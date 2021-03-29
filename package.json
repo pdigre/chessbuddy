@@ -1,0 +1,79 @@
+{
+  "name": "chessbot-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": ".",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@reduxjs/toolkit": "^1.5.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/chess.js": "patch:@types/chess.js@^0.10.1#./@types-chessjs.diff",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^14.14.35",
+    "@types/react": "^17.0.1",
+    "@types/react-dom": "^17.0.1",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-scroll": "^1.5.4",
+    "chess.js": "^0.11.0",
+    "chessboardjsx": "^2.4.2",
+    "node-sass": "5.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-global-hook": "^2.0.0",
+    "react-hooks-global-state": "^1.0.1",
+    "react-is": "^17.0.1",
+    "react-redux": "^7.1.3",
+    "react-scripts": "4.0.3",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-persist": "^6.0.0",
+    "redux-saga": "^1.1.3",
+    "redux-thunk": "^2.3.0",
+    "typescript": "^4.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start --watch",
+    "build": "react-scripts build",
+    "test": "react-scripts test --watchAll=false",
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src/**/*.{ts,tsx}",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx}"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "prettier": "^2.1.2",
+    "react-refresh": "^0.9.0",
+    "typescript-plugin-css-modules": "^2.8.0"
+  }
+}
