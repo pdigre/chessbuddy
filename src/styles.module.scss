@@ -6,59 +6,62 @@ body {
   margin: 1px;
 }
 .App {
-  min-width: 750px;
+  border-width: 2px;
+  border-style: dotted;
+  width: 1024px;
+  height: 768px;
+  display: flex;
+  flex-direction: row;
 }
-.MainTable {
-  margin: 1px;
-  border: 1px;
+
+.AppLeft {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 700px;
 }
-.MainTable td {
-  margin: 1px;
-  border: 1px;
-  padding: 0px;
-  border-spacing: 0px;
-  width: 100%;
-}
-.PanelTd {
-  vertical-align: top;
-}
-.TopNav {
+
+.AppRight {
+  display: flex;
+  flex-direction: column;
+  width: 324px;
   text-align: center;
 }
 
-.Button {
-  margin: 5px;
+.Player,.PlayerRight {
+  font-size: 1.2em;
+  height: 34px;
+  margin: 0px;
 }
 
-.Buttons {
-  margin: 5px;
+.PlayerRight {
+  text-align: right;
 }
 
-.BotSelector {
-  margin: 10px;
-  display: inline-block;
-
-  label {
-    margin-right: 10px;
-  }
-}
-
-.Chessboard {
-  float: left;
+.Rotate {
+  transform: rotate(90deg);
 }
 
 .Dialog {
   text-align: center;
+  font-size: 1.4em;
+}
+
+.Panel {
+  width: 320px;
+  height: 50px;
 }
 
 .HistoryTable {
   table-layout: fixed;
   width: 100%;
+  overflow: visible;
 }
 
 .HistoryTable td {
   padding: 3px;
   text-align: center;
+  font-size: 1.2em;
 }
 
 .MarkHistory {
@@ -69,10 +72,26 @@ body {
   margin: 1px;
 }
 
-.Rotate {
-  transform: rotate(90deg);
+
+.Button {
+  margin: 5px;
+  height: 46px;
+  flex-grow: 1;
 }
 
-.AlignRight {
-  text-align: right;
+.Buttons {
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
 }
+
+.BotSelector {
+  margin: 10px;
+  display: inline-block;
+  font-size: 1.4em;
+
+  label {
+    margin-right: 10px;
+  }
+}
+

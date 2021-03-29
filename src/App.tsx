@@ -124,26 +124,24 @@ const App: React.FC = () => {
   return (
     <div className={styles.App}>
       <Config newGame={newGame} stopstart={stopstart} />
-      <table className={styles.MainTable}>
-        <tr>
-          <td>
-            <p className={r90 ? styles.AlignRight : ''}>{r180 ? wtext : btext}</p>
-            <div className={r90 ? styles.Rotate : ''}>
-              <Chessboard
-                position={fen}
-                allowDrag={onDragStart}
-                onDrop={onMovePiece}
-                orientation={!r180 ? 'white' : 'black'}
-              />
-            </div>
-            <p>{r180 ? btext : wtext}</p>
-          </td>
-          <td className={styles.PanelTd}>
-            <Panel stopstart={stopstart} />
-            <History gotoMark={gotoMark} />
-          </td>
-        </tr>
-      </table>
+      <div className={styles.AppLeft}>
+        <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
+        <div className={r90 ? styles.Rotate : ''}>
+          <Chessboard
+            position={fen}
+            allowDrag={onDragStart}
+            onDrop={onMovePiece}
+            orientation={!r180 ? 'white' : 'black'}
+            width={700}
+          />
+        </div>
+        <p className={styles.Player}>{r180 ? btext : wtext}</p>
+      </div>
+      <div className={styles.AppRight}>
+        <h3>♛ Chessbuddy</h3>
+        <Panel stopstart={stopstart} />
+        <History gotoMark={gotoMark} />
+      </div>
     </div>
   );
 };

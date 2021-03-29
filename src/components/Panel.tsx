@@ -13,7 +13,10 @@ export const Panel: React.FC<{ stopstart: () => void }> = ({ stopstart }) => {
   const [rotation, setRotation] = useGlobalState('rotation');
 
   return (
-    <ButtonGroup color="primary" aria-label="outlined primary button group">
+    <ButtonGroup
+      color="primary"
+      aria-label="outlined primary button group"
+      className={styles.Panel}>
       <Button className={styles.Button} onClick={stopstart}>
         {isPlaying ? <PlayArrow /> : <Pause />}
       </Button>
