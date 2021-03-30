@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import Chessboard from 'chessboardjsx';
-import * as engine from './data/engine';
+import * as rules from './data/rules';
 import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
@@ -8,7 +8,7 @@ import { San, locate, sanText } from './data/openings';
 import { Config } from './components/Config';
 import { useGlobalState } from './data/state';
 import { setTimeFunc } from './data/actions';
-import { botmap, runBot } from './data/bots';
+import { players, runBot, Human } from './data/players';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -18,8 +18,8 @@ const pgnStyle: React.CSSProperties = {
 };
 
 type BoardMove = {
-  sourceSquare: engine.Square;
-  targetSquare: engine.Square;
+  sourceSquare: rules.Square;
+  targetSquare: rules.Square;
 };
 
 const toHHMMSS = (sec_num: number) => {
@@ -41,8 +41,8 @@ const App: React.FC = () => {
   const [btime, setBtime] = useGlobalState('btime');
 
   const doMove = useCallback(
-    (fen: engine.Fen, from: engine.Square, to: engine.Square) => {
-      const move = engine.move(fen, from, to);
+    (fen: rules.Fen, from: rules.Square, to: rules.Square) => {
+      const move = rules.move(fen, from, to);
       if (!move) {
         return;
       }
@@ -60,7 +60,7 @@ const App: React.FC = () => {
     setWtime(0);
     setBtime(0);
     setMarkHistory(-1);
-    setFen(engine.newGame);
+    setFen(rules.NEW_GAME);
   };
 
   const stopstart = () => {
@@ -69,16 +69,16 @@ const App: React.FC = () => {
     setPlaying(!isPlaying);
   };
 
-  const isComplete = engine.isGameOver(fen);
-  const isWhiteTurn = engine.isWhiteTurn(fen);
+  const isComplete = rules.isGameOver(fen);
+  const isWhiteTurn = rules.isWhiteTurn(fen);
   const next = isWhiteTurn ? white : black;
-  const bot = botmap.get(next);
+  const player = players.find(p => p.name == next);
 
   if (isPlaying && isComplete) setPlaying(false);
 
   const gotoMark = (mark: number) => {
     if (isPlaying) stopstart();
-    setFen(engine.replay(history, mark >= 0 ? mark : history.length));
+    setFen(rules.replay(history, mark >= 0 ? mark : history.length));
   };
 
   setTimeFunc(() => {
@@ -92,7 +92,7 @@ const App: React.FC = () => {
   });
 
   const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
-    return isPlaying && engine.isMoveable(fen, from) && !bot;
+    return isPlaying && rules.isMoveable(fen, from) && player instanceof Human;
   };
 
   const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
@@ -134,7 +134,7 @@ const App: React.FC = () => {
   const markers = {};
   if (san) {
     const sans = san.children.map(x => x.san);
-    engine.findInfoMarkers(sans, fen).forEach(x => {
+    rules.findInfoMarkers(sans, fen).forEach(x => {
       Object.assign(markers, { [x]: pgnStyle });
     });
   }
