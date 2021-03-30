@@ -2,6 +2,19 @@
 	"version": "0.2.0",
 	"configurations": [
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Run PGN reader",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+			"program": "${workspaceRoot}/tools/out/pgn2json.js",
+            "stopOnEntry": false,
+            "sourceMaps": true,
+			"cwd": "${workspaceRoot}/tools",
+            "outFiles": ["${workspaceRoot}/tools/out/*.js"]
+        },
+        {
             "name": "Chrome",
             "type": "chrome",
             "request": "launch",

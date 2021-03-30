@@ -1,10 +1,8 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import styles from '../styles.module.scss';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
 
 export const BotSelector: React.FC<{
   playerName: string;

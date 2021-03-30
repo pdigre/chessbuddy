@@ -3,7 +3,7 @@ import { ButtonGroup } from '@material-ui/core';
 import { ToggleButton } from '@material-ui/lab';
 import { PlayArrow, Pause, Settings, Timeline, RotateRight } from '@material-ui/icons';
 import styles from '../styles.module.scss';
-import { useGlobalState } from '../state';
+import { useGlobalState } from '../data/state';
 import { Button } from '@material-ui/core';
 
 export const Panel: React.FC<{ stopstart: () => void }> = ({ stopstart }) => {
