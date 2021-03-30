@@ -8,7 +8,7 @@ body {
 .App {
   border-width: 2px;
   border-style: dotted;
-  width: 1024px;
+  width: 1200px;
   height: 768px;
   display: flex;
   flex-direction: row;
@@ -18,13 +18,13 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 700px;
+  width: 705px;
 }
 
 .AppRight {
   display: flex;
   flex-direction: column;
-  width: 324px;
+  width: 500px;
   text-align: center;
 }
 
@@ -48,7 +48,7 @@ body {
 }
 
 .Panel {
-  width: 320px;
+  width: 490px;
   height: 50px;
 }
 

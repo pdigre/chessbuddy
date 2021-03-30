@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import styles from '../styles.module.scss';
-import { useGlobalState } from '../state';
+import { useGlobalState } from '../data/state';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
 
 export const History: React.FC<{ gotoMark: (mark: number) => void }> = ({ gotoMark }) => {

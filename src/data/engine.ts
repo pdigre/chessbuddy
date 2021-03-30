@@ -38,3 +38,12 @@ export const replay = (moves: string[], to: number): Fen => {
   }
   return game.fen();
 };
+
+export const findInfoMarkers = (moves: string[], fen: string): string[] => {
+  const froms: string[] = [];
+  moves.forEach(san => {
+    const move = Chess(fen).move(san);
+    if (move && !froms.includes(move.from)) froms.push(move.from);
+  });
+  return froms;
+};

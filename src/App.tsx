@@ -1,13 +1,21 @@
 import React, { useEffect, useCallback } from 'react';
 import Chessboard from 'chessboardjsx';
-import * as engine from './engine';
+import * as engine from './data/engine';
 import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
+import { San, locate, sanText } from './data/openings';
 import { Config } from './components/Config';
-import { useGlobalState } from './state';
-import { setTimeFunc } from './actions';
-import { botmap, runBot } from './bots';
+import { useGlobalState } from './data/state';
+import { setTimeFunc } from './data/actions';
+import { botmap, runBot } from './data/bots';
+import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
+
+const theme = unstable_createMuiStrictModeTheme();
+const pgnStyle: React.CSSProperties = {
+  background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
+  borderRadius: '50%',
+};
 
 type BoardMove = {
   sourceSquare: engine.Square;
@@ -121,28 +129,42 @@ const App: React.FC = () => {
     };
   }, [isPlaying, fen, white, black, doMove]);
 
+  const san: San | undefined = locate(history);
+
+  const markers = {};
+  if (san) {
+    const sans = san.children.map(x => x.san);
+    engine.findInfoMarkers(sans, fen).forEach(x => {
+      Object.assign(markers, { [x]: pgnStyle });
+    });
+  }
+
   return (
-    <div className={styles.App}>
-      <Config newGame={newGame} stopstart={stopstart} />
-      <div className={styles.AppLeft}>
-        <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
-        <div className={r90 ? styles.Rotate : ''}>
-          <Chessboard
-            position={fen}
-            allowDrag={onDragStart}
-            onDrop={onMovePiece}
-            orientation={!r180 ? 'white' : 'black'}
-            width={700}
-          />
+    <ThemeProvider theme={theme}>
+      <div className={styles.App}>
+        <Config newGame={newGame} stopstart={stopstart} />
+        <div className={styles.AppLeft}>
+          <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
+          <div className={r90 ? styles.Rotate : ''}>
+            <Chessboard
+              position={fen}
+              allowDrag={onDragStart}
+              onDrop={onMovePiece}
+              orientation={!r180 ? 'white' : 'black'}
+              width={700}
+              squareStyles={markers}
+            />
+          </div>
+          <p className={styles.Player}>{r180 ? btext : wtext}</p>
         </div>
-        <p className={styles.Player}>{r180 ? btext : wtext}</p>
+        <div className={styles.AppRight}>
+          <h3>♛ Chessbuddy 0.1</h3>
+          <Panel stopstart={stopstart} />
+          <p>{sanText(san)}</p>
+          <History gotoMark={gotoMark} />
+        </div>
       </div>
-      <div className={styles.AppRight}>
-        <h3>♛ Chessbuddy</h3>
-        <Panel stopstart={stopstart} />
-        <History gotoMark={gotoMark} />
-      </div>
-    </div>
+    </ThemeProvider>
   );
 };
 
