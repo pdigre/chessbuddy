@@ -1,5 +1,5 @@
 import { createGlobalState } from 'react-hooks-global-state';
-import * as engine from './engine';
+import { NEW_GAME } from './rules';
 
 type Initial = {
   // game
@@ -28,7 +28,7 @@ const initial: Initial = {
   black: 'User',
   wtime: 0,
   btime: 0,
-  fen: engine.newGame,
+  fen: NEW_GAME,
   history: [],
   moves: [],
   playing: false,

@@ -5,9 +5,9 @@ export type Fen = string;
 export type GameWinner = 'b' | 'w' | null;
 export type { Square, Move, ShortMove };
 
-export const newGame = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+export const NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-export const isNewGame = (fen: Fen): boolean => fen == newGame;
+export const isNewGame = (fen: Fen): boolean => fen == NEW_GAME;
 
 export const isBlackTurn = (fen: Fen): boolean => Chess(fen).turn() === 'b';
 
@@ -32,7 +32,7 @@ export const move = (fen: Fen, from: Square, to: Square): [Fen, Move] | null => 
 };
 
 export const replay = (moves: string[], to: number): Fen => {
-  const game = Chess(newGame);
+  const game = Chess(NEW_GAME);
   for (let i = 0; i <= to; i++) {
     game.move(moves[i]);
   }

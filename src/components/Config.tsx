@@ -4,7 +4,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import styles from '../styles.module.scss';
 import { useGlobalState } from '../data/state';
-import { botmap } from '../data/bots';
+import { players } from '../data/players';
 import { Button } from '@material-ui/core';
 import { Clear } from '@material-ui/icons';
 import { ButtonGroup } from '@material-ui/core';
@@ -18,8 +18,7 @@ export const Config: React.FC<{ newGame: () => void; stopstart: () => void }> = 
   const [blackBot, setBlackBot] = useGlobalState('black');
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
 
-  const choices = 'User,Per,Ronny'.split(',');
-  choices.push(...Array.from(botmap.keys()));
+  const choices = Array.from(players.map(x => x.name));
 
   const playAction = () => {
     setShowConfig(false);
