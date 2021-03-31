@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styles from '../styles.module.scss';
 import { useGlobalState } from '../data/state';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
+import type { HANDLE_CLICK } from './reacttypes';
 
 export const History: React.FC<{ gotoMark: (mark: number) => void }> = ({ gotoMark }) => {
   const endRef = useRef<HTMLElement>(null);
@@ -22,12 +23,13 @@ export const History: React.FC<{ gotoMark: (mark: number) => void }> = ({ gotoMa
     wb[l][c] = t;
   });
 
-  function handleClick(event: React.MouseEvent<HTMLElement>) {
+  const handleClick: HANDLE_CLICK = event => {
     event.preventDefault();
     const id = Number.parseInt((event.target as HTMLTableCellElement).id);
-    setMarkHistory(id);
-    gotoMark(id);
-  }
+    const id2 = id == markHistory ? -1 : id;
+    setMarkHistory(id2);
+    gotoMark(id2);
+  };
 
   return (
     <TableContainer className={styles.History}>

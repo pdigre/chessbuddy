@@ -6,10 +6,14 @@ import { History } from './components/History';
 import { Panel } from './components/Panel';
 import { San, locate, sanText } from './data/openings';
 import { Config } from './components/Config';
+import { Confirmation, ConfirmationProps } from './components/Confirmation';
 import { useGlobalState } from './data/state';
 import { setTimeFunc } from './data/actions';
-import { players, runBot, Human } from './data/players';
+import { getPlayers, Human, playerInit } from './data/players';
+import { Bot } from './data/bots';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
+import { useLocalStorage } from './data/localstorage';
+import { useState } from 'react';
 
 const theme = unstable_createMuiStrictModeTheme();
 const pgnStyle: React.CSSProperties = {
@@ -39,6 +43,7 @@ const App: React.FC = () => {
   const [rotation, setRotation] = useGlobalState('rotation');
   const [wtime, setWtime] = useGlobalState('wtime');
   const [btime, setBtime] = useGlobalState('btime');
+  const [confirm, setConfirm] = useState<ConfirmationProps>();
 
   const doMove = useCallback(
     (fen: rules.Fen, from: rules.Square, to: rules.Square) => {
@@ -65,13 +70,46 @@ const App: React.FC = () => {
 
   const stopstart = () => {
     if (isComplete) newGame();
-    if (!isPlaying) setMarkHistory(-1);
+    if (!isPlaying && markHistory >= 0) {
+      setConfirm({
+        title: 'Undo',
+        msg: 'Do you want to revert the game to the marked position?',
+        ok: 'Yes',
+        cancel: 'No',
+        response: yes => {
+          setConfirm({});
+          if (yes) {
+            setHistory(history.slice(0, markHistory));
+          }
+          setMarkHistory(-1);
+          setPlaying(true);
+        },
+      });
+      return;
+    }
     setPlaying(!isPlaying);
+  };
+
+  const about = () => {
+    setConfirm({
+      title: 'About',
+      msg:
+        'This chess program is open source and\n available at github https://github.com/pdigre/chessbuddy',
+      ok: 'Ok',
+      cancel: undefined,
+      response: yes => {
+        setConfirm({});
+      },
+    });
   };
 
   const isComplete = rules.isGameOver(fen);
   const isWhiteTurn = rules.isWhiteTurn(fen);
   const next = isWhiteTurn ? white : black;
+  const players = getPlayers(() => {
+    const [playerdata, setPlayerdata] = useLocalStorage('playerdata', playerInit);
+    return playerdata as string;
+  });
   const player = players.find(p => p.name == next);
 
   if (isPlaying && isComplete) setPlaying(false);
@@ -120,10 +158,12 @@ const App: React.FC = () => {
     if (!isPlaying) {
       return;
     }
-    runBot(next, fen, ({ from, to }) => {
-      doMove(fen, from, to);
-    });
-
+    const player = players.find(p => p.name == next && p instanceof Bot);
+    if (player instanceof Bot) {
+      player.runBot(fen, ({ from, to }) => {
+        doMove(fen, from, to);
+      });
+    }
     return () => {
       //
     };
@@ -142,7 +182,8 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
-        <Config newGame={newGame} stopstart={stopstart} />
+        <Confirmation {...confirm} />
+        <Config newGame={newGame} stopstart={stopstart} players={players} />
         <div className={styles.AppLeft}>
           <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
           <div className={r90 ? styles.Rotate : ''}>
@@ -158,7 +199,7 @@ const App: React.FC = () => {
           <p className={styles.Player}>{r180 ? btext : wtext}</p>
         </div>
         <div className={styles.AppRight}>
-          <h3>♛ Chessbuddy 0.1</h3>
+          <h3 onClick={about}>♛ Chessbuddy 0.1</h3>
           <Panel stopstart={stopstart} />
           <p>{sanText(san)}</p>
           <History gotoMark={gotoMark} />
