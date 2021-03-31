@@ -45,7 +45,7 @@ Bot:Lozza:20:1:
 
 const players: Player[] = [];
 export const getPlayers: (func: () => string) => Player[] = (func: () => string) => {
-  if (!players.length) {
+  if (!players?.length) {
     const pdata = func();
     players.splice(0, players.length);
     restore(pdata);

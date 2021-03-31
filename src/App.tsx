@@ -106,11 +106,9 @@ const App: React.FC = () => {
   const isComplete = rules.isGameOver(fen);
   const isWhiteTurn = rules.isWhiteTurn(fen);
   const next = isWhiteTurn ? white : black;
-  const players = getPlayers(() => {
-    const [playerdata, setPlayerdata] = useLocalStorage('playerdata', playerInit);
-    return playerdata as string;
-  });
-  const player = players.find(p => p.name == next);
+  const [playerdata, setPlayerdata] = useLocalStorage('playerdata', playerInit);
+  const players = () => getPlayers(() => playerdata as string);
+  const player = players().find(p => p.name == next);
 
   if (isPlaying && isComplete) setPlaying(false);
 
@@ -158,7 +156,7 @@ const App: React.FC = () => {
     if (!isPlaying) {
       return;
     }
-    const player = players.find(p => p.name == next && p instanceof Bot);
+    const player = players().find(p => p.name == next && p instanceof Bot);
     if (player instanceof Bot) {
       player.runBot(fen, ({ from, to }) => {
         doMove(fen, from, to);
@@ -183,7 +181,7 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
         <Confirmation {...confirm} />
-        <Config newGame={newGame} stopstart={stopstart} players={players} />
+        <Config newGame={newGame} stopstart={stopstart} players={players()} />
         <div className={styles.AppLeft}>
           <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
           <div className={r90 ? styles.Rotate : ''}>
@@ -199,7 +197,7 @@ const App: React.FC = () => {
           <p className={styles.Player}>{r180 ? btext : wtext}</p>
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.1</h3>
+          <h3 onClick={about}>♛ Chessbuddy 0.2</h3>
           <Panel stopstart={stopstart} />
           <p>{sanText(san)}</p>
           <History gotoMark={gotoMark} />
