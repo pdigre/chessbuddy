@@ -28,7 +28,8 @@ body {
   text-align: center;
 }
 
-.Player,.PlayerRight {
+.Player,
+.PlayerRight {
   font-size: 1.2em;
   height: 34px;
   margin: 0px;
@@ -72,7 +73,6 @@ body {
   margin: 1px;
 }
 
-
 .Button {
   margin: 5px;
   height: 46px;
@@ -85,6 +85,12 @@ body {
   flex-direction: row;
 }
 
+.Config {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
 .BotSelector {
   margin: 10px;
   display: inline-block;
@@ -94,4 +100,3 @@ body {
     margin-right: 10px;
   }
 }
-
