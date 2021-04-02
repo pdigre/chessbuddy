@@ -46,6 +46,7 @@ body {
 .Dialog {
   text-align: center;
   font-size: 1.4em;
+  height: '400px';
 }
 
 .Panel {
@@ -65,12 +66,27 @@ body {
   font-size: 1.2em;
 }
 
-.MarkHistory {
+.MarkCell {
+  background-color: aquamarine;
+}
+.MarkRow td {
   background-color: aquamarine;
 }
 
 .History {
   margin: 1px;
+}
+
+.ConfigTableContainer {
+  margin: 1px;
+}
+.ConfigTable {
+  table-layout: fixed;
+}
+.ConfigTable td {
+  padding: 3px;
+  text-align: center;
+  font-size: 1.2em;
 }
 
 .Button {

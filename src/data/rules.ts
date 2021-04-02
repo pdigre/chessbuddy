@@ -47,3 +47,13 @@ export const findInfoMarkers = (moves: string[], fen: string): string[] => {
   });
   return froms;
 };
+
+export const whoWon = (game: string[]) => {
+  const n = game.length;
+  const san = game[n - 1];
+  if (san == '1-0') return 'White';
+  if (san == '0-1') return 'Black';
+  if (san == '1/2-1/2') return 'Draw';
+  if (san?.endsWith('#')) return n % 2 == 0 ? 'w' : 'b';
+  return undefined;
+};

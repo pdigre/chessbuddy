@@ -12,6 +12,11 @@ export const addPlayer = (data: string) => {
   if (player) players.push(player);
 };
 
+export const delPlayer = (name: string) => {
+  const i = players.findIndex(x => x.name == name);
+  if (i >= 0) players.splice(i, 1);
+};
+
 const createPlayer = (data: string) => {
   if (data.includes('undefined')) return undefined;
   const split = data.split(':');
