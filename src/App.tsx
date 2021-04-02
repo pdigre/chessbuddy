@@ -1,19 +1,17 @@
-import React, { useEffect, useCallback } from 'react';
-import Chessboard from 'chessboardjsx';
+import React, { useState, useEffect, useCallback } from 'react';
 import * as rules from './data/rules';
+import { Bot } from './data/bots';
+import { San, locate, sanText } from './data/openings';
+import { useGlobalState, usePersistentState } from './data/state';
+import { setTimeFunc, toHHMMSS } from './data/library';
+import { getPlayers, Human, playerInit } from './data/players';
+import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import styles from './styles.module.scss';
+import Chessboard from 'chessboardjsx';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
-import { San, locate, sanText } from './data/openings';
 import { Config } from './components/Config';
-import { Confirmation, ConfirmationProps } from './components/Confirmation';
-import { useGlobalState } from './data/state';
-import { setTimeFunc } from './data/actions';
-import { getPlayers, Human, playerInit } from './data/players';
-import { Bot } from './data/bots';
-import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
-import { useLocalStorage } from './data/localstorage';
-import { useState } from 'react';
+import { MessageBox, MessageBoxProps } from './components/MessageBox';
 
 const theme = unstable_createMuiStrictModeTheme();
 const pgnStyle: React.CSSProperties = {
@@ -26,16 +24,10 @@ type BoardMove = {
   targetSquare: rules.Square;
 };
 
-const toHHMMSS = (sec_num: number) => {
-  const h = Math.floor(sec_num / 3600);
-  const m = Math.floor((sec_num - h * 3600) / 60);
-  const s = sec_num - h * 3600 - m * 60;
-  return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-};
-
 const App: React.FC = () => {
   const [isPlaying, setPlaying] = useGlobalState('playing');
   const [fen, setFen] = useGlobalState('fen');
+  const [start, setStart] = useGlobalState('start');
   const [history, setHistory] = useGlobalState('history');
   const [markHistory, setMarkHistory] = useGlobalState('markHistory');
   const [white, setWhite] = useGlobalState('white');
@@ -43,7 +35,8 @@ const App: React.FC = () => {
   const [rotation, setRotation] = useGlobalState('rotation');
   const [wtime, setWtime] = useGlobalState('wtime');
   const [btime, setBtime] = useGlobalState('btime');
-  const [confirm, setConfirm] = useState<ConfirmationProps>();
+  const [message, setMessage] = useState<MessageBoxProps>();
+  const [log, setLog] = usePersistentState('log', '');
 
   const doMove = useCallback(
     (fen: rules.Fen, from: rules.Square, to: rules.Square) => {
@@ -54,14 +47,19 @@ const App: React.FC = () => {
       if (isPlaying) {
         const [newFen, action] = move;
         setFen(newFen);
-        setHistory(history => [...history, action.san]);
+        addHistory(action.san);
       }
     },
     [isPlaying]
   );
 
+  const addHistory = (san: string) => {
+    setHistory(history => [...history, san]);
+  };
+
   const newGame = () => {
     setHistory([]);
+    setStart(new Date());
     setWtime(0);
     setBtime(0);
     setMarkHistory(-1);
@@ -71,14 +69,13 @@ const App: React.FC = () => {
   const stopstart = () => {
     if (isComplete) newGame();
     if (!isPlaying && markHistory >= 0) {
-      setConfirm({
+      setMessage({
         title: 'Undo',
         msg: 'Do you want to revert the game to the marked position?',
-        ok: 'Yes',
-        cancel: 'No',
+        buttons: ['Yes', 'No'],
         response: yes => {
-          setConfirm({});
-          if (yes) {
+          setMessage({});
+          if (yes == 'Yes') {
             setHistory(history.slice(0, markHistory));
           }
           setMarkHistory(-1);
@@ -91,14 +88,13 @@ const App: React.FC = () => {
   };
 
   const about = () => {
-    setConfirm({
+    setMessage({
       title: 'About',
       msg:
         'This chess program is open source and\n available at github https://github.com/pdigre/chessbuddy',
-      ok: 'Ok',
-      cancel: undefined,
-      response: yes => {
-        setConfirm({});
+      buttons: ['Ok'],
+      response: reply => {
+        setMessage({});
       },
     });
   };
@@ -106,11 +102,13 @@ const App: React.FC = () => {
   const isComplete = rules.isGameOver(fen);
   const isWhiteTurn = rules.isWhiteTurn(fen);
   const next = isWhiteTurn ? white : black;
-  const [playerdata, setPlayerdata] = useLocalStorage('playerdata', playerInit);
+  const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
   const players = () => getPlayers(() => playerdata as string);
   const player = players().find(p => p.name == next);
 
-  if (isPlaying && isComplete) setPlaying(false);
+  if (isPlaying && isComplete) {
+    setPlaying(false);
+  }
 
   const gotoMark = (mark: number) => {
     if (isPlaying) stopstart();
@@ -127,30 +125,20 @@ const App: React.FC = () => {
     }
   });
 
-  const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
-    return isPlaying && rules.isMoveable(fen, from) && player instanceof Human;
-  };
+  const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) =>
+    isPlaying && rules.isMoveable(fen, from) && player instanceof Human;
 
-  const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
+  const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) =>
     doMove(fen, from, to);
-  };
 
   const r90 = rotation % 2 == 1;
   const r180 = rotation > 1;
-  const wtext =
-    'White: ' +
-    white +
-    ' ' +
-    toHHMMSS(wtime) +
-    ' ' +
-    (isComplete && !isWhiteTurn ? ' ** Winner **' : '');
-  const btext =
-    'Black: ' +
-    black +
-    ' ' +
-    toHHMMSS(btime) +
-    ' ' +
-    (isComplete && isWhiteTurn ? ' ** Winner **' : '');
+  const wtext = `White: ${white} ${toHHMMSS(wtime)} ${
+    isComplete && !isWhiteTurn ? ' ** Winner **' : ''
+  }`;
+  const btext = `Black: ${black} ${toHHMMSS(btime)} ${
+    isComplete && isWhiteTurn ? ' ** Winner **' : ''
+  }`;
 
   useEffect(() => {
     if (!isPlaying) {
@@ -167,9 +155,8 @@ const App: React.FC = () => {
     };
   }, [isPlaying, fen, white, black, doMove]);
 
-  const san: San | undefined = locate(history);
-
   const markers = {};
+  const san: San | undefined = locate(history);
   if (san) {
     const sans = san.children.map(x => x.san);
     rules.findInfoMarkers(sans, fen).forEach(x => {
@@ -180,8 +167,13 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
-        <Confirmation {...confirm} />
-        <Config newGame={newGame} stopstart={stopstart} players={players()} />
+        <MessageBox {...message} />
+        <Config
+          newGame={newGame}
+          stopstart={stopstart}
+          setMessage={setMessage}
+          players={players()}
+        />
         <div className={styles.AppLeft}>
           <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
           <div className={r90 ? styles.Rotate : ''}>
@@ -197,10 +189,10 @@ const App: React.FC = () => {
           <p className={styles.Player}>{r180 ? btext : wtext}</p>
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.2</h3>
+          <h3 onClick={about}>♛ Chessbuddy 0.3</h3>
           <Panel stopstart={stopstart} />
           <p>{sanText(san)}</p>
-          <History gotoMark={gotoMark} />
+          <History gotoMark={gotoMark} setMessage={setMessage} />
         </div>
       </div>
     </ThemeProvider>

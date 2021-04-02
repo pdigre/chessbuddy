@@ -1,19 +1,19 @@
 import React, { ReactChild } from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import styles from '../styles.module.scss';
 import { useGlobalState } from '../data/state';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { DialogTitle, Dialog, AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
+import styles from '../styles.module.scss';
 import { ConfigGame, ConfigGameProps } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
+import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
 import type { HANDLE_CHANGE } from './reacttypes';
 
-export const Config: React.FC<ConfigGameProps> = ({ newGame, stopstart, players }) => {
+export const Config: React.FC<ConfigGameProps> = ({
+  newGame,
+  stopstart,
+  setMessage: setMessage,
+  players,
+}) => {
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
 
   type TabProps = {
@@ -26,7 +26,7 @@ export const Config: React.FC<ConfigGameProps> = ({ newGame, stopstart, players 
     label: string;
   };
 
-  function TabPanel(props: TabProps) {
+  const TabPanel = (props: TabProps) => {
     const { children, value, index } = props;
 
     return (
@@ -42,16 +42,16 @@ export const Config: React.FC<ConfigGameProps> = ({ newGame, stopstart, players 
         )}
       </div>
     );
-  }
+  };
 
-  function linkProps(index: number) {
+  const linkProps = (index: number) => {
     return {
       id: `nav-tab-${index}`,
       'aria-controls': `nav-tabpanel-${index}`,
     };
-  }
+  };
 
-  function LinkTab(props: LinkProps) {
+  const LinkTab = (props: LinkProps) => {
     return (
       <Tab
         component="a"
@@ -59,7 +59,7 @@ export const Config: React.FC<ConfigGameProps> = ({ newGame, stopstart, players 
         {...props}
       />
     );
-  }
+  };
   const [value, setValue] = React.useState(0);
 
   const handleChange: HANDLE_CHANGE = (event, newValue) => setValue(newValue as number);
@@ -69,6 +69,7 @@ export const Config: React.FC<ConfigGameProps> = ({ newGame, stopstart, players 
       aria-labelledby="simple-dialog-title"
       open={showConfig}
       onClose={() => setShowConfig(false)}
+      maxWidth="md"
       className={styles.Dialog}>
       <DialogTitle id="simple-dialog-title">Configure</DialogTitle>
 
@@ -79,18 +80,27 @@ export const Config: React.FC<ConfigGameProps> = ({ newGame, stopstart, players 
           onChange={handleChange}
           aria-label="nav tabs example">
           <LinkTab label="Game" {...linkProps(0)} />
-          <LinkTab label="Humans" {...linkProps(1)} />
-          <LinkTab label="Bots" {...linkProps(2)} />
+          <LinkTab label="Display" {...linkProps(1)} />
+          <LinkTab label="Humans" {...linkProps(2)} />
+          <LinkTab label="Bots" {...linkProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <ConfigGame newGame={newGame} stopstart={stopstart} players={players} />
+        <ConfigGame
+          newGame={newGame}
+          stopstart={stopstart}
+          setMessage={setMessage}
+          players={players}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ConfigHuman />
+        <ConfigDisplay />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ConfigBot />
+        <ConfigHuman players={players} />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <ConfigBot players={players} />
       </TabPanel>
     </Dialog>
   );

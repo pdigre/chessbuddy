@@ -1,4 +1,5 @@
 import { createGlobalState } from 'react-hooks-global-state';
+import React from 'react';
 import { NEW_GAME } from './rules';
 
 type Initial = {
@@ -9,6 +10,7 @@ type Initial = {
   btime: number;
   fen: string;
   history: string[];
+  start?: Date;
   moves: string[];
   playing: boolean;
   // account: {
@@ -30,6 +32,7 @@ const initial: Initial = {
   btime: 0,
   fen: NEW_GAME,
   history: [],
+  start: new Date(),
   moves: [],
   playing: false,
   // account: {
@@ -43,3 +46,14 @@ const initial: Initial = {
   showStats: false,
 };
 export const { useGlobalState } = createGlobalState(initial);
+
+export const usePersistentState: (
+  key: string,
+  defaultValue: string
+) => [string, React.Dispatch<React.SetStateAction<string>>] = (key, defaultValue) => {
+  const [state, setState] = React.useState(localStorage.getItem(key) || defaultValue);
+  React.useEffect(() => {
+    localStorage.setItem(key, state);
+  }, [key, state]);
+  return [state, setState];
+};
