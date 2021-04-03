@@ -18,6 +18,12 @@ const pgnStyle: React.CSSProperties = {
   background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
   borderRadius: '50%',
 };
+const whiteSquareStyle: React.CSSProperties = {
+  backgroundColor: 'rgb(240, 217, 181)',
+};
+const blackSquareStyle: React.CSSProperties = {
+  backgroundColor: 'rgb(181, 136, 99)',
+};
 
 type BoardMove = {
   sourceSquare: rules.Square;
@@ -37,6 +43,9 @@ const App: React.FC = () => {
   const [btime, setBtime] = useGlobalState('btime');
   const [message, setMessage] = useState<MessageBoxProps>();
   const [log, setLog] = usePersistentState('log', '');
+
+  const r90 = rotation % 2 == 1;
+  const r180 = rotation > 1;
 
   const doMove = useCallback(
     (fen: rules.Fen, from: rules.Square, to: rules.Square) => {
@@ -112,6 +121,7 @@ const App: React.FC = () => {
 
   const gotoMark = (mark: number) => {
     if (isPlaying) stopstart();
+    setFen(rules.CLEAR_GAME);
     setFen(rules.replay(history, mark >= 0 ? mark : history.length));
   };
 
@@ -125,14 +135,15 @@ const App: React.FC = () => {
     }
   });
 
-  const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) =>
-    isPlaying && rules.isMoveable(fen, from) && player instanceof Human;
+  const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
+    const from2 = r90 ? rules.leftSquare(from) : from;
+    return isPlaying && rules.isMoveable(fen, from2) && player instanceof Human;
+  };
 
-  const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) =>
-    doMove(fen, from, to);
+  const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
+    doMove(fen, r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to);
+  };
 
-  const r90 = rotation % 2 == 1;
-  const r180 = rotation > 1;
   const wtext = `White: ${white} ${toHHMMSS(wtime)} ${
     isComplete && !isWhiteTurn ? ' ** Winner **' : ''
   }`;
@@ -160,7 +171,7 @@ const App: React.FC = () => {
   if (san) {
     const sans = san.children.map(x => x.san);
     rules.findInfoMarkers(sans, fen).forEach(x => {
-      Object.assign(markers, { [x]: pgnStyle });
+      Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: pgnStyle });
     });
   }
 
@@ -176,16 +187,16 @@ const App: React.FC = () => {
         />
         <div className={styles.AppLeft}>
           <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
-          <div className={r90 ? styles.Rotate : ''}>
-            <Chessboard
-              position={fen}
-              allowDrag={onDragStart}
-              onDrop={onMovePiece}
-              orientation={!r180 ? 'white' : 'black'}
-              width={700}
-              squareStyles={markers}
-            />
-          </div>
+          <Chessboard
+            position={r90 ? rules.leftFen(fen) : fen}
+            allowDrag={onDragStart}
+            onDrop={onMovePiece}
+            orientation={!r180 ? 'white' : 'black'}
+            width={700}
+            squareStyles={markers}
+            lightSquareStyle={r90 ? blackSquareStyle : whiteSquareStyle}
+            darkSquareStyle={r90 ? whiteSquareStyle : blackSquareStyle}
+          />
           <p className={styles.Player}>{r180 ? btext : wtext}</p>
         </div>
         <div className={styles.AppRight}>

@@ -78,15 +78,15 @@ export const ConfigGame: React.FC<ConfigGameProps> = ({
         setSelected={setBlackBot}
       />
       <div className={styles.Buttons}>
-        <Button className={styles.Button} onClick={playAction} aria-label="list" value="Play">
+        <Button className={styles.Button} onClick={playAction} variant="contained">
           Play
           <PlayArrow />
         </Button>
-        <Button className={styles.Button} onClick={endAction} aria-label="list" value="End">
+        <Button className={styles.Button} onClick={endAction} variant="contained">
           End game
           <ExitToApp />
         </Button>
-        <Button className={styles.Button} onClick={newGame} aria-label="list" value="Reset">
+        <Button className={styles.Button} onClick={newGame} variant="contained">
           Reset
           <Clear />
         </Button>

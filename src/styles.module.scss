@@ -46,7 +46,6 @@ body {
 .Dialog {
   text-align: center;
   font-size: 1.4em;
-  height: '400px';
 }
 
 .Panel {
@@ -91,7 +90,7 @@ body {
 
 .Button {
   margin: 5px;
-  height: 46px;
+  height: 56px;
   flex-grow: 1;
 }
 
@@ -105,6 +104,8 @@ body {
   display: flex;
   flex-direction: column;
   text-align: center;
+  width: 800px;
+  height: 500px;
 }
 
 .BotSelector {
@@ -115,4 +116,11 @@ body {
   label {
     margin-right: 10px;
   }
+}
+
+.lightSquare {
+  background-color: rgb(240, 217, 181);
+}
+.darkSquare {
+  background-color: rgb(240, 217, 181);
 }
