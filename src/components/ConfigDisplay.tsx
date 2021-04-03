@@ -10,7 +10,10 @@ export const ConfigDisplay: React.FC = () => {
   return (
     <div className={styles.Config}>
       <div className={styles.Buttons}>
-        <Button className={styles.Button} onClick={() => setRotation((rotation + 1) % 4)}>
+        <Button
+          className={styles.Button}
+          variant="contained"
+          onClick={() => setRotation((rotation + 1) % 4)}>
           Rotate chessboard <RotateRight />
         </Button>
       </div>

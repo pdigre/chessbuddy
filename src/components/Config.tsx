@@ -69,7 +69,7 @@ export const Config: React.FC<ConfigGameProps> = ({
       aria-labelledby="simple-dialog-title"
       open={showConfig}
       onClose={() => setShowConfig(false)}
-      maxWidth="md"
+      maxWidth="xl"
       className={styles.Dialog}>
       <DialogTitle id="simple-dialog-title">Configure</DialogTitle>
 

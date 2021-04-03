@@ -62,10 +62,10 @@ export const ConfigHuman: React.FC<ConfigHumanProps> = ({ players }) => {
 
       <TextField label="Player Name" id="name" size="small" onChange={handleChange} />
       <div className={styles.Buttons}>
-        <Button className={styles.Button} onClick={addPlayerHandler} aria-label="list" value="Play">
+        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
           Add <Add />
         </Button>
-        <Button className={styles.Button} onClick={delPlayerHandler} aria-label="list" value="Play">
+        <Button className={styles.Button} onClick={delPlayerHandler} variant="contained">
           Delete <Delete />
         </Button>
       </div>

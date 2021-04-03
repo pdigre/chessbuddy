@@ -82,11 +82,11 @@ export const ConfigBot: React.FC<ConfigBotProps> = ({ players }) => {
       />
       <TextField label="Time (seconds)" id="time" size="small" onChange={timeChange} />
       <div className={styles.Buttons}>
-        <Button className={styles.Button} onClick={addPlayerHandler} aria-label="list" value="Add">
+        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
           Add
           <Add />
         </Button>
-        <Button className={styles.Button} onClick={delPlayerHandler} aria-label="list" value="Play">
+        <Button className={styles.Button} onClick={delPlayerHandler} variant="contained">
           Delete <Delete />
         </Button>
       </div>
