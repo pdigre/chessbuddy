@@ -28,9 +28,14 @@ export const isGameOver = (fen: Fen): boolean => Chess(fen).game_over();
 export const isMoveable = (fen: Fen, from: Square): boolean =>
   new Chess(fen).moves({ square: from }).length > 0;
 
-export const move = (fen: Fen, from: Square, to: Square): [Fen, Move] | null => {
+export const move = (
+  fen: Fen,
+  from: Square,
+  to: Square,
+  promotion?: 'b' | 'n' | 'r' | 'q'
+): [Fen, Move] | null => {
   const game = Chess(fen);
-  const action = game.move({ from, to, promotion: 'q' });
+  const action = game.move({ from, to, promotion: promotion ?? 'q' });
   return action ? [game.fen(), action] : null;
 };
 

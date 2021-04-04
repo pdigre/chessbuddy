@@ -1,70 +1,41 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import * as rules from './data/rules';
-import { Bot } from './data/bots';
-import { San, locate, sanText } from './data/openings';
+import { locate, sanText } from './data/openings';
 import { useGlobalState, usePersistentState } from './data/state';
-import { setTimeFunc, toHHMMSS } from './data/library';
-import { getPlayers, Human, playerInit } from './data/players';
+import { getPlayers, playerInit } from './data/players';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import styles from './styles.module.scss';
-import Chessboard from 'chessboardjsx';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
 import { Config } from './components/Config';
+import { Board } from './components/Board';
 import { MessageBox, MessageBoxProps } from './components/MessageBox';
 
 const theme = unstable_createMuiStrictModeTheme();
-const pgnStyle: React.CSSProperties = {
-  background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
-  borderRadius: '50%',
-};
-const whiteSquareStyle: React.CSSProperties = {
-  backgroundColor: 'rgb(240, 217, 181)',
-};
-const blackSquareStyle: React.CSSProperties = {
-  backgroundColor: 'rgb(181, 136, 99)',
-};
-
-type BoardMove = {
-  sourceSquare: rules.Square;
-  targetSquare: rules.Square;
-};
 
 const App: React.FC = () => {
+  const [message, setMessage] = useState<MessageBoxProps>();
+
+  const about = () => {
+    setMessage({
+      title: 'About',
+      msg:
+        'This chess program is open source and\n available at github https://github.com/pdigre/chessbuddy',
+      buttons: ['Ok'],
+      response: reply => {
+        setMessage({});
+      },
+    });
+  };
+
+  // New Game
   const [isPlaying, setPlaying] = useGlobalState('playing');
   const [fen, setFen] = useGlobalState('fen');
-  const [start, setStart] = useGlobalState('start');
   const [history, setHistory] = useGlobalState('history');
   const [markHistory, setMarkHistory] = useGlobalState('markHistory');
-  const [white, setWhite] = useGlobalState('white');
-  const [black, setBlack] = useGlobalState('black');
-  const [rotation, setRotation] = useGlobalState('rotation');
+  const [start, setStart] = useGlobalState('start');
   const [wtime, setWtime] = useGlobalState('wtime');
   const [btime, setBtime] = useGlobalState('btime');
-  const [message, setMessage] = useState<MessageBoxProps>();
-  const [log, setLog] = usePersistentState('log', '');
-
-  const r90 = rotation % 2 == 1;
-  const r180 = rotation > 1;
-
-  const doMove = useCallback(
-    (fen: rules.Fen, from: rules.Square, to: rules.Square) => {
-      const move = rules.move(fen, from, to);
-      if (!move) {
-        return;
-      }
-      if (isPlaying) {
-        const [newFen, action] = move;
-        setFen(newFen);
-        addHistory(action.san);
-      }
-    },
-    [isPlaying]
-  );
-
-  const addHistory = (san: string) => {
-    setHistory(history => [...history, san]);
-  };
 
   const newGame = () => {
     setHistory([]);
@@ -74,6 +45,11 @@ const App: React.FC = () => {
     setMarkHistory(-1);
     setFen(rules.NEW_GAME);
   };
+
+  // StopStart
+  const isComplete = rules.isGameOver(fen);
+  const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
+  const players = () => getPlayers(() => playerdata as string);
 
   const stopstart = () => {
     if (isComplete) newGame();
@@ -96,84 +72,11 @@ const App: React.FC = () => {
     setPlaying(!isPlaying);
   };
 
-  const about = () => {
-    setMessage({
-      title: 'About',
-      msg:
-        'This chess program is open source and\n available at github https://github.com/pdigre/chessbuddy',
-      buttons: ['Ok'],
-      response: reply => {
-        setMessage({});
-      },
-    });
-  };
-
-  const isComplete = rules.isGameOver(fen);
-  const isWhiteTurn = rules.isWhiteTurn(fen);
-  const next = isWhiteTurn ? white : black;
-  const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
-  const players = () => getPlayers(() => playerdata as string);
-  const player = players().find(p => p.name == next);
-
-  if (isPlaying && isComplete) {
-    setPlaying(false);
-  }
-
   const gotoMark = (mark: number) => {
     if (isPlaying) stopstart();
     setFen(rules.CLEAR_GAME);
     setFen(rules.replay(history, mark >= 0 ? mark : history.length));
   };
-
-  setTimeFunc(() => {
-    if (isPlaying) {
-      if (isWhiteTurn) {
-        setWtime(wtime + 1);
-      } else {
-        setBtime(btime + 1);
-      }
-    }
-  });
-
-  const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
-    const from2 = r90 ? rules.leftSquare(from) : from;
-    return isPlaying && rules.isMoveable(fen, from2) && player instanceof Human;
-  };
-
-  const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
-    doMove(fen, r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to);
-  };
-
-  const wtext = `White: ${white} ${toHHMMSS(wtime)} ${
-    isComplete && !isWhiteTurn ? ' ** Winner **' : ''
-  }`;
-  const btext = `Black: ${black} ${toHHMMSS(btime)} ${
-    isComplete && isWhiteTurn ? ' ** Winner **' : ''
-  }`;
-
-  useEffect(() => {
-    if (!isPlaying) {
-      return;
-    }
-    const player = players().find(p => p.name == next && p instanceof Bot);
-    if (player instanceof Bot) {
-      player.runBot(fen, ({ from, to }) => {
-        doMove(fen, from, to);
-      });
-    }
-    return () => {
-      //
-    };
-  }, [isPlaying, fen, white, black, doMove]);
-
-  const markers = {};
-  const san: San | undefined = locate(history);
-  if (san) {
-    const sans = san.children.map(x => x.san);
-    rules.findInfoMarkers(sans, fen).forEach(x => {
-      Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: pgnStyle });
-    });
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -185,24 +88,11 @@ const App: React.FC = () => {
           setMessage={setMessage}
           players={players()}
         />
-        <div className={styles.AppLeft}>
-          <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
-          <Chessboard
-            position={r90 ? rules.leftFen(fen) : fen}
-            allowDrag={onDragStart}
-            onDrop={onMovePiece}
-            orientation={!r180 ? 'white' : 'black'}
-            width={700}
-            squareStyles={markers}
-            lightSquareStyle={r90 ? blackSquareStyle : whiteSquareStyle}
-            darkSquareStyle={r90 ? whiteSquareStyle : blackSquareStyle}
-          />
-          <p className={styles.Player}>{r180 ? btext : wtext}</p>
-        </div>
+        <Board setMessage={setMessage} />
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.3</h3>
+          <h3 onClick={about}>♛ Chessbuddy 0.4</h3>
           <Panel stopstart={stopstart} />
-          <p>{sanText(san)}</p>
+          <p>{sanText(locate(history))}</p>
           <History gotoMark={gotoMark} setMessage={setMessage} />
         </div>
       </div>
