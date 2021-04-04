@@ -7,7 +7,7 @@ import * as rules from '../data/rules';
 import { MessageBoxProps } from './MessageBox';
 import { game2string, log2arr } from '../data/library';
 
-export type HistoryProps = {
+type HistoryProps = {
   gotoMark: (mark: number) => void;
   setMessage: (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
 };
