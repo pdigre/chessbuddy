@@ -48,7 +48,7 @@ Bot:Lozza:20::10
 Bot:Lozza:20:1:
 `;
 
-export const helper = createPlayer('Bot:Stockfish:20:2:') as Bot;
+export const helper = createPlayer('Bot:Stockfish:20:1:') as Bot;
 
 const players: Player[] = [];
 export const getPlayers: (func: () => string) => Player[] = (func: () => string) => {

@@ -10,7 +10,7 @@ type Initial = {
   btime: number;
   fen: string;
   history: string[];
-  start?: Date;
+  timer: number;
   moves: string[];
   playing: boolean;
   // account: {
@@ -32,7 +32,7 @@ const initial: Initial = {
   btime: 0,
   fen: NEW_GAME,
   history: [],
-  start: new Date(),
+  timer: 0,
   moves: [],
   playing: false,
   // account: {

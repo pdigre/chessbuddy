@@ -49,14 +49,14 @@ export const ConfigGame: React.FC<ConfigGameProps> = ({
     if (winner) {
       setMessage({
         title: 'Game has ended',
-        msg: winner != 'Draw' ? winner + ' won this game' : 'The game was a draw',
+        msg: <div>{winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'}</div>,
         buttons: [],
         response: () => setMessage({}),
       });
     } else {
       setMessage({
         title: 'End game',
-        msg: 'Who won?',
+        msg: <div>Who won?</div>,
         buttons: ['White', 'Black', 'Draw'],
         response: recordScore,
       });

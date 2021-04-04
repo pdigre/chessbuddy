@@ -12,7 +12,7 @@ import type { HANDLE_CLICK } from './reacttypes';
 
 export type MessageBoxProps = {
   title?: string;
-  msg?: string;
+  msg?: JSX.Element;
   buttons?: string[];
   response?: (button: string) => void;
 };
