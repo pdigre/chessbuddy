@@ -8,6 +8,7 @@ type Initial = {
   black: string;
   wtime: number;
   btime: number;
+  cp: number;
   fen: string;
   history: string[];
   timer: number;
@@ -30,6 +31,7 @@ const initial: Initial = {
   black: 'User',
   wtime: 0,
   btime: 0,
+  cp: 0,
   fen: NEW_GAME,
   history: [],
   timer: 0,
