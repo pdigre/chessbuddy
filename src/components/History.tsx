@@ -15,7 +15,7 @@ type HistoryProps = {
 export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
   const endRef = useRef<HTMLElement>(null);
   const [history, setHistory] = useGlobalState('history');
-  const [start, setStart] = useGlobalState('start');
+  const [timer, setTimer] = useGlobalState('timer');
   const [white, setWhite] = useGlobalState('white');
   const [black, setBlack] = useGlobalState('black');
   const [markHistory, setMarkHistory] = useGlobalState('markHistory');
@@ -29,7 +29,7 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
   }, [history]);
 
   if (rules.whoWon(history)) {
-    const game = game2string(start, white, black, history);
+    const game = game2string(new Date(timer), white, black, history);
     if (!log.split('\n').includes(game)) {
       setLog(log + game + '\n');
     }
@@ -37,11 +37,14 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
 
   if (!showStats && marker >= 0) {
     const games = log2arr(log);
-    if (history.length == 0 || games.includes(game2string(start, white, black, history))) {
+    if (
+      history.length == 0 ||
+      games.includes(game2string(new Date(timer), white, black, history))
+    ) {
       const moves = games[marker].split(';')[3].split(' ');
       setMessage({
         title: 'Load game',
-        msg: 'Do you want to look at this game?',
+        msg: <div>Do you want to look at this game?</div>,
         buttons: ['Yes', 'No'],
         response: reply => {
           if (reply == 'Yes') {
@@ -56,7 +59,7 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     } else {
       setMessage({
         title: 'Load game',
-        msg: 'You have to end current game to load previous games',
+        msg: <div>You have to end current game to load previous games</div>,
         buttons: ['Ok'],
         response: () => {
           setMessage({});

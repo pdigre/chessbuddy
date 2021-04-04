@@ -3,9 +3,7 @@ import * as rules from '../data/rules';
 import { Bot } from '../data/bots';
 import { San, locate } from '../data/openings';
 import { useGlobalState, usePersistentState } from '../data/state';
-import { setTimeFunc, toHHMMSS } from '../data/library';
 import { getPlayers, helper, Human, playerInit } from '../data/players';
-import styles from '../styles.module.scss';
 import Chessboard from 'chessboardjsx';
 import { MessageBoxProps } from './MessageBox';
 
@@ -31,18 +29,19 @@ type BoardMove = {
 
 export type BoardProps = {
   setMessage: (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
+  addMove: (fen: string, san: string) => void;
 };
 
-export const Board: React.FC<BoardProps> = ({ setMessage }) => {
+export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
   const [isPlaying, setPlaying] = useGlobalState('playing');
   const [fen, setFen] = useGlobalState('fen');
   const [history, setHistory] = useGlobalState('history');
   const [white, setWhite] = useGlobalState('white');
   const [black, setBlack] = useGlobalState('black');
   const [rotation, setRotation] = useGlobalState('rotation');
-  const [wtime, setWtime] = useGlobalState('wtime');
-  const [btime, setBtime] = useGlobalState('btime');
   const [help, setHelp] = useState([] as string[]);
+  const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
+  const players = () => getPlayers(() => playerdata as string);
 
   const doMove = useCallback(
     (fen: rules.Fen, from: rules.Square, to: rules.Square, isHuman: boolean) => {
@@ -50,13 +49,13 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
       if (!move) {
         return;
       }
-      if (isPlaying) {
+      if (isPlaying || isHuman) {
         const [newFen, action] = move;
         if (action.promotion && isHuman) {
           const buttons = ['Queen', 'Rook', 'Knight', 'Bishop'];
           setMessage({
             title: 'Promotion',
-            msg: 'Choose promotion piece',
+            msg: <div>Choose promotion piece</div>,
             buttons: buttons,
             response: reply => {
               let promo: 'b' | 'q' | 'n' | 'r' = 'q';
@@ -67,15 +66,13 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
               if (move != null) {
                 const [newFen, action] = move;
                 setMessage({});
-                setFen(newFen);
-                addHistory(action.san);
+                addMove(newFen, action.san);
                 setHelp([]);
               }
             },
           });
         } else {
-          setFen(newFen);
-          addHistory(action.san);
+          addMove(newFen, action.san);
           setHelp([]);
         }
       }
@@ -83,60 +80,44 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
     [isPlaying]
   );
 
-  const addHistory = (san: string) => {
-    setHistory(history => [...history, san]);
-  };
-
   const isComplete = rules.isGameOver(fen);
   const isWhiteTurn = rules.isWhiteTurn(fen);
   const next = isWhiteTurn ? white : black;
-  const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
-  const players = () => getPlayers(() => playerdata as string);
   const player = players().find(p => p.name == next);
 
   if (isPlaying && isComplete) {
     setPlaying(false);
   }
 
-  setTimeFunc(() => {
-    if (isPlaying) {
-      if (isWhiteTurn) {
-        setWtime(wtime + 1);
-      } else {
-        setBtime(btime + 1);
-      }
-    }
-  });
-
   const r90 = rotation % 2 == 1;
   const r180 = rotation > 1;
 
   const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
-    const from2 = r90 ? rules.leftSquare(from) : from;
-    return isPlaying && rules.isMoveable(fen, from2) && player instanceof Human;
+    if (player instanceof Human) {
+      const from2 = r90 ? rules.leftSquare(from) : from;
+      return rules.isMoveable(fen, from2);
+    }
+    return false;
   };
 
   const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
     doMove(fen, r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
+    if (!isPlaying) setPlaying(true);
   };
-
-  const wtext = `White: ${white} ${toHHMMSS(wtime)} ${
-    isComplete && !isWhiteTurn ? ' ** Winner **' : ''
-  }`;
-  const btext = `Black: ${black} ${toHHMMSS(btime)} ${
-    isComplete && isWhiteTurn ? ' ** Winner **' : ''
-  }`;
 
   useEffect(() => {
     if (!isPlaying) {
       return;
     }
-    const player = players().find(p => p.name == next && p instanceof Bot);
+    const isWhiteTurn = rules.isWhiteTurn(fen);
+    const next = isWhiteTurn ? white : black;
+    const player = players().find(p => p.name == next);
     if (player instanceof Bot) {
       player.runBot(fen, ({ from, to }) => {
         doMove(fen, from, to, false);
       });
-    } else {
+    }
+    if (player instanceof Human) {
       if (!help.length) {
         helper.runBot(fen, ({ from, to }) => {
           setHelp([from, to]);
@@ -146,7 +127,7 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
     return () => {
       //
     };
-  }, [isPlaying, fen, white, black, doMove]);
+  }, [isPlaying, fen, white, black, doMove, players]);
 
   const showMarkers = () => {
     const markers = {};
@@ -163,19 +144,15 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
   };
 
   return (
-    <div className={styles.AppLeft}>
-      <p className={r90 ? styles.PlayerRight : styles.Player}>{r180 ? wtext : btext}</p>
-      <Chessboard
-        position={r90 ? rules.leftFen(fen) : fen}
-        allowDrag={onDragStart}
-        onDrop={onMovePiece}
-        orientation={!r180 ? 'white' : 'black'}
-        width={700}
-        squareStyles={showMarkers()}
-        lightSquareStyle={r90 ? blackSquareStyle : whiteSquareStyle}
-        darkSquareStyle={r90 ? whiteSquareStyle : blackSquareStyle}
-      />
-      <p className={styles.Player}>{r180 ? btext : wtext}</p>
-    </div>
+    <Chessboard
+      position={r90 ? rules.leftFen(fen) : fen}
+      allowDrag={onDragStart}
+      onDrop={onMovePiece}
+      orientation={!r180 ? 'white' : 'black'}
+      width={700}
+      squareStyles={showMarkers()}
+      lightSquareStyle={r90 ? blackSquareStyle : whiteSquareStyle}
+      darkSquareStyle={r90 ? whiteSquareStyle : blackSquareStyle}
+    />
   );
 };
