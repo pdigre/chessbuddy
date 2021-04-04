@@ -3,7 +3,8 @@ import * as rules from '../data/rules';
 import { Bot } from '../data/bots';
 import { San, locate } from '../data/openings';
 import { useGlobalState, usePersistentState } from '../data/state';
-import { getPlayers, helper, Human, playerInit } from '../data/players';
+import { getPlayers, Human, playerInit } from '../data/players';
+import { helper } from '../data/bots';
 import Chessboard from 'chessboardjsx';
 import { MessageBoxProps } from './MessageBox';
 
@@ -12,8 +13,12 @@ const pgnStyle: React.CSSProperties = {
   borderRadius: '50%',
 };
 const helpStyle: React.CSSProperties = {
+  background: 'radial-gradient(circle, #00ff4c 36%, transparent 50%)',
+  borderRadius: '10%',
+};
+const helpStyle2: React.CSSProperties = {
   background: 'radial-gradient(circle, #00ff4c 36%, transparent 30%)',
-  borderRadius: '70%',
+  borderRadius: '10%',
 };
 const whiteSquareStyle: React.CSSProperties = {
   backgroundColor: 'rgb(240, 217, 181)',
@@ -39,6 +44,7 @@ export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
   const [white, setWhite] = useGlobalState('white');
   const [black, setBlack] = useGlobalState('black');
   const [rotation, setRotation] = useGlobalState('rotation');
+  const [cp, setCp] = useGlobalState('cp');
   const [help, setHelp] = useState([] as string[]);
   const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
   const players = () => getPlayers(() => playerdata as string);
@@ -119,8 +125,11 @@ export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
     }
     if (player instanceof Human) {
       if (!help.length) {
-        helper.runBot(fen, ({ from, to }) => {
-          setHelp([from, to]);
+        helper.run(fen, ({ moves, cp }) => {
+          const squares: Set<string> = new Set();
+          moves.forEach(x => squares.add(x));
+          setHelp([...squares]);
+          setCp(isWhiteTurn ? cp : -cp);
         });
       }
     }
@@ -139,7 +148,9 @@ export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
       );
       pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: pgnStyle }));
     }
-    help.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: helpStyle }));
+    help.forEach((x, i) =>
+      Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: i > 1 ? helpStyle2 : helpStyle })
+    );
     return markers;
   };
 

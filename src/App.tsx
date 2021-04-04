@@ -23,6 +23,7 @@ const App: React.FC = () => {
   const [black, setBlack] = useGlobalState('black');
   const [fen, setFen] = useGlobalState('fen');
   const [history, setHistory] = useGlobalState('history');
+  const [cp, setCp] = useGlobalState('cp');
 
   const about = () => {
     setMessage({
@@ -136,6 +137,8 @@ const App: React.FC = () => {
     isComplete && isWhiteTurn ? ' ** Winner **' : ''
   }`;
 
+  const lead = `, cp ${Math.abs(cp)} ${cp > 0 ? 'white' : 'black'}`;
+
   const r180 = rotation > 1;
   return (
     <ThemeProvider theme={theme}>
@@ -152,7 +155,9 @@ const App: React.FC = () => {
             {r180 ? wtext : btext}
           </p>
           <Board setMessage={setMessage} addMove={addMove} />
-          <p className={styles.Player}>{!r180 ? wtext : btext}</p>
+          <p className={styles.Player}>
+            {!r180 ? wtext : btext} {lead}
+          </p>
         </div>
 
         <div className={styles.AppRight}>
