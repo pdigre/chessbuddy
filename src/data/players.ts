@@ -1,4 +1,4 @@
-import { Bot, UCI_ENGINES, UCI_ENGINE } from './bots';
+import { Bot } from './bots';
 import { Player } from './player';
 
 export class Human extends Player {
@@ -21,8 +21,7 @@ const createPlayer = (data: string) => {
   if (data.includes('undefined')) return undefined;
   const split = data.split(':');
   if (split[0] == 'Bot') {
-    const engine = UCI_ENGINES.find(x => x.name == split[1]) as UCI_ENGINE;
-    return new Bot(engine, parseInt(split[2]) as number, parseInt(split[3]), parseInt(split[4]));
+    return new Bot(split[1], parseInt(split[2]) as number, parseInt(split[3]), parseInt(split[4]));
   }
   if (split[0] == 'Human') {
     return new Human(split[1]);
@@ -49,11 +48,15 @@ Bot:Lozza:20:1:
 `;
 
 const players: Player[] = [];
-export const getPlayers: (func: () => string) => Player[] = (func: () => string) => {
+export const getPlayers = () => {
   if (!players?.length) {
-    const pdata = func();
+    const pdata = localStorage.getItem('playerdata') ?? playerInit;
     players.splice(0, players.length);
     restore(pdata);
   }
   return players;
+};
+
+export const setPlayers = () => {
+  localStorage.setItem('playerdata', toString());
 };

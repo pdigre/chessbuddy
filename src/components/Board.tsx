@@ -1,10 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import * as rules from '../data/rules';
-import { Bot } from '../data/bots';
-import { San, locate } from '../data/openings';
-import { useGlobalState, usePersistentState } from '../data/state';
-import { getPlayers, Human, playerInit } from '../data/players';
-import { helper } from '../data/bots';
+import { Bot, helper } from '../data/bots';
+import { Human } from '../data/players';
+import { useGlobalState } from '../data/state';
+import { gamerunner } from '../data/game';
 import Chessboard from 'chessboardjsx';
 import { MessageBoxProps } from './MessageBox';
 
@@ -34,20 +33,15 @@ type BoardMove = {
 
 export type BoardProps = {
   setMessage: (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
-  addMove: (fen: string, san: string) => void;
 };
 
-export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
+export const Board: React.FC<BoardProps> = ({ setMessage }) => {
   const [isPlaying, setPlaying] = useGlobalState('playing');
   const [fen, setFen] = useGlobalState('fen');
   const [history, setHistory] = useGlobalState('history');
-  const [white, setWhite] = useGlobalState('white');
-  const [black, setBlack] = useGlobalState('black');
   const [rotation, setRotation] = useGlobalState('rotation');
   const [cp, setCp] = useGlobalState('cp');
   const [help, setHelp] = useState([] as string[]);
-  const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
-  const players = () => getPlayers(() => playerdata as string);
 
   const doMove = useCallback(
     (fen: rules.Fen, from: rules.Square, to: rules.Square, isHuman: boolean) => {
@@ -72,13 +66,17 @@ export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
               if (move != null) {
                 const [newFen, action] = move;
                 setMessage({});
-                addMove(newFen, action.san);
+                gamerunner.game.addMove(newFen, action.san);
+                setFen(newFen);
+                setHistory(gamerunner.game.log);
                 setHelp([]);
               }
             },
           });
         } else {
-          addMove(newFen, action.san);
+          gamerunner.game.addMove(newFen, action.san);
+          setFen(newFen);
+          setHistory(gamerunner.game.log);
           setHelp([]);
         }
       }
@@ -86,12 +84,10 @@ export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
     [isPlaying]
   );
 
-  const isComplete = rules.isGameOver(fen);
-  const isWhiteTurn = rules.isWhiteTurn(fen);
-  const next = isWhiteTurn ? white : black;
-  const player = players().find(p => p.name == next);
+  const g = gamerunner.game;
+  const player = g.nextPlayer();
 
-  if (isPlaying && isComplete) {
+  if (isPlaying && g.isComplete) {
     setPlaying(false);
   }
 
@@ -115,40 +111,33 @@ export const Board: React.FC<BoardProps> = ({ setMessage, addMove }) => {
     if (!isPlaying) {
       return;
     }
-    const isWhiteTurn = rules.isWhiteTurn(fen);
-    const next = isWhiteTurn ? white : black;
-    const player = players().find(p => p.name == next);
+    const g = gamerunner.game;
+    const player = g.nextPlayer();
     if (player instanceof Bot) {
-      player.runBot(fen, ({ from, to }) => {
-        doMove(fen, from, to, false);
+      player.runBot(g.fen, ({ from, to }) => {
+        doMove(g.fen, from, to, false);
       });
     }
     if (player instanceof Human) {
-      if (!help.length) {
-        helper.run(fen, ({ moves, cp }) => {
+      if (!g.help.length) {
+        helper.run(g.fen, ({ moves, cp }) => {
           const squares: Set<string> = new Set();
           moves.forEach(x => squares.add(x));
-          setHelp([...squares]);
-          setCp(isWhiteTurn ? cp : -cp);
+          g.help = [...squares];
+          setHelp(g.help);
+          setCp(g.isWhiteTurn ? cp : -cp);
         });
       }
     }
     return () => {
       //
     };
-  }, [isPlaying, fen, white, black, doMove, players]);
+  }, [isPlaying, fen, setHelp, doMove]);
 
   const showMarkers = () => {
     const markers = {};
-    const san: San | undefined = locate(history);
-    if (san) {
-      const pgns = rules.findInfoMarkers(
-        san.children.map(x => x.san),
-        fen
-      );
-      pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: pgnStyle }));
-    }
-    help.forEach((x, i) =>
+    g.pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: pgnStyle }));
+    g.help.forEach((x, i) =>
       Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: i > 1 ? helpStyle2 : helpStyle })
     );
     return markers;

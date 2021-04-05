@@ -13,6 +13,10 @@ export class UCI_ENGINE {
     this.path = path;
   }
 }
+export const UCI_ENGINES: UCI_ENGINE[] = [
+  new UCI_ENGINE('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
+  new UCI_ENGINE('Lozza', 'bots/lozza-1.18/lozza.js'),
+];
 
 export class Bot extends Player {
   type: UCI_ENGINE = UCI_ENGINES[0];
@@ -23,8 +27,9 @@ export class Bot extends Player {
   instance?: InitialisedBot;
   isRunning = false;
 
-  constructor(type: UCI_ENGINE, skill: number, time?: number, depth?: number) {
-    super(`${type.name} skill=${skill} ` + (time ? ` time=${time}` : `depth=${depth}`));
+  constructor(engine: string, skill: number, time?: number, depth?: number) {
+    super(`${engine} skill=${skill} ` + (time ? ` time=${time}` : `depth=${depth}`));
+    const type = UCI_ENGINES.find(x => x.name == engine) as UCI_ENGINE;
     this.type = type;
     this.skill = skill;
     this.time = time;
@@ -46,11 +51,6 @@ export class Bot extends Player {
   };
   toString = () => `Bot:${this.type.name}:${this.skill}:${this.time ?? ''}:${this.depth ?? ''}`;
 }
-
-export const UCI_ENGINES: UCI_ENGINE[] = [
-  new UCI_ENGINE('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
-  new UCI_ENGINE('Lozza', 'bots/lozza-1.18/lozza.js'),
-];
 
 const uciWorker = (file: string, actions: Array<string>): UninitialisedBot => () => {
   const worker = new Worker(file);
