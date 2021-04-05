@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { usePersistentState } from '../data/state';
-import { addPlayer, delPlayer, Human, toString } from '../data/players';
-import { Player } from '../data/player';
+import { addPlayer, delPlayer, Human, getPlayers, setPlayers } from '../data/players';
 import styles from '../styles.module.scss';
 import {
   Button,
@@ -15,16 +13,11 @@ import {
 import { Add, Delete } from '@material-ui/icons';
 import type { HANDLE_CHANGE, HANDLE_CLICK } from './reacttypes';
 
-export type ConfigHumanProps = {
-  players: Player[];
-};
-
-export const ConfigHuman: React.FC<ConfigHumanProps> = ({ players }) => {
+export const ConfigHuman: React.FC = () => {
   const [name, setName] = useState('');
-  const [playerdata, setPlayerdata] = usePersistentState('playerdata', '');
   const addPlayerHandler: HANDLE_CLICK = event => {
     addPlayer(`Human:${name}`);
-    setPlayerdata(toString());
+    setPlayers();
   };
   const handleChange: HANDLE_CHANGE = (event, child) => setName(event.target.value as string);
 
@@ -37,11 +30,11 @@ export const ConfigHuman: React.FC<ConfigHumanProps> = ({ players }) => {
     }
   };
 
-  const humans = players.filter(x => x instanceof Human);
+  const humans = getPlayers().filter(x => x instanceof Human);
   const delPlayerHandler: HANDLE_CLICK = event => {
     if (marker >= 0) {
       delPlayer(humans[marker].name);
-      setPlayerdata(toString());
+      setPlayers();
     }
   };
 

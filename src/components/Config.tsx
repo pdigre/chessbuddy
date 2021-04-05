@@ -12,7 +12,6 @@ export const Config: React.FC<ConfigGameProps> = ({
   newGame,
   stopstart,
   setMessage: setMessage,
-  players,
 }) => {
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
 
@@ -86,21 +85,16 @@ export const Config: React.FC<ConfigGameProps> = ({
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <ConfigGame
-          newGame={newGame}
-          stopstart={stopstart}
-          setMessage={setMessage}
-          players={players}
-        />
+        <ConfigGame newGame={newGame} stopstart={stopstart} setMessage={setMessage} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ConfigDisplay />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ConfigHuman players={players} />
+        <ConfigHuman />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <ConfigBot players={players} />
+        <ConfigBot />
       </TabPanel>
     </Dialog>
   );

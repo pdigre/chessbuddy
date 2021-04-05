@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import * as rules from './data/rules';
 import { locate, sanText } from './data/openings';
-import { useGlobalState, usePersistentState } from './data/state';
-import { getPlayers, playerInit } from './data/players';
-import { toMMSS, TimeKeeper } from './data/library';
+import { useGlobalState } from './data/state';
+import { gamerunner } from './data/game';
+import { TimeKeeper } from './data/library';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import { Link } from '@material-ui/core';
 import styles from './styles.module.scss';
@@ -58,46 +58,22 @@ const App: React.FC = () => {
   // New Game
   const [isPlaying, setPlaying] = useGlobalState('playing');
   const [markHistory, setMarkHistory] = useGlobalState('markHistory');
-  const [timer, setTimer] = useGlobalState('timer');
-  const [wtime, setWtime] = useGlobalState('wtime');
-  const [btime, setBtime] = useGlobalState('btime');
   const [time, setTime] = useState(new Date().getTime());
 
   TimeKeeper.ticker = () => {
     const time = TimeKeeper.update(isPlaying);
     if (isPlaying) setTime(time);
   };
-  TimeKeeper.white = wtime;
-  TimeKeeper.black = btime;
 
   const newGame = () => {
+    gamerunner.newGame(white, black);
     setHistory([]);
-    setTimer(new Date().getTime());
-    setWtime(0);
-    setBtime(0);
     setMarkHistory(-1);
     setFen(rules.NEW_GAME);
   };
 
-  const addMove = (newFen: string, san: string) => {
-    setFen(newFen);
-    setHistory(history => [...history, san]);
-    setTimer(new Date().getTime());
-
-    const isWhiteTurn = rules.isWhiteTurn(newFen);
-    const diff = TimeKeeper.next(isWhiteTurn);
-    if (isWhiteTurn) {
-      setBtime(TimeKeeper.black);
-    } else {
-      setWtime(TimeKeeper.white);
-    }
-    TimeKeeper.reset();
-  };
-
   // StopStart
   const isComplete = rules.isGameOver(fen);
-  const [playerdata, setPlayerdata] = usePersistentState('playerdata', playerInit);
-  const players = () => getPlayers(() => playerdata as string);
 
   const stopstart = () => {
     if (isComplete) newGame();
@@ -126,35 +102,19 @@ const App: React.FC = () => {
     setFen(rules.replay(history, mark >= 0 ? mark : history.length));
   };
 
-  const isWhiteTurn = rules.isWhiteTurn(fen);
-  const elapsed = TimeKeeper.getUsed();
-  const wtimer = !isComplete && isWhiteTurn ? wtime + elapsed : wtime;
-  const wtext = `White: ${white} ${toMMSS(wtimer)} ${
-    isComplete && !isWhiteTurn ? ' ** Winner **' : ''
-  }`;
-  const btimer = !isComplete && !isWhiteTurn ? btime + elapsed : btime;
-  const btext = `Black: ${black} ${toMMSS(btimer)} ${
-    isComplete && isWhiteTurn ? ' ** Winner **' : ''
-  }`;
-
+  const [wtext, btext] = gamerunner.game.getTitleTexts();
   const lead = `, cp ${Math.abs(cp)} ${cp > 0 ? 'white' : 'black'}`;
-
   const r180 = rotation > 1;
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
         <MessageBox {...message} />
-        <Config
-          newGame={newGame}
-          stopstart={stopstart}
-          setMessage={setMessage}
-          players={players()}
-        />
+        <Config newGame={newGame} stopstart={stopstart} setMessage={setMessage} />
         <div className={styles.AppLeft}>
           <p className={rotation % 2 == 1 ? styles.PlayerRight : styles.Player}>
             {r180 ? wtext : btext}
           </p>
-          <Board setMessage={setMessage} addMove={addMove} />
+          <Board setMessage={setMessage} />
           <p className={styles.Player}>
             {!r180 ? wtext : btext} {lead}
           </p>

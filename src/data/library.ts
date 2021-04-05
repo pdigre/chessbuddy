@@ -1,41 +1,43 @@
-export const TimeKeeper = {
-  ticker: () => {
+class TK {
+  ticker = () => {
     // to be reassigned
-  },
-  time: new Date().getTime(),
-  paused: 0,
-  elapsed: 0,
-  black: 0,
-  white: 0,
-  update: (isPlaying: boolean) => {
-    const time1 = TimeKeeper.time;
+  };
+  time = new Date().getTime();
+  paused = 0;
+  elapsed = 0;
+  black = 0;
+  white = 0;
+  update = (isPlaying: boolean) => {
+    const time1 = this.time;
     const time2 = new Date().getTime();
-    TimeKeeper.time = time2;
+    this.time = time2;
     if (isPlaying) {
-      TimeKeeper.elapsed += time2 - time1;
+      this.elapsed += time2 - time1;
     } else {
-      TimeKeeper.paused += time2 - time1;
+      this.paused += time2 - time1;
     }
     return time2;
-  },
-  getUsed: () => {
-    return Math.round(TimeKeeper.elapsed / 1000);
-  },
-  next: (isWhiteTurn: boolean) => {
-    TimeKeeper.update(true);
+  };
+  getUsed = () => {
+    return Math.round(this.elapsed / 1000);
+  };
+  next = (isWhiteTurn: boolean) => {
+    this.update(true);
     if (isWhiteTurn) {
-      TimeKeeper.black += TimeKeeper.getUsed();
+      this.black += this.getUsed();
     } else {
-      TimeKeeper.white += TimeKeeper.getUsed();
+      this.white += this.getUsed();
     }
-    TimeKeeper.reset();
-  },
-  reset: () => {
-    TimeKeeper.elapsed = 0;
-    TimeKeeper.paused = 0;
-    TimeKeeper.time = new Date().getTime();
-  },
-};
+    this.reset();
+  };
+  reset = () => {
+    this.elapsed = 0;
+    this.paused = 0;
+    this.time = new Date().getTime();
+  };
+}
+
+export const TimeKeeper = new TK();
 
 global.setInterval(() => TimeKeeper.ticker(), 1000);
 

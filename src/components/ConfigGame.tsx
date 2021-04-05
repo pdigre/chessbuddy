@@ -1,32 +1,31 @@
 import React from 'react';
 import { useGlobalState } from '../data/state';
-import { Player } from '../data/player';
+import { getPlayers } from '../data/players';
 import * as rules from '../data/rules';
 import { ConfigSelector } from './ConfigSelector';
 import styles from '../styles.module.scss';
 import { Button } from '@material-ui/core';
 import { Clear, PlayArrow, ExitToApp } from '@material-ui/icons';
 import { MessageBoxProps } from './MessageBox';
+import { gamerunner } from '../data/game';
 
 export type ConfigGameProps = {
   newGame: () => void;
   stopstart: () => void;
   setMessage: (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
-  players: Player[];
 };
 
 export const ConfigGame: React.FC<ConfigGameProps> = ({
   newGame,
   stopstart,
   setMessage: setMessage,
-  players,
 }) => {
   const [whiteBot, setWhiteBot] = useGlobalState('white');
   const [blackBot, setBlackBot] = useGlobalState('black');
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
   const [history, setHistory] = useGlobalState('history');
-
-  const playerNames = Array.from(players.map(x => x.name));
+  const playerNames = Array.from(getPlayers().map(x => x.name));
+  gamerunner.game.setPlayers(whiteBot, blackBot);
 
   const playAction = () => {
     setShowConfig(false);
