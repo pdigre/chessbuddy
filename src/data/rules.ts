@@ -24,6 +24,8 @@ export const getGameWinner = (fen: Fen): GameWinner => {
 };
 
 export const isGameOver = (fen: Fen): boolean => Chess(fen).game_over();
+export const isEndMove = (san: string) =>
+  san == '1-0' || san == '0-1' || san == '1/2-1/2' || san.endsWith('#');
 
 export const isMoveable = (fen: Fen, from: Square): boolean =>
   new Chess(fen).moves({ square: from }).length > 0;
@@ -37,6 +39,12 @@ export const move = (
   const game = Chess(fen);
   const action = game.move({ from, to, promotion: promotion ?? 'q' });
   return action ? [game.fen(), action] : null;
+};
+
+export const newFen = (fen: string, san: string) => {
+  const game = Chess(fen);
+  game.move(san);
+  return game.fen();
 };
 
 export const replay = (moves: string[], to: number): Fen => {

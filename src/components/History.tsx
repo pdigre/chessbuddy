@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useGlobalState, usePersistentState } from '../data/state';
+import { useGlobalState } from '../data/state';
 import styles from '../styles.module.scss';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
 import type { HANDLE_CLICK } from './reacttypes';
 import * as rules from '../data/rules';
 import { MessageBoxProps } from './MessageBox';
-import { game2string, log2arr } from '../data/library';
+import { gamerunner } from '../data/game';
 
 type HistoryProps = {
   gotoMark: (mark: number) => void;
@@ -15,12 +15,8 @@ type HistoryProps = {
 export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
   const endRef = useRef<HTMLElement>(null);
   const [history, setHistory] = useGlobalState('history');
-  const [timer, setTimer] = useGlobalState('timer');
-  const [white, setWhite] = useGlobalState('white');
-  const [black, setBlack] = useGlobalState('black');
   const [markHistory, setMarkHistory] = useGlobalState('markHistory');
   const [marker, setMarker] = useState(-1);
-  const [log, setLog] = usePersistentState('log', '');
   const [showStats, setShowStats] = useGlobalState('showStats');
   const [fen, setFen] = useGlobalState('fen');
 
@@ -28,19 +24,9 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     endRef.current?.scrollIntoView();
   }, [history]);
 
-  if (rules.whoWon(history)) {
-    const game = game2string(new Date(timer), white, black, history);
-    if (!log.split('\n').includes(game)) {
-      setLog(log + game + '\n');
-    }
-  }
-
   if (!showStats && marker >= 0) {
-    const games = log2arr(log);
-    if (
-      history.length == 0 ||
-      games.includes(game2string(new Date(timer), white, black, history))
-    ) {
+    const games = gamerunner.getHistory();
+    if (gamerunner.getGame().isComplete) {
       const moves = games[marker].split(';')[3].split(' ');
       setMessage({
         title: 'Load game',
@@ -84,7 +70,6 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     );
     const id2 = id == marker ? -1 : id;
     setMarker(id2);
-    //    gotoMark(id2);
   };
 
   const showGame = () => {
@@ -111,23 +96,25 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     ));
   };
 
-  const showLog = () => {
-    const rows: string[][] = [];
-    log2arr(log).forEach(game => {
-      const cols = game.split(';');
-      const moves = cols[3].split(' ');
+  const showLog = () =>
+    gamerunner.getHistory().map((row, iRow) => {
+      const cols = row.split(';');
+      const date = new Date(Number.parseInt(cols[0], 36));
+      const tim =
+        date.getDate() == new Date().getDate()
+          ? date.toTimeString().split(' ')[0]
+          : date.toISOString().split('T')[0];
+      const moves = cols[cols.length - 1].split(' ');
       const win = rules.whoWon(moves)?.substring(0, 1) ?? '?';
-      rows.push([cols[0], cols[1].split(' ')[0], cols[2].split(' ')[0], win]);
+      return (
+        <TableRow key={iRow} id={iRow} className={iRow == marker ? styles.MarkRow : ''}>
+          <TableCell>{tim}</TableCell>
+          <TableCell>{cols[1].split(' ')[0]}</TableCell>
+          <TableCell>{cols[2].split(' ')[0]}</TableCell>
+          <TableCell>{win}</TableCell>
+        </TableRow>
+      );
     });
-    return rows.map((row, iRow) => (
-      <TableRow key={iRow} id={iRow} className={iRow == marker ? styles.MarkRow : ''}>
-        <TableCell>{row[0]}</TableCell>
-        <TableCell>{row[1]}</TableCell>
-        <TableCell>{row[2]}</TableCell>
-        <TableCell>{row[3]}</TableCell>
-      </TableRow>
-    ));
-  };
 
   return (
     <TableContainer className={styles.History}>

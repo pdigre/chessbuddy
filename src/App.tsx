@@ -3,7 +3,6 @@ import * as rules from './data/rules';
 import { locate, sanText } from './data/openings';
 import { useGlobalState } from './data/state';
 import { gamerunner } from './data/game';
-import { TimeKeeper } from './data/library';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import { Link } from '@material-ui/core';
 import styles from './styles.module.scss';
@@ -11,6 +10,7 @@ import { History } from './components/History';
 import { Panel } from './components/Panel';
 import { Config } from './components/Config';
 import { Board } from './components/Board';
+import { PlayerInfo } from './components/PlayerInfo';
 import { MessageBox, MessageBoxProps } from './components/MessageBox';
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -18,12 +18,10 @@ const theme = unstable_createMuiStrictModeTheme();
 const App: React.FC = () => {
   const [message, setMessage] = useState<MessageBoxProps>();
 
-  const [rotation, setRotation] = useGlobalState('rotation');
   const [white, setWhite] = useGlobalState('white');
   const [black, setBlack] = useGlobalState('black');
   const [fen, setFen] = useGlobalState('fen');
   const [history, setHistory] = useGlobalState('history');
-  const [cp, setCp] = useGlobalState('cp');
 
   const about = () => {
     setMessage({
@@ -58,12 +56,6 @@ const App: React.FC = () => {
   // New Game
   const [isPlaying, setPlaying] = useGlobalState('playing');
   const [markHistory, setMarkHistory] = useGlobalState('markHistory');
-  const [time, setTime] = useState(new Date().getTime());
-
-  TimeKeeper.ticker = () => {
-    const time = TimeKeeper.update(isPlaying);
-    if (isPlaying) setTime(time);
-  };
 
   const newGame = () => {
     gamerunner.newGame(white, black);
@@ -72,11 +64,8 @@ const App: React.FC = () => {
     setFen(rules.NEW_GAME);
   };
 
-  // StopStart
-  const isComplete = rules.isGameOver(fen);
-
   const stopstart = () => {
-    if (isComplete) newGame();
+    if (gamerunner.getGame().isComplete) newGame();
     if (!isPlaying && markHistory >= 0) {
       setMessage({
         title: 'Undo',
@@ -102,24 +91,16 @@ const App: React.FC = () => {
     setFen(rules.replay(history, mark >= 0 ? mark : history.length));
   };
 
-  const [wtext, btext] = gamerunner.game.getTitleTexts();
-  const lead = `, cp ${Math.abs(cp)} ${cp > 0 ? 'white' : 'black'}`;
-  const r180 = rotation > 1;
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
         <MessageBox {...message} />
         <Config newGame={newGame} stopstart={stopstart} setMessage={setMessage} />
         <div className={styles.AppLeft}>
-          <p className={rotation % 2 == 1 ? styles.PlayerRight : styles.Player}>
-            {r180 ? wtext : btext}
-          </p>
+          <PlayerInfo isTop={true} />
           <Board setMessage={setMessage} />
-          <p className={styles.Player}>
-            {!r180 ? wtext : btext} {lead}
-          </p>
+          <PlayerInfo isTop={false} />
         </div>
-
         <div className={styles.AppRight}>
           <h3 onClick={about}>♛ Chessbuddy 0.4</h3>
           <Panel stopstart={stopstart} />

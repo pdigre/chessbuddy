@@ -64,30 +64,25 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
               if (reply == 'Bishop') promo = 'b';
               const move = rules.move(fen, from, to, promo);
               if (move != null) {
-                const [newFen, action] = move;
                 setMessage({});
-                gamerunner.game.addMove(newFen, action.san);
+                const [newFen, action] = move;
                 setFen(newFen);
-                setHistory(gamerunner.game.log);
+                setHistory(gamerunner.addMove(action.san));
                 setHelp([]);
               }
             },
           });
         } else {
-          gamerunner.game.addMove(newFen, action.san);
           setFen(newFen);
-          setHistory(gamerunner.game.log);
+          setHistory(gamerunner.addMove(action.san));
           setHelp([]);
         }
       }
     },
-    [isPlaying]
+    [isPlaying, setFen, setHistory, setHelp]
   );
 
-  const g = gamerunner.game;
-  const player = g.nextPlayer();
-
-  if (isPlaying && g.isComplete) {
+  if (isPlaying && gamerunner.getGame().isComplete) {
     setPlaying(false);
   }
 
@@ -95,7 +90,9 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
   const r180 = rotation > 1;
 
   const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
-    if (player instanceof Human) {
+    const g = gamerunner.getGame();
+    const player = g.nextPlayer();
+    if (player instanceof Human && !g.isComplete) {
       const from2 = r90 ? rules.leftSquare(from) : from;
       return rules.isMoveable(fen, from2);
     }
@@ -111,7 +108,7 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
     if (!isPlaying) {
       return;
     }
-    const g = gamerunner.game;
+    const g = gamerunner.getGame();
     const player = g.nextPlayer();
     if (player instanceof Bot) {
       player.runBot(g.fen, ({ from, to }) => {
@@ -132,10 +129,11 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
     return () => {
       //
     };
-  }, [isPlaying, fen, setHelp, doMove]);
+  }, [isPlaying, help, setHelp, doMove]);
 
   const showMarkers = () => {
     const markers = {};
+    const g = gamerunner.getGame();
     g.pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: pgnStyle }));
     g.help.forEach((x, i) =>
       Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: i > 1 ? helpStyle2 : helpStyle })

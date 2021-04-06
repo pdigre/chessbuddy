@@ -25,7 +25,7 @@ export const ConfigGame: React.FC<ConfigGameProps> = ({
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
   const [history, setHistory] = useGlobalState('history');
   const playerNames = Array.from(getPlayers().map(x => x.name));
-  gamerunner.game.setPlayers(whiteBot, blackBot);
+  gamerunner.getGame().setPlayers(whiteBot, blackBot);
 
   const playAction = () => {
     setShowConfig(false);
@@ -34,11 +34,11 @@ export const ConfigGame: React.FC<ConfigGameProps> = ({
 
   const recordScore: (ok: string) => void = yes => {
     if (yes == 'White') {
-      setHistory(history => [...history, '1-0']);
+      setHistory(gamerunner.addMove('1-0'));
     } else if (yes == 'Black') {
-      setHistory(history => [...history, '0-1']);
+      setHistory(gamerunner.addMove('0-1'));
     } else if (yes == 'Draw') {
-      setHistory(history => [...history, '1/2-1/2']);
+      setHistory(gamerunner.addMove('1/2-1/2'));
     }
     setMessage({});
   };
