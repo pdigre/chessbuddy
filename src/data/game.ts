@@ -36,12 +36,12 @@ export class CurrentGame {
   constructor(white: string, black: string) {
     this.setPlayers(white, black);
   }
-  addMove = (fen: string, san: string) => {
+  addMove = (san: string) => {
     this.date = new Date().getTime();
     this.log.push(san);
-    this.fen = fen;
-    this.isComplete = rules.isGameOver(fen);
-    const wt = rules.isWhiteTurn(fen);
+    this.fen = rules.newFen(this.fen, san);
+    this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
+    const wt = rules.isWhiteTurn(this.fen);
     this.isWhiteTurn = wt;
     this.help = [];
     TimeKeeper.next(wt);
@@ -56,7 +56,7 @@ export class CurrentGame {
     if (pgn) {
       this.pgns = rules.findInfoMarkers(
         pgn.children.map(x => x.san),
-        fen
+        this.fen
       );
     }
   };
@@ -75,14 +75,55 @@ export class CurrentGame {
   nextPlayer = () => {
     return this.isWhiteTurn ? this.wplayer : this.bplayer;
   };
+  toString = () =>
+    `${this.date.toString(36)};${this.white};${this.black};${this.wtime.toString(
+      36
+    )};${this.btime.toString(36)};${this.log.join(' ')}`;
 }
 
-export class GameRunner {
-  game = new CurrentGame('User', 'User');
-
+class GameRunner {
+  curr?: CurrentGame;
+  hist?: string[];
   newGame = (white: string, black: string) => {
-    this.game = new CurrentGame(white, black);
+    this.curr = new CurrentGame(white, black);
+    return this.curr;
   };
+  addMove = (san: string) => {
+    const g = this.getGame();
+    g.addMove(san);
+    if (g.isComplete) {
+      const h = this.getHistory();
+      h.push(g.toString());
+      localStorage.setItem('log', h.join('\n') ?? []);
+    }
+    return g.log;
+  };
+  getHistory: () => string[] = () => {
+    if (this.hist) return this.hist;
+    const h1 = localStorage.getItem('log')?.replaceAll('\r', '').split('\n') ?? [];
+    const h2: string[] = [];
+    h1.forEach(x => {
+      const s = x.split(';');
+      if (s.length == 6) {
+        h2.push(x);
+      } else if (s.length == 4) {
+        let d = Date.parse(s[0]);
+        if (isNaN(d)) {
+          d = Number.parseInt(s[0]) * 1000;
+        }
+        if (isNaN(d)) {
+          console.log('Unknown date ' + s[0]);
+        } else {
+          h2.push(d.toString(36) + ';' + s[1] + ';' + s[2] + ';0;0;' + s[3]);
+        }
+      } else {
+        console.log('Unknown format ' + x);
+      }
+    });
+    this.hist = h2;
+    return this.hist as string[];
+  };
+  getGame = () => (this.curr ? this.curr : this.newGame('User', 'User'));
 }
 
 export const gamerunner = new GameRunner();

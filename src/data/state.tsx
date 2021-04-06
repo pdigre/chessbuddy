@@ -48,14 +48,3 @@ const initial: Initial = {
   showStats: false,
 };
 export const { useGlobalState } = createGlobalState(initial);
-
-export const usePersistentState: (
-  key: string,
-  defaultValue: string
-) => [string, React.Dispatch<React.SetStateAction<string>>] = (key, defaultValue) => {
-  const [state, setState] = React.useState(localStorage.getItem(key) || defaultValue);
-  React.useEffect(() => {
-    localStorage.setItem(key, state);
-  }, [key, state]);
-  return [state, setState];
-};
