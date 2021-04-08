@@ -14,15 +14,15 @@ type HistoryProps = {
 
 export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
   const endRef = useRef<HTMLElement>(null);
-  const [history, setHistory] = useGlobalState('history');
-  const [markHistory, setMarkHistory] = useGlobalState('markHistory');
+  const [log, setLog] = useGlobalState('log');
+  const [markLog, setMarkLog] = useGlobalState('markLog');
   const [marker, setMarker] = useState(-1);
   const [showStats, setShowStats] = useGlobalState('showStats');
   const [fen, setFen] = useGlobalState('fen');
 
   useEffect(() => {
     endRef.current?.scrollIntoView();
-  }, [history]);
+  }, [log]);
 
   if (!showStats && marker >= 0) {
     const games = gamerunner.getHistory();
@@ -34,9 +34,9 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
         buttons: ['Yes', 'No'],
         response: reply => {
           if (reply == 'Yes') {
-            setHistory(moves);
+            setLog(moves);
             const mark = moves.length - 1;
-            setMarkHistory(mark);
+            setMarkLog(mark);
             setFen(rules.replay(moves, mark));
           }
           setMessage({});
@@ -58,8 +58,8 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
   const historyClick: HANDLE_CLICK = event => {
     event.preventDefault();
     const id = Number.parseInt((event.target as HTMLTableCellElement).id);
-    const id2 = id == markHistory ? -1 : id;
-    setMarkHistory(id2);
+    const id2 = id == markLog ? -1 : id;
+    setMarkLog(id2);
     gotoMark(id2);
   };
 
@@ -74,10 +74,10 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
 
   const showGame = () => {
     const rows: string[][] = [];
-    for (let i = 0; i < history.length / 2; i++) {
+    for (let i = 0; i < log.length / 2; i++) {
       rows[i] = ['', ''];
     }
-    history.forEach((t, i) => {
+    log.forEach((t, i) => {
       const l = Math.floor(i / 2),
         c = i % 2;
       rows[l][c] = t;
@@ -87,7 +87,7 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
         {row.map((col, iCol) => {
           const id = iRow * 2 + iCol;
           return (
-            <TableCell id={id} key={id} className={id == markHistory ? styles.MarkCell : ''}>
+            <TableCell id={id} key={id} className={id == markLog ? styles.MarkCell : ''}>
               {col}
             </TableCell>
           );

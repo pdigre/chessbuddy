@@ -38,7 +38,7 @@ export type BoardProps = {
 export const Board: React.FC<BoardProps> = ({ setMessage }) => {
   const [isPlaying, setPlaying] = useGlobalState('playing');
   const [fen, setFen] = useGlobalState('fen');
-  const [history, setHistory] = useGlobalState('history');
+  const [log, setLog] = useGlobalState('log');
   const [rotation, setRotation] = useGlobalState('rotation');
   const [cp, setCp] = useGlobalState('cp');
   const [help, setHelp] = useState([] as string[]);
@@ -67,19 +67,19 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
                 setMessage({});
                 const [newFen, action] = move;
                 setFen(newFen);
-                setHistory(gamerunner.addMove(action.san));
+                setLog(gamerunner.addMove(action.san));
                 setHelp([]);
               }
             },
           });
         } else {
           setFen(newFen);
-          setHistory(gamerunner.addMove(action.san));
+          setLog(gamerunner.addMove(action.san));
           setHelp([]);
         }
       }
     },
-    [isPlaying, setFen, setHistory, setHelp]
+    [isPlaying, setFen, setLog, setHelp]
   );
 
   if (isPlaying && gamerunner.getGame().isComplete) {
