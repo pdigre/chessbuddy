@@ -23,7 +23,7 @@ export const ConfigGame: React.FC<ConfigGameProps> = ({
   const [whiteBot, setWhiteBot] = useGlobalState('white');
   const [blackBot, setBlackBot] = useGlobalState('black');
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
-  const [history, setHistory] = useGlobalState('history');
+  const [log, setLog] = useGlobalState('log');
   const playerNames = Array.from(getPlayers().map(x => x.name));
   gamerunner.getGame().setPlayers(whiteBot, blackBot);
 
@@ -34,17 +34,17 @@ export const ConfigGame: React.FC<ConfigGameProps> = ({
 
   const recordScore: (ok: string) => void = yes => {
     if (yes == 'White') {
-      setHistory(gamerunner.addMove('1-0'));
+      setLog(gamerunner.addMove('1-0'));
     } else if (yes == 'Black') {
-      setHistory(gamerunner.addMove('0-1'));
+      setLog(gamerunner.addMove('0-1'));
     } else if (yes == 'Draw') {
-      setHistory(gamerunner.addMove('1/2-1/2'));
+      setLog(gamerunner.addMove('1/2-1/2'));
     }
     setMessage({});
   };
 
   const endAction = () => {
-    const winner = rules.whoWon(history);
+    const winner = rules.whoWon(log);
     if (winner) {
       setMessage({
         title: 'Game has ended',

@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const [white, setWhite] = useGlobalState('white');
   const [black, setBlack] = useGlobalState('black');
   const [fen, setFen] = useGlobalState('fen');
-  const [history, setHistory] = useGlobalState('history');
+  const [history, setHistory] = useGlobalState('log');
 
   const about = () => {
     setMessage({
@@ -55,7 +55,7 @@ const App: React.FC = () => {
 
   // New Game
   const [isPlaying, setPlaying] = useGlobalState('playing');
-  const [markHistory, setMarkHistory] = useGlobalState('markHistory');
+  const [markHistory, setMarkHistory] = useGlobalState('markLog');
 
   const newGame = () => {
     gamerunner.newGame(white, black);

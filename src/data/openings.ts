@@ -49,7 +49,7 @@ export const locate: (moves: string[]) => San | undefined = moves => {
 };
 
 export const sanText: (san: San | undefined) => string = san => {
-  if (san?.info) return san.info.replaceAll('/', ' - ');
-  if (san?.children.length) return sanText(san.children[0]);
+  if (san && san.info) return san.info.replaceAll('/', ' - ');
+  if (san && san.children.length) return sanText(san.children[0]);
   return '';
 };

@@ -3,6 +3,7 @@ import { getPlayers } from './players';
 import { Player } from './player';
 import { TimeKeeper, toMMSS } from './library';
 import { San, locate } from './openings';
+import { initial } from './state';
 
 export type SaveGame = {
   date: number;
@@ -91,6 +92,7 @@ class GameRunner {
   addMove = (san: string) => {
     const g = this.getGame();
     g.addMove(san);
+    localStorage.setItem('game', g.toString());
     if (g.isComplete) {
       const h = this.getHistory();
       h.push(g.toString());
@@ -123,7 +125,16 @@ class GameRunner {
     this.hist = h2;
     return this.hist as string[];
   };
-  getGame = () => (this.curr ? this.curr : this.newGame('User', 'User'));
+  getGame = () => {
+    if (this.curr) return this.curr;
+    const g = this.newGame(initial.white, initial.black);
+    g.fen = initial.fen;
+    g.log = initial.log;
+    g.wtime = initial.wtime;
+    g.btime = initial.btime;
+    g.date = initial.time;
+    return g;
+  };
 }
 
 export const gamerunner = new GameRunner();
