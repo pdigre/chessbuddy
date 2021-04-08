@@ -102,7 +102,7 @@ const App: React.FC = () => {
           <PlayerInfo isTop={false} />
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.4</h3>
+          <h3 onClick={about}>♛ Chessbuddy 0.5</h3>
           <Panel stopstart={stopstart} />
           <p>{sanText(locate(history))}</p>
           <History gotoMark={gotoMark} setMessage={setMessage} />
