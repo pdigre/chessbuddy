@@ -1,16 +1,19 @@
 body {
-  margin: 1px;
-  padding: 1px;
+  margin: 0px;
+  padding: 0px;
 }
 #root {
-  margin: 1px;
+  margin: 0px;
+  padding: 0px;
 }
 .App {
-  border-width: 2px;
+  border-width: 1px;
   border-style: dotted;
-  width: 1200px;
-  height: 768px;
+  width: 1020px;
+  height: 656px;
   display: flex;
+  margin: 0px;
+  padding: 0px;
   flex-direction: row;
 }
 
@@ -18,21 +21,22 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 705px;
+  width: 602px;
 }
 
 .AppRight {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 418px;
   text-align: center;
 }
 
 .Player,
 .PlayerRight {
-  font-size: 1.2em;
-  height: 34px;
+  font-size: 1.3em;
+  height: 28px;
   margin: 0px;
+  padding: 0px;
 }
 
 .PlayerRight {
@@ -49,20 +53,46 @@ body {
 }
 
 .Panel {
-  width: 490px;
+  width: 100%;
   height: 50px;
 }
 
-.HistoryTable {
+.History,
+.Log {
+  margin: 1px;
+  width: 416px;
+}
+
+.History table,
+.Log table {
   table-layout: fixed;
   width: 100%;
   overflow: visible;
+  -webkit-overflow-scrolling: touch;
 }
-
-.HistoryTable td {
+.History td {
   padding: 3px;
   text-align: center;
   font-size: 1.2em;
+}
+.Log td {
+  padding: 2px;
+  text-align: left;
+  font-size: 0.9em;
+}
+.Log td:first-child {
+  width: 120px;
+}
+.Log td:last-child {
+  width: 20px;
+}
+
+.NumberCell {
+  width: 20px;
+}
+.NumberCell span {
+  color: rgb(75, 31, 31);
+  font-size: 0.8em;
 }
 
 .MarkCell {
@@ -70,10 +100,6 @@ body {
 }
 .MarkRow td {
   background-color: aquamarine;
-}
-
-.History {
-  margin: 1px;
 }
 
 .ConfigTableContainer {

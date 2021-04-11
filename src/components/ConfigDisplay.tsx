@@ -1,14 +1,25 @@
 import React from 'react';
 import { useGlobalState } from '../data/state';
 import styles from '../styles.module.scss';
-import { Button } from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import { RotateRight } from '@material-ui/icons';
 
 export const ConfigDisplay: React.FC = () => {
   const [rotation, setRotation] = useGlobalState('rotation');
+  const [showHints, setShowHints] = useGlobalState('showHints');
 
   return (
     <div className={styles.Config}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={showHints}
+            onChange={() => setShowHints(!showHints)}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />
+        }
+        label="Training mode / Stockfish suggestions"
+      />
       <div className={styles.Buttons}>
         <Button
           className={styles.Button}

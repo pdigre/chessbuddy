@@ -1,5 +1,6 @@
 import Chess from 'chess.js';
 import type { Square, Move, ShortMove } from 'chess.js';
+import moves from './openingdata';
 
 export type Fen = string;
 export type GameWinner = 'b' | 'w' | null;
@@ -47,9 +48,10 @@ export const newFen = (fen: string, san: string) => {
   return game.fen();
 };
 
-export const replay = (moves: string[], to: number): Fen => {
+export const replay = (moves: string[], to?: number): Fen => {
   const game = Chess(NEW_GAME);
-  for (let i = 0; i <= to; i++) {
+  const n = to ?? moves.length;
+  for (let i = 0; i <= n; i++) {
     game.move(moves[i]);
   }
   return game.fen();

@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const [white, setWhite] = useGlobalState('white');
   const [black, setBlack] = useGlobalState('black');
   const [fen, setFen] = useGlobalState('fen');
-  const [history, setHistory] = useGlobalState('log');
+  const [log, setLog] = useGlobalState('log');
 
   const about = () => {
     setMessage({
@@ -55,18 +55,18 @@ const App: React.FC = () => {
 
   // New Game
   const [isPlaying, setPlaying] = useGlobalState('playing');
-  const [markHistory, setMarkHistory] = useGlobalState('markLog');
+  const [markLog, setMarkLog] = useGlobalState('markLog');
 
   const newGame = () => {
     gamerunner.newGame(white, black);
-    setHistory([]);
-    setMarkHistory(-1);
+    setLog([]);
+    setMarkLog(-1);
     setFen(rules.NEW_GAME);
   };
 
   const stopstart = () => {
     if (gamerunner.getGame().isComplete) newGame();
-    if (!isPlaying && markHistory >= 0) {
+    if (!isPlaying && markLog >= 0) {
       setMessage({
         title: 'Undo',
         msg: <div>Do you want to revert the game to the marked position?</div>,
@@ -74,9 +74,11 @@ const App: React.FC = () => {
         response: yes => {
           setMessage({});
           if (yes == 'Yes') {
-            setHistory(history.slice(0, markHistory));
+            const h = log.slice(0, markLog + 1);
+            setLog(h);
+            gamerunner.assignLog(h);
           }
-          setMarkHistory(-1);
+          setMarkLog(-1);
           setPlaying(true);
         },
       });
@@ -88,7 +90,7 @@ const App: React.FC = () => {
   const gotoMark = (mark: number) => {
     if (isPlaying) stopstart();
     setFen(rules.CLEAR_GAME);
-    setFen(rules.replay(history, mark >= 0 ? mark : history.length));
+    setFen(rules.replay(log, mark >= 0 ? mark : log.length));
   };
 
   return (
@@ -104,7 +106,7 @@ const App: React.FC = () => {
         <div className={styles.AppRight}>
           <h3 onClick={about}>♛ Chessbuddy 0.5</h3>
           <Panel stopstart={stopstart} />
-          <p>{sanText(locate(history))}</p>
+          <p>{sanText(locate(log))}</p>
           <History gotoMark={gotoMark} setMessage={setMessage} />
         </div>
       </div>

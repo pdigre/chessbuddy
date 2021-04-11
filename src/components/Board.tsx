@@ -42,6 +42,7 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
   const [rotation, setRotation] = useGlobalState('rotation');
   const [cp, setCp] = useGlobalState('cp');
   const [help, setHelp] = useState([] as string[]);
+  const [showHints, setShowHints] = useGlobalState('showHints');
 
   const doMove = useCallback(
     (fen: rules.Fen, from: rules.Square, to: rules.Square, isHuman: boolean) => {
@@ -64,22 +65,22 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
               if (reply == 'Bishop') promo = 'b';
               const move = rules.move(fen, from, to, promo);
               if (move != null) {
-                setMessage({});
                 const [newFen, action] = move;
-                setFen(newFen);
                 setLog(gamerunner.addMove(action.san));
                 setHelp([]);
+                setFen(newFen);
+                setMessage({});
               }
             },
           });
         } else {
-          setFen(newFen);
           setLog(gamerunner.addMove(action.san));
+          setFen(newFen);
           setHelp([]);
         }
       }
     },
-    [isPlaying, setFen, setLog, setHelp]
+    [isPlaying, fen, log, setFen, setLog, setHelp]
   );
 
   if (isPlaying && gamerunner.getGame().isComplete) {
@@ -109,6 +110,9 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
       return;
     }
     const g = gamerunner.getGame();
+    if (g.fen != fen) {
+      setFen(g.fen);
+    }
     const player = g.nextPlayer();
     if (player instanceof Bot) {
       player.runBot(g.fen, ({ from, to }) => {
@@ -135,9 +139,13 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
     const markers = {};
     const g = gamerunner.getGame();
     g.pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: pgnStyle }));
-    g.help.forEach((x, i) =>
-      Object.assign(markers, { [r90 ? rules.rightSquare2(x) : x]: i > 1 ? helpStyle2 : helpStyle })
-    );
+    if (showHints) {
+      g.help.forEach((x, i) =>
+        Object.assign(markers, {
+          [r90 ? rules.rightSquare2(x) : x]: i > 1 ? helpStyle2 : helpStyle,
+        })
+      );
+    }
     return markers;
   };
 
@@ -147,7 +155,7 @@ export const Board: React.FC<BoardProps> = ({ setMessage }) => {
       allowDrag={onDragStart}
       onDrop={onMovePiece}
       orientation={!r180 ? 'white' : 'black'}
-      width={700}
+      width={600}
       squareStyles={showMarkers()}
       lightSquareStyle={r90 ? blackSquareStyle : whiteSquareStyle}
       darkSquareStyle={r90 ? whiteSquareStyle : blackSquareStyle}
