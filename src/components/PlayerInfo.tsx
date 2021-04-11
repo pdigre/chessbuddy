@@ -16,7 +16,7 @@ export const PlayerInfo: React.FC<{ isTop: boolean }> = ({ isTop }) => {
     <p className={isTop && rotation % 2 == 1 ? styles.PlayerRight : styles.Player}>
       {isWhite ? `White: ${g.white}` : `Black: ${g.black}`} &lt;
       {isWhite == g.isWhiteTurn ? <Ticker /> : toMMSS(isWhite ? g.wtime : g.btime)} &gt;
-      {isWhite != g.isWhiteTurn && g.isComplete ? ' ** Winner **' : ''}
+      {isWhite != g.isWhiteTurn && g.isComplete ? ' *WIN*' : ''}
       {!isTop ? ` , cp ${Math.abs(cp)} ${cp > 0 ? 'white' : 'black'}` : ''}
     </p>
   );

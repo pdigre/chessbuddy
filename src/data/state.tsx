@@ -35,7 +35,7 @@ export const initial: Initial = {
   wtime: Number.parseInt(exist_game[3]),
   btime: Number.parseInt(exist_game[4]),
   cp: 0,
-  fen: replay(exist_moves, exist_moves.length),
+  fen: replay(exist_moves),
   log: exist_moves,
   time: Number.parseInt(exist_game[0]),
   playing: false,
@@ -45,7 +45,7 @@ export const initial: Initial = {
   rotation: 0,
   markLog: -1,
   showConfig: false,
-  showHints: false,
+  showHints: true,
   showFacts: true,
   showStats: false,
 };

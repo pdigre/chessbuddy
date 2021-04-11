@@ -22,7 +22,7 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
 
   useEffect(() => {
     endRef.current?.scrollIntoView();
-  }, [log]);
+  }, [log, fen]);
 
   if (!showStats && marker >= 0) {
     const games = gamerunner.getHistory();
@@ -72,18 +72,42 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     setMarker(id2);
   };
 
-  const showGame = () => {
+  function isTouchDevice() {
+    try {
+      document.createEvent('TouchEvent');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  let scrollStartPos = 0;
+  let scrollTop = 0;
+  const touchstart = (event: TouchEvent) => {
+    scrollStartPos = scrollTop + event.touches[0].pageY;
+    //            event.preventDefault();
+  };
+  const touchmove = (event: TouchEvent) => {
+    scrollTop = scrollStartPos - event.touches[0].pageY;
+    //            event.preventDefault();
+  };
+
+  const showLog = () => {
+    const g = gamerunner.getGame();
     const rows: string[][] = [];
-    for (let i = 0; i < log.length / 2; i++) {
+    for (let i = 0; i < g.log.length / 2; i++) {
       rows[i] = ['', ''];
     }
-    log.forEach((t, i) => {
+    g.log.forEach((t, i) => {
       const l = Math.floor(i / 2),
         c = i % 2;
       rows[l][c] = t;
     });
     return rows.map((row, iRow) => (
       <TableRow key={iRow}>
+        <TableCell size="small" className={styles.NumberCell}>
+          <span>{iRow}</span>
+        </TableCell>
         {row.map((col, iCol) => {
           const id = iRow * 2 + iCol;
           return (
@@ -96,7 +120,7 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     ));
   };
 
-  const showLog = () =>
+  const showHistory = () =>
     gamerunner.getHistory().map((row, iRow) => {
       const cols = row.split(';');
       const date = new Date(Number.parseInt(cols[0], 36));
@@ -117,10 +141,10 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     });
 
   return (
-    <TableContainer className={styles.History}>
-      <Table size="small" className={styles.HistoryTable}>
+    <TableContainer className={showStats ? styles.Log : styles.History}>
+      <Table size="small" ontouchstart={touchstart} ontouchmove={touchmove}>
         <TableBody onClick={showStats ? logClick : historyClick}>
-          {showStats ? showLog() : showGame()}
+          {showStats ? showHistory() : showLog()}
           <TableRow ref={endRef} />
         </TableBody>
       </Table>

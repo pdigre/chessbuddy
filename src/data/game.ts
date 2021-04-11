@@ -100,6 +100,13 @@ class GameRunner {
     }
     return g.log;
   };
+
+  assignLog = (log: string[]) => {
+    const g = this.getGame();
+    g.log = log;
+    g.fen = rules.replay(log);
+    localStorage.setItem('game', g.toString());
+  };
   getHistory: () => string[] = () => {
     if (this.hist) return this.hist;
     const h1 = localStorage.getItem('log')?.replaceAll('\r', '').split('\n') ?? [];
