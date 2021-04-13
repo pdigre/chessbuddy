@@ -2,17 +2,15 @@ import React, { ReactChild } from 'react';
 import { useGlobalState } from '../data/state';
 import { DialogTitle, Dialog, AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
 import styles from '../styles.module.scss';
-import { ConfigGame, ConfigGameProps } from './ConfigGame';
+import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
 import type { HANDLE_CHANGE } from './reacttypes';
+import { players } from '../data/players';
+import { MessageType } from './MessageBox';
 
-export const Config: React.FC<ConfigGameProps> = ({
-  newGame,
-  stopstart,
-  setMessage: setMessage,
-}) => {
+export const Config: React.FC<{ setMessage: MessageType }> = ({ setMessage: setMessage }) => {
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
 
   type TabProps = {
@@ -85,16 +83,16 @@ export const Config: React.FC<ConfigGameProps> = ({
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <ConfigGame newGame={newGame} stopstart={stopstart} setMessage={setMessage} />
+        <ConfigGame setMessage={setMessage} players={players} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ConfigDisplay />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ConfigHuman />
+        <ConfigHuman players={players} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <ConfigBot />
+        <ConfigBot players={players} />
       </TabPanel>
     </Dialog>
   );

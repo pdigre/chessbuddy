@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core';
 import type { HANDLE_CLICK } from './reacttypes';
 
+export type MessageType = (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
+
 export type MessageBoxProps = {
   title?: string;
   msg?: JSX.Element;

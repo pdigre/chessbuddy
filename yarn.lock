@@ -5711,6 +5711,8 @@ __metadata:
     eslint-plugin-import: ^2.22.1
     eslint-plugin-prettier: ^3.1.4
     eslint-plugin-react: ^7.21.5
+    mobx: ^6.2.0
+    mobx-react: ^7.1.0
     node-sass: 5.0.0
     prettier: ^2.1.2
     react: ^17.0.1
@@ -11859,6 +11861,45 @@ fsevents@^1.2.7:
   bin:
     mkdirp: bin/cmd.js
   checksum: 1aa3a6a2d7514f094a91329ec09994f5d32d2955a4985ecbb3d86f2aaeafc4aa11521f98d606144c1d49cd9835004d9a73342709b8c692c92e59eacf37412468
+  languageName: node
+  linkType: hard
+
+"mobx-react-lite@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "mobx-react-lite@npm:3.2.0"
+  peerDependencies:
+    mobx: ^6.1.0
+    react: ^16.8.0 || ^17
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 80d782f9e31039fd352b1021e9edd2ab1aaa17fe9893e0a0fd833ca964567691e80f02643b77bbc5f8fb62db08a23b418c9e1e5dbf7de13ab222d82b31a53ec6
+  languageName: node
+  linkType: hard
+
+"mobx-react@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "mobx-react@npm:7.1.0"
+  dependencies:
+    mobx-react-lite: ^3.2.0
+  peerDependencies:
+    mobx: ^6.1.0
+    react: ^16.8.0 || ^17
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 26fbe1047bacf8fa6ca0f25f45b811c873e35183a10beeedec9198a912cc4c46571a67bb04f25984fa1ee4124e24f70106ce9e9a972a60e42cab1aa833b5b46d
+  languageName: node
+  linkType: hard
+
+"mobx@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "mobx@npm:6.2.0"
+  checksum: e302444ea18ed873b4188417103b5c47e70656d0050733d8e400f9b408c43cfa03422974820058458cb7f429f70042ceb35c10241f324e82ba87bd2159408b01
   languageName: node
   linkType: hard
 

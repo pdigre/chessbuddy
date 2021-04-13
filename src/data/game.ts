@@ -1,57 +1,101 @@
 import * as rules from './rules';
-import { getPlayers } from './players';
+import { players, Human } from './players';
 import { Player } from './player';
-import { TimeKeeper, toMMSS } from './library';
+import { timeKeeper } from '../data/timekeeper';
 import { San, locate } from './openings';
-import { initial } from './state';
+import { makeAutoObservable } from 'mobx';
+import { helper } from './helper';
+import { Bot } from './bots';
 
-export type SaveGame = {
-  date: number;
-  white: string;
-  black: string;
-  wtime: number;
-  btime: number;
-  log: string[];
-};
+/*
+ * Start and pause of game, starts the bots if in turn
+ */
+export class GameState {
+  isPlaying = false;
+  constructor() {
+    makeAutoObservable(this);
+  }
+  run = () => {
+    if (this.isPlaying) {
+      game.playBot();
+    }
+  };
+}
+export const gameState = new GameState();
 
-export class CurrentGame {
-  date = new Date().getTime();
+/*
+ * Everything about the current game (can be restored when returning to browser later)
+ */
+export class Game {
   white = '';
   black = '';
-  bplayer?: Player;
-  wplayer?: Player;
+  private bplayer?: Player;
+  private wplayer?: Player;
+  private date = new Date().getTime();
   wtime = 0;
   btime = 0;
   log: string[] = [];
   fen = rules.NEW_GAME;
   isWhiteTurn = true;
   isComplete = false;
-  help: string[] = [];
   pgns: string[] = [];
+  reset = () => {
+    this.wtime = 0;
+    this.btime = 0;
+    this.log = [];
+    this.fen = rules.NEW_GAME;
+    this.isWhiteTurn = true;
+    this.isComplete = false;
+    helper.reset();
+  };
   setPlayers = (white: string, black: string) => {
     this.white = white;
     this.black = black;
-    this.wplayer = getPlayers().find(p => p.name == this.white);
-    this.bplayer = getPlayers().find(p => p.name == this.black);
+    this.wplayer = players.players.find(p => p.name == white);
+    this.bplayer = players.players.find(p => p.name == black);
   };
-  constructor(white: string, black: string) {
-    this.setPlayers(white, black);
+  constructor() {
+    makeAutoObservable(this);
+    this.restoreFromLocalStorage();
   }
   addMove = (san: string) => {
+    const prev = this.nextPlayer();
+    if (prev instanceof Human) gameState.isPlaying = true;
     this.date = new Date().getTime();
     this.log.push(san);
+    helper.reset();
     this.fen = rules.newFen(this.fen, san);
-    this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
-    const wt = rules.isWhiteTurn(this.fen);
-    this.isWhiteTurn = wt;
-    this.help = [];
-    TimeKeeper.next(wt);
-    if (wt) {
-      this.btime = TimeKeeper.black;
+    this.calculate();
+    timeKeeper.next(this.isWhiteTurn);
+    if (this.isWhiteTurn) {
+      this.btime = timeKeeper.black;
     } else {
-      this.wtime = TimeKeeper.white;
+      this.wtime = timeKeeper.white;
     }
-    TimeKeeper.reset();
+    timeKeeper.reset();
+    const next = this.nextPlayer();
+    if (next instanceof Human) {
+      helper.run(this.fen);
+    }
+    gameState.run();
+  };
+  playBot = () => {
+    const next = this.nextPlayer();
+    if (next instanceof Bot) {
+      next.runBot(this.fen, ({ from, to }) => {
+        const move = rules.move(game.fen, from, to);
+        if (move) {
+          const [newFen, action] = move;
+          this.addMove(action.san);
+        }
+      });
+    }
+  };
+  private calculate = () => {
+    const san = this.log[this.log.length - 1];
+    this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
+    if (this.isComplete) gameState.isPlaying = false;
+    this.isWhiteTurn = rules.isWhiteTurn(this.fen);
     this.pgns = [];
     const pgn: San | undefined = locate(this.log);
     if (pgn) {
@@ -61,18 +105,6 @@ export class CurrentGame {
       );
     }
   };
-  getTitleTexts = () => {
-    const elapsed = TimeKeeper.getUsed();
-    const wtimer = !this.isComplete && this.isWhiteTurn ? this.wtime + elapsed : this.wtime;
-    const wtext = `White: ${this.white} ${toMMSS(wtimer)} ${
-      this.isComplete && !this.isWhiteTurn ? ' ** Winner **' : ''
-    }`;
-    const btimer = !this.isComplete && !this.isWhiteTurn ? this.btime + elapsed : this.btime;
-    const btext = `Black: ${this.black} ${toMMSS(btimer)} ${
-      this.isComplete && this.isWhiteTurn ? ' ** Winner **' : ''
-    }`;
-    return [wtext, btext];
-  };
   nextPlayer = () => {
     return this.isWhiteTurn ? this.wplayer : this.bplayer;
   };
@@ -80,35 +112,44 @@ export class CurrentGame {
     `${this.date.toString(36)};${this.white};${this.black};${this.wtime.toString(
       36
     )};${this.btime.toString(36)};${this.log.join(' ')}`;
+  restoreFromLocalStorage = () => {
+    const _game = (localStorage.getItem('game') ?? new Date().getTime() + ';User;User;0;0;').split(
+      ';'
+    );
+    this.log = _game[5] ? _game[5].split(' ') : [];
+    this.setPlayers(_game[1], _game[2]);
+    this.fen = rules.replay(this.log);
+    this.wtime = Number.parseInt(_game[3]);
+    this.btime = Number.parseInt(_game[4]);
+    this.date = Number.parseInt(_game[0]);
+    this.calculate();
+  };
+
+  playMove = (san: string) => {
+    this.addMove(san);
+    localStorage.setItem('game', this.toString());
+    if (this.isComplete) gameHistory.storeGame();
+  };
 }
+export const game = new Game();
 
-class GameRunner {
-  curr?: CurrentGame;
-  hist?: string[];
-  newGame = (white: string, black: string) => {
-    this.curr = new CurrentGame(white, black);
-    return this.curr;
-  };
-  addMove = (san: string) => {
-    const g = this.getGame();
-    g.addMove(san);
-    localStorage.setItem('game', g.toString());
-    if (g.isComplete) {
-      const h = this.getHistory();
-      h.push(g.toString());
-      localStorage.setItem('log', h.join('\n') ?? []);
-    }
-    return g.log;
-  };
+/*
+ * History of previous games, should store a maximum locally
+ */
+export class GameHistory {
+  history: string[];
 
-  assignLog = (log: string[]) => {
-    const g = this.getGame();
-    g.log = log;
-    g.fen = rules.replay(log);
-    localStorage.setItem('game', g.toString());
-  };
-  getHistory: () => string[] = () => {
-    if (this.hist) return this.hist;
+  constructor() {
+    makeAutoObservable(this);
+    this.history = this.loadHistory();
+  }
+
+  storeGame() {
+    this.history.push(game.toString());
+    localStorage.setItem('log', this.history.join('\n') ?? []);
+  }
+
+  private loadHistory() {
     const h1 = localStorage.getItem('log')?.replaceAll('\r', '').split('\n') ?? [];
     const h2: string[] = [];
     h1.forEach(x => {
@@ -129,19 +170,7 @@ class GameRunner {
         console.log('Unknown format ' + x);
       }
     });
-    this.hist = h2;
-    return this.hist as string[];
-  };
-  getGame = () => {
-    if (this.curr) return this.curr;
-    const g = this.newGame(initial.white, initial.black);
-    g.fen = initial.fen;
-    g.log = initial.log;
-    g.wtime = initial.wtime;
-    g.btime = initial.btime;
-    g.date = initial.time;
-    return g;
-  };
+    return h2;
+  }
 }
-
-export const gamerunner = new GameRunner();
+export const gameHistory = new GameHistory();
