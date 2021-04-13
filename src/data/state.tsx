@@ -1,21 +1,6 @@
 import { createGlobalState } from 'react-hooks-global-state';
 
-export type Initial = {
-  // account: {
-  email: string;
-  // config: {
-  rotation: number;
-  markLog: number;
-  showConfig: boolean;
-  showHints: boolean;
-  showFacts: boolean;
-  showStats: boolean;
-};
-
-export const initial: Initial = {
-  // account: {
-  email: '',
-  // config: {
+const initial = {
   rotation: 0,
   markLog: -1,
   showConfig: false,
@@ -23,4 +8,5 @@ export const initial: Initial = {
   showFacts: true,
   showStats: false,
 };
+export type Initial = typeof initial;
 export const { useGlobalState } = createGlobalState(initial);

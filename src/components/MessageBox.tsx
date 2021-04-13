@@ -9,35 +9,54 @@ import {
   Button,
 } from '@material-ui/core';
 import type { HANDLE_CLICK } from './reacttypes';
+import { makeAutoObservable } from 'mobx';
+import { observer } from 'mobx-react';
 
-export type MessageType = (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
-
-export type MessageBoxProps = {
+export class Messager {
   title?: string;
   msg?: JSX.Element;
   buttons?: string[];
   response?: (button: string) => void;
-};
+  show = false;
+  constructor() {
+    makeAutoObservable(this);
+  }
+  clear() {
+    this.title = undefined;
+  }
+  display(
+    title: string,
+    msg: JSX.Element,
+    buttons?: string[],
+    response?: (button: string) => void
+  ) {
+    this.title = title;
+    this.msg = msg;
+    this.buttons = buttons;
+    this.response = response ?? (() => messager.clear());
+  }
+}
+export const messager = new Messager();
 
-export const MessageBox: React.FC<MessageBoxProps> = ({ title, msg, buttons, response }) => {
+export const MessageBox = observer(({ messager }: { messager: Messager }) => {
   const handleClick: HANDLE_CLICK = event => {
-    if (response) {
-      response((event.target as HTMLButtonElement).innerHTML);
+    if (messager.response) {
+      messager.response((event.target as HTMLButtonElement).innerHTML);
     }
   };
 
   return (
     <Dialog
       aria-labelledby="message"
-      open={title != undefined}
+      open={messager.title != undefined}
       onClose={handleClick}
       className={styles.Dialog}>
-      <DialogTitle id="message">{title}</DialogTitle>
+      <DialogTitle id="message">{messager.title}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{msg}</DialogContentText>
+        <DialogContentText>{messager.msg}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        {buttons?.map(x => (
+        {messager.buttons?.map(x => (
           <Button key={x} autoFocus onClick={handleClick} color="primary">
             {x}
           </Button>
@@ -45,4 +64,4 @@ export const MessageBox: React.FC<MessageBoxProps> = ({ title, msg, buttons, res
       </DialogActions>
     </Dialog>
   );
-};
+});

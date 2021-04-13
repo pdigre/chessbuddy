@@ -6,7 +6,7 @@ import { Human } from '../data/players';
 import { useGlobalState } from '../data/state';
 import { game, GameState } from '../data/game';
 import Chessboard from 'chessboardjsx';
-import { MessageBoxProps } from './MessageBox';
+import { messager } from './MessageBox';
 import { observer } from 'mobx-react';
 
 const pgnStyle: React.CSSProperties = {
@@ -34,12 +34,11 @@ type BoardMove = {
 };
 
 export type BoardProps = {
-  setMessage: (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
   helper: Helper;
   gameState: GameState;
 };
 
-export const Board = observer(({ setMessage, gameState }: BoardProps) => {
+export const Board = observer(({ gameState }: BoardProps) => {
   const [rotation, setRotation] = useGlobalState('rotation');
 
   const doMove = useCallback((from: rules.Square, to: rules.Square, isHuman: boolean) => {
@@ -51,22 +50,17 @@ export const Board = observer(({ setMessage, gameState }: BoardProps) => {
       const [newFen, action] = move;
       if (action.promotion && isHuman) {
         const buttons = ['Queen', 'Rook', 'Knight', 'Bishop'];
-        setMessage({
-          title: 'Promotion',
-          msg: <div>Choose promotion piece</div>,
-          buttons: buttons,
-          response: reply => {
-            let promo: 'b' | 'q' | 'n' | 'r' = 'q';
-            if (reply == 'Rook') promo = 'r';
-            if (reply == 'Knight') promo = 'n';
-            if (reply == 'Bishop') promo = 'b';
-            const move = rules.move(game.fen, from, to, promo);
-            if (move != null) {
-              setMessage({});
-              const [newFen, action] = move;
-              game.playMove(action.san);
-            }
-          },
+        messager.display('Promotion', <div>Choose promotion piece</div>, buttons, reply => {
+          let promo: 'b' | 'q' | 'n' | 'r' = 'q';
+          if (reply == 'Rook') promo = 'r';
+          if (reply == 'Knight') promo = 'n';
+          if (reply == 'Bishop') promo = 'b';
+          const move = rules.move(game.fen, from, to, promo);
+          if (move != null) {
+            messager.clear();
+            const [newFen, action] = move;
+            game.playMove(action.san);
+          }
         });
       } else {
         game.playMove(action.san);

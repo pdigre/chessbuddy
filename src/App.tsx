@@ -8,41 +8,30 @@ import { Panel } from './components/Panel';
 import { Config } from './components/Config';
 import { Board } from './components/Board';
 import { PlayerInfo } from './components/PlayerInfo';
-import { MessageBox, MessageBoxProps } from './components/MessageBox';
+import { MessageBox, messager } from './components/MessageBox';
 import { helper } from './data/helper';
 import { About } from './components/About';
 
 const theme = unstable_createMuiStrictModeTheme();
 
 const App: React.FC = () => {
-  const [message, setMessage] = useState<MessageBoxProps>();
-
-  const about = () => {
-    setMessage({
-      title: 'About',
-      msg: <About />,
-      buttons: [],
-      response: reply => {
-        setMessage({});
-      },
-    });
-  };
+  const about = () => messager.display('About', <About />);
 
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
-        <MessageBox {...message} />
-        <Config setMessage={setMessage} />
+        <MessageBox messager={messager} />
+        <Config />
         <div className={styles.AppLeft}>
           <PlayerInfo isTop={true} helper={helper} />
-          <Board setMessage={setMessage} helper={helper} gameState={gameState} />
+          <Board helper={helper} gameState={gameState} />
           <PlayerInfo isTop={false} helper={helper} />
         </div>
         <div className={styles.AppRight}>
           <h3 onClick={about}>♛ Chessbuddy 0.5</h3>
-          <Panel gameState={gameState} setMessage={setMessage} />
+          <Panel gameState={gameState} />
           <p>{sanText(locate(game.log))}</p>
-          <History setMessage={setMessage} game={game} gameHistory={gameHistory} />
+          <History game={game} gameHistory={gameHistory} />
         </div>
       </div>
     </ThemeProvider>

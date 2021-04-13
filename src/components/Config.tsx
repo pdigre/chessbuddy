@@ -8,9 +8,8 @@ import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
 import type { HANDLE_CHANGE } from './reacttypes';
 import { players } from '../data/players';
-import { MessageType } from './MessageBox';
 
-export const Config: React.FC<{ setMessage: MessageType }> = ({ setMessage: setMessage }) => {
+export const Config: React.FC = () => {
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
 
   type TabProps = {
@@ -83,7 +82,7 @@ export const Config: React.FC<{ setMessage: MessageType }> = ({ setMessage: setM
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <ConfigGame setMessage={setMessage} players={players} />
+        <ConfigGame players={players} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ConfigDisplay />
