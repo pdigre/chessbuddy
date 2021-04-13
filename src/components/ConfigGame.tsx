@@ -1,95 +1,91 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGlobalState } from '../data/state';
-import { getPlayers } from '../data/players';
 import * as rules from '../data/rules';
 import { ConfigSelector } from './ConfigSelector';
 import styles from '../styles.module.scss';
 import { Button } from '@material-ui/core';
 import { Clear, PlayArrow, ExitToApp } from '@material-ui/icons';
-import { MessageBoxProps } from './MessageBox';
-import { gamerunner } from '../data/game';
+import { MessageType } from './MessageBox';
+import { game, gameState } from '../data/game';
+import { observer } from 'mobx-react';
+import { Players } from '../data/players';
 
-export type ConfigGameProps = {
-  newGame: () => void;
-  stopstart: () => void;
-  setMessage: (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
-};
+export const ConfigGame = observer(
+  ({ setMessage: setMessage, players }: { setMessage: MessageType; players: Players }) => {
+    const [white, setWhite] = useState(game.white);
+    const [black, setBlack] = useState(game.black);
+    const [showConfig, setShowConfig] = useGlobalState('showConfig');
+    const playerNames = Array.from(players.players.map(x => x.name));
+    game.setPlayers(white, black);
 
-export const ConfigGame: React.FC<ConfigGameProps> = ({
-  newGame,
-  stopstart,
-  setMessage: setMessage,
-}) => {
-  const [whiteBot, setWhiteBot] = useGlobalState('white');
-  const [blackBot, setBlackBot] = useGlobalState('black');
-  const [showConfig, setShowConfig] = useGlobalState('showConfig');
-  const [log, setLog] = useGlobalState('log');
-  const playerNames = Array.from(getPlayers().map(x => x.name));
-  gamerunner.getGame().setPlayers(whiteBot, blackBot);
+    const resetGame = () => {
+      game.reset();
+    };
 
-  const playAction = () => {
-    setShowConfig(false);
-    stopstart();
-  };
+    const playAction = () => {
+      setShowConfig(false);
+      gameState.isPlaying = true;
+    };
 
-  const recordScore: (ok: string) => void = yes => {
-    if (yes == 'White') {
-      setLog(gamerunner.addMove('1-0'));
-    } else if (yes == 'Black') {
-      setLog(gamerunner.addMove('0-1'));
-    } else if (yes == 'Draw') {
-      setLog(gamerunner.addMove('1/2-1/2'));
-    }
-    setMessage({});
-  };
+    const recordScore: (ok: string) => void = yes => {
+      if (yes == 'White') {
+        game.playMove('1-0');
+      } else if (yes == 'Black') {
+        game.playMove('0-1');
+      } else if (yes == 'Draw') {
+        game.playMove('1/2-1/2');
+      }
+      setMessage({});
+    };
 
-  const endAction = () => {
-    const winner = rules.whoWon(log);
-    if (winner) {
-      setMessage({
-        title: 'Game has ended',
-        msg: <div>{winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'}</div>,
-        buttons: [],
-        response: () => setMessage({}),
-      });
-    } else {
-      setMessage({
-        title: 'End game',
-        msg: <div>Who won?</div>,
-        buttons: ['White', 'Black', 'Draw'],
-        response: recordScore,
-      });
-    }
-  };
+    const endAction = () => {
+      const winner = rules.whoWon(game.log);
+      if (winner) {
+        setMessage({
+          title: 'Game has ended',
+          msg: <div>{winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'}</div>,
+          buttons: [],
+          response: () => setMessage({}),
+        });
+      } else {
+        setMessage({
+          title: 'End game',
+          msg: <div>Who won?</div>,
+          buttons: ['White', 'Black', 'Draw'],
+          response: recordScore,
+        });
+      }
+    };
 
-  return (
-    <div className={styles.Config}>
-      <ConfigSelector
-        label="White"
-        choices={playerNames}
-        selected={whiteBot}
-        setSelected={setWhiteBot}
-      />
-      <ConfigSelector
-        label="Black"
-        choices={playerNames}
-        selected={blackBot}
-        setSelected={setBlackBot}
-      />
-      <div className={styles.Buttons}>
-        <Button className={styles.Button} onClick={playAction} variant="contained">
-          Play
-          <PlayArrow />
-        </Button>
-        <Button className={styles.Button} onClick={endAction} variant="contained">
-          End game
-          <ExitToApp />
-        </Button>
-        <Button className={styles.Button} onClick={newGame} variant="contained">
-          Reset
-          <Clear />
-        </Button>
+    return (
+      <div className={styles.Config}>
+        <ConfigSelector
+          label="White"
+          choices={playerNames}
+          selected={white}
+          setSelected={setWhite}
+        />
+        <ConfigSelector
+          label="Black"
+          choices={playerNames}
+          selected={black}
+          setSelected={setBlack}
+        />
+        <div className={styles.Buttons}>
+          <Button className={styles.Button} onClick={playAction} variant="contained">
+            Play
+            <PlayArrow />
+          </Button>
+          <Button className={styles.Button} onClick={endAction} variant="contained">
+            End game
+            <ExitToApp />
+          </Button>
+          <Button className={styles.Button} onClick={resetGame} variant="contained">
+            Reset
+            <Clear />
+          </Button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);

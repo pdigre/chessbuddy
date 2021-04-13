@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addPlayer, delPlayer, Human, getPlayers, setPlayers } from '../data/players';
+import { Human, Players } from '../data/players';
 import styles from '../styles.module.scss';
 import {
   Button,
@@ -12,12 +12,13 @@ import {
 } from '@material-ui/core';
 import { Add, Delete } from '@material-ui/icons';
 import type { HANDLE_CHANGE, HANDLE_CLICK } from './reacttypes';
+import { observer } from 'mobx-react';
 
-export const ConfigHuman: React.FC = () => {
+export const ConfigHuman = observer(({ players }: { players: Players }) => {
   const [name, setName] = useState('');
   const addPlayerHandler: HANDLE_CLICK = event => {
-    addPlayer(`Human:${name}`);
-    setPlayers();
+    players.addPlayer(`Human:${name}`);
+    players.save();
   };
   const handleChange: HANDLE_CHANGE = (event, child) => setName(event.target.value as string);
 
@@ -30,11 +31,11 @@ export const ConfigHuman: React.FC = () => {
     }
   };
 
-  const humans = getPlayers().filter(x => x instanceof Human);
+  const humans = players.players.filter(x => x instanceof Human);
   const delPlayerHandler: HANDLE_CLICK = event => {
     if (marker >= 0) {
-      delPlayer(humans[marker].name);
-      setPlayers();
+      players.delPlayer(humans[marker].name);
+      players.save();
     }
   };
 
@@ -64,4 +65,4 @@ export const ConfigHuman: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -1,6 +1,5 @@
 import Chess from 'chess.js';
 import type { Square, Move, ShortMove } from 'chess.js';
-import moves from './openingdata';
 
 export type Fen = string;
 export type GameWinner = 'b' | 'w' | null;
@@ -50,7 +49,7 @@ export const newFen = (fen: string, san: string) => {
 
 export const replay = (moves: string[], to?: number): Fen => {
   const game = Chess(NEW_GAME);
-  const n = to ?? moves.length;
+  const n = to ? to : moves.length;
   for (let i = 0; i <= n; i++) {
     game.move(moves[i]);
   }
@@ -144,14 +143,5 @@ export const rightwards = (i: number) => {
 export const leftSquare: (c: Square) => Square = (c: Square) =>
   SQUARES[leftwards(SQUARES.indexOf(c))];
 
-export const leftSquare2: (c: string) => Square = (c: string) =>
-  SQUARES[leftwards(SQUARES2.indexOf(c))];
-
-export const rightSquare2: (c: string) => Square = (c: string) =>
+export const rightSquare: (c: string) => Square = (c: string) =>
   SQUARES[rightwards(SQUARES2.indexOf(c))];
-
-export const leftMove: (c: Move) => Move = (c: Move) => {
-  c.from = leftSquare(c.from);
-  c.to = leftSquare(c.to);
-  return c;
-};

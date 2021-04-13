@@ -5,39 +5,39 @@ import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material
 import type { HANDLE_CLICK } from './reacttypes';
 import * as rules from '../data/rules';
 import { MessageBoxProps } from './MessageBox';
-import { gamerunner } from '../data/game';
+import { GameHistory, Game, gameState } from '../data/game';
+import { observer } from 'mobx-react';
 
 type HistoryProps = {
-  gotoMark: (mark: number) => void;
   setMessage: (value: React.SetStateAction<MessageBoxProps | undefined>) => void;
+  game: Game;
+  gameHistory: GameHistory;
 };
 
-export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
+export const History = observer(({ setMessage, game, gameHistory }: HistoryProps) => {
   const endRef = useRef<HTMLElement>(null);
-  const [log, setLog] = useGlobalState('log');
   const [markLog, setMarkLog] = useGlobalState('markLog');
   const [marker, setMarker] = useState(-1);
-  const [showStats, setShowStats] = useGlobalState('showStats');
-  const [fen, setFen] = useGlobalState('fen');
+  const [showHistory, setShowHistory] = useGlobalState('showStats');
 
   useEffect(() => {
     endRef.current?.scrollIntoView();
-  }, [log, fen]);
+  }, []);
 
-  if (!showStats && marker >= 0) {
-    const games = gamerunner.getHistory();
-    if (gamerunner.getGame().isComplete) {
-      const moves = games[marker].split(';')[3].split(' ');
+  if (!showHistory && marker >= 0) {
+    const games = gameHistory.history;
+    if (game.isComplete || game.log.length == 0) {
+      const moves = games[marker].split(';')[5].split(' ');
       setMessage({
         title: 'Load game',
         msg: <div>Do you want to look at this game?</div>,
         buttons: ['Yes', 'No'],
         response: reply => {
           if (reply == 'Yes') {
-            setLog(moves);
+            game.log = moves;
             const mark = moves.length - 1;
             setMarkLog(mark);
-            setFen(rules.replay(moves, mark));
+            game.fen = rules.replay(moves, mark);
           }
           setMessage({});
         },
@@ -55,7 +55,12 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     setMarker(-1);
   }
 
-  const historyClick: HANDLE_CLICK = event => {
+  const gotoMark = (mark: number) => {
+    if (gameState.isPlaying) gameState.isPlaying = false;
+    game.fen = rules.replay(game.log, mark >= 0 ? mark : game.log.length);
+  };
+
+  const logClick: HANDLE_CLICK = event => {
     event.preventDefault();
     const id = Number.parseInt((event.target as HTMLTableCellElement).id);
     const id2 = id == markLog ? -1 : id;
@@ -63,7 +68,7 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     gotoMark(id2);
   };
 
-  const logClick: HANDLE_CLICK = event => {
+  const historyClick: HANDLE_CLICK = event => {
     event.preventDefault();
     const id = Number.parseInt(
       ((event.target as HTMLTableCellElement).parentNode as HTMLTableRowElement).id
@@ -92,13 +97,13 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     //            event.preventDefault();
   };
 
-  const showLog = () => {
-    const g = gamerunner.getGame();
+  const viewLog = () => {
     const rows: string[][] = [];
-    for (let i = 0; i < g.log.length / 2; i++) {
+    const log = game.log;
+    for (let i = 0; i < log.length / 2; i++) {
       rows[i] = ['', ''];
     }
-    g.log.forEach((t, i) => {
+    log.forEach((t, i) => {
       const l = Math.floor(i / 2),
         c = i % 2;
       rows[l][c] = t;
@@ -120,8 +125,8 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     ));
   };
 
-  const showHistory = () =>
-    gamerunner.getHistory().map((row, iRow) => {
+  const viewHistory = () =>
+    gameHistory.history.map((row, iRow) => {
       const cols = row.split(';');
       const date = new Date(Number.parseInt(cols[0], 36));
       const tim =
@@ -141,13 +146,13 @@ export const History: React.FC<HistoryProps> = ({ gotoMark, setMessage }) => {
     });
 
   return (
-    <TableContainer className={showStats ? styles.Log : styles.History}>
+    <TableContainer className={showHistory ? styles.Log : styles.History}>
       <Table size="small" ontouchstart={touchstart} ontouchmove={touchmove}>
-        <TableBody onClick={showStats ? logClick : historyClick}>
-          {showStats ? showHistory() : showLog()}
+        <TableBody onClick={showHistory ? historyClick : logClick}>
+          {showHistory ? viewHistory() : viewLog()}
           <TableRow ref={endRef} />
         </TableBody>
       </Table>
     </TableContainer>
   );
-};
+});

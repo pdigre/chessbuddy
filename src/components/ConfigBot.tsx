@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Bot, UCI_ENGINES } from '../data/bots';
-import { addPlayer, delPlayer, getPlayers, setPlayers } from '../data/players';
+import { Players } from '../data/players';
 import styles from '../styles.module.scss';
 import {
   Button,
@@ -14,15 +14,16 @@ import {
 import { Add, Delete } from '@material-ui/icons';
 import { ConfigSelector } from './ConfigSelector';
 import type { HANDLE_CHANGE, HANDLE_CLICK } from './reacttypes';
+import { observer } from 'mobx-react';
 
-export const ConfigBot: React.FC = () => {
+export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [engine, setEngine] = React.useState('');
   const [skill, setSkill] = useState('20');
   const [depth, setDepth] = useState('10');
   const [time, setTime] = useState('');
   const addPlayerHandler: HANDLE_CLICK = event => {
-    addPlayer(`Bot:${engine}:${skill}:${time}:${depth}`);
-    setPlayers();
+    players.addPlayer(`Bot:${engine}:${skill}:${time}:${depth}`);
+    players.save();
   };
   const engineNames = Array.from(UCI_ENGINES.map(x => x.name));
   const skillChange: HANDLE_CHANGE = (event, child) => setSkill(event.target.value as string);
@@ -38,11 +39,11 @@ export const ConfigBot: React.FC = () => {
     }
   };
 
-  const bots = getPlayers().filter(x => x instanceof Bot);
+  const bots = players.players.filter(x => x instanceof Bot);
   const delPlayerHandler: HANDLE_CLICK = event => {
     if (marker >= 0) {
-      delPlayer(bots[marker].name);
-      setPlayers();
+      players.delPlayer(bots[marker].name);
+      players.save();
     }
   };
 
@@ -85,4 +86,4 @@ export const ConfigBot: React.FC = () => {
       </div>
     </div>
   );
-};
+});
