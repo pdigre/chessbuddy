@@ -61,27 +61,25 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <div className={styles.Buttons}>
+        <Button className={styles.Button} onClick={delPlayerHandler} variant="contained">
+          Delete <Delete />
+        </Button>
+      </div>
       <ConfigSelector
         label="Chess Engine"
         choices={engineNames}
         selected={engine}
         setSelected={setEngine}
       />
-      <TextField label="Skill level" id="skill" size="small" onChange={skillChange} />
-      <TextField
-        label="Depth (leave empty to use time)"
-        id="depth"
-        size="small"
-        onChange={depthChange}
-      />
-      <TextField label="Time (seconds)" id="time" size="small" onChange={timeChange} />
+      <span>
+        <TextField label="Skill level" id="skill" size="small" onChange={skillChange} />
+        <TextField label="Depth (..not time)" id="depth" size="small" onChange={depthChange} />
+        <TextField label="Time (sec)" id="time" size="small" onChange={timeChange} />
+      </span>
       <div className={styles.Buttons}>
         <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
-          Add
-          <Add />
-        </Button>
-        <Button className={styles.Button} onClick={delPlayerHandler} variant="contained">
-          Delete <Delete />
+          Add <Add />
         </Button>
       </div>
     </div>
