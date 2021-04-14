@@ -86,7 +86,7 @@ export class Game {
         const move = rules.move(game.fen, from, to);
         if (move) {
           const [newFen, action] = move;
-          this.addMove(action.san);
+          this.playMove(action.san);
         }
       });
     }
@@ -128,7 +128,9 @@ export class Game {
   playMove = (san: string) => {
     this.addMove(san);
     localStorage.setItem('game', this.toString());
-    if (this.isComplete) gameHistory.storeGame();
+    if (this.isComplete) {
+      gameHistory.storeGame();
+    }
   };
 }
 export const game = new Game();

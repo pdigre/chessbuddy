@@ -24,6 +24,7 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
   const playAction = () => {
     setShowConfig(false);
     gameState.isPlaying = true;
+    gameState.run();
   };
 
   const recordScore: (ok: string) => void = yes => {

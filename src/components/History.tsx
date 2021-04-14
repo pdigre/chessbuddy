@@ -15,9 +15,7 @@ export const History = observer(
     const [marker, setMarker] = useState(-1);
     const [showHistory, setShowHistory] = useGlobalState('showStats');
 
-    useEffect(() => {
-      endRef.current?.scrollIntoView();
-    }, []);
+    endRef.current?.scrollIntoView();
 
     if (!showHistory && marker >= 0) {
       const games = gameHistory.history;
@@ -121,8 +119,10 @@ export const History = observer(
       gameHistory.history.map((row, iRow) => {
         const cols = row.split(';');
         const date = new Date(Number.parseInt(cols[0], 36));
+        const t1 = date.getTime();
+        const t2 = new Date().getTime();
         const tim =
-          date.getDate() == new Date().getDate()
+          t2 - t1 < 3600 * 24000 && t1 < t2
             ? date.toTimeString().split(' ')[0]
             : date.toISOString().split('T')[0];
         const moves = cols[cols.length - 1].split(' ');
