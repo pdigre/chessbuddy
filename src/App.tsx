@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { locate, sanText } from './data/openings';
 import { game, gameState, gameHistory } from './data/game';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
@@ -28,7 +28,7 @@ const App: React.FC = () => {
           <PlayerInfo isTop={false} helper={helper} />
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.5</h3>
+          <h3 onClick={about}>♛ Chessbuddy 0.6</h3>
           <Panel gameState={gameState} />
           <p>{sanText(locate(game.log))}</p>
           <History game={game} gameHistory={gameHistory} />

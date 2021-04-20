@@ -19,7 +19,7 @@ export const Panel = observer(({ gameState }: { gameState: GameState }) => {
     if (!gameState.isPlaying && markLog >= 0) {
       messager.display(
         'Undo',
-        <div>Do you want to revert the game to the marked position?</div>,
+        'Do you want to revert the game to the marked position?',
         ['Yes', 'No'],
         yes => {
           messager.clear();

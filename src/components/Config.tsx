@@ -8,6 +8,7 @@ import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
 import type { HANDLE_CHANGE } from './reacttypes';
 import { players } from '../data/players';
+import { server } from '../data/server';
 
 export const Config: React.FC = () => {
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
@@ -88,7 +89,7 @@ export const Config: React.FC = () => {
         <ConfigDisplay />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ConfigHuman players={players} />
+        <ConfigHuman players={players} server={server} />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <ConfigBot players={players} />

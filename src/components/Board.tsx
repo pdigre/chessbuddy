@@ -50,7 +50,7 @@ export const Board = observer(({ gameState }: BoardProps) => {
       const [newFen, action] = move;
       if (action.promotion && isHuman) {
         const buttons = ['Queen', 'Rook', 'Knight', 'Bishop'];
-        messager.display('Promotion', <div>Choose promotion piece</div>, buttons, reply => {
+        messager.display('Promotion', 'Choose promotion piece', buttons, reply => {
           let promo: 'b' | 'q' | 'n' | 'r' = 'q';
           if (reply == 'Rook') promo = 'r';
           if (reply == 'Knight') promo = 'n';

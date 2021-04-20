@@ -72,7 +72,7 @@ export const whoWon = (game: string[]) => {
   if (san == '1-0') return 'White';
   if (san == '0-1') return 'Black';
   if (san == '1/2-1/2') return 'Draw';
-  if (san?.endsWith('#')) return n % 2 == 0 ? 'w' : 'b';
+  if (san?.endsWith('#')) return n % 2 == 0 ? 'Black' : 'White';
   return undefined;
 };
 
