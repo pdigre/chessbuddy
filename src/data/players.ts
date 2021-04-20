@@ -3,7 +3,12 @@ import { Bot } from './bots';
 import { Player } from './player';
 
 export class Human extends Player {
-  toString = () => `Human:${this.name}`;
+  email: string;
+  toString = () => `Human:${this.name}:${this.email}`;
+  constructor(name: string, email?: string) {
+    super(name);
+    this.email = email ?? '';
+  }
 }
 
 const parseInt = (num: string) => (num ? Number.parseInt(num) : undefined);
@@ -55,7 +60,7 @@ export class Players {
       );
     }
     if (split[0] == 'Human') {
-      return new Human(split[1]);
+      return new Human(split[1], split.length > 2 ? split[2] : '');
     }
     return undefined;
   };

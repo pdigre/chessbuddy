@@ -46,7 +46,7 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         <div>{winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'}</div>
       );
     } else {
-      messager.display('End game', <div>Who won?</div>, ['White', 'Black', 'Draw'], recordScore);
+      messager.display('End game', 'Who won?', ['White', 'Black', 'Draw'], recordScore);
     }
   };
 

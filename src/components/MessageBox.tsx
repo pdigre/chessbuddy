@@ -26,12 +26,12 @@ export class Messager {
   }
   display(
     title: string,
-    msg: JSX.Element,
+    msg: JSX.Element | string,
     buttons?: string[],
     response?: (button: string) => void
   ) {
     this.title = title;
-    this.msg = msg;
+    this.msg = (msg instanceof Element ? msg : <div>{msg}</div>) as JSX.Element;
     this.buttons = buttons;
     this.response = response ?? (() => messager.clear());
   }

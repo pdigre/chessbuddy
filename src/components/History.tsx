@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useGlobalState } from '../data/state';
 import styles from '../styles.module.scss';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
@@ -15,32 +15,25 @@ export const History = observer(
     const [marker, setMarker] = useState(-1);
     const [showHistory, setShowHistory] = useGlobalState('showStats');
 
-    endRef.current?.scrollIntoView();
+    if (markLog == -1) endRef.current?.scrollIntoView();
 
     if (!showHistory && marker >= 0) {
       const games = gameHistory.history;
       if (game.isComplete || game.log.length == 0) {
         const moves = games[marker].split(';')[5].split(' ');
-        messager.display(
-          'Load game',
-          <div>Do you want to look at this game?</div>,
-          ['Yes', 'No'],
-          reply => {
-            if (reply == 'Yes') {
-              game.log = moves;
-              const mark = moves.length - 1;
-              setMarkLog(mark);
-              game.fen = rules.replay(moves, mark);
-            }
-            messager.clear();
+        messager.display('Load game', 'Do you want to look at this game?', ['Yes', 'No'], reply => {
+          if (reply == 'Yes') {
+            game.log = moves;
+            const mark = moves.length - 1;
+            setMarkLog(mark);
+            game.fen = rules.replay(moves, mark);
           }
-        );
+          messager.clear();
+        });
       } else {
-        messager.display(
-          'Load game',
-          <div>You have to end current game to load previous games</div>,
-          ['Ok']
-        );
+        messager.display('Load game', 'You have to end current game to load previous games', [
+          'Ok',
+        ]);
       }
       setMarker(-1);
     }
@@ -116,26 +109,33 @@ export const History = observer(
     };
 
     const viewHistory = () =>
-      gameHistory.history.map((row, iRow) => {
-        const cols = row.split(';');
-        const date = new Date(Number.parseInt(cols[0], 36));
-        const t1 = date.getTime();
-        const t2 = new Date().getTime();
-        const tim =
-          t2 - t1 < 3600 * 24000 && t1 < t2
-            ? date.toTimeString().split(' ')[0]
-            : date.toISOString().split('T')[0];
-        const moves = cols[cols.length - 1].split(' ');
-        const win = rules.whoWon(moves)?.substring(0, 1) ?? '?';
-        return (
-          <TableRow key={iRow} id={iRow} className={iRow == marker ? styles.MarkRow : ''}>
-            <TableCell>{tim}</TableCell>
-            <TableCell>{cols[1].split(' ')[0]}</TableCell>
-            <TableCell>{cols[2].split(' ')[0]}</TableCell>
-            <TableCell>{win}</TableCell>
-          </TableRow>
-        );
-      });
+      gameHistory.history
+        .filter(x => x.split(';').length > 5)
+        .map((row, iRow) => {
+          const cols = row.split(';');
+          let tim = '?';
+          const date = new Date(Number.parseInt(cols[0], 36));
+          const t1 = date.getTime();
+          const t2 = new Date().getTime();
+          try {
+            tim =
+              t2 - t1 < 3600 * 24000 && t1 < t2
+                ? date.toTimeString().split(' ')[0]
+                : date.toISOString().split('T')[0];
+          } catch (error) {
+            console.log(error);
+          }
+          const moves = cols[cols.length - 1].split(' ');
+          const win = rules.whoWon(moves)?.substring(0, 1) ?? '?';
+          return (
+            <TableRow key={iRow} id={iRow} className={iRow == marker ? styles.MarkRow : ''}>
+              <TableCell>{tim}</TableCell>
+              <TableCell>{cols[1].split(' ')[0]}</TableCell>
+              <TableCell>{cols[2].split(' ')[0]}</TableCell>
+              <TableCell>{win}</TableCell>
+            </TableRow>
+          );
+        });
 
     return (
       <TableContainer className={showHistory ? styles.Log : styles.History}>
