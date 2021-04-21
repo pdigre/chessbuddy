@@ -15,7 +15,11 @@ export const History = observer(
     const [markHist, setMarkHist] = useGlobalState('markHist');
     const [showHistory, setShowHistory] = useGlobalState('showHist');
 
-    if (markLog == -1) endRef.current?.scrollIntoView();
+    if (showHistory) {
+      if (markHist == -1) endRef.current?.scrollIntoView();
+    } else {
+      if (markLog == -1) endRef.current?.scrollIntoView();
+    }
 
     if (!showHistory && markHist >= 0) {
       if (game.isComplete || game.log.length == 0) {

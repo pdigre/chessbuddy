@@ -1,6 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import * as rules from '../data/rules';
-import { Bot } from '../data/bots';
 import { helper, Helper } from '../data/helper';
 import { Human } from '../data/players';
 import { useGlobalState } from '../data/state';
@@ -40,6 +39,8 @@ export type BoardProps = {
 
 export const Board = observer(({ gameState }: BoardProps) => {
   const [rotation, setRotation] = useGlobalState('rotation');
+  const [showHints, setShowHints] = useGlobalState('showHints');
+  const [showFacts, setShowFacts] = useGlobalState('showFacts');
 
   const doMove = useCallback((from: rules.Square, to: rules.Square, isHuman: boolean) => {
     const move = rules.move(game.fen, from, to);
@@ -87,10 +88,16 @@ export const Board = observer(({ gameState }: BoardProps) => {
   const showMarkers = () => {
     const markers = {};
     const g = game;
-    g.pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle }));
-    helper.help.forEach((x, i) => {
-      Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: i > 1 ? helpStyle2 : helpStyle });
-    });
+    if (showFacts) {
+      g.pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle }));
+    }
+    if (showHints) {
+      helper.help.forEach((x, i) => {
+        Object.assign(markers, {
+          [r90 ? rules.rightSquare(x) : x]: i > 1 ? helpStyle2 : helpStyle,
+        });
+      });
+    }
     return markers;
   };
 
