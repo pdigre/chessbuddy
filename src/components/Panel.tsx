@@ -1,6 +1,6 @@
 import React from 'react';
 import { ButtonGroup } from '@material-ui/core';
-import { PlayArrow, Pause, Settings, Timeline, EventNote } from '@material-ui/icons';
+import { PlayArrow, Pause, Settings, Timeline, EventNote, Input, Undo } from '@material-ui/icons';
 import styles from '../styles.module.scss';
 import { useGlobalState } from '../data/state';
 import * as rules from '../data/rules';
@@ -11,9 +11,12 @@ import { messager } from './MessageBox';
 
 export const Panel = observer(({ gameState }: { gameState: GameState }) => {
   const [showConfig, setShowConfig] = useGlobalState('showConfig');
-  const [showStats, setShowStats] = useGlobalState('showStats');
+  const [showHist, setShowHist] = useGlobalState('showHist');
+  const [markHist, setMarkHist] = useGlobalState('markHist');
   const [markLog, setMarkLog] = useGlobalState('markLog');
 
+  const isGotoHist = showHist && markHist >= 0;
+  const isUndo = !showHist && markLog >= 0;
   const playHandler = () => {
     if (game.isComplete) game.reset();
     if (!gameState.isPlaying && markLog >= 0) {
@@ -36,7 +39,7 @@ export const Panel = observer(({ gameState }: { gameState: GameState }) => {
     gameState.run();
   };
 
-  const statsHandler = () => setShowStats(!showStats);
+  const histHandler = () => setShowHist(!showHist);
 
   const configHandler = () => {
     setShowConfig(true);
@@ -49,10 +52,10 @@ export const Panel = observer(({ gameState }: { gameState: GameState }) => {
       aria-label="outlined primary button group"
       className={styles.Panel}>
       <Button className={styles.Button} onClick={playHandler} variant="contained">
-        {gameState.isPlaying ? <PlayArrow /> : <Pause />}
+        {isUndo ? <Undo /> : gameState.isPlaying ? <PlayArrow /> : <Pause />}
       </Button>
-      <Button className={styles.Button} onClick={statsHandler} variant="contained">
-        {showStats ? <Timeline /> : <EventNote />}
+      <Button className={styles.Button} onClick={histHandler} variant="contained">
+        {isGotoHist ? <Input /> : showHist ? <Timeline /> : <EventNote />}
       </Button>
       <Button className={styles.Button} onClick={configHandler} variant="contained">
         <Settings />

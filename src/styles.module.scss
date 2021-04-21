@@ -17,6 +17,26 @@ body {
   flex-direction: row;
 }
 
+.CP {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 16px;
+  height: 650px;
+}
+.CPWHITE{
+  writing-mode: vertical-lr;
+  text-align: center;
+  background-color: white;
+  color: black;
+}
+.CPBLACK{
+  writing-mode: vertical-lr;
+  text-align: center;
+  background-color: black;
+  color: white;
+}
+
 .AppLeft {
   display: flex;
   flex-direction: column;
