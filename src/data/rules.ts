@@ -25,7 +25,7 @@ export const getGameWinner = (fen: Fen): GameWinner => {
 
 export const isGameOver = (fen: Fen): boolean => Chess(fen).game_over();
 export const isEndMove = (san: string) =>
-  san == '1-0' || san == '0-1' || san == '1/2-1/2' || san.endsWith('#');
+  san == '1-0' || san == '0-1' || san == '1/2-1/2' || san?.endsWith('#');
 
 export const isMoveable = (fen: Fen, from: Square): boolean =>
   new Chess(fen).moves({ square: from }).length > 0;

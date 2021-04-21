@@ -75,7 +75,7 @@ export class Game {
     timeKeeper.reset();
     const next = this.nextPlayer();
     if (next instanceof Human) {
-      helper.run(this.fen);
+      helper.run(this.fen, this.isWhiteTurn);
     }
     gameState.run();
   };

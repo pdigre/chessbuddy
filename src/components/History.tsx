@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useGlobalState } from '../data/state';
 import styles from '../styles.module.scss';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
@@ -12,15 +12,15 @@ export const History = observer(
   ({ game, gameHistory }: { game: Game; gameHistory: GameHistory }) => {
     const endRef = useRef<HTMLElement>(null);
     const [markLog, setMarkLog] = useGlobalState('markLog');
-    const [marker, setMarker] = useState(-1);
-    const [showHistory, setShowHistory] = useGlobalState('showStats');
+    const [markHist, setMarkHist] = useGlobalState('markHist');
+    const [showHistory, setShowHistory] = useGlobalState('showHist');
 
     if (markLog == -1) endRef.current?.scrollIntoView();
 
-    if (!showHistory && marker >= 0) {
-      const games = gameHistory.history;
+    if (!showHistory && markHist >= 0) {
       if (game.isComplete || game.log.length == 0) {
-        const moves = games[marker].split(';')[5].split(' ');
+        const games = gameHistory.history;
+        const moves = games[markHist].split(';')[5].split(' ');
         messager.display('Load game', 'Do you want to look at this game?', ['Yes', 'No'], reply => {
           if (reply == 'Yes') {
             game.log = moves;
@@ -35,7 +35,7 @@ export const History = observer(
           'Ok',
         ]);
       }
-      setMarker(-1);
+      setMarkHist(-1);
     }
 
     const gotoMark = (mark: number) => {
@@ -56,8 +56,8 @@ export const History = observer(
       const id = Number.parseInt(
         ((event.target as HTMLTableCellElement).parentNode as HTMLTableRowElement).id
       );
-      const id2 = id == marker ? -1 : id;
-      setMarker(id2);
+      const id2 = id == markHist ? -1 : id;
+      setMarkHist(id2);
     };
 
     function isTouchDevice() {
@@ -128,7 +128,7 @@ export const History = observer(
           const moves = cols[cols.length - 1].split(' ');
           const win = rules.whoWon(moves)?.substring(0, 1) ?? '?';
           return (
-            <TableRow key={iRow} id={iRow} className={iRow == marker ? styles.MarkRow : ''}>
+            <TableRow key={iRow} id={iRow} className={iRow == markHist ? styles.MarkRow : ''}>
               <TableCell>{tim}</TableCell>
               <TableCell>{cols[1].split(' ')[0]}</TableCell>
               <TableCell>{cols[2].split(' ')[0]}</TableCell>

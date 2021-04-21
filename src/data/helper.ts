@@ -74,13 +74,13 @@ export class Helper {
     makeAutoObservable(this);
   }
   reset = () => (this.help = []);
-  run = (fen: string) => {
+  run = (fen: string, isWhiteTurn: boolean) => {
     this.reset();
     helperBot.run(fen, ({ moves, cp }) => {
       const squares: Set<string> = new Set();
       moves.forEach(x => squares.add(x));
       this.help = [...squares];
-      this.cp = cp;
+      this.cp = isWhiteTurn ? cp : -cp;
     });
   };
 }

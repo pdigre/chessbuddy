@@ -5,6 +5,7 @@ import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/c
 import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
+import { CP } from './components/CP';
 import { Config } from './components/Config';
 import { Board } from './components/Board';
 import { PlayerInfo } from './components/PlayerInfo';
@@ -22,10 +23,11 @@ const App: React.FC = () => {
       <div className={styles.App}>
         <MessageBox messager={messager} />
         <Config />
+        <CP helper={helper} />
         <div className={styles.AppLeft}>
-          <PlayerInfo isTop={true} helper={helper} />
+          <PlayerInfo isTop={true} game={game} />
           <Board helper={helper} gameState={gameState} />
-          <PlayerInfo isTop={false} helper={helper} />
+          <PlayerInfo isTop={false} game={game} />
         </div>
         <div className={styles.AppRight}>
           <h3 onClick={about}>♛ Chessbuddy 0.6</h3>
