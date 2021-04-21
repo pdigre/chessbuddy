@@ -5,7 +5,7 @@ const initial = {
   markLog: -1,
   markHist: -1,
   showConfig: false,
-  showHints: false,
+  showHints: true,
   showFacts: true,
   showHist: false,
 };
