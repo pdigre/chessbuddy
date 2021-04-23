@@ -15,13 +15,37 @@ import { Add, Delete } from '@material-ui/icons';
 import { ConfigSelector } from './ConfigSelector';
 import type { HANDLE_CHANGE, HANDLE_CLICK } from './reacttypes';
 import { observer } from 'mobx-react';
+import { messager } from './MessageBox';
 
 export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [engine, setEngine] = React.useState('');
-  const [skill, setSkill] = useState('20');
-  const [depth, setDepth] = useState('10');
+  const [skill, setSkill] = useState('');
+  const [depth, setDepth] = useState('');
   const [time, setTime] = useState('');
   const addPlayerHandler: HANDLE_CLICK = event => {
+    if (!engine.length) {
+      messager.display('Add Bot', 'Need to select a chess engine');
+      return;
+    }
+    const nSkill = Number.parseInt(skill);
+    if (isNaN(nSkill) || nSkill < 1 || nSkill > 20) {
+      messager.display('Add Bot', 'Need to enter skill level between 1 and 20');
+      return;
+    }
+    const nDepth = Number.parseInt(depth);
+    if (!time.length == !depth.length) {
+      messager.display('Add Bot', 'Need to enter time or depth, but not both');
+      return;
+    }
+    if (depth.length && (isNaN(nDepth) || nDepth < 6 || nDepth > 30)) {
+      messager.display('Add Bot', 'Need to enter depth between 6 and 30');
+      return;
+    }
+    const nTime = Number.parseInt(time);
+    if (time.length && (isNaN(nTime) || nTime < 1 || nTime > 60)) {
+      messager.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
+      return;
+    }
     players.addPlayer(`Bot:${engine}:${skill}:${time}:${depth}`);
     players.save();
   };
@@ -38,11 +62,12 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
       setMarker(num == marker ? -1 : num);
     }
   };
-
+  const hasSelect = marker >= 0;
   const bots = players.players.filter(x => x instanceof Bot);
   const delPlayerHandler: HANDLE_CLICK = event => {
     if (marker >= 0) {
       players.delPlayer(bots[marker].name);
+      setMarker(-1);
       players.save();
     }
   };
@@ -61,23 +86,33 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <div className={styles.Buttons}>
-        <Button className={styles.Button} onClick={delPlayerHandler} variant="contained">
+      <div>
+        <Button
+          className={styles.Button}
+          onClick={delPlayerHandler}
+          variant="contained"
+          disabled={!hasSelect}>
           Delete <Delete />
         </Button>
       </div>
-      <ConfigSelector
-        label="Chess Engine"
-        choices={engineNames}
-        selected={engine}
-        setSelected={setEngine}
-      />
-      <span>
-        <TextField label="Skill level" id="skill" size="small" onChange={skillChange} />
-        <TextField label="Depth (..not time)" id="depth" size="small" onChange={depthChange} />
-        <TextField label="Time (sec)" id="time" size="small" onChange={timeChange} />
-      </span>
-      <div className={styles.Buttons}>
+      <div>&nbsp;</div>
+      <div>
+        <ConfigSelector
+          label="Chess Engine"
+          choices={engineNames}
+          selected={engine}
+          setSelected={setEngine}
+        />{' '}
+        &nbsp;
+        <TextField label="Skill level" id="skill" size="medium" onChange={skillChange} /> &nbsp;
+        <TextField
+          label="Depth (..not time)"
+          id="depth"
+          size="medium"
+          onChange={depthChange}
+        />{' '}
+        &nbsp;
+        <TextField label="Time (sec)" id="time" size="medium" onChange={timeChange} /> &nbsp;
         <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
           Add <Add />
         </Button>

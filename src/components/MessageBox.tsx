@@ -57,7 +57,13 @@ export const MessageBox = observer(({ messager }: { messager: Messager }) => {
       </DialogContent>
       <DialogActions>
         {messager.buttons?.map(x => (
-          <Button key={x} autoFocus onClick={handleClick} color="primary">
+          <Button
+            key={x}
+            autoFocus
+            onClick={handleClick}
+            color="primary"
+            variant="contained"
+            size="large">
             {x}
           </Button>
         ))}

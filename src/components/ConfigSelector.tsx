@@ -23,7 +23,7 @@ export const ConfigSelector: React.FC<SelectorProps> = ({
   };
 
   return (
-    <FormControl variant="filled" className={styles.BotSelector}>
+    <FormControl variant="filled">
       <InputLabel htmlFor="for">{label}</InputLabel>
       <Select
         native
