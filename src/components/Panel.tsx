@@ -52,13 +52,25 @@ export const Panel = observer(({ gameState }: { gameState: GameState }) => {
       aria-label="outlined primary button group"
       className={styles.Panel}>
       <Button className={styles.Button} onClick={playHandler} variant="contained">
-        {isUndo ? <Undo /> : gameState.isPlaying ? <PlayArrow /> : <Pause />}
+        {isUndo ? (
+          <Undo fontSize="large" />
+        ) : gameState.isPlaying ? (
+          <PlayArrow fontSize="large" />
+        ) : (
+          <Pause fontSize="large" />
+        )}
       </Button>
       <Button className={styles.Button} onClick={histHandler} variant="contained">
-        {isGotoHist ? <Input /> : showHist ? <Timeline /> : <EventNote />}
+        {isGotoHist ? (
+          <Input fontSize="large" />
+        ) : showHist ? (
+          <Timeline fontSize="large" />
+        ) : (
+          <EventNote fontSize="large" />
+        )}
       </Button>
       <Button className={styles.Button} onClick={configHandler} variant="contained">
-        <Settings />
+        <Settings fontSize="large" />
       </Button>
     </ButtonGroup>
   );

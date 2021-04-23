@@ -52,18 +52,34 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
 
   return (
     <div className={styles.Config}>
-      <ConfigSelector label="White" choices={playerNames} selected={white} setSelected={setWhite} />
-      <ConfigSelector label="Black" choices={playerNames} selected={black} setSelected={setBlack} />
-      <div className={styles.Buttons}>
-        <Button className={styles.Button} onClick={playAction} variant="contained">
+      <div>
+        <ConfigSelector
+          label="White"
+          choices={playerNames}
+          selected={white}
+          setSelected={setWhite}
+        />
+        &nbsp;
+        <ConfigSelector
+          label="Black"
+          choices={playerNames}
+          selected={black}
+          setSelected={setBlack}
+        />
+      </div>
+      <div>&nbsp;</div>
+      <div>
+        <Button className={styles.Button} onClick={playAction} variant="contained" color="primary">
           Play
           <PlayArrow />
         </Button>
-        <Button className={styles.Button} onClick={endAction} variant="contained">
+        &nbsp;
+        <Button className={styles.Button} onClick={endAction} variant="contained" color="primary">
           End game
           <ExitToApp />
         </Button>
-        <Button className={styles.Button} onClick={resetGame} variant="contained">
+        &nbsp;
+        <Button className={styles.Button} onClick={resetGame} variant="contained" color="primary">
           Reset
           <Clear />
         </Button>

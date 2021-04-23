@@ -7,10 +7,10 @@ body {
   padding: 0px;
 }
 .App {
-  border-width: 1px;
-  border-style: dotted;
   width: 1020px;
-  height: 656px;
+  height: 654px;
+  background-color: rgb(212, 239, 255);
+  border-width: 0px;
   display: flex;
   margin: 0px;
   padding: 0px;
@@ -18,19 +18,19 @@ body {
 }
 
 .CP {
+  width: 16px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 16px;
-  height: 650px;
 }
-.CPWHITE{
+.CPWHITE {
   writing-mode: vertical-lr;
   text-align: center;
   background-color: white;
   color: black;
 }
-.CPBLACK{
+.CPBLACK {
   writing-mode: vertical-lr;
   text-align: center;
   background-color: black;
@@ -41,20 +41,19 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 602px;
 }
 
 .AppRight {
   display: flex;
   flex-direction: column;
-  width: 418px;
+  width: 100%;
   text-align: center;
 }
 
 .Player,
 .PlayerRight {
+  height: 27px;
   font-size: 1.3em;
-  height: 28px;
   margin: 0px;
   padding: 0px;
 }
@@ -72,23 +71,26 @@ body {
   font-size: 1.4em;
 }
 
+.DialogActions {
+  text-align: center;
+  flex-direction: row;
+}
+
 .Panel {
   width: 100%;
-  height: 50px;
 }
 
 .History,
 .Log {
-  margin: 1px;
-  width: 416px;
+  margin: 0px;
+  width: 100%;
 }
 
 .History table,
 .Log table {
   table-layout: fixed;
   width: 100%;
-  overflow: visible;
-  -webkit-overflow-scrolling: touch;
+  overflow: auto;
 }
 .History td {
   padding: 3px;
@@ -135,13 +137,11 @@ body {
 }
 
 .Button {
-  margin: 5px;
   height: 56px;
   flex-grow: 1;
 }
 
 .Buttons {
-  margin: 5px;
   display: flex;
   flex-direction: row;
 }
@@ -150,18 +150,8 @@ body {
   display: flex;
   flex-direction: column;
   text-align: center;
-  width: 800px;
-  height: 500px;
-}
-
-.BotSelector {
-  margin: 10px;
-  display: inline-block;
-  font-size: 1.4em;
-
-  label {
-    margin-right: 10px;
-  }
+  width: 650px;
+  height: 400px;
 }
 
 .lightSquare {
@@ -172,4 +162,35 @@ body {
 }
 .Hidden {
   display: none;
+}
+
+// iPad - also needs to set chessboard width 600px - Chrome takes 112 pixels from height
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: portrait) {
+  .App {
+    width: 1020px;
+    height: 654px;
+  }
+  .CP {
+    width: 16px;
+  }
+  .Player,
+  .PlayerRight {
+    height: 27px;
+  }
+  .Log td:first-child {
+    width: 120px;
+  }
+  .Log td:last-child {
+    width: 20px;
+  }
+  .NumberCell {
+    width: 20px;
+  }
+  .Button {
+    height: 56px;
+  }
+  .Config {
+    width: 650px;
+    height: 400px;
+  }
 }

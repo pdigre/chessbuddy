@@ -15,6 +15,7 @@ import { Add, Delete, GetApp, Publish, Language } from '@material-ui/icons';
 import type { HANDLE_CHANGE, HANDLE_CLICK } from './reacttypes';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../data/game';
+import { messager } from './MessageBox';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
   const [name, setName] = useState('');
@@ -38,6 +39,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     if (hasSelect) {
       players.delPlayer(humans[marker].name);
       players.save();
+      setMarker(-1);
     }
   };
   const [downloadLink, setDownloadLink] = useState('');
@@ -71,9 +73,14 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
   };
   const changeName: HANDLE_CHANGE = e => setName(e.target.value as string);
   const changeEmail: HANDLE_CHANGE = e => setEmail(e.target.value as string);
+
   const doAddPlayer: HANDLE_CLICK = event => {
-    players.addPlayer(`Human:${name}:${email}`);
-    players.save();
+    if (name.length) {
+      players.addPlayer(`Human:${name}:${email}`);
+      players.save();
+    } else {
+      messager.display('Add Human', 'Need to enter a name');
+    }
   };
 
   const uploadClick = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -151,9 +158,12 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           Connect <Language />
         </Button>
       </div>
-      <TextField label="Player Name" id="name" size="small" onChange={changeName} />
-      <TextField label="Player Email" id="email" size="small" onChange={changeEmail} />
-      <div className={styles.Buttons}>
+      <div>&nbsp;</div>
+      <div>
+        <TextField label="Player Name" id="name" size="medium" onChange={changeName} />
+        &nbsp;
+        <TextField label="Player Email" id="email" size="medium" onChange={changeEmail} />
+        &nbsp;
         <Button className={styles.Button} onClick={doAddPlayer} variant="contained">
           Add <Add />
         </Button>

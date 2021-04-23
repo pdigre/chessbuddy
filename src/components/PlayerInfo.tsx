@@ -14,6 +14,7 @@ export const PlayerInfo = observer(({ isTop, game }: { isTop: boolean; game: Gam
   const Ticker = observer(({ timer }: TIMER) => (
     <span>{toMMSS(timer.getUsed() + (g.isWhiteTurn ? g.wtime : g.btime))}</span>
   ));
+
   return (
     <p className={isTop && rotation % 2 == 1 ? styles.PlayerRight : styles.Player}>
       {isWhite ? `White: ${g.white}` : `Black: ${g.black}`} &lt;

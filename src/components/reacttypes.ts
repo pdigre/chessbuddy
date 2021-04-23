@@ -9,3 +9,4 @@ export type HANDLE_CHANGE = (
 ) => void;
 
 export type HANDLE_CLICK = (event: React.MouseEvent<HTMLElement>) => void;
+export type HANDLE_TOUCH = (event: React.TouchEvent<HTMLElement>) => void;

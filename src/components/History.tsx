@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useGlobalState } from '../data/state';
 import styles from '../styles.module.scss';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
-import type { HANDLE_CLICK } from './reacttypes';
+import type { HANDLE_CLICK, HANDLE_TOUCH } from './reacttypes';
 import * as rules from '../data/rules';
 import { messager } from './MessageBox';
 import { GameHistory, Game, gameState } from '../data/game';
@@ -11,16 +11,17 @@ import { observer } from 'mobx-react';
 export const History = observer(
   ({ game, gameHistory }: { game: Game; gameHistory: GameHistory }) => {
     const endRef = useRef<HTMLElement>(null);
+    const scrollRef = useRef<HTMLElement>(null);
     const [markLog, setMarkLog] = useGlobalState('markLog');
     const [markHist, setMarkHist] = useGlobalState('markHist');
     const [showHistory, setShowHistory] = useGlobalState('showHist');
-
+    /*
     if (showHistory) {
       if (markHist == -1) endRef.current?.scrollIntoView();
     } else {
       if (markLog == -1) endRef.current?.scrollIntoView();
     }
-
+*/
     if (!showHistory && markHist >= 0) {
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
@@ -64,24 +65,19 @@ export const History = observer(
       setMarkHist(id2);
     };
 
-    function isTouchDevice() {
-      try {
-        document.createEvent('TouchEvent');
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-
-    let scrollStartPos = 0;
-    let scrollTop = 0;
-    const touchstart = (event: TouchEvent) => {
-      scrollStartPos = scrollTop + event.touches[0].pageY;
-      //            event.preventDefault();
+    let fingerStart = 0;
+    let scrollStart = 0;
+    let scrollMove = 0;
+    const onTouchStart: HANDLE_TOUCH = event => {
+      fingerStart = event.touches[0].pageY;
+      scrollStart = scrollMove;
+      event.preventDefault();
     };
-    const touchmove = (event: TouchEvent) => {
-      scrollTop = scrollStartPos - event.touches[0].pageY;
-      //            event.preventDefault();
+    const onTouchMove = (event: TouchEvent) => {
+      const fingerMove = fingerStart - event.touches[0].pageY;
+      scrollMove = scrollStart + fingerMove;
+      scrollRef.current?.scroll({ top: scrollMove });
+      event.preventDefault();
     };
 
     const viewLog = () => {
@@ -142,9 +138,12 @@ export const History = observer(
         });
 
     return (
-      <TableContainer className={showHistory ? styles.Log : styles.History}>
-        <Table size="small" ontouchstart={touchstart} ontouchmove={touchmove}>
-          <TableBody onClick={showHistory ? historyClick : logClick}>
+      <TableContainer className={showHistory ? styles.Log : styles.History} ref={scrollRef}>
+        <Table size="small">
+          <TableBody
+            onClick={showHistory ? historyClick : logClick}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}>
             {showHistory ? viewHistory() : viewLog()}
             <TableRow ref={endRef} />
           </TableBody>

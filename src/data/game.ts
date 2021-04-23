@@ -119,9 +119,13 @@ export class Game {
     this.log = _game[5] ? _game[5].split(' ') : [];
     this.setPlayers(_game[1], _game[2]);
     this.fen = rules.replay(this.log);
-    this.wtime = Number.parseInt(_game[3]);
-    this.btime = Number.parseInt(_game[4]);
+    this.wtime = Number.parseInt(_game[3], 36);
+    this.btime = Number.parseInt(_game[4], 36);
     this.date = Number.parseInt(_game[0]);
+    if (isNaN(this.wtime)) this.wtime = 0;
+    if (isNaN(this.btime)) this.btime = 0;
+    timeKeeper.white = this.wtime;
+    timeKeeper.black = this.btime;
     this.calculate();
   };
 

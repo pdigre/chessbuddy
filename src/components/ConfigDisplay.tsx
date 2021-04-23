@@ -11,27 +11,31 @@ export const ConfigDisplay: React.FC = () => {
 
   return (
     <div className={styles.Config}>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={showFacts}
-            onChange={() => setShowFacts(!showFacts)}
-            inputProps={{ 'aria-label': 'primary checkbox' }}
-          />
-        }
-        label="Show openings information"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={showHints}
-            onChange={() => setShowHints(!showHints)}
-            inputProps={{ 'aria-label': 'primary checkbox' }}
-          />
-        }
-        label="Training mode / Stockfish suggestions"
-      />
-      <div className={styles.Buttons}>
+      <div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={showFacts}
+              onChange={() => setShowFacts(!showFacts)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          }
+          label="Show openings information"
+        />
+      </div>
+      <div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={showHints}
+              onChange={() => setShowHints(!showHints)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          }
+          label="Training mode / Stockfish suggestions"
+        />
+      </div>
+      <div>
         <Button
           className={styles.Button}
           variant="contained"
