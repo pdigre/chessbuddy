@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { useGlobalState } from '../data/state';
 import styles from '../styles.module.scss';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
 import type { HANDLE_CLICK, HANDLE_TOUCH } from './reacttypes';
@@ -7,30 +6,28 @@ import * as rules from '../data/rules';
 import { messager } from './MessageBox';
 import { GameHistory, Game, gameState } from '../data/game';
 import { observer } from 'mobx-react';
+import { Config } from '../data/config';
 
 export const History = observer(
-  ({ game, gameHistory }: { game: Game; gameHistory: GameHistory }) => {
+  ({ game, gameHistory, flow }: { game: Game; gameHistory: GameHistory; flow: Config }) => {
     const endRef = useRef<HTMLElement>(null);
     const scrollRef = useRef<HTMLElement>(null);
-    const [markLog, setMarkLog] = useGlobalState('markLog');
-    const [markHist, setMarkHist] = useGlobalState('markHist');
-    const [showHistory, setShowHistory] = useGlobalState('showHist');
 
-    if (showHistory) {
-      if (markHist == -1) endRef.current?.scrollIntoView();
+    if (flow.showHist) {
+      if (flow.markHist == -1) endRef.current?.scrollIntoView();
     } else {
-      if (markLog == -1) endRef.current?.scrollIntoView();
+      if (flow.markLog == -1) endRef.current?.scrollIntoView();
     }
 
-    if (!showHistory && markHist >= 0) {
+    if (!flow.showHist && flow.markHist >= 0) {
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
-        const moves = games[markHist].split(';')[5].split(' ');
+        const moves = games[flow.markHist].split(';')[5].split(' ');
         messager.display('Load game', 'Do you want to look at this game?', ['Yes', 'No'], reply => {
           if (reply == 'Yes') {
             game.log = moves;
             const mark = moves.length - 1;
-            setMarkLog(mark);
+            flow.markLog = mark;
             game.fen = rules.replay(moves, mark);
           }
           messager.clear();
@@ -40,7 +37,7 @@ export const History = observer(
           'Ok',
         ]);
       }
-      setMarkHist(-1);
+      flow.markHist = -1;
     }
 
     const gotoMark = (mark: number) => {
@@ -51,8 +48,8 @@ export const History = observer(
     const logClick: HANDLE_CLICK = event => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
-      const id2 = id == markLog ? -1 : id;
-      setMarkLog(id2);
+      const id2 = id == flow.markLog ? -1 : id;
+      flow.markLog = id2;
       gotoMark(id2);
     };
 
@@ -61,8 +58,8 @@ export const History = observer(
       const id = Number.parseInt(
         ((event.target as HTMLTableCellElement).parentNode as HTMLTableRowElement).id
       );
-      const id2 = id == markHist ? -1 : id;
-      setMarkHist(id2);
+      const id2 = id == flow.markHist ? -1 : id;
+      flow.markHist = id2;
     };
 
     let fingerStart = 0;
@@ -99,7 +96,7 @@ export const History = observer(
           {row.map((col, iCol) => {
             const id = iRow * 2 + iCol;
             return (
-              <TableCell id={id} key={id} className={id == markLog ? styles.MarkCell : ''}>
+              <TableCell id={id} key={id} className={id == flow.markLog ? styles.MarkCell : ''}>
                 {col}
               </TableCell>
             );
@@ -128,7 +125,7 @@ export const History = observer(
           const moves = cols[cols.length - 1].split(' ');
           const win = rules.whoWon(moves)?.substring(0, 1) ?? '?';
           return (
-            <TableRow key={iRow} id={iRow} className={iRow == markHist ? styles.MarkRow : ''}>
+            <TableRow key={iRow} id={iRow} className={iRow == flow.markHist ? styles.MarkRow : ''}>
               <TableCell>{tim}</TableCell>
               <TableCell>{cols[1].split(' ')[0]}</TableCell>
               <TableCell>{cols[2].split(' ')[0]}</TableCell>
@@ -138,13 +135,13 @@ export const History = observer(
         });
 
     return (
-      <TableContainer className={showHistory ? styles.Log : styles.History} ref={scrollRef}>
+      <TableContainer className={flow.showHist ? styles.Log : styles.History} ref={scrollRef}>
         <Table size="small">
           <TableBody
-            onClick={showHistory ? historyClick : logClick}
+            onClick={flow.showHist ? historyClick : logClick}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}>
-            {showHistory ? viewHistory() : viewLog()}
+            {flow.showHist ? viewHistory() : viewLog()}
             <TableRow ref={endRef} />
           </TableBody>
         </Table>

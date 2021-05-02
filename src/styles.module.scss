@@ -9,7 +9,7 @@ body {
 .App {
   width: 1020px;
   height: 654px;
-  background-color: rgb(212, 239, 255);
+  background-color: rgb(235, 246, 253);
   border-width: 0px;
   display: flex;
   margin: 0px;
@@ -18,7 +18,7 @@ body {
 }
 
 .CP {
-  width: 16px;
+  width: 24px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -165,20 +165,29 @@ body {
 }
 
 // iPad - also needs to set chessboard width 600px - Chrome takes 112 pixels from height
-@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: portrait) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .App {
-    width: 1020px;
+    width: 1024px;
     height: 654px;
+    background-color: rgb(240, 223, 223);
   }
   .CP {
     width: 16px;
   }
+  .AppLeft {
+    width: 604px;
+  }
+  
+  .AppRight {
+    width: 404px;
+  }
+  
   .Player,
   .PlayerRight {
     height: 27px;
   }
   .Log td:first-child {
-    width: 120px;
+    width: 110px;
   }
   .Log td:last-child {
     width: 20px;

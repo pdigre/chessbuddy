@@ -2,24 +2,19 @@ import React from 'react';
 import { ButtonGroup } from '@material-ui/core';
 import { PlayArrow, Pause, Settings, Timeline, EventNote, Input, Undo } from '@material-ui/icons';
 import styles from '../styles.module.scss';
-import { useGlobalState } from '../data/state';
 import * as rules from '../data/rules';
 import { Button } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import { GameState, game } from '../data/game';
+import { Config } from '../data/config';
 import { messager } from './MessageBox';
 
-export const Panel = observer(({ gameState }: { gameState: GameState }) => {
-  const [showConfig, setShowConfig] = useGlobalState('showConfig');
-  const [showHist, setShowHist] = useGlobalState('showHist');
-  const [markHist, setMarkHist] = useGlobalState('markHist');
-  const [markLog, setMarkLog] = useGlobalState('markLog');
-
-  const isGotoHist = showHist && markHist >= 0;
-  const isUndo = !showHist && markLog >= 0;
+export const Panel = observer(({ gameState, flow }: { gameState: GameState; flow: Config }) => {
+  const isGotoHist = flow.showHist && flow.markHist >= 0;
+  const isUndo = !flow.showHist && flow.markLog >= 0;
   const playHandler = () => {
     if (game.isComplete) game.reset();
-    if (!gameState.isPlaying && markLog >= 0) {
+    if (!gameState.isPlaying && flow.markLog >= 0) {
       messager.display(
         'Undo',
         'Do you want to revert the game to the marked position?',
@@ -27,10 +22,10 @@ export const Panel = observer(({ gameState }: { gameState: GameState }) => {
         yes => {
           messager.clear();
           if (yes == 'Yes') {
-            game.log = game.log.slice(0, markLog);
+            game.log = game.log.slice(0, flow.markLog);
             game.fen = rules.replay(game.log);
           }
-          setMarkLog(-1);
+          flow.markLog = -1;
         }
       );
       return;
@@ -39,10 +34,10 @@ export const Panel = observer(({ gameState }: { gameState: GameState }) => {
     gameState.run();
   };
 
-  const histHandler = () => setShowHist(!showHist);
+  const histHandler = () => (flow.showHist = !flow.showHist);
 
   const configHandler = () => {
-    setShowConfig(true);
+    flow.showConfig = true;
     gameState.isPlaying = false;
   };
 
@@ -63,7 +58,7 @@ export const Panel = observer(({ gameState }: { gameState: GameState }) => {
       <Button className={styles.Button} onClick={histHandler} variant="contained">
         {isGotoHist ? (
           <Input fontSize="large" />
-        ) : showHist ? (
+        ) : flow.showHist ? (
           <Timeline fontSize="large" />
         ) : (
           <EventNote fontSize="large" />

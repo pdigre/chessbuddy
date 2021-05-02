@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import * as rules from '../data/rules';
 import { Helper } from '../data/helper';
 import { Human } from '../data/players';
-import { useGlobalState } from '../data/state';
 import { game, GameState } from '../data/game';
 import Chessboard from 'chessboardjsx';
+import { Config } from '../data/config';
 import { messager } from './MessageBox';
 import { Rendering } from '../data/rendering';
 import { observer } from 'mobx-react';
@@ -38,15 +38,13 @@ export const Board = observer(
     helper,
     gameState,
     rendering,
+    flow,
   }: {
     helper: Helper;
     gameState: GameState;
     rendering: Rendering;
+    flow: Config;
   }) => {
-    const [rotation, setRotation] = useGlobalState('rotation');
-    const [showHints, setShowHints] = useGlobalState('showHints');
-    const [showFacts, setShowFacts] = useGlobalState('showFacts');
-
     const doMove = useCallback((from: rules.Square, to: rules.Square, isHuman: boolean) => {
       const move = rules.move(game.fen, from, to);
       if (!move) {
@@ -74,8 +72,8 @@ export const Board = observer(
       }
     }, []);
 
-    const r90 = rotation % 2 == 1;
-    const r180 = rotation > 1;
+    const r90 = flow.rotation % 2 == 1;
+    const r180 = flow.rotation > 1;
 
     const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
       const player = game.nextPlayer();
@@ -93,10 +91,10 @@ export const Board = observer(
     const showMarkers = () => {
       const markers = {};
       const g = game;
-      if (showFacts) {
+      if (flow.showFacts) {
         g.pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle }));
       }
-      if (showHints) {
+      if (flow.showHints) {
         helper.help.forEach((x, i) => {
           Object.assign(markers, {
             [r90 ? rules.rightSquare(x) : x]: i > 1 ? helpStyle2 : helpStyle,
