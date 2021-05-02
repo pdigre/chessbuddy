@@ -1,22 +1,19 @@
 import React from 'react';
-import { useGlobalState } from '../data/state';
+import { Config } from '../data/config';
 import styles from '../styles.module.scss';
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import { RotateRight } from '@material-ui/icons';
+import { observer } from 'mobx-react';
 
-export const ConfigDisplay: React.FC = () => {
-  const [rotation, setRotation] = useGlobalState('rotation');
-  const [showHints, setShowHints] = useGlobalState('showHints');
-  const [showFacts, setShowFacts] = useGlobalState('showFacts');
-
+export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   return (
     <div className={styles.Config}>
       <div>
         <FormControlLabel
           control={
             <Checkbox
-              checked={showFacts}
-              onChange={() => setShowFacts(!showFacts)}
+              checked={config.showFacts}
+              onChange={() => (config.showFacts = !config.showFacts)}
               inputProps={{ 'aria-label': 'primary checkbox' }}
             />
           }
@@ -27,8 +24,8 @@ export const ConfigDisplay: React.FC = () => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={showHints}
-              onChange={() => setShowHints(!showHints)}
+              checked={config.showHints}
+              onChange={() => (config.showHints = !config.showHints)}
               inputProps={{ 'aria-label': 'primary checkbox' }}
             />
           }
@@ -39,10 +36,10 @@ export const ConfigDisplay: React.FC = () => {
         <Button
           className={styles.Button}
           variant="contained"
-          onClick={() => setRotation((rotation + 1) % 4)}>
+          onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
           Rotate chessboard <RotateRight />
         </Button>
       </div>
     </div>
   );
-};
+});

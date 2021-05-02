@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGlobalState } from '../data/state';
+import { config } from '../data/config';
 import * as rules from '../data/rules';
 import { ConfigSelector } from './ConfigSelector';
 import styles from '../styles.module.scss';
@@ -13,7 +13,6 @@ import { Players } from '../data/players';
 export const ConfigGame = observer(({ players }: { players: Players }) => {
   const [white, setWhite] = useState(game.white);
   const [black, setBlack] = useState(game.black);
-  const [showConfig, setShowConfig] = useGlobalState('showConfig');
   const playerNames = Array.from(players.players.map(x => x.name));
   game.setPlayers(white, black);
 
@@ -22,7 +21,7 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
   };
 
   const playAction = () => {
-    setShowConfig(false);
+    config.showConfig = false;
     gameState.isPlaying = true;
     gameState.run();
   };

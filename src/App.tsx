@@ -1,12 +1,13 @@
 import React from 'react';
 import { game, gameState, gameHistory } from './data/game';
+import { config } from './data/config';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
 import { FenInfo } from './components/FenInfo';
 import { CP } from './components/CP';
-import { Config } from './components/Config';
+import { ConfigMain } from './components/ConfigMain';
 import { Board } from './components/Board';
 import { PlayerInfo } from './components/PlayerInfo';
 import { MessageBox, messager } from './components/MessageBox';
@@ -22,20 +23,20 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
-        <MessageBox messager={messager} />
-        <Config />
-        <CP helper={helper} rendering={rendering} />
+        <CP helper={helper} rendering={rendering} flow={config} />
         <div className={styles.AppLeft}>
-          <PlayerInfo isTop={true} game={game} />
-          <Board helper={helper} gameState={gameState} rendering={rendering} />
-          <PlayerInfo isTop={false} game={game} />
+          <PlayerInfo isTop={true} game={game} flow={config} />
+          <Board helper={helper} gameState={gameState} rendering={rendering} flow={config} />
+          <PlayerInfo isTop={false} game={game} flow={config} />
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.7</h3>
-          <Panel gameState={gameState} />
+          <h3 onClick={about}>♛ Chessbuddy 0.8</h3>
+          <Panel gameState={gameState} flow={config} />
           <FenInfo game={game} />
-          <History game={game} gameHistory={gameHistory} />
+          <History game={game} gameHistory={gameHistory} flow={config} />
         </div>
+        <MessageBox messager={messager} />
+        <ConfigMain config={config} />
       </div>
     </ThemeProvider>
   );

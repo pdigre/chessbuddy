@@ -1,5 +1,4 @@
 import React, { ReactChild } from 'react';
-import { useGlobalState } from '../data/state';
 import { DialogTitle, Dialog, AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
 import styles from '../styles.module.scss';
 import { ConfigGame } from './ConfigGame';
@@ -9,10 +8,10 @@ import { ConfigBot } from './ConfigBot';
 import type { HANDLE_CHANGE } from './reacttypes';
 import { players } from '../data/players';
 import { server } from '../data/server';
+import { observer } from 'mobx-react';
+import { Config } from '../data/config';
 
-export const Config: React.FC = () => {
-  const [showConfig, setShowConfig] = useGlobalState('showConfig');
-
+export const ConfigMain = observer(({ config }: { config: Config }) => {
   type TabProps = {
     children: ReactChild;
     index: number;
@@ -64,8 +63,8 @@ export const Config: React.FC = () => {
   return (
     <Dialog
       aria-labelledby="simple-dialog-title"
-      open={showConfig}
-      onClose={() => setShowConfig(false)}
+      open={config.showConfig}
+      onClose={() => (config.showConfig = false)}
       maxWidth="xl"
       className={styles.Dialog}>
       <DialogTitle id="simple-dialog-title">Configure</DialogTitle>
@@ -86,7 +85,7 @@ export const Config: React.FC = () => {
         <ConfigGame players={players} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ConfigDisplay />
+        <ConfigDisplay config={config} />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <ConfigHuman players={players} server={server} />
@@ -96,4 +95,4 @@ export const Config: React.FC = () => {
       </TabPanel>
     </Dialog>
   );
-};
+});

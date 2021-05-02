@@ -45,17 +45,8 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
   const [downloadLink, setDownloadLink] = useState('');
   const downloadPlayer: HANDLE_CLICK = event => {
     event.preventDefault();
-    const txt: string[] = [];
-    const name = humans[marker].name;
-    gameHistory.history.forEach(line => {
-      const cols = line.split(';');
-      if (cols[1] == name || cols[2] == name) {
-        const time = new Date(Number.parseInt(cols[0], 36));
-        cols[0] = time.toISOString();
-        txt.push(cols.join(';'));
-      }
-    });
-    const data = new Blob([txt.join('\r\n')], { type: 'text/plain' });
+    const downtext = gameHistory.downloadPlayer(humans[marker].name);
+    const data = new Blob([downtext], { type: 'text/plain' });
     setDownloadLink(window.URL.createObjectURL(data));
   };
   useEffect(() => {
@@ -64,8 +55,6 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
       window.URL.revokeObjectURL(downloadLink);
     }
   }, [downloadLink, setDownloadLink]);
-
-  const [uploadLink, setUploadLink] = useState('');
 
   const uploadPlayer: HANDLE_CLICK = event => {
     event.preventDefault();
@@ -83,8 +72,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     }
   };
 
-  const uploadClick = (evt: ChangeEvent<HTMLInputElement>) => {
-    const status: string[] = [];
+  const uploadChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const files = evt.currentTarget?.files;
     if (files && files.length) {
       const file = files[0];
@@ -92,7 +80,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
         const reader = new FileReader();
         reader.onerror = reject;
         reader.onload = function () {
-          resolve(reader.result);
+          gameHistory.upload(reader.result as string);
         };
         reader.readAsBinaryString(file); // here the file can be read in different way Text, DataUrl, ArrayBuffer
       });
@@ -100,7 +88,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
   };
   const connectPlayer: HANDLE_CLICK = event => {
     event.preventDefault();
-    server.connect(humans[marker] as Human);
+    server.connectREST(humans[marker] as Human);
   };
   return (
     <div className={styles.Config}>
@@ -125,7 +113,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
         className={styles.Hidden}
         multiple={false}
         accept=".txt,text/plain"
-        onChange={uploadClick}
+        onChange={uploadChange}
         ref={uploadRef}
       />
       <div className={styles.Buttons}>
