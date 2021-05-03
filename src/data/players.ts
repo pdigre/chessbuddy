@@ -68,7 +68,7 @@ export class Players {
 
   private restore = (data: string) =>
     data
-      .replaceAll('\r', '')
+      .replace(/\r/, '')
       .split('\n')
       .forEach(x => this.addPlayer(x));
 }

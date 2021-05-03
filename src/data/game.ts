@@ -166,7 +166,7 @@ export class GameHistory {
   }
 
   private loadHistory() {
-    const h1 = localStorage.getItem('log')?.replaceAll('\r', '').split('\n') ?? [];
+    const h1 = localStorage.getItem('log')?.replace(/\r/, '').split('\n') ?? [];
     const h2 = h1.map(x => this.readGame(x)).filter(x => x) as string[];
     h2.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
     return h2;
@@ -218,7 +218,7 @@ export class GameHistory {
   }
 
   upload(text: string) {
-    const lines = text.replaceAll('\r', '').split('\n');
+    const lines = text.replace(/\r/gi, '').split('\n');
     const games = lines.map(x => this.readGame(x)).filter(x => x) as string[];
     const h1 = this.history;
     games.forEach(game => {
