@@ -6,26 +6,34 @@ import * as rules from '../data/rules';
 import { Button } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import { GameState, game } from '../data/game';
+import { undorefresh } from '../data/undorefresh';
 import { Config } from '../data/config';
 import { messager } from './MessageBox';
+import { helper } from '../data/helper';
 
-export const Panel = observer(({ gameState, flow }: { gameState: GameState; flow: Config }) => {
-  const isGotoHist = flow.showHist && flow.markHist >= 0;
-  const isUndo = !flow.showHist && flow.markLog >= 0;
+export const Panel = observer(({ gameState, config }: { gameState: GameState; config: Config }) => {
+  const isGotoHist = config.showHist && config.markHist >= 0;
   const playHandler = () => {
     if (game.isComplete) game.reset();
-    if (!gameState.isPlaying && flow.markLog >= 0) {
+    const isHistUndo = !config.showHist && config.markLog >= 0;
+    const isPlayUndo = gameState.isPlaying && config.showUndo;
+    if (isHistUndo || isPlayUndo) {
       messager.display(
         'Undo',
-        'Do you want to revert the game to the marked position?',
+        isPlayUndo
+          ? 'Do you want to undo last move?'
+          : 'Do you want to revert the game to the marked position?',
         ['Yes', 'No'],
         yes => {
           messager.clear();
           if (yes == 'Yes') {
-            game.log = game.log.slice(0, flow.markLog);
+            game.log = game.log.slice(0, isPlayUndo ? config.undopos : config.markLog);
             game.fen = rules.replay(game.log);
+            undorefresh.startRefreshTimer();
+            helper.cp = 0;
+            helper.help = [];
           }
-          flow.markLog = -1;
+          config.markLog = -1;
         }
       );
       return;
@@ -34,12 +42,15 @@ export const Panel = observer(({ gameState, flow }: { gameState: GameState; flow
     gameState.run();
   };
 
-  const histHandler = () => (flow.showHist = !flow.showHist);
+  const histHandler = () => (config.showHist = !config.showHist);
 
   const configHandler = () => {
-    flow.showConfig = true;
+    config.showConfig = true;
     gameState.isPlaying = false;
   };
+
+  const isHistUndo = !config.showHist && config.markLog >= 0;
+  const isPlayUndo = gameState.isPlaying && config.showUndo;
 
   return (
     <ButtonGroup
@@ -47,7 +58,7 @@ export const Panel = observer(({ gameState, flow }: { gameState: GameState; flow
       aria-label="outlined primary button group"
       className={styles.Panel}>
       <Button className={styles.Button} onClick={playHandler} variant="contained">
-        {isUndo ? (
+        {isHistUndo || isPlayUndo ? (
           <Undo fontSize="large" />
         ) : gameState.isPlaying ? (
           <PlayArrow fontSize="large" />
@@ -58,7 +69,7 @@ export const Panel = observer(({ gameState, flow }: { gameState: GameState; flow
       <Button className={styles.Button} onClick={histHandler} variant="contained">
         {isGotoHist ? (
           <Input fontSize="large" />
-        ) : flow.showHist ? (
+        ) : config.showHist ? (
           <Timeline fontSize="large" />
         ) : (
           <EventNote fontSize="large" />

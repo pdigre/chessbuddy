@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import { Config } from '../data/config';
 
 export const PlayerInfo = observer(
-  ({ isTop, game, flow }: { isTop: boolean; game: Game; flow: Config }) => {
+  ({ isTop, game, config: flow }: { isTop: boolean; game: Game; config: Config }) => {
     const g = game;
     const isWhite = isTop == flow.rotation > 1;
     type TIMER = { timer: typeof timeKeeper };

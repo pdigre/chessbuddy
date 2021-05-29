@@ -3400,9 +3400,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chess.js@patch:@types/chess.js@^0.10.1#./@types-chessjs.diff::locator=chessbot-typescript%40workspace%3A.":
+"@types/chess.js@patch:@types/chess.js@^0.10.1#./@types-chessjs.diff::locator=chesbuddy%40workspace%3A.":
   version: 0.10.1
-  resolution: "@types/chess.js@patch:@types/chess.js@npm%3A0.10.1#./@types-chessjs.diff::version=0.10.1&hash=737bbb&locator=chessbot-typescript%40workspace%3A."
+  resolution: "@types/chess.js@patch:@types/chess.js@npm%3A0.10.1#./@types-chessjs.diff::version=0.10.1&hash=737bbb&locator=chesbuddy%40workspace%3A."
   checksum: e094772164c01ba5bcec67c44fd06a49fad2bf8c2d4e6acf33fcaa76f41232a639f03f1118d7f807734ad1f48cdc99e35640326bfaa273d07e7c90ac5942eb7b
   languageName: node
   linkType: hard
@@ -5666,32 +5666,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chess.js@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "chess.js@npm:0.11.0"
-  checksum: 74b6f31b743f3db1ebcd90b8baecc4490ede1c95459ba234e1a50f8f6e5524c44e6cc9963abe7bbc7a2cecab21a14afa8c4ed3814d860567e1ede6c83ca459b9
-  languageName: node
-  linkType: hard
-
-"chessboardjsx@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "chessboardjsx@npm:2.4.2"
-  dependencies:
-    deep-diff: 1.0.1
-    lodash.isequal: 4.5.0
-    react-dnd: 2.6.0
-    react-dnd-html5-backend: 4.0.5
-    react-dnd-multi-backend: 3.1.2
-  peerDependencies:
-    react: ">= 16.3.2"
-    react-dom: ">= 16.3.2"
-  checksum: 30accd6d2faef6fa45d1fd70cba2485abfd49d654aa47111c845e6eac544e60da25b592ea72936e3b36aba87db9f199b26bd034c1ad23d6880c9787ce224cde5
-  languageName: node
-  linkType: hard
-
-"chessbot-typescript@workspace:.":
+"chesbuddy@workspace:.":
   version: 0.0.0-use.local
-  resolution: "chessbot-typescript@workspace:."
+  resolution: "chesbuddy@workspace:."
   dependencies:
     "@material-ui/core": ^4.11.3
     "@material-ui/data-grid": ^4.0.0-alpha.23
@@ -5741,6 +5718,29 @@ __metadata:
     typescript-plugin-css-modules: ^2.8.0
   languageName: unknown
   linkType: soft
+
+"chess.js@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "chess.js@npm:0.11.0"
+  checksum: 74b6f31b743f3db1ebcd90b8baecc4490ede1c95459ba234e1a50f8f6e5524c44e6cc9963abe7bbc7a2cecab21a14afa8c4ed3814d860567e1ede6c83ca459b9
+  languageName: node
+  linkType: hard
+
+"chessboardjsx@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "chessboardjsx@npm:2.4.2"
+  dependencies:
+    deep-diff: 1.0.1
+    lodash.isequal: 4.5.0
+    react-dnd: 2.6.0
+    react-dnd-html5-backend: 4.0.5
+    react-dnd-multi-backend: 3.1.2
+  peerDependencies:
+    react: ">= 16.3.2"
+    react-dom: ">= 16.3.2"
+  checksum: 30accd6d2faef6fa45d1fd70cba2485abfd49d654aa47111c845e6eac544e60da25b592ea72936e3b36aba87db9f199b26bd034c1ad23d6880c9787ce224cde5
+  languageName: node
+  linkType: hard
 
 "chokidar@npm:>=2.0.0 <4.0.0, chokidar@npm:^3.4.1":
   version: 3.4.3

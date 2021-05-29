@@ -6,9 +6,12 @@ import { Rendering } from '../data/rendering';
 import { Config } from '../data/config';
 
 export const CP = observer(
-  ({ helper, rendering, flow }: { helper: Helper; rendering: Rendering; flow: Config }) => {
+  ({ helper, rendering, config }: { helper: Helper; rendering: Rendering; config: Config }) => {
+    if (!config.showCP) {
+      return <div className={styles.CP}></div>;
+    }
     const cp = helper.cp;
-    const blackTop = flow.rotation > 1;
+    const blackTop = config.rotation > 1;
     const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);
     const whiteLead = cp > 0;
     const txt = `cp ${cp2} ${whiteLead ? 'white' : 'black'}`;

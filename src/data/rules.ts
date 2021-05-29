@@ -49,7 +49,7 @@ export const newFen = (fen: string, san: string) => {
 
 export const replay = (moves: string[], to?: number): Fen => {
   const game = Chess(NEW_GAME);
-  const n = to ? to : moves.length;
+  const n = to != undefined ? to : moves.length;
   for (let i = 0; i <= n; i++) {
     game.move(moves[i]);
   }

@@ -2,9 +2,10 @@ import React, { useCallback } from 'react';
 import * as rules from '../data/rules';
 import { Helper } from '../data/helper';
 import { Human } from '../data/players';
-import { game, GameState } from '../data/game';
+import { game, gameHistory, GameState } from '../data/game';
 import Chessboard from 'chessboardjsx';
 import { Config } from '../data/config';
+import { UndoRefresh } from '../data/undorefresh';
 import { messager } from './MessageBox';
 import { Rendering } from '../data/rendering';
 import { observer } from 'mobx-react';
@@ -38,12 +39,14 @@ export const Board = observer(
     helper,
     gameState,
     rendering,
-    flow,
+    config,
+    undorefresh,
   }: {
     helper: Helper;
     gameState: GameState;
     rendering: Rendering;
-    flow: Config;
+    config: Config;
+    undorefresh: UndoRefresh;
   }) => {
     const doMove = useCallback((from: rules.Square, to: rules.Square, isHuman: boolean) => {
       const move = rules.move(game.fen, from, to);
@@ -72,8 +75,8 @@ export const Board = observer(
       }
     }, []);
 
-    const r90 = flow.rotation % 2 == 1;
-    const r180 = flow.rotation > 1;
+    const r90 = config.rotation % 2 == 1;
+    const r180 = config.rotation > 1;
 
     const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
       const player = game.nextPlayer();
@@ -85,16 +88,18 @@ export const Board = observer(
     };
 
     const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
+      config.startUndoTimer(game.log.length);
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
     };
 
     const showMarkers = () => {
       const markers = {};
-      const g = game;
-      if (flow.showFacts) {
-        g.pgns.forEach(x => Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle }));
+      if (config.showFacts) {
+        game.pgns.forEach(x =>
+          Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle })
+        );
       }
-      if (flow.showHints) {
+      if (config.showHints) {
         helper.help.forEach((x, i) => {
           Object.assign(markers, {
             [r90 ? rules.rightSquare(x) : x]: i > 1 ? helpStyle2 : helpStyle,
@@ -103,10 +108,10 @@ export const Board = observer(
       }
       return markers;
     };
-
+    const fen = undorefresh.showBlank ? rules.CLEAR_GAME : game.fen;
     return (
       <Chessboard
-        position={r90 ? rules.leftFen(game.fen) : game.fen}
+        position={r90 ? rules.leftFen(fen) : fen}
         allowDrag={onDragStart}
         onDrop={onMovePiece}
         orientation={!r180 ? 'white' : 'black'}
