@@ -33,6 +33,18 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
         />
       </div>
       <div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={config.showCP}
+              onChange={() => (config.showCP = !config.showCP)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          }
+          label="Show CP - CentiPawns estimate"
+        />
+      </div>
+      <div>
         <Button
           className={styles.Button}
           variant="contained"

@@ -6,8 +6,11 @@ export class Config {
   markHist = -1;
   showConfig = false;
   showHints = true;
+  showCP = true;
   showFacts = true;
   showHist = false;
+  showUndo = false;
+  undopos = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -15,6 +18,17 @@ export class Config {
 
   getUsed = () => {
     //
+  };
+
+  private undoTimer: TimerHandler = () => {
+    this.showUndo = false;
+    this.undopos = 0;
+  };
+
+  startUndoTimer = (pos: number) => {
+    this.showUndo = true;
+    this.undopos = pos;
+    window.setTimeout(this.undoTimer, 6000);
   };
 }
 

@@ -14,6 +14,7 @@ import { MessageBox, messager } from './components/MessageBox';
 import { helper } from './data/helper';
 import { About } from './components/About';
 import { rendering } from './data/rendering';
+import { undorefresh } from './data/undorefresh';
 
 const theme = unstable_createMuiStrictModeTheme();
 
@@ -23,17 +24,23 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
-        <CP helper={helper} rendering={rendering} flow={config} />
+        <CP helper={helper} rendering={rendering} config={config} />
         <div className={styles.AppLeft}>
-          <PlayerInfo isTop={true} game={game} flow={config} />
-          <Board helper={helper} gameState={gameState} rendering={rendering} flow={config} />
-          <PlayerInfo isTop={false} game={game} flow={config} />
+          <PlayerInfo isTop={true} game={game} config={config} />
+          <Board
+            helper={helper}
+            gameState={gameState}
+            rendering={rendering}
+            config={config}
+            undorefresh={undorefresh}
+          />
+          <PlayerInfo isTop={false} game={game} config={config} />
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.8</h3>
-          <Panel gameState={gameState} flow={config} />
+          <h3 onClick={about}>♛ Chessbuddy 0.9</h3>
+          <Panel gameState={gameState} config={config} />
           <FenInfo game={game} />
-          <History game={game} gameHistory={gameHistory} flow={config} />
+          <History game={game} gameHistory={gameHistory} config={config} />
         </div>
         <MessageBox messager={messager} />
         <ConfigMain config={config} />

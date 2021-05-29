@@ -10,6 +10,7 @@ import { players } from '../data/players';
 import { server } from '../data/server';
 import { observer } from 'mobx-react';
 import { Config } from '../data/config';
+import { undorefresh } from '../data/undorefresh';
 
 export const ConfigMain = observer(({ config }: { config: Config }) => {
   type TabProps = {
@@ -60,11 +61,16 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
 
   const handleChange: HANDLE_CHANGE = (event, newValue) => setValue(newValue as number);
 
+  const handleClose = () => {
+    config.showConfig = false;
+    undorefresh.startRefreshTimer();
+  };
+
   return (
     <Dialog
       aria-labelledby="simple-dialog-title"
       open={config.showConfig}
-      onClose={() => (config.showConfig = false)}
+      onClose={handleClose}
       maxWidth="xl"
       className={styles.Dialog}>
       <DialogTitle id="simple-dialog-title">Configure</DialogTitle>
