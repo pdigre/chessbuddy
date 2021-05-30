@@ -1,19 +1,17 @@
-import React, { useRef } from 'react';
+import React, { MouseEvent, TouchEvent, useRef } from 'react';
 import styles from '../styles.module.scss';
-import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
-import type { HANDLE_CLICK, HANDLE_TOUCH } from './reacttypes';
 import * as rules from '../data/rules';
 import { messager } from './MessageBox';
 import { GameHistory, Game, gameState } from '../data/game';
 import { observer } from 'mobx-react';
 import { Config } from '../data/config';
-import { undorefresh } from '../data/undorefresh';
+import { refreshtimer } from '../data/refreshtimer';
 import { helper } from '../data/helper';
 
 export const History = observer(
   ({ game, gameHistory, config }: { game: Game; gameHistory: GameHistory; config: Config }) => {
-    const endRef = useRef<HTMLElement>(null);
-    const scrollRef = useRef<HTMLElement>(null);
+    const endRef = useRef<HTMLTableRowElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     if (config.showHist) {
       if (config.markHist == -1) endRef.current?.scrollIntoView();
@@ -45,12 +43,12 @@ export const History = observer(
     const gotoMark = (mark: number) => {
       if (gameState.isPlaying) gameState.isPlaying = false;
       game.fen = rules.replay(game.log, mark >= 0 ? mark : game.log.length);
-      undorefresh.startRefreshTimer();
+      refreshtimer.startRefreshTimer();
       helper.cp = 0;
       helper.help = [];
     };
 
-    const logClick: HANDLE_CLICK = event => {
+    const logClick = (event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
       const id2 = id == config.markLog ? -1 : id;
@@ -58,7 +56,7 @@ export const History = observer(
       gotoMark(id2);
     };
 
-    const historyClick: HANDLE_CLICK = event => {
+    const historyClick = (event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt(
         ((event.target as HTMLTableCellElement).parentNode as HTMLTableRowElement).id
@@ -70,12 +68,12 @@ export const History = observer(
     let fingerStart = 0;
     let scrollStart = 0;
     let scrollMove = 0;
-    const onTouchStart: HANDLE_TOUCH = event => {
+    const onTouchStart = (event: TouchEvent<HTMLTableElement>) => {
       fingerStart = event.touches[0].pageY;
       scrollStart = scrollMove;
       event.preventDefault();
     };
-    const onTouchMove = (event: TouchEvent) => {
+    const onTouchMove = (event: TouchEvent<HTMLTableElement>) => {
       const fingerMove = fingerStart - event.touches[0].pageY;
       scrollMove = scrollStart + fingerMove;
       scrollRef.current?.scroll({ top: scrollMove });
@@ -94,19 +92,22 @@ export const History = observer(
         rows[l][c] = t;
       });
       return rows.map((row, iRow) => (
-        <TableRow key={iRow}>
-          <TableCell size="small" className={styles.NumberCell}>
+        <tr key={iRow}>
+          <td className={styles.NumberCell}>
             <span>{iRow}</span>
-          </TableCell>
+          </td>
           {row.map((col, iCol) => {
             const id = iRow * 2 + iCol;
             return (
-              <TableCell id={id} key={id} className={id == config.markLog ? styles.MarkCell : ''}>
+              <td
+                id={id.toString()}
+                key={id.toString()}
+                className={id == config.markLog ? styles.MarkCell : ''}>
                 {col}
-              </TableCell>
+              </td>
             );
           })}
-        </TableRow>
+        </tr>
       ));
     };
 
@@ -130,30 +131,26 @@ export const History = observer(
           const moves = cols[cols.length - 1].split(' ');
           const win = rules.whoWon(moves)?.substring(0, 1) ?? '?';
           return (
-            <TableRow
-              key={iRow}
-              id={iRow}
+            <tr
+              key={iRow.toString()}
+              id={iRow.toString()}
               className={iRow == config.markHist ? styles.MarkRow : ''}>
-              <TableCell>{tim}</TableCell>
-              <TableCell>{cols[1].split(' ')[0]}</TableCell>
-              <TableCell>{cols[2].split(' ')[0]}</TableCell>
-              <TableCell>{win}</TableCell>
-            </TableRow>
+              <td>{tim}</td>
+              <td>{cols[1].split(' ')[0]}</td>
+              <td>{cols[2].split(' ')[0]}</td>
+              <td>{win}</td>
+            </tr>
           );
         });
-
+    const chooseClick = config.showHist ? historyClick : logClick;
+    const chooseStyle = config.showHist ? styles.Log : styles.History;
     return (
-      <TableContainer className={config.showHist ? styles.Log : styles.History} ref={scrollRef}>
-        <Table size="small">
-          <TableBody
-            onClick={config.showHist ? historyClick : logClick}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}>
-            {config.showHist ? viewHistory() : viewLog()}
-            <TableRow ref={endRef} />
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <div className={chooseStyle} ref={scrollRef}>
+        <table onTouchStart={onTouchStart} onTouchMove={onTouchMove} onClick={chooseClick}>
+          {config.showHist ? viewHistory() : viewLog()}
+          <tr ref={endRef} />
+        </table>
+      </div>
     );
   }
 );

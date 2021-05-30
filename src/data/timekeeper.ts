@@ -24,7 +24,6 @@ class TimeKeeper {
     } else {
       this.paused += time2 - time1;
     }
-    return time2;
   };
   getUsed = () => {
     return Math.round(this.elapsed / 1000);

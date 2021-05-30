@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useRef, useEffect } from 'react';
+import React, { ChangeEvent, useState, useRef, useEffect, MouseEvent } from 'react';
 import { Human, Players } from '../data/players';
 import { Server } from '../data/server';
 import styles from '../styles.module.scss';
@@ -12,7 +12,6 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { Add, Delete, GetApp, Publish, Language } from '@material-ui/icons';
-import type { HANDLE_CHANGE, HANDLE_CLICK } from './reacttypes';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../data/game';
 import { messager } from './MessageBox';
@@ -28,14 +27,14 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
   const hasSelect = marker >= 0;
   const hasEmail = hasSelect && (humans[marker] as Human).email;
 
-  const doSelect: HANDLE_CLICK = event => {
+  const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
     if (event.target instanceof HTMLTableCellElement) {
       const id = (event.target.parentNode as HTMLTableRowElement).id;
       const num = Number.parseInt(id);
       setMarker(num == marker ? -1 : num);
     }
   };
-  const doDelPlayer: HANDLE_CLICK = event => {
+  const doDelPlayer = () => {
     if (hasSelect) {
       players.delPlayer(humans[marker].name);
       players.save();
@@ -43,7 +42,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     }
   };
   const [downloadLink, setDownloadLink] = useState('');
-  const downloadPlayer: HANDLE_CLICK = event => {
+  const downloadPlayer = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const downtext = gameHistory.downloadPlayer(humans[marker].name);
     const data = new Blob([downtext], { type: 'text/plain' });
@@ -56,14 +55,16 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     }
   }, [downloadLink, setDownloadLink]);
 
-  const uploadPlayer: HANDLE_CLICK = event => {
+  const uploadPlayer = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     uploadRef.current?.click();
   };
-  const changeName: HANDLE_CHANGE = e => setName(e.target.value as string);
-  const changeEmail: HANDLE_CHANGE = e => setEmail(e.target.value as string);
+  const changeName = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setName(e.target.value as string);
+  const changeEmail = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setEmail(e.target.value as string);
 
-  const doAddPlayer: HANDLE_CLICK = event => {
+  const doAddPlayer = () => {
     if (name.length) {
       players.addPlayer(`Human:${name}:${email}`);
       players.save();
@@ -76,7 +77,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     const files = evt.currentTarget?.files;
     if (files && files.length) {
       const file = files[0];
-      const promise = new Promise(function (resolve, reject) {
+      new Promise(function (resolve, reject) {
         const reader = new FileReader();
         reader.onerror = reject;
         reader.onload = function () {
@@ -86,7 +87,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
       });
     }
   };
-  const connectPlayer: HANDLE_CLICK = event => {
+  const connectPlayer = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     server.connectREST(humans[marker] as Human);
   };
@@ -96,7 +97,10 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
         <Table size="small" className={styles.ConfigTable}>
           <TableBody onClick={doSelect}>
             {humans.map((human, iLine) => (
-              <TableRow key={iLine} id={iLine} className={iLine == marker ? styles.MarkRow : ''}>
+              <TableRow
+                key={iLine.toString()}
+                id={iLine.toString()}
+                className={iLine == marker ? styles.MarkRow : ''}>
                 <TableCell>{human.name}</TableCell>
                 <TableCell>{(human as Human).email}</TableCell>
               </TableRow>

@@ -16,19 +16,17 @@ export class Config {
     makeAutoObservable(this);
   }
 
-  getUsed = () => {
-    //
-  };
-
   private undoTimer: TimerHandler = () => {
+    if (this.showUndo) {
+      this.undopos = 0; // In the case you're already in a UNDO confirmation box.
+    }
     this.showUndo = false;
-    this.undopos = 0;
   };
 
-  startUndoTimer = (pos: number) => {
+  startUndoTimer: (pos: number) => void = pos => {
     this.showUndo = true;
     this.undopos = pos;
-    window.setTimeout(this.undoTimer, 6000);
+    window.setTimeout(this.undoTimer, 9000);
   };
 }
 

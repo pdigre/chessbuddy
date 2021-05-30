@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import styles from '../styles.module.scss';
 import {
   Dialog,
@@ -8,7 +8,6 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
-import type { HANDLE_CLICK } from './reacttypes';
 import { makeAutoObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
@@ -21,25 +20,25 @@ export class Messager {
   constructor() {
     makeAutoObservable(this);
   }
-  clear() {
+  clear: () => void = () => {
     this.title = undefined;
-  }
-  display(
+  };
+  display: (
     title: string,
     msg: JSX.Element | string,
     buttons?: string[],
     response?: (button: string) => void
-  ) {
+  ) => void = (title, msg, buttons?, response?) => {
     this.title = title;
     this.msg = (msg instanceof Element ? msg : <div>{msg}</div>) as JSX.Element;
     this.buttons = buttons;
     this.response = response ?? (() => messager.clear());
-  }
+  };
 }
 export const messager = new Messager();
 
 export const MessageBox = observer(({ messager }: { messager: Messager }) => {
-  const handleClick: HANDLE_CLICK = event => {
+  const handleClick = (event: MouseEvent) => {
     if (messager.response) {
       messager.response((event.target as HTMLButtonElement).innerHTML);
     }

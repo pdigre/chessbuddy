@@ -1,16 +1,15 @@
-import React, { ReactChild } from 'react';
+import React, { ChangeEvent, MouseEvent, ReactChild } from 'react';
 import { DialogTitle, Dialog, AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
 import styles from '../styles.module.scss';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
-import type { HANDLE_CHANGE } from './reacttypes';
 import { players } from '../data/players';
 import { server } from '../data/server';
 import { observer } from 'mobx-react';
 import { Config } from '../data/config';
-import { undorefresh } from '../data/undorefresh';
+import { refreshtimer } from '../data/refreshtimer';
 
 export const ConfigMain = observer(({ config }: { config: Config }) => {
   type TabProps = {
@@ -52,18 +51,18 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
     return (
       <Tab
         component="a"
-        onClick={(event: React.ChangeEvent) => event.preventDefault()}
+        onClick={(event: MouseEvent<HTMLAnchorElement>) => event.preventDefault()}
         {...props}
       />
     );
   };
   const [value, setValue] = React.useState(0);
 
-  const handleChange: HANDLE_CHANGE = (event, newValue) => setValue(newValue as number);
+  const handleChange = (event: ChangeEvent<any>, newValue: any) => setValue(newValue as number);
 
   const handleClose = () => {
     config.showConfig = false;
-    undorefresh.startRefreshTimer();
+    refreshtimer.startRefreshTimer();
   };
 
   return (

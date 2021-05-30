@@ -15,7 +15,7 @@ export class GameState {
   constructor() {
     makeAutoObservable(this);
   }
-  run = () => {
+  run: VoidFunction = () => {
     if (this.isPlaying) {
       game.playBot();
     }
@@ -39,7 +39,7 @@ export class Game {
   isWhiteTurn = true;
   isComplete = false;
   pgns: string[] = [];
-  reset = () => {
+  reset: VoidFunction = () => {
     this.wtime = 0;
     this.btime = 0;
     this.log = [];
@@ -48,7 +48,7 @@ export class Game {
     this.isComplete = false;
     helper.reset();
   };
-  setPlayers = (white: string, black: string) => {
+  setPlayers: (white: string, black: string) => void = (white, black) => {
     this.white = white;
     this.black = black;
     this.wplayer = players.players.find(p => p.name == white);
@@ -58,7 +58,7 @@ export class Game {
     makeAutoObservable(this);
     this.restoreFromLocalStorage();
   }
-  addMove = (san: string) => {
+  addMove: (san: string) => void = san => {
     const prev = this.nextPlayer();
     if (prev instanceof Human) gameState.isPlaying = true;
     this.date = new Date().getTime();
@@ -79,14 +79,13 @@ export class Game {
     }
     gameState.run();
   };
-  playBot = () => {
+  playBot: VoidFunction = () => {
     const next = this.nextPlayer();
     if (next instanceof Bot) {
       next.runBot(this.fen, ({ from, to }) => {
         const move = rules.move(game.fen, from, to);
         if (move) {
-          const [newFen, action] = move;
-          this.playMove(action.san);
+          this.playMove(move[1].san);
         }
       });
     }
@@ -105,14 +104,14 @@ export class Game {
       );
     }
   };
-  nextPlayer = () => {
+  nextPlayer: () => Player | undefined = () => {
     return this.isWhiteTurn ? this.wplayer : this.bplayer;
   };
-  toString = () =>
+  toString: () => string = () =>
     `${this.date.toString(36)};${this.white};${this.black};${this.wtime.toString(
       36
     )};${this.btime.toString(36)};${this.log.join(' ')}`;
-  restoreFromLocalStorage = () => {
+  restoreFromLocalStorage: VoidFunction = () => {
     const _game = (localStorage.getItem('game') ?? new Date().getTime() + ';User;User;0;0;').split(
       ';'
     );
@@ -129,7 +128,7 @@ export class Game {
     this.calculate();
   };
 
-  playMove = (san: string) => {
+  playMove: (san: string) => void = san => {
     this.addMove(san);
     localStorage.setItem('game', this.toString());
     if (this.isComplete) {
@@ -150,20 +149,19 @@ export class GameHistory {
     this.history = this.loadHistory();
   }
 
-  storeGame() {
+  storeGame: VoidFunction = () => {
     this.history.push(game.toString());
     this.history.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
     localStorage.setItem('log', this.history.join('\n') ?? []);
-  }
+  };
 
-  importFromServer(games: string[]) {
+  importFromServer: (games: string[]) => void = games => {
     const h1 = gameHistory.history;
-    const i1 = h1.length;
     h1.push(...games.filter(x => !h1.includes(x)));
     const h2 = h1.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
     gameHistory.history = h2;
     gameHistory.storeGame();
-  }
+  };
 
   private loadHistory() {
     const h1 = localStorage.getItem('log')?.replace(/\r/, '').split('\n') ?? [];
@@ -172,7 +170,7 @@ export class GameHistory {
     return h2;
   }
 
-  readDate(x: string) {
+  readDate: (x: string) => string | undefined = x => {
     if (x == 'NaN') return undefined;
     const min = Date.parse('03/03/2021');
     const max = new Date().getTime();
@@ -188,9 +186,9 @@ export class GameHistory {
       return undefined;
     }
     return d.toString(36);
-  }
+  };
 
-  readGame(x: string) {
+  readGame: (x: string) => string | undefined = x => {
     const s = x.split(';');
     const date = this.readDate(s[0]);
     if (!date) return undefined;
@@ -202,9 +200,9 @@ export class GameHistory {
       console.log('Unknown format ' + x);
     }
     return undefined;
-  }
+  };
 
-  downloadPlayer(name: string) {
+  downloadPlayer: (name: string) => string = name => {
     const txt: string[] = [];
     this.history.forEach(line => {
       const cols = line.split(';');
@@ -215,9 +213,9 @@ export class GameHistory {
       }
     });
     return txt.join('\r\n');
-  }
+  };
 
-  upload(text: string) {
+  upload: (text: string) => void = text => {
     const lines = text.replace(/\r/gi, '').split('\n');
     const games = lines.map(x => this.readGame(x)).filter(x => x) as string[];
     const h1 = this.history;
@@ -227,9 +225,9 @@ export class GameHistory {
       if (!find) this.history.push(game);
     });
     this.storeGame();
-  }
+  };
 
-  getFilteredGames = (name: string) =>
+  getFilteredGames: (name: string) => string[] = (name: string) =>
     gameHistory.history.filter(x => {
       const s = x.split(';');
       return s[1] == name || s[2] == name;

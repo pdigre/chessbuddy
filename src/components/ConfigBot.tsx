@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Bot, UCI_ENGINES } from '../data/bots';
 import { Players } from '../data/players';
 import styles from '../styles.module.scss';
@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 import { Add, Delete } from '@material-ui/icons';
 import { ConfigSelector } from './ConfigSelector';
-import type { HANDLE_CHANGE, HANDLE_CLICK } from './reacttypes';
 import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
 
@@ -22,7 +21,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [skill, setSkill] = useState('');
   const [depth, setDepth] = useState('');
   const [time, setTime] = useState('');
-  const addPlayerHandler: HANDLE_CLICK = event => {
+  const addPlayerHandler = () => {
     if (!engine.length) {
       messager.display('Add Bot', 'Need to select a chess engine');
       return;
@@ -50,12 +49,15 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
     players.save();
   };
   const engineNames = Array.from(UCI_ENGINES.map(x => x.name));
-  const skillChange: HANDLE_CHANGE = (event, child) => setSkill(event.target.value as string);
-  const timeChange: HANDLE_CHANGE = (event, child) => setTime(event.target.value as string);
-  const depthChange: HANDLE_CHANGE = (event, child) => setDepth(event.target.value as string);
+  const skillChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setSkill(event.target.value as string);
+  const timeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setTime(event.target.value as string);
+  const depthChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setDepth(event.target.value as string);
 
   const [marker, setMarker] = useState(-1);
-  const selectHandler: HANDLE_CLICK = event => {
+  const selectHandler = (event: MouseEvent<HTMLTableSectionElement>) => {
     if (event.target instanceof HTMLTableCellElement) {
       const id = (event.target.parentNode as HTMLTableRowElement).id;
       const num = Number.parseInt(id);
@@ -64,7 +66,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   };
   const hasSelect = marker >= 0;
   const bots = players.players.filter(x => x instanceof Bot);
-  const delPlayerHandler: HANDLE_CLICK = event => {
+  const delPlayerHandler = () => {
     if (marker >= 0) {
       players.delPlayer(bots[marker].name);
       setMarker(-1);
@@ -78,7 +80,10 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         <Table size="small" className={styles.ConfigTable}>
           <TableBody onClick={selectHandler}>
             {bots.map((bot, iLine) => (
-              <TableRow key={iLine} id={iLine} className={iLine == marker ? styles.MarkRow : ''}>
+              <TableRow
+                key={iLine.toString()}
+                id={iLine.toString()}
+                className={iLine == marker ? styles.MarkRow : ''}>
                 <TableCell>{bot.name}</TableCell>
               </TableRow>
             ))}

@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 import * as rules from '../data/rules';
 import { Helper } from '../data/helper';
 import { Human } from '../data/players';
-import { game, gameHistory, GameState } from '../data/game';
+import { game, GameState } from '../data/game';
 import Chessboard from 'chessboardjsx';
 import { Config } from '../data/config';
-import { UndoRefresh } from '../data/undorefresh';
+import { RefreshTimer } from '../data/refreshtimer';
 import { messager } from './MessageBox';
 import { Rendering } from '../data/rendering';
 import { observer } from 'mobx-react';
@@ -40,13 +40,13 @@ export const Board = observer(
     gameState,
     rendering,
     config,
-    undorefresh,
+    refreshtimer,
   }: {
     helper: Helper;
     gameState: GameState;
     rendering: Rendering;
     config: Config;
-    undorefresh: UndoRefresh;
+    refreshtimer: RefreshTimer;
   }) => {
     const doMove = useCallback((from: rules.Square, to: rules.Square, isHuman: boolean) => {
       const move = rules.move(game.fen, from, to);
@@ -54,7 +54,7 @@ export const Board = observer(
         return;
       }
       if (gameState.isPlaying || isHuman) {
-        const [newFen, action] = move;
+        const action = move[1];
         if (action.promotion && isHuman) {
           const buttons = ['Queen', 'Rook', 'Knight', 'Bishop'];
           messager.display('Promotion', 'Choose promotion piece', buttons, reply => {
@@ -65,8 +65,7 @@ export const Board = observer(
             const move = rules.move(game.fen, from, to, promo);
             if (move != null) {
               messager.clear();
-              const [newFen, action] = move;
-              game.playMove(action.san);
+              game.playMove(move[1].san);
             }
           });
         } else {
@@ -108,7 +107,7 @@ export const Board = observer(
       }
       return markers;
     };
-    const fen = undorefresh.showBlank ? rules.CLEAR_GAME : game.fen;
+    const fen = refreshtimer.showBlank ? rules.CLEAR_GAME : game.fen;
     return (
       <Chessboard
         position={r90 ? rules.leftFen(fen) : fen}

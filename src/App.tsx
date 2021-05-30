@@ -14,7 +14,7 @@ import { MessageBox, messager } from './components/MessageBox';
 import { helper } from './data/helper';
 import { About } from './components/About';
 import { rendering } from './data/rendering';
-import { undorefresh } from './data/undorefresh';
+import { refreshtimer } from './data/refreshtimer';
 
 const theme = unstable_createMuiStrictModeTheme();
 
@@ -32,7 +32,7 @@ const App: React.FC = () => {
             gameState={gameState}
             rendering={rendering}
             config={config}
-            undorefresh={undorefresh}
+            refreshtimer={refreshtimer}
           />
           <PlayerInfo isTop={false} game={game} config={config} />
         </div>

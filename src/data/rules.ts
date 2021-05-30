@@ -1,34 +1,37 @@
-import Chess from 'chess.js';
+import Chess, { ChessInstance } from 'chess.js';
 import type { Square, Move, ShortMove } from 'chess.js';
 
 export type Fen = string;
 export type GameWinner = 'b' | 'w' | null;
 export type { Square, Move, ShortMove };
-export const SQUARES = Chess().SQUARES;
+
+// getChess(fen) - Normally you would use Chess(fen) directly but Typescript doesn't allow Object being used that way
+type GetChess = (fen?: string) => ChessInstance;
+const chessTemp = Chess as unknown;
+const getChess = chessTemp as GetChess;
+
+export const SQUARES = getChess().SQUARES;
 export const SQUARES2 = SQUARES.map(x => x.toString());
 
 export const NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 export const CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';
 
 export const isNewGame = (fen: Fen): boolean => fen == NEW_GAME;
-
-export const isBlackTurn = (fen: Fen): boolean => Chess(fen).turn() === 'b';
-
-export const isWhiteTurn = (fen: Fen): boolean => Chess(fen).turn() === 'w';
-
-export const isCheck = (fen: Fen): boolean => Chess(fen).in_check();
+export const isBlackTurn = (fen: Fen): boolean => getChess(fen).turn() === 'b';
+export const isWhiteTurn = (fen: Fen): boolean => getChess(fen).turn() === 'w';
+export const isCheck = (fen: Fen): boolean => getChess(fen).in_check();
 
 export const getGameWinner = (fen: Fen): GameWinner => {
-  const game = Chess(fen);
+  const game = getChess(fen);
   return game.in_checkmate() ? (game.turn() === 'w' ? 'b' : 'w') : null;
 };
 
-export const isGameOver = (fen: Fen): boolean => Chess(fen).game_over();
-export const isEndMove = (san: string) =>
+export const isGameOver = (fen: Fen): boolean => getChess(fen).game_over();
+export const isEndMove: (san: string) => boolean = (san: string) =>
   san == '1-0' || san == '0-1' || san == '1/2-1/2' || san?.endsWith('#');
 
 export const isMoveable = (fen: Fen, from: Square): boolean =>
-  new Chess(fen).moves({ square: from }).length > 0;
+  getChess(fen).moves({ square: from }).length > 0;
 
 export const move = (
   fen: Fen,
@@ -36,19 +39,19 @@ export const move = (
   to: Square,
   promotion?: 'b' | 'n' | 'r' | 'q'
 ): [Fen, Move] | null => {
-  const game = Chess(fen);
+  const game = getChess(fen);
   const action = game.move({ from, to, promotion: promotion ?? 'q' });
   return action ? [game.fen(), action] : null;
 };
 
-export const newFen = (fen: string, san: string) => {
-  const game = Chess(fen);
+export const newFen: (fen: string, san: string) => string = (fen, san) => {
+  const game = getChess(fen);
   game.move(san);
   return game.fen();
 };
 
 export const replay = (moves: string[], to?: number): Fen => {
-  const game = Chess(NEW_GAME);
+  const game = getChess(NEW_GAME);
   const n = to != undefined ? to : moves.length;
   for (let i = 0; i <= n; i++) {
     game.move(moves[i]);
@@ -59,14 +62,14 @@ export const replay = (moves: string[], to?: number): Fen => {
 export const findInfoMarkers = (moves: string[], fen: string): string[] => {
   const sqs: string[] = [];
   moves.forEach(san => {
-    const move = Chess(fen).move(san);
+    const move = getChess(fen).move(san);
     if (move && !sqs.includes(move.from)) sqs.push(move.from);
     if (move && !sqs.includes(move.to)) sqs.push(move.to);
   });
   return sqs;
 };
 
-export const whoWon = (game: string[]) => {
+export const whoWon: (game: string[]) => string | undefined = (game: string[]) => {
   const n = game.length;
   const san = game[n - 1];
   if (san == '1-0') return 'White';
@@ -122,19 +125,19 @@ const brd2fen = (brd: string) => {
   return fen;
 };
 
-export const leftFen = (fen: string) => {
+export const leftFen: (fen: string) => string = fen => {
   const brd = getBrd(fen);
   const brd2 = leftBrd(brd);
   return brd2fen(brd2) + fen.substring(fen.indexOf(' '));
 };
 
-export const leftwards = (i: number) => {
+export const leftwards: (i: number) => number = i => {
   const r = Math.floor(i / 8);
   const c = i % 8;
   return (7 - c) * 8 + r;
 };
 
-export const rightwards = (i: number) => {
+export const rightwards: (i: number) => number = i => {
   const r = Math.floor(i / 8);
   const c = i % 8;
   return c * 8 + (7 - r);
