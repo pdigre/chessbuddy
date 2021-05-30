@@ -3393,17 +3393,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chess.js@^0.10.1":
-  version: 0.10.1
-  resolution: "@types/chess.js@npm:0.10.1"
-  checksum: 113ae13bcdd3a0f652f7047cf2de4c249e2eb708fd73582471d2d71006f4970e24de4598dde4ba9717affb155cddec7693838a8455ffe450e8db422c8cb93104
+"@types/chess.js@^0.11.0":
+  version: 0.11.0
+  resolution: "@types/chess.js@npm:0.11.0"
+  checksum: d2bf000c5a25b4b0557c26813b53e4ed1fe8c6f548bae9c1412626c31f15d22109988389c1c4ab002d998d4d0286fb71523c52f7ba6d82337c0b1551851866ae
   languageName: node
   linkType: hard
 
-"@types/chess.js@patch:@types/chess.js@^0.10.1#./@types-chessjs.diff::locator=chesbuddy%40workspace%3A.":
-  version: 0.10.1
-  resolution: "@types/chess.js@patch:@types/chess.js@npm%3A0.10.1#./@types-chessjs.diff::version=0.10.1&hash=737bbb&locator=chesbuddy%40workspace%3A."
-  checksum: e094772164c01ba5bcec67c44fd06a49fad2bf8c2d4e6acf33fcaa76f41232a639f03f1118d7f807734ad1f48cdc99e35640326bfaa273d07e7c90ac5942eb7b
+"@types/chess.js@patch:@types/chess.js@^0.11.0#./@types-chessjs.diff::locator=chesbuddy%40workspace%3A.":
+  version: 0.11.0
+  resolution: "@types/chess.js@patch:@types/chess.js@npm%3A0.11.0#./@types-chessjs.diff::version=0.11.0&hash=737bbb&locator=chesbuddy%40workspace%3A."
+  checksum: 874e24bd952b90a17ab0a3f00b90449848690fc8404892e8e00108b098b66de41ba9d4e0b66ce7f5a5367b2cb85a46eb11ec3bf56adb783f070819bcd46b0195
   languageName: node
   linkType: hard
 
@@ -5678,7 +5678,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.2.5
     "@testing-library/user-event": ^12.1.10
-    "@types/chess.js": "patch:@types/chess.js@^0.10.1#./@types-chessjs.diff"
+    "@types/chess.js": "patch:@types/chess.js@^0.11.0#./@types-chessjs.diff"
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.35
     "@types/react": ^17.0.1
@@ -5687,7 +5687,7 @@ __metadata:
     "@types/react-scroll": ^1.5.4
     "@typescript-eslint/eslint-plugin": ^4.6.1
     "@typescript-eslint/parser": ^4.18.0
-    chess.js: ^0.11.0
+    chess.js: ^0.12.0
     chessboardjsx: ^2.4.2
     eslint: ^7.12.1
     eslint-config-prettier: ^6.15.0
@@ -5719,10 +5719,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"chess.js@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "chess.js@npm:0.11.0"
-  checksum: 74b6f31b743f3db1ebcd90b8baecc4490ede1c95459ba234e1a50f8f6e5524c44e6cc9963abe7bbc7a2cecab21a14afa8c4ed3814d860567e1ede6c83ca459b9
+"chess.js@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "chess.js@npm:0.12.0"
+  checksum: 397f72da917b387b6cbebb3dad3dc7cf4e1bfe60e61e451477030f8ebff1bae44f433eb03038c0ae5f2303eda24f367b2d619055d2cb7953b9b6802163e16246
   languageName: node
   linkType: hard
 
