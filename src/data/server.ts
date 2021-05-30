@@ -11,7 +11,7 @@ export class Server {
     makeAutoObservable(this);
   }
 
-  connectREST = async (human: Human) => {
+  connectREST: (human: Human) => void = async human => {
     const games1 = gameHistory.getFilteredGames(human.name);
     const connect = { email: human.email, device: deviceInfo, games: games1.join('\n') };
     const url =
@@ -30,7 +30,7 @@ export class Server {
       .then(resp => this.importFromServer(resp as RESP))
       .catch(err => messager.display('Connect Error', (err as Error).message));
   };
-  importFromServer = (resp: RESP) => {
+  importFromServer: (resp: RESP) => void = resp => {
     const i1 = gameHistory.history.length;
     gameHistory.importFromServer(resp.games);
     const i2 = gameHistory.history.length;

@@ -4,7 +4,7 @@ import { Player } from './player';
 
 export class Human extends Player {
   email: string;
-  toString = () => `Human:${this.name}:${this.email}`;
+  toString: () => string = () => `Human:${this.name}:${this.email}`;
   constructor(name: string, email?: string) {
     super(name);
     this.email = email ?? '';
@@ -34,16 +34,16 @@ export class Players {
     //    const pdata = playerInit;
     this.restore(pdata);
   }
-  save = () => {
+  save: VoidFunction = () => {
     const data = this.toString();
     localStorage.setItem('playerdata', data);
   };
-  addPlayer = (data: string) => {
+  addPlayer: (data: string) => void = data => {
     const player = this.createPlayer(data);
     if (player) this.players.push(player);
   };
 
-  delPlayer = (name: string) => {
+  delPlayer: (name: string) => void = name => {
     const i = this.players.findIndex(x => x.name == name);
     if (i >= 0) this.players.splice(i, 1);
   };

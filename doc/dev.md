@@ -11,10 +11,9 @@
 
 1. git clone https://github.com/pdigre/chessbuddy.git
 2. In VS Code, Open folder on "chessbuddy"
-3. Get Yarn: `npm install --global yarn`
-4. Setup: `yarn`
-5. Run in browser: `yarn start`
-6. Build for deployment: `yarn build`
+3. Setup: `npm install`
+4. Run in browser: `npm run start`
+5. Build for deployment: `npm run build`
 
 ## About the code choices
 * REACT-JS for UI components https://reactjs.org/

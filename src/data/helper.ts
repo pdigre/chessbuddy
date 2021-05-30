@@ -15,14 +15,18 @@ const helpWorker = (): UninitialisedHelper => () => {
   worker.addEventListener('message', e => {
     //    console.log(e.data);
     const s = e.data.split(' ') as string[];
-    const i1 = s.indexOf('cp');
-    const i2 = s.indexOf('pv');
-    if (s[0] == 'info' && i1 && i2) {
-      cp = Number.parseInt(s[i1 + 1]);
-      const pv = s[i2 + 1];
-      const pv1 = pv.substring(0, 2);
-      const pv2 = pv.substring(2, 4);
-      moves.push(pv1, pv2);
+    if (s[0] == 'info') {
+      const i1 = s.indexOf('cp');
+      if (i1 >= 0) {
+        cp = Number.parseInt(s[i1 + 1]);
+      }
+      const i2 = s.indexOf('pv');
+      if (i2 >= 0) {
+        const pv = s[i2 + 1];
+        const pv1 = pv.substring(0, 2);
+        const pv2 = pv.substring(2, 4);
+        moves.push(pv1, pv2);
+      }
     }
     if (s[0] == 'bestmove' && resolver) {
       resolver({
@@ -73,8 +77,8 @@ export class Helper {
   constructor() {
     makeAutoObservable(this);
   }
-  reset = () => (this.help = []);
-  run = (fen: string, isWhiteTurn: boolean) => {
+  reset: VoidFunction = () => (this.help = []);
+  run: (fen: string, isWhiteTurn: boolean) => void = (fen, isWhiteTurn) => {
     this.reset();
     helperBot.run(fen, ({ moves, cp }) => {
       const squares: Set<string> = new Set();

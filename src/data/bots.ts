@@ -39,7 +39,7 @@ export class Bot extends Player {
     this.engine = uciWorker(type.path, options);
   }
 
-  runBot = (fen: string, resolver: Resolver) => {
+  runBot: (fen: string, resolver: Resolver) => void = (fen, resolver) => {
     if (!this.isRunning) {
       if (!this.instance) this.instance = this.engine();
       this.isRunning = true;
@@ -49,10 +49,12 @@ export class Bot extends Player {
       });
     }
   };
-  toString = () => `Bot:${this.type.name}:${this.skill}:${this.time ?? ''}:${this.depth ?? ''}`;
+  toString: () => string = () =>
+    `Bot:${this.type.name}:${this.skill}:${this.time ?? ''}:${this.depth ?? ''}`;
 }
 
-const uciWorker = (file: string, actions: Array<string>): UninitialisedBot => () => {
+type UCI_WORKER = (file: string, actions: Array<string>) => UninitialisedBot;
+const uciWorker: UCI_WORKER = (file, actions) => () => {
   const worker = new Worker(file);
   let resolver: Resolver | null = null;
 

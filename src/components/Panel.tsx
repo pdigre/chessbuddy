@@ -6,7 +6,7 @@ import * as rules from '../data/rules';
 import { Button } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import { GameState, game } from '../data/game';
-import { undorefresh } from '../data/undorefresh';
+import { refreshtimer } from '../data/refreshtimer';
 import { Config } from '../data/config';
 import { messager } from './MessageBox';
 import { helper } from '../data/helper';
@@ -29,7 +29,7 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
           if (yes == 'Yes') {
             game.log = game.log.slice(0, isPlayUndo ? config.undopos : config.markLog);
             game.fen = rules.replay(game.log);
-            undorefresh.startRefreshTimer();
+            refreshtimer.startRefreshTimer();
             helper.cp = 0;
             helper.help = [];
           }

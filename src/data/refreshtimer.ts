@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-export class UndoRefresh {
+export class RefreshTimer {
   showBlank = false;
 
   constructor() {
@@ -11,10 +11,10 @@ export class UndoRefresh {
     this.showBlank = false;
   };
 
-  startRefreshTimer = () => {
+  startRefreshTimer: VoidFunction = () => {
     this.showBlank = true;
     window.setTimeout(this.refreshTimer, 100);
   };
 }
 
-export const undorefresh = new UndoRefresh();
+export const refreshtimer = new RefreshTimer();
