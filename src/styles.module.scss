@@ -84,13 +84,13 @@ body {
 .Log {
   margin: 0px;
   width: 100%;
+  overflow: auto;
 }
 
 .History table,
 .Log table {
   table-layout: fixed;
   width: 100%;
-  overflow: auto;
 }
 .History td {
   padding: 3px;
