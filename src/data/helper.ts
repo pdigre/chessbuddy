@@ -2,7 +2,7 @@ import type { Fen } from './rules';
 import { UCI_ENGINES } from './bots';
 import { makeAutoObservable } from 'mobx';
 
-type HelperReturn = { moves: string[]; cp: number };
+type HelperReturn = { moves: string[]; cp: number | undefined };
 type HelpResolver = (ret: HelperReturn) => void;
 type UninitialisedHelper = () => InitialisedHelper;
 type InitialisedHelper = (fen: Fen) => Promise<HelperReturn>;
@@ -10,7 +10,7 @@ type InitialisedHelper = (fen: Fen) => Promise<HelperReturn>;
 const helpWorker = (): UninitialisedHelper => () => {
   const worker = new Worker(UCI_ENGINES[0].path);
   let resolver: HelpResolver | null = null;
-  let cp = 0;
+  let cp: number | undefined = 0;
   let moves: string[] = [];
   worker.addEventListener('message', e => {
     //    console.log(e.data);
@@ -34,6 +34,7 @@ const helpWorker = (): UninitialisedHelper => () => {
         cp: cp,
       });
       moves = [];
+      cp = undefined;
       resolver = null;
     }
   });
@@ -84,7 +85,7 @@ export class Helper {
       const squares: Set<string> = new Set();
       moves.forEach(x => squares.add(x));
       this.help = [...squares];
-      this.cp = isWhiteTurn ? cp : -cp;
+      if (cp) this.cp = isWhiteTurn ? cp : -cp;
     });
   };
 }

@@ -14,9 +14,34 @@ export class Config {
 
   constructor() {
     makeAutoObservable(this);
+    this.wakeLocker();
   }
 
-  private undoTimer: TimerHandler = () => {
+  wakeLocker: VoidFunction = async () => {
+    if ('wakeLock' in navigator) {
+      // The wake lock sentinel.
+      let wakeLock: WakeLockSentinel | undefined = undefined;
+
+      // Function that attempts to request a screen wake lock.
+      const requestWakeLock = async () => {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          if (wakeLock) {
+            wakeLock?.addEventListener('release', () => {
+              console.log('Screen Wake Lock released:', wakeLock?.released);
+            });
+            console.log('Screen Wake Lock released:', wakeLock.released);
+          }
+        } catch (err) {
+          console.error(`${err.name}, ${err.message}`);
+        }
+      };
+      // Request a screen wake lock…
+      await requestWakeLock();
+    }
+  };
+
+  undoTimer: TimerHandler = () => {
     if (this.showUndo) {
       this.undopos = 0; // In the case you're already in a UNDO confirmation box.
     }
