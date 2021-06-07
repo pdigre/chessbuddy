@@ -36,6 +36,14 @@ export class Config {
           console.error(`${err.name}, ${err.message}`);
         }
       };
+      const handleVisibilityChange = async () => {
+        if (wakeLock !== null && document.visibilityState === 'visible') {
+          await requestWakeLock();
+        }
+      };
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
       // Request a screen wake lock…
       await requestWakeLock();
     }
