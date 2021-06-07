@@ -1,37 +1,36 @@
-import Chess, { ChessInstance } from 'chess.js';
 import type { Square, Move, ShortMove } from 'chess.js';
 
 export type Fen = string;
 export type GameWinner = 'b' | 'w' | null;
 export type { Square, Move, ShortMove };
 
-// getChess(fen) - Normally you would use Chess(fen) directly but Typescript doesn't allow Object being used that way
-type GetChess = (fen?: string) => ChessInstance;
-const chessTemp = Chess as unknown;
-const getChess = chessTemp as GetChess;
+import Chess, { ChessInstance } from 'chess.js';
+type ChessType = (fen?: string) => ChessInstance;
+const ChessImport = Chess as unknown;
+const Chess2 = ChessImport as ChessType;
 
-export const SQUARES = getChess().SQUARES;
+export const SQUARES = Chess2().SQUARES;
 export const SQUARES2 = SQUARES.map(x => x.toString());
 
 export const NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 export const CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';
 
 export const isNewGame = (fen: Fen): boolean => fen == NEW_GAME;
-export const isBlackTurn = (fen: Fen): boolean => getChess(fen).turn() === 'b';
-export const isWhiteTurn = (fen: Fen): boolean => getChess(fen).turn() === 'w';
-export const isCheck = (fen: Fen): boolean => getChess(fen).in_check();
+export const isBlackTurn = (fen: Fen): boolean => Chess2(fen).turn() === 'b';
+export const isWhiteTurn = (fen: Fen): boolean => Chess2(fen).turn() === 'w';
+export const isCheck = (fen: Fen): boolean => Chess2(fen).in_check();
 
 export const getGameWinner = (fen: Fen): GameWinner => {
-  const game = getChess(fen);
+  const game = Chess2(fen);
   return game.in_checkmate() ? (game.turn() === 'w' ? 'b' : 'w') : null;
 };
 
-export const isGameOver = (fen: Fen): boolean => getChess(fen).game_over();
+export const isGameOver = (fen: Fen): boolean => Chess2(fen).game_over();
 export const isEndMove: (san: string) => boolean = (san: string) =>
   san == '1-0' || san == '0-1' || san == '1/2-1/2' || san?.endsWith('#');
 
 export const isMoveable = (fen: Fen, from: Square): boolean =>
-  getChess(fen).moves({ square: from }).length > 0;
+  Chess2(fen).moves({ square: from }).length > 0;
 
 export const move = (
   fen: Fen,
@@ -39,19 +38,19 @@ export const move = (
   to: Square,
   promotion?: 'b' | 'n' | 'r' | 'q'
 ): [Fen, Move] | null => {
-  const game = getChess(fen);
+  const game = Chess2(fen);
   const action = game.move({ from, to, promotion: promotion ?? 'q' });
   return action ? [game.fen(), action] : null;
 };
 
 export const newFen: (fen: string, san: string) => string = (fen, san) => {
-  const game = getChess(fen);
+  const game = Chess2(fen);
   game.move(san);
   return game.fen();
 };
 
 export const replay = (moves: string[], to?: number): Fen => {
-  const game = getChess(NEW_GAME);
+  const game = Chess2(NEW_GAME);
   const n = to != undefined ? to : moves.length;
   for (let i = 0; i <= n; i++) {
     game.move(moves[i]);
@@ -62,7 +61,7 @@ export const replay = (moves: string[], to?: number): Fen => {
 export const findInfoMarkers = (moves: string[], fen: string): string[] => {
   const sqs: string[] = [];
   moves.forEach(san => {
-    const move = getChess(fen).move(san);
+    const move = Chess2(fen).move(san);
     if (move && !sqs.includes(move.from)) sqs.push(move.from);
     if (move && !sqs.includes(move.to)) sqs.push(move.to);
   });

@@ -9,7 +9,7 @@ export class San {
   }
 }
 
-const tree: San[] = [];
+export const tree: San[] = [];
 
 const create: (moves: string[]) => San = moves => {
   let ch = tree;

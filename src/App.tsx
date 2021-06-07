@@ -37,7 +37,7 @@ const App: React.FC = () => {
           <PlayerInfo isTop={false} game={game} config={config} />
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.9</h3>
+          <h3 onClick={about}>♛ Chessbuddy 0.10</h3>
           <Panel gameState={gameState} config={config} />
           <FenInfo game={game} />
           <History game={game} gameHistory={gameHistory} config={config} />

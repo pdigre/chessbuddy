@@ -2,7 +2,7 @@ import * as rules from './rules';
 import { players, Human } from './players';
 import { Player } from './player';
 import { timeKeeper } from '../data/timekeeper';
-import { San, locate } from './openings';
+import { San, locate, tree } from './openings';
 import { makeAutoObservable } from 'mobx';
 import { helper } from './helper';
 import { Bot } from './bots';
@@ -47,6 +47,7 @@ export class Game {
     this.isWhiteTurn = true;
     this.isComplete = false;
     helper.reset();
+    this.run();
   };
   setPlayers: (white: string, black: string) => void = (white, black) => {
     this.white = white;
@@ -65,20 +66,24 @@ export class Game {
     this.log.push(san);
     helper.reset();
     this.fen = rules.newFen(this.fen, san);
-    this.calculate();
     timeKeeper.next(this.isWhiteTurn);
     if (this.isWhiteTurn) {
       this.btime = timeKeeper.black;
     } else {
       this.wtime = timeKeeper.white;
     }
+    this.run();
+  };
+  run: VoidFunction = () => {
     timeKeeper.reset();
+    this.calculate();
     const next = this.nextPlayer();
     if (next instanceof Human) {
       helper.run(this.fen, this.isWhiteTurn);
     }
     gameState.run();
   };
+
   playBot: VoidFunction = () => {
     const next = this.nextPlayer();
     if (next instanceof Bot) {
@@ -96,13 +101,18 @@ export class Game {
     if (this.isComplete) gameState.isPlaying = false;
     this.isWhiteTurn = rules.isWhiteTurn(this.fen);
     this.pgns = [];
-    const pgn: San | undefined = locate(this.log);
-    if (pgn) {
-      this.pgns = rules.findInfoMarkers(
-        pgn.children.map(x => x.san),
-        this.fen
-      );
+    if (this.log.length == 0) {
+      this.setPGNS(tree);
+    } else {
+      const pgn: San | undefined = locate(this.log);
+      if (pgn) this.setPGNS(pgn.children);
     }
+  };
+  setPGNS: (sans: San[]) => void = sans => {
+    this.pgns = rules.findInfoMarkers(
+      sans.map(x => x.san),
+      this.fen
+    );
   };
   nextPlayer: () => Player | undefined = () => {
     return this.isWhiteTurn ? this.wplayer : this.bplayer;
