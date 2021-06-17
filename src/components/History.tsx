@@ -119,7 +119,7 @@ export const History = observer(
           let tim = '?';
           const date = new Date(Number.parseInt(cols[0], 36));
           const t1 = date.getTime();
-          const t2 = new Date().getTime();
+          const t2 = Date.now();
           try {
             tim =
               t2 - t1 < 3600 * 24000 && t1 < t2

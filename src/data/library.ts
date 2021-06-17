@@ -12,7 +12,7 @@ const getDeviceInfo = () => {
   const dev1 = localStorage.getItem('device');
   if (dev1) return dev1;
   const dev = {
-    first: new Date().getTime().toString(36),
+    first: Date.now().toString(36),
     userAgent: navigator.userAgent,
     width: window.screen.width,
     height: window.screen.height,

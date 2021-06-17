@@ -1,23 +1,23 @@
 {
   "name": "chesbuddy",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "homepage": ".",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
-    "@material-ui/data-grid": "^4.0.0-alpha.23",
+    "@material-ui/data-grid": "^4.0.0-alpha.31",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/styles": "^4.11.4",
     "@material-ui/system": "^4.11.3",
-    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.2.7",
     "@types/chess.js": "^0.11.0",
     "@types/jest": "^26.0.23",
-    "@types/node": "^14.17.1",
-    "@types/react": "^17.0.8",
-    "@types/react-dom": "^17.0.5",
+    "@types/node": "^14.17.3",
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.7",
     "@types/react-scroll": "^1.5.4",
     "chess.js": "^0.12.0",
     "chessboardjsx": "^2.4.7",
@@ -30,7 +30,7 @@
     "react-is": "^17.0.2",
     "react-scripts": "4.0.3",
     "react-transition-group": "^4.4.2",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.4"
   },
   "scripts": {
     "start": "react-scripts start --watch",
@@ -59,9 +59,9 @@
     ]
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
-    "eslint": "^7.27.0",
+    "@typescript-eslint/eslint-plugin": "^4.27.0",
+    "@typescript-eslint/parser": "^4.27.0",
+    "eslint": "^7.28.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-config-react": "^1.1.7",
     "eslint-config-react-app": "^6.0.0",
@@ -69,7 +69,7 @@
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
-    "prettier": "^2.3.0",
+    "prettier": "^2.3.1",
     "react-refresh": "^0.9.0",
     "typescript-plugin-css-modules": "^2.8.0"
   }
