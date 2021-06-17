@@ -12,7 +12,9 @@ export const PlayerInfo = observer(
     const isWhite = isTop == config.rotation > 1;
     type TIMER = { timer: typeof timeKeeper };
     const Ticker = observer(({ timer }: TIMER) => (
-      <span>{toMMSS(timer.getUsed() + (g.isWhiteTurn ? g.wtime : g.btime))}</span>
+      <span>
+        {toMMSS(Math.floor(timer.elapsed) + Math.floor(g.isWhiteTurn ? g.wtime : g.btime))}
+      </span>
     ));
 
     return (

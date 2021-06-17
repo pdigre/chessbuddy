@@ -31,7 +31,7 @@ export class Game {
   black = '';
   private bplayer?: Player;
   private wplayer?: Player;
-  private date = new Date().getTime();
+  private date = Date.now();
   wtime = 0;
   btime = 0;
   log: string[] = [];
@@ -62,16 +62,16 @@ export class Game {
   addMove: (san: string) => void = san => {
     const prev = this.nextPlayer();
     if (prev instanceof Human) gameState.isPlaying = true;
-    this.date = new Date().getTime();
+    this.date = Date.now();
     this.log.push(san);
     helper.reset();
     this.fen = rules.newFen(this.fen, san);
-    timeKeeper.next(this.isWhiteTurn);
     if (this.isWhiteTurn) {
-      this.btime = timeKeeper.black;
+      this.wtime += timeKeeper.elapsed;
     } else {
-      this.wtime = timeKeeper.white;
+      this.btime += timeKeeper.elapsed;
     }
+    timeKeeper.reset();
     this.run();
   };
   run: VoidFunction = () => {
@@ -133,8 +133,6 @@ export class Game {
     this.date = Number.parseInt(_game[0]);
     if (isNaN(this.wtime)) this.wtime = 0;
     if (isNaN(this.btime)) this.btime = 0;
-    timeKeeper.white = this.wtime;
-    timeKeeper.black = this.btime;
     this.calculate();
   };
 
@@ -183,7 +181,7 @@ export class GameHistory {
   readDate: (x: string) => string | undefined = x => {
     if (x == 'NaN') return undefined;
     const min = Date.parse('03/03/2021');
-    const max = new Date().getTime();
+    const max = Date.now();
     let d = Date.parse(x);
     if (isNaN(d) || d < min || d > max) {
       d = Number.parseInt(x) * 1000;
