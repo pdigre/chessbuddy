@@ -1,6 +1,6 @@
 # ChessBuddy
 
-[Configure here](doc/dev.md)
+[Development here](doc/dev.md)
 
 _React-based Chess (with multiple Bots) in TypeScript_.
 
