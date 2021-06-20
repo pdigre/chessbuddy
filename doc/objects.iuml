@@ -1,10 +1,7 @@
 @startuml
-actor client
-node app
-node car
-node tshirt
-
-car -> app
-app -> client
-client -> tshirt
+abstract Player
+class Human
+class Bot
+Player <|-- Human
+Player <|-- Bot
 @enduml

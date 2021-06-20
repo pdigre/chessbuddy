@@ -1,0 +1,17 @@
+@startmindmap
+* App
+** MessageBox
+** About
+** ConfigMain
+*** ConfigGame
+*** ConfigDisplay
+*** ConfigHuman
+*** ConfigBot
+** CP
+** Board
+** PlayerInfo
+*** Ticker
+** Panel
+** FenInfo
+** History
+@endmindmap
