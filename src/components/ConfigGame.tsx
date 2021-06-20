@@ -27,9 +27,9 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
   };
 
   const recordScore: (ok: string) => void = yes => {
-    if (yes == 'White') {
+    if (yes.startsWith('White')) {
       game.playMove('1-0');
-    } else if (yes == 'Black') {
+    } else if (yes.startsWith('Black')) {
       game.playMove('0-1');
     } else if (yes == 'Draw') {
       game.playMove('1/2-1/2');
@@ -45,7 +45,9 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         <div>{winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'}</div>
       );
     } else {
-      messager.display('End game', 'Who won?', ['White', 'Black', 'Draw'], recordScore);
+      const white = 'White - ' + game.white;
+      const black = 'Black - ' + game.black;
+      messager.display('End game', 'Who won?', [white, 'Draw', black], recordScore);
     }
   };
 
@@ -71,12 +73,16 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         <Button className={styles.Button} onClick={playAction} variant="contained" color="primary">
           Play
           <PlayArrow />
-        </Button>
+        </Button>{' '}
         &nbsp;
-        <Button className={styles.Button} onClick={endAction} variant="contained" color="primary">
-          End game
-          <ExitToApp />
-        </Button>
+        {game.isComplete ? (
+          ''
+        ) : (
+          <Button className={styles.Button} onClick={endAction} variant="contained" color="primary">
+            End game
+            <ExitToApp />
+          </Button>
+        )}
         &nbsp;
         <Button className={styles.Button} onClick={resetGame} variant="contained" color="primary">
           Reset
