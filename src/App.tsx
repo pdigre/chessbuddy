@@ -1,5 +1,5 @@
 import React from 'react';
-import { game, gameState, gameHistory } from './data/game';
+import { game, gameHistory, gameState } from './data/game';
 import { config } from './data/config';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import styles from './styles.module.scss';
@@ -15,6 +15,8 @@ import { helper } from './data/helper';
 import { About } from './components/About';
 import { rendering } from './data/rendering';
 import { refreshtimer } from './data/refreshtimer';
+import { playall } from './components/Emotion';
+import { Refresh } from '@material-ui/icons';
 
 const theme = unstable_createMuiStrictModeTheme();
 
@@ -37,7 +39,10 @@ const App: React.FC = () => {
           <PlayerInfo isTop={false} game={game} config={config} />
         </div>
         <div className={styles.AppRight}>
-          <h3 onClick={about}>♛ Chessbuddy 0.11</h3>
+          <h3>
+            <span onClick={about}>♛ Chessbuddy 0.11</span>
+            <Refresh fontSize="small" onClick={playall} />
+          </h3>
           <Panel gameState={gameState} config={config} />
           <FenInfo game={game} />
           <History game={game} gameHistory={gameHistory} config={config} />
