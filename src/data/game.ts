@@ -1,26 +1,30 @@
 import * as rules from './rules';
-import { players, Human } from './players';
+import { Human, players } from './players';
 import { Player } from './player';
-import { timeKeeper } from '../data/timekeeper';
-import { San, locate, tree } from './openings';
+import { timeKeeper } from './timekeeper';
+import { locate, San, tree } from './openings';
 import { makeAutoObservable } from 'mobx';
 import { helper } from './helper';
 import { Bot } from './bots';
+import { winner } from '../components/Emotion';
 
 /*
  * Start and pause of game, starts the bots if in turn
  */
 export class GameState {
   isPlaying = false;
+
   constructor() {
     makeAutoObservable(this);
   }
+
   run: VoidFunction = () => {
     if (this.isPlaying) {
       game.playBot();
     }
   };
 }
+
 export const gameState = new GameState();
 
 /*
@@ -29,9 +33,6 @@ export const gameState = new GameState();
 export class Game {
   white = '';
   black = '';
-  private bplayer?: Player;
-  private wplayer?: Player;
-  private date = Date.now();
   wtime = 0;
   btime = 0;
   log: string[] = [];
@@ -39,6 +40,15 @@ export class Game {
   isWhiteTurn = true;
   isComplete = false;
   pgns: string[] = [];
+  private bplayer?: Player;
+  private wplayer?: Player;
+  private date = Date.now();
+
+  constructor() {
+    makeAutoObservable(this);
+    this.restoreFromLocalStorage();
+  }
+
   reset: VoidFunction = () => {
     this.wtime = 0;
     this.btime = 0;
@@ -49,16 +59,14 @@ export class Game {
     helper.reset();
     this.run();
   };
+
   setPlayers: (white: string, black: string) => void = (white, black) => {
     this.white = white;
     this.black = black;
     this.wplayer = players.players.find(p => p.name == white);
     this.bplayer = players.players.find(p => p.name == black);
   };
-  constructor() {
-    makeAutoObservable(this);
-    this.restoreFromLocalStorage();
-  }
+
   addMove: (san: string) => void = san => {
     const prev = this.nextPlayer();
     if (prev instanceof Human) gameState.isPlaying = true;
@@ -95,32 +103,23 @@ export class Game {
       });
     }
   };
-  private calculate = () => {
-    const san = this.log[this.log.length - 1];
-    this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
-    if (this.isComplete) gameState.isPlaying = false;
-    this.isWhiteTurn = rules.isWhiteTurn(this.fen);
-    this.pgns = [];
-    if (this.log.length == 0) {
-      this.setPGNS(tree);
-    } else {
-      const pgn: San | undefined = locate(this.log);
-      if (pgn) this.setPGNS(pgn.children);
-    }
-  };
+
   setPGNS: (sans: San[]) => void = sans => {
     this.pgns = rules.findInfoMarkers(
       sans.map(x => x.san),
       this.fen
     );
   };
+
   nextPlayer: () => Player | undefined = () => {
     return this.isWhiteTurn ? this.wplayer : this.bplayer;
   };
+
   toString: () => string = () =>
     `${this.date.toString(36)};${this.white};${this.black};${this.wtime.toString(
       36
     )};${this.btime.toString(36)};${this.log.join(' ')}`;
+
   restoreFromLocalStorage: VoidFunction = () => {
     const _game = (localStorage.getItem('game') ?? new Date().getTime() + ';User;User;0;0;').split(
       ';'
@@ -143,7 +142,25 @@ export class Game {
       gameHistory.storeGame();
     }
   };
+
+  private calculate = () => {
+    const san = this.log[this.log.length - 1];
+    this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
+    if (this.isComplete) {
+      gameState.isPlaying = false;
+      winner();
+    }
+    this.isWhiteTurn = rules.isWhiteTurn(this.fen);
+    this.pgns = [];
+    if (this.log.length == 0) {
+      this.setPGNS(tree);
+    } else {
+      const pgn: San | undefined = locate(this.log);
+      if (pgn) this.setPGNS(pgn.children);
+    }
+  };
 }
+
 export const game = new Game();
 
 /*
@@ -170,13 +187,6 @@ export class GameHistory {
     gameHistory.history = h2;
     gameHistory.storeGame();
   };
-
-  private loadHistory() {
-    const h1 = localStorage.getItem('log')?.replace(/\r/, '').split('\n') ?? [];
-    const h2 = h1.map(x => this.readGame(x)).filter(x => x) as string[];
-    h2.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
-    return h2;
-  }
 
   readDate: (x: string) => string | undefined = x => {
     if (x == 'NaN') return undefined;
@@ -240,5 +250,13 @@ export class GameHistory {
       const s = x.split(';');
       return s[1] == name || s[2] == name;
     });
+
+  private loadHistory() {
+    const h1 = localStorage.getItem('log')?.replace(/\r/, '').split('\n') ?? [];
+    const h2 = h1.map(x => this.readGame(x)).filter(x => x) as string[];
+    h2.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
+    return h2;
+  }
 }
+
 export const gameHistory = new GameHistory();

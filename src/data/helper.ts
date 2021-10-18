@@ -54,9 +54,11 @@ const helpWorker = (): UninitialisedHelper => () => {
 class HelperBot {
   instance: InitialisedHelper;
   isRunning = false;
+
   constructor() {
     this.instance = helpWorker()();
   }
+
   run = (fen: string, resolver: HelpResolver) => {
     if (!this.isRunning) {
       this.isRunning = true;
@@ -67,6 +69,7 @@ class HelperBot {
     }
   };
 }
+
 const helperBot = new HelperBot();
 
 /*
@@ -75,9 +78,11 @@ const helperBot = new HelperBot();
 export class Helper {
   help: string[] = [];
   cp = 0;
+
   constructor() {
     makeAutoObservable(this);
   }
+
   reset: VoidFunction = () => (this.help = []);
   run: (fen: string, isWhiteTurn: boolean) => void = (fen, isWhiteTurn) => {
     this.reset();
@@ -89,4 +94,5 @@ export class Helper {
     });
   };
 }
+
 export const helper = new Helper();

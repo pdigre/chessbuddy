@@ -1,10 +1,10 @@
-import type { Square, Move, ShortMove } from 'chess.js';
+import type { Move, ShortMove, Square } from 'chess.js';
+import Chess, { ChessInstance } from 'chess.js';
 
 export type Fen = string;
 export type GameWinner = 'b' | 'w' | null;
 export type { Square, Move, ShortMove };
 
-import Chess, { ChessInstance } from 'chess.js';
 type ChessType = (fen?: string) => ChessInstance;
 const ChessImport = Chess as unknown;
 const Chess2 = ChessImport as ChessType;
@@ -119,7 +119,6 @@ const brd2fen = (brd: string) => {
   }
   if (spaces) {
     fen += spaces;
-    spaces = 0;
   }
   return fen;
 };

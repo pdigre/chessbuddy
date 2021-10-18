@@ -4,6 +4,9 @@ import { observer } from 'mobx-react';
 import { Helper } from '../data/helper';
 import { Rendering } from '../data/rendering';
 import { Config } from '../data/config';
+import { mistake } from './Emotion';
+
+let prevcp = 0;
 
 export const CP = observer(
   ({ helper, rendering, config }: { helper: Helper; rendering: Rendering; config: Config }) => {
@@ -11,6 +14,8 @@ export const CP = observer(
       return <div className={styles.CP}></div>;
     }
     const cp = helper.cp;
+    if (Math.abs(cp - prevcp) > 100) mistake();
+    prevcp = cp;
     const blackTop = config.rotation > 1;
     const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);
     const whiteLead = cp > 0;
