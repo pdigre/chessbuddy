@@ -9,6 +9,7 @@ import { RefreshTimer } from '../data/refreshtimer';
 import { messager } from './MessageBox';
 import { Rendering } from '../data/rendering';
 import { observer } from 'mobx-react';
+import { correct } from './Emotion';
 
 const pgnStyle: React.CSSProperties = {
   background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
@@ -87,6 +88,7 @@ export const Board = observer(
     };
 
     const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
+      if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from) correct();
       config.startUndoTimer(game.log.length);
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
     };

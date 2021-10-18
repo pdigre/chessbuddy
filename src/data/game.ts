@@ -1,11 +1,12 @@
 import * as rules from './rules';
-import {Human, players} from './players';
-import {Player} from './player';
-import {timeKeeper} from './timekeeper';
-import {locate, San, tree} from './openings';
-import {makeAutoObservable} from 'mobx';
-import {helper} from './helper';
-import {Bot} from './bots';
+import { Human, players } from './players';
+import { Player } from './player';
+import { timeKeeper } from './timekeeper';
+import { locate, San, tree } from './openings';
+import { makeAutoObservable } from 'mobx';
+import { helper } from './helper';
+import { Bot } from './bots';
+import { winner } from '../components/Emotion';
 
 /*
  * Start and pause of game, starts the bots if in turn
@@ -145,7 +146,10 @@ export class Game {
   private calculate = () => {
     const san = this.log[this.log.length - 1];
     this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
-    if (this.isComplete) gameState.isPlaying = false;
+    if (this.isComplete) {
+      gameState.isPlaying = false;
+      winner();
+    }
     this.isWhiteTurn = rules.isWhiteTurn(this.fen);
     this.pgns = [];
     if (this.log.length == 0) {

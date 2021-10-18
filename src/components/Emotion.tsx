@@ -34,14 +34,6 @@ const winner_urls = [
     src="https://giphy.com/embed/lYv10cDlosFnA0toPb/video"
     width="480"
   />,
-  <iframe
-    key="w5"
-    allow="fullscreen"
-    frameBorder="0"
-    height="360"
-    src="https://giphy.com/embed/y68J3KAxOA3NRd85Tw/video"
-    width="480"
-  />,
 ];
 const correct_urls = [
   <iframe
@@ -74,6 +66,14 @@ const correct_urls = [
     frameBorder="0"
     height="480"
     src="https://giphy.com/embed/t34U2oXtwwgIjURdOw/video"
+    width="480"
+  />,
+  <iframe
+    key="c5"
+    allow="fullscreen"
+    frameBorder="0"
+    height="360"
+    src="https://giphy.com/embed/y68J3KAxOA3NRd85Tw/video"
     width="480"
   />,
 ];
@@ -115,8 +115,8 @@ const all_urls = [...winner_urls, ...correct_urls, ...mistake_urls];
 let prev = 0;
 
 export const winner = (): void => emotion('Winner', winner_urls, 100);
-export const correct = (): void => emotion('Stockfish would do the same', correct_urls, 5);
-export const mistake = (): void => emotion('Mistake', winner_urls, 10);
+export const correct = (): void => emotion('Stockfish would do the same', correct_urls, 2);
+export const mistake = (): void => emotion('Mistake', mistake_urls, 6);
 export const playall = (): void => {
   prev++;
   if (prev == all_urls.length) prev = 0;
