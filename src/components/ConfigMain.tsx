@@ -1,5 +1,5 @@
 import React, { ChangeEvent, MouseEvent, ReactChild } from 'react';
-import { DialogTitle, Dialog, AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
+import { AppBar, Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@material-ui/core';
 import styles from '../styles.module.scss';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
@@ -58,6 +58,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
   };
   const [value, setValue] = React.useState(0);
 
+  // eslint-disable-next-line
   const handleChange = (event: ChangeEvent<any>, newValue: any) => setValue(newValue as number);
 
   const handleClose = () => {

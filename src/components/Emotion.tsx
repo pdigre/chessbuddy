@@ -114,10 +114,10 @@ const mistake_urls = [
 const all_urls = [...winner_urls, ...correct_urls, ...mistake_urls];
 let prev = 0;
 
-export const winner = () => emotion('Winner', winner_urls, 100);
-export const correct = () => emotion('Stockfish would do the same', correct_urls, 5);
-export const mistake = () => emotion('Mistake', winner_urls, 10);
-export const playall = () => {
+export const winner = (): void => emotion('Winner', winner_urls, 100);
+export const correct = (): void => emotion('Stockfish would do the same', correct_urls, 5);
+export const mistake = (): void => emotion('Mistake', winner_urls, 10);
+export const playall = (): void => {
   prev++;
   if (prev == all_urls.length) prev = 0;
   window.setTimeout(() => messager.clear(), 9000);

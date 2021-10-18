@@ -45,6 +45,42 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
         />
       </div>
       <div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={config.playCorrect}
+              onChange={() => (config.playCorrect = !config.playCorrect)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          }
+          label="Play giphy for correct moves"
+        />
+      </div>
+      <div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={config.playMistake}
+              onChange={() => (config.playMistake = !config.playMistake)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          }
+          label="Play giphy for big mistake"
+        />
+      </div>
+      <div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={config.playWinner}
+              onChange={() => (config.playWinner = !config.playWinner)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          }
+          label="Play giphy when game ends"
+        />
+      </div>
+      <div>
         <Button
           className={styles.Button}
           variant="contained"
