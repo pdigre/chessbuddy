@@ -1,5 +1,5 @@
 import React, { ChangeEvent, MouseEvent, ReactChild } from 'react';
-import { AppBar, Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@material-ui/core';
+import { AppBar, Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@mui/material';
 import styles from '../styles.module.scss';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';

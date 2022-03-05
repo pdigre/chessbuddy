@@ -1,8 +1,8 @@
 import React from 'react';
 import { Config } from '../data/config';
 import styles from '../styles.module.scss';
-import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
-import { RotateRight } from '@material-ui/icons';
+import { Button, Checkbox, FormControlLabel } from '@mui/material';
+import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 
 export const ConfigDisplay = observer(({ config }: { config: Config }) => {

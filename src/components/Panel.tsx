@@ -1,11 +1,10 @@
 import React from 'react';
-import { ButtonGroup } from '@material-ui/core';
-import { PlayArrow, Pause, Settings, Timeline, EventNote, Input, Undo } from '@material-ui/icons';
+import { Button, ButtonGroup } from '@mui/material';
+import { EventNote, Input, Pause, PlayArrow, Settings, Timeline, Undo } from '@mui/icons-material';
 import styles from '../styles.module.scss';
 import * as rules from '../data/rules';
-import { Button } from '@material-ui/core';
 import { observer } from 'mobx-react';
-import { GameState, game } from '../data/game';
+import { game, GameState } from '../data/game';
 import { refreshtimer } from '../data/refreshtimer';
 import { Config } from '../data/config';
 import { messager } from './MessageBox';

@@ -1,12 +1,12 @@
-import React, { ChangeEvent } from 'react';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import React from 'react';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export type SelectorProps = {
   label: string;
   choices: string[];
-  selected: string;
+  selected: { name?: string | undefined; value: unknown } | undefined;
   setSelected: (name: string) => void;
 };
 
@@ -17,10 +17,7 @@ export const ConfigSelector: React.FC<SelectorProps> = ({
   setSelected: setSelected,
 }) => {
   const handleChange = (
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
+    event: SelectChangeEvent<{ name?: string | undefined; value: unknown }>
   ) => {
     setSelected(event.target.value as string);
   };

@@ -4,25 +4,28 @@ import { Players } from '../data/players';
 import styles from '../styles.module.scss';
 import {
   Button,
-  TextField,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-} from '@material-ui/core';
-import { Add, Delete } from '@material-ui/icons';
+  TextField,
+} from '@mui/material';
+import { Add, Delete } from '@mui/icons-material';
 import { ConfigSelector } from './ConfigSelector';
 import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
 
 export const ConfigBot = observer(({ players }: { players: Players }) => {
-  const [engine, setEngine] = React.useState('');
+  const [engine, setEngine] = React.useState<{ name?: string | undefined; value: unknown }>({
+    name: undefined,
+    value: undefined,
+  });
   const [skill, setSkill] = useState('');
   const [depth, setDepth] = useState('');
   const [time, setTime] = useState('');
   const addPlayerHandler = () => {
-    if (!engine.length) {
+    if (!engine.value) {
       messager.display('Add Bot', 'Need to select a chess engine');
       return;
     }
