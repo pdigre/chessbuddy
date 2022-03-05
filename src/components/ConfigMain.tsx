@@ -59,7 +59,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
   const [value, setValue] = React.useState(0);
 
   // eslint-disable-next-line
-  const handleChange = (event: ChangeEvent<any>, newValue: any) => setValue(newValue as number);
+  const handleChange = (event: ChangeEvent<{}>, newValue: number) => setValue(newValue as number);
 
   const handleClose = () => {
     config.showConfig = false;
