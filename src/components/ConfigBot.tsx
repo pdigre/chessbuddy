@@ -17,15 +17,12 @@ import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
 
 export const ConfigBot = observer(({ players }: { players: Players }) => {
-  const [engine, setEngine] = React.useState<{ name?: string | undefined; value: unknown }>({
-    name: undefined,
-    value: undefined,
-  });
+  const [engine, setEngine] = React.useState('');
   const [skill, setSkill] = useState('');
   const [depth, setDepth] = useState('');
   const [time, setTime] = useState('');
   const addPlayerHandler = () => {
-    if (!engine.value) {
+    if (!engine) {
       messager.display('Add Bot', 'Need to select a chess engine');
       return;
     }
@@ -108,7 +105,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         <ConfigSelector
           label="Chess Engine"
           choices={engineNames}
-          selected={engine}
+          selected={{ name: 'ConfigSelector', value: engine }}
           setSelected={setEngine}
         />{' '}
         &nbsp;

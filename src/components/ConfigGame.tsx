@@ -57,14 +57,14 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         <ConfigSelector
           label="White"
           choices={playerNames}
-          selected={white}
+          selected={{ name: white, value: white }}
           setSelected={setWhite}
         />
         &nbsp;
         <ConfigSelector
           label="Black"
           choices={playerNames}
-          selected={black}
+          selected={{ name: black, value: black }}
           setSelected={setBlack}
         />
       </div>
