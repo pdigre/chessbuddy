@@ -77,6 +77,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
 
       <AppBar position="static">
         <Tabs
+          className={styles.ConfigTabs}
           variant="fullWidth"
           value={value}
           onChange={handleChange}
