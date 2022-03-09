@@ -4,14 +4,14 @@ import { Players } from '../data/players';
 import styles from '../styles.module.scss';
 import {
   Button,
-  TextField,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-} from '@material-ui/core';
-import { Add, Delete } from '@material-ui/icons';
+  TextField,
+} from '@mui/material';
+import { Add, Delete } from '@mui/icons-material';
 import { ConfigSelector } from './ConfigSelector';
 import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
@@ -22,7 +22,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [depth, setDepth] = useState('');
   const [time, setTime] = useState('');
   const addPlayerHandler = () => {
-    if (!engine.length) {
+    if (!engine) {
       messager.display('Add Bot', 'Need to select a chess engine');
       return;
     }
@@ -105,7 +105,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         <ConfigSelector
           label="Chess Engine"
           choices={engineNames}
-          selected={engine}
+          selected={{ name: 'ConfigSelector', value: engine }}
           setSelected={setEngine}
         />{' '}
         &nbsp;

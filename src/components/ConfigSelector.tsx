@@ -1,12 +1,12 @@
 import React, { ChangeEvent } from 'react';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
 
 export type SelectorProps = {
   label: string;
   choices: string[];
-  selected: string;
+  selected: { name?: string | undefined; value: unknown } | undefined;
   setSelected: (name: string) => void;
 };
 
@@ -16,24 +16,19 @@ export const ConfigSelector: React.FC<SelectorProps> = ({
   selected: selected,
   setSelected: setSelected,
 }) => {
-  const handleChange = (
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) => {
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelected(event.target.value as string);
   };
-
   return (
     <FormControl variant="filled">
-      <InputLabel htmlFor="for">{label}</InputLabel>
-      <Select
-        native
-        value={selected}
+      <InputLabel variant="standard" htmlFor={label}>
+        {label}
+      </InputLabel>
+      <NativeSelect
+        value={selected?.value as string}
         onChange={handleChange}
         inputProps={{
-          name: { label: 'label' },
+          name: label,
           id: 'for',
         }}>
         <option aria-label="None" value="" />
@@ -42,7 +37,7 @@ export const ConfigSelector: React.FC<SelectorProps> = ({
             {name}
           </option>
         ))}
-      </Select>
+      </NativeSelect>
     </FormControl>
   );
 };

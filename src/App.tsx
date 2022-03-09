@@ -1,7 +1,7 @@
 import React from 'react';
 import { game, gameHistory, gameState } from './data/game';
 import { config } from './data/config';
-import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
+import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@mui/material/styles';
 import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
@@ -16,7 +16,7 @@ import { About } from './components/About';
 import { rendering } from './data/rendering';
 import { refreshtimer } from './data/refreshtimer';
 import { playall } from './components/Emotion';
-import { Refresh } from '@material-ui/icons';
+import { Refresh } from '@mui/icons-material';
 
 const theme = unstable_createMuiStrictModeTheme();
 

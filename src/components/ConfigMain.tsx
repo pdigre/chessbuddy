@@ -1,5 +1,5 @@
 import React, { ChangeEvent, MouseEvent, ReactChild } from 'react';
-import { AppBar, Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@material-ui/core';
+import { AppBar, Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@mui/material';
 import styles from '../styles.module.scss';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
@@ -77,6 +77,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
 
       <AppBar position="static">
         <Tabs
+          className={styles.ConfigTabs}
           variant="fullWidth"
           value={value}
           onChange={handleChange}

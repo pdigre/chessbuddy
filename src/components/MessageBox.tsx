@@ -1,13 +1,13 @@
 import React, { MouseEvent } from 'react';
 import styles from '../styles.module.scss';
 import {
+  Button,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Button,
-} from '@material-ui/core';
+  DialogTitle,
+} from '@mui/material';
 import { makeAutoObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
@@ -17,9 +17,11 @@ export class Messager {
   buttons?: string[];
   response?: (button: string) => void;
   show = false;
+
   constructor() {
     makeAutoObservable(this);
   }
+
   clear: () => void = () => {
     this.title = undefined;
   };
@@ -35,6 +37,7 @@ export class Messager {
     this.response = response ?? (() => messager.clear());
   };
 }
+
 export const messager = new Messager();
 
 export const MessageBox = observer(({ messager }: { messager: Messager }) => {

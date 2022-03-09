@@ -1,17 +1,17 @@
-import React, { ChangeEvent, useState, useRef, useEffect, MouseEvent } from 'react';
+import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { Human, Players } from '../data/players';
 import { Server } from '../data/server';
 import styles from '../styles.module.scss';
 import {
   Button,
-  TextField,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-} from '@material-ui/core';
-import { Add, Delete, GetApp, Publish, Language } from '@material-ui/icons';
+  TextField,
+} from '@mui/material';
+import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../data/game';
 import { messager } from './MessageBox';

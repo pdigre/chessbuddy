@@ -3,8 +3,8 @@ import { config } from '../data/config';
 import * as rules from '../data/rules';
 import { ConfigSelector } from './ConfigSelector';
 import styles from '../styles.module.scss';
-import { Button } from '@material-ui/core';
-import { Clear, PlayArrow, ExitToApp } from '@material-ui/icons';
+import { Button } from '@mui/material';
+import { Clear, ExitToApp, PlayArrow } from '@mui/icons-material';
 import { messager } from './MessageBox';
 import { game, gameState } from '../data/game';
 import { observer } from 'mobx-react';
@@ -57,14 +57,14 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         <ConfigSelector
           label="White"
           choices={playerNames}
-          selected={white}
+          selected={{ name: white, value: white }}
           setSelected={setWhite}
         />
         &nbsp;
         <ConfigSelector
           label="Black"
           choices={playerNames}
-          selected={black}
+          selected={{ name: black, value: black }}
           setSelected={setBlack}
         />
       </div>

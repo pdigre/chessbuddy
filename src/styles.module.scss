@@ -1,19 +1,21 @@
 body {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
+
 #root {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
+
 .App {
   width: 1020px;
   height: 654px;
   background-color: rgb(235, 246, 253);
-  border-width: 0px;
+  border-width: 0;
   display: flex;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   flex-direction: row;
 }
 
@@ -24,12 +26,14 @@ body {
   flex-direction: column;
   flex-grow: 1;
 }
+
 .CPWHITE {
   writing-mode: vertical-lr;
   text-align: center;
   background-color: white;
   color: black;
 }
+
 .CPBLACK {
   writing-mode: vertical-lr;
   text-align: center;
@@ -76,13 +80,17 @@ body {
   flex-direction: row;
 }
 
+.ConfigTabs {
+  background-color: lightgreen;
+}
+
 .Panel {
   width: 100%;
 }
 
 .History,
 .Log {
-  margin: 0px;
+  margin: 0;
   width: 100%;
   overflow: auto;
 }
@@ -92,19 +100,23 @@ body {
   table-layout: fixed;
   width: 100%;
 }
+
 .History td {
   padding: 3px;
   text-align: center;
   font-size: 1.2em;
 }
+
 .Log td {
   padding: 2px;
   text-align: left;
   font-size: 0.9em;
 }
+
 .Log td:first-child {
   width: 120px;
 }
+
 .Log td:last-child {
   width: 20px;
 }
@@ -112,6 +124,7 @@ body {
 .NumberCell {
   width: 20px;
 }
+
 .NumberCell span {
   color: rgb(75, 31, 31);
   font-size: 0.8em;
@@ -120,6 +133,7 @@ body {
 .MarkCell {
   background-color: aquamarine;
 }
+
 .MarkRow td {
   background-color: aquamarine;
 }
@@ -127,9 +141,11 @@ body {
 .ConfigTableContainer {
   margin: 1px;
 }
+
 .ConfigTable {
   table-layout: fixed;
 }
+
 .ConfigTable td {
   padding: 3px;
   text-align: center;
@@ -139,6 +155,7 @@ body {
 .Button {
   height: 56px;
   flex-grow: 1;
+  background-color: darkgreen;
 }
 
 .Buttons {
@@ -157,9 +174,11 @@ body {
 .lightSquare {
   background-color: rgb(240, 217, 181);
 }
+
 .darkSquare {
   background-color: rgb(240, 217, 181);
 }
+
 .Hidden {
   display: none;
 }
@@ -177,11 +196,11 @@ body {
   .AppLeft {
     width: 604px;
   }
-  
+
   .AppRight {
     width: 404px;
   }
-  
+
   .Player,
   .PlayerRight {
     height: 27px;
