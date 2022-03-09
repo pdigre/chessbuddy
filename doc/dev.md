@@ -18,11 +18,12 @@
 5. Build for deployment: `npm run build`
 
 ## About the code choices
+
 * REACT-JS for UI components https://reactjs.org/
 * MOBX for state management https://mobx.js.org/README.html
 * https://material-ui.com/ based on https://material.io/design
-* Chess JS - https://github.com/jhlywa/chess.js
-* Chessboard JS - https://chessboardjsx.com/basics
+* Chess Rules - https://github.com/jhlywa/chess.js
+* Chess Board - https://github.com/Clariity/react-chessboard
 * WASM - Use with Stockfish
 * Lozza JS chess engine
 

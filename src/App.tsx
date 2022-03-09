@@ -34,7 +34,7 @@ const App: React.FC = () => {
             gameState={gameState}
             rendering={rendering}
             config={config}
-            refreshtimer={refreshtimer}
+            refreshTimer={refreshtimer}
           />
           <PlayerInfo isTop={false} game={game} config={config} />
         </div>

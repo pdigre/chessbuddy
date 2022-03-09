@@ -3,13 +3,14 @@ import * as rules from '../data/rules';
 import { Helper } from '../data/helper';
 import { Human } from '../data/players';
 import { game, GameState } from '../data/game';
-import Chessboard from 'chessboardjsx';
+import { Chessboard } from 'react-chessboard';
 import { Config } from '../data/config';
 import { RefreshTimer } from '../data/refreshtimer';
 import { messager } from './MessageBox';
 import { Rendering } from '../data/rendering';
 import { observer } from 'mobx-react';
 import { correct } from './Emotion';
+import { Square } from 'chess.js';
 
 const pgnStyle: React.CSSProperties = {
   background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
@@ -30,24 +31,19 @@ const blackSquareStyle: React.CSSProperties = {
   backgroundColor: 'rgb(181, 136, 99)',
 };
 
-type BoardMove = {
-  sourceSquare: rules.Square;
-  targetSquare: rules.Square;
-};
-
 export const Board = observer(
   ({
     helper,
     gameState,
     rendering,
     config,
-    refreshtimer,
+    refreshTimer,
   }: {
     helper: Helper;
     gameState: GameState;
     rendering: Rendering;
     config: Config;
-    refreshtimer: RefreshTimer;
+    refreshTimer: RefreshTimer;
   }) => {
     const doMove = useCallback((from: rules.Square, to: rules.Square, isHuman: boolean) => {
       const move = rules.move(game.fen, from, to);
@@ -78,7 +74,7 @@ export const Board = observer(
     const r90 = config.rotation % 2 == 1;
     const r180 = config.rotation > 1;
 
-    const onDragStart = ({ sourceSquare: from }: Pick<BoardMove, 'sourceSquare'>) => {
+    const onDragStart = (piece: string, from: Square) => {
       const player = game.nextPlayer();
       if (player instanceof Human && !game.isComplete) {
         const from2 = r90 ? rules.leftSquare(from) : from;
@@ -87,10 +83,11 @@ export const Board = observer(
       return false;
     };
 
-    const onMovePiece = ({ sourceSquare: from, targetSquare: to }: BoardMove) => {
+    const onMovePiece = (from: Square, to: Square, piece: string) => {
       if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from) correct();
       config.startUndoTimer(game.log.length);
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
+      return true;
     };
 
     const showMarkers = () => {
@@ -109,17 +106,17 @@ export const Board = observer(
       }
       return markers;
     };
-    const fen = refreshtimer.showBlank ? rules.CLEAR_GAME : game.fen;
+    const fen = refreshTimer.showBlank ? rules.CLEAR_GAME : game.fen;
     return (
       <Chessboard
         position={r90 ? rules.leftFen(fen) : fen}
-        allowDrag={onDragStart}
-        onDrop={onMovePiece}
-        orientation={!r180 ? 'white' : 'black'}
-        width={rendering.boardWidth}
-        squareStyles={showMarkers()}
-        lightSquareStyle={r90 ? blackSquareStyle : whiteSquareStyle}
-        darkSquareStyle={r90 ? whiteSquareStyle : blackSquareStyle}
+        onPieceDragBegin={onDragStart}
+        onPieceDrop={onMovePiece}
+        boardOrientation={!r180 ? 'white' : 'black'}
+        boardWidth={rendering.boardWidth}
+        customSquareStyles={showMarkers()}
+        customLightSquareStyle={r90 ? blackSquareStyle : whiteSquareStyle}
+        customDarkSquareStyle={r90 ? whiteSquareStyle : blackSquareStyle}
       />
     );
   }
