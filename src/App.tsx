@@ -1,7 +1,7 @@
 import React from 'react';
 import { game, gameHistory, gameState } from './data/game';
 import { config } from './data/config';
-import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
@@ -17,12 +17,13 @@ import { rendering } from './data/rendering';
 import { refreshtimer } from './data/refreshtimer';
 import { playall } from './components/Emotion';
 import { Refresh } from '@mui/icons-material';
-
-const theme = unstable_createMuiStrictModeTheme();
+import packageInfo from '../package.json';
+import { themes } from './themes';
 
 const App: React.FC = () => {
   const about = () => messager.display('About', <About />);
-
+  const version = packageInfo.version;
+  const theme = createTheme(themes[0].theme);
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.App}>
@@ -40,7 +41,7 @@ const App: React.FC = () => {
         </div>
         <div className={styles.AppRight}>
           <h3>
-            <span onClick={about}>♛ Chessbuddy 0.12</span>
+            <span onClick={about}>♛ Chessbuddy {version}</span>
             <Refresh fontSize="small" onClick={playall} />
           </h3>
           <Panel gameState={gameState} config={config} />

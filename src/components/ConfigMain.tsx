@@ -77,8 +77,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
 
       <AppBar position="static">
         <Tabs
-          className={styles.ConfigTabs}
-          variant="fullWidth"
+          //          className={styles.ConfigTabs}
           value={value}
           onChange={handleChange}
           aria-label="nav tabs example">
