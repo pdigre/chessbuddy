@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - "PORT=80"
     ports:
       - "3000:80"
     restart: always
-    volumes:
-      - .:/app
