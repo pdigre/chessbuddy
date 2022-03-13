@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { config } from '../data/config';
 import * as rules from '../data/rules';
-import { ConfigSelector } from './ConfigSelector';
+import { StyledSelector } from './StyledSelector';
 import styles from '../styles.module.scss';
 import { Button } from '@mui/material';
 import { Clear, ExitToApp, PlayArrow } from '@mui/icons-material';
@@ -54,14 +54,14 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
   return (
     <div className={styles.Config}>
       <div>
-        <ConfigSelector
+        <StyledSelector
           label="White"
           choices={playerNames}
           selected={{ name: white, value: white }}
           setSelected={setWhite}
         />
         &nbsp;
-        <ConfigSelector
+        <StyledSelector
           label="Black"
           choices={playerNames}
           selected={{ name: black, value: black }}
@@ -70,21 +70,33 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
       </div>
       <div>&nbsp;</div>
       <div>
-        <Button className={styles.Button} onClick={playAction} variant="contained" color="primary">
+        <Button
+          className={styles.Button}
+          sx={{ backgroundColor: 'darkgreen' }}
+          onClick={playAction}
+          variant="contained">
           Play
           <PlayArrow />
-        </Button>{' '}
+        </Button>
         &nbsp;
         {game.isComplete ? (
           ''
         ) : (
-          <Button className={styles.Button} onClick={endAction} variant="contained" color="primary">
+          <Button
+            className={styles.Button}
+            sx={{ backgroundColor: 'darkgreen' }}
+            onClick={endAction}
+            variant="contained">
             End game
             <ExitToApp />
           </Button>
         )}
         &nbsp;
-        <Button className={styles.Button} onClick={resetGame} variant="contained" color="primary">
+        <Button
+          className={styles.Button}
+          sx={{ backgroundColor: 'darkgreen' }}
+          onClick={resetGame}
+          variant="contained">
           Reset
           <Clear />
         </Button>

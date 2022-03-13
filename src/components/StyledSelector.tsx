@@ -11,7 +11,7 @@ export type SelectorProps = {
   setSelected: (name: string) => void;
 };
 
-export const ConfigSelector: React.FC<SelectorProps> = ({
+export const StyledSelector: React.FC<SelectorProps> = ({
   label: label,
   choices: choices,
   selected: selected,

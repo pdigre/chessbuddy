@@ -7,18 +7,18 @@ import { observer } from 'mobx-react';
 
 export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   /*
-  const themeNames = themes.map(x => x.name);
-  const setTheme = (name: string) => (config.theme = themeNames.indexOf(name));
-        <div>
-        <ConfigSelector
-          label="Theme"
-          choices={themeNames}
-          selected={{ name: themeNames[config.theme], value: themeNames[config.theme] }}
-          setSelected={setTheme}
-        />
-      </div>
-
-     */
+    const themeNames = themes.map(x => x.name);
+    const setTheme = (name: string) => (config.theme = themeNames.indexOf(name));
+          <div>
+          <ConfigSelector
+            label="Theme"
+            choices={themeNames}
+            selected={{ name: themeNames[config.theme], value: themeNames[config.theme] }}
+            setSelected={setTheme}
+          />
+        </div>
+  
+       */
   return (
     <div className={styles.Config}>
       <div>
@@ -96,6 +96,7 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
       <div>
         <Button
           className={styles.Button}
+          sx={{ backgroundColor: 'darkgreen' }}
           variant="contained"
           onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
           Rotate chessboard <RotateRight />
