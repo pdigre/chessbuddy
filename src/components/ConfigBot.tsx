@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
-import { ConfigSelector } from './ConfigSelector';
+import { StyledSelector } from './StyledSelector';
 import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
 
@@ -95,6 +95,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         <div>
           <Button
             className={styles.Button}
+            sx={{ backgroundColor: 'darkgreen' }}
             onClick={delPlayerHandler}
             variant="contained"
             disabled={!hasSelect}>
@@ -103,11 +104,15 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         </div>
       </div>
       <div className={styles.AddSection}>
-        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
+        <Button
+          className={styles.Button}
+          sx={{ backgroundColor: 'darkgreen' }}
+          onClick={addPlayerHandler}
+          variant="contained">
           Add <Add />
         </Button>{' '}
         &nbsp;
-        <ConfigSelector
+        <StyledSelector
           label="Chess Engine"
           choices={engineNames}
           selected={{ name: 'ConfigSelector', value: engine }}

@@ -124,6 +124,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
         <div className={styles.Buttons}>
           <Button
             className={styles.Button}
+            sx={{ backgroundColor: 'darkgreen' }}
             onClick={doDelPlayer}
             disabled={!hasSelect}
             variant="contained">
@@ -131,6 +132,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           </Button>
           <Button
             className={styles.Button}
+            sx={{ backgroundColor: 'darkgreen' }}
             onClick={downloadPlayer}
             disabled={!hasSelect}
             variant="contained">
@@ -138,6 +140,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           </Button>
           <Button
             className={styles.Button}
+            sx={{ backgroundColor: 'darkgreen' }}
             onClick={uploadPlayer}
             disabled={!hasSelect}
             variant="contained">
@@ -145,6 +148,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           </Button>
           <Button
             className={styles.Button}
+            sx={{ backgroundColor: 'darkgreen' }}
             onClick={connectPlayer}
             disabled={!hasEmail}
             variant="contained">
@@ -153,7 +157,11 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
         </div>
       </div>
       <div className={styles.AddSection}>
-        <Button className={styles.Button} onClick={doAddPlayer} variant="contained">
+        <Button
+          className={styles.Button}
+          sx={{ backgroundColor: 'darkgreen' }}
+          onClick={doAddPlayer}
+          variant="contained">
           Add <Add />
         </Button>
         &nbsp;
