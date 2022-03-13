@@ -11,7 +11,7 @@ body {
 .App {
   width: 1020px;
   height: 654px;
-  background-color: rgb(235, 255, 235);
+  background-color: rgb(225, 255, 225);
   border-width: 0;
   display: flex;
   margin: 0;
@@ -235,7 +235,8 @@ body {
   .NumberCell {
     width: 20px;
   }
-  .Button {
+  .Button,
+  .MuiButton-root {
     height: 56px;
     background-color: darkgreen;
   }
