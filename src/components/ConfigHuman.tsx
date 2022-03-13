@@ -93,72 +93,73 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
   };
   return (
     <div className={styles.Config}>
-      <TableContainer className={styles.ConfigTableContainer}>
-        <Table size="small" className={styles.ConfigTable}>
-          <TableBody onClick={doSelect}>
-            {humans.map((human, iLine) => (
-              <TableRow
-                key={iLine.toString()}
-                id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}>
-                <TableCell>{human.name}</TableCell>
-                <TableCell>{(human as Human).email}</TableCell>
-              </TableRow>
-            ))}
-            <TableRow />
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <a className={styles.Hidden} download="games.txt" href={downloadLink} ref={downloadRef}>
-        download it
-      </a>
-      <input
-        type="file"
-        className={styles.Hidden}
-        multiple={false}
-        accept=".txt,text/plain"
-        onChange={uploadChange}
-        ref={uploadRef}
-      />
-      <div className={styles.Buttons}>
-        <Button
-          className={styles.Button}
-          onClick={doDelPlayer}
-          disabled={!hasSelect}
-          variant="contained">
-          Delete <Delete />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={downloadPlayer}
-          disabled={!hasSelect}
-          variant="contained">
-          Download <GetApp />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={uploadPlayer}
-          disabled={!hasSelect}
-          variant="contained">
-          Upload <Publish />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={connectPlayer}
-          disabled={!hasEmail}
-          variant="contained">
-          Connect <Language />
-        </Button>
+      <div className={styles.ListSection}>
+        <TableContainer className={styles.ConfigTableContainer}>
+          <Table size="small" className={styles.ConfigTable}>
+            <TableBody onClick={doSelect}>
+              {humans.map((human, iLine) => (
+                <TableRow
+                  key={iLine.toString()}
+                  id={iLine.toString()}
+                  className={iLine == marker ? styles.MarkRow : ''}>
+                  <TableCell>{human.name}</TableCell>
+                  <TableCell>{(human as Human).email}</TableCell>
+                </TableRow>
+              ))}
+              <TableRow />
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <a className={styles.Hidden} download="games.txt" href={downloadLink} ref={downloadRef}>
+          download it
+        </a>
+        <input
+          type="file"
+          className={styles.Hidden}
+          multiple={false}
+          accept=".txt,text/plain"
+          onChange={uploadChange}
+          ref={uploadRef}
+        />
+        <div className={styles.Buttons}>
+          <Button
+            className={styles.Button}
+            onClick={doDelPlayer}
+            disabled={!hasSelect}
+            variant="contained">
+            Delete <Delete />
+          </Button>
+          <Button
+            className={styles.Button}
+            onClick={downloadPlayer}
+            disabled={!hasSelect}
+            variant="contained">
+            Download <GetApp />
+          </Button>
+          <Button
+            className={styles.Button}
+            onClick={uploadPlayer}
+            disabled={!hasSelect}
+            variant="contained">
+            Upload <Publish />
+          </Button>
+          <Button
+            className={styles.Button}
+            onClick={connectPlayer}
+            disabled={!hasEmail}
+            variant="contained">
+            Connect <Language />
+          </Button>
+        </div>
       </div>
-      <div>&nbsp;</div>
-      <div>
-        <TextField label="Player Name" id="name" size="medium" onChange={changeName} />
-        &nbsp;
-        <TextField label="Player Email" id="email" size="medium" onChange={changeEmail} />
-        &nbsp;
+      <div className={styles.AddSection}>
         <Button className={styles.Button} onClick={doAddPlayer} variant="contained">
           Add <Add />
         </Button>
+        &nbsp;
+        <TextField label="Player Name" id="name" size="medium" onChange={changeName} />
+        &nbsp;
+        <TextField label="Player Email" id="email" size="medium" onChange={changeEmail} />
       </div>
     </div>
   );

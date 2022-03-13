@@ -41,7 +41,7 @@ const App: React.FC = () => {
         </div>
         <div className={styles.AppRight}>
           <h3>
-            <span onClick={about}>♛ Chessbuddy {version}</span>
+            <span onClick={about}>ChessBuddy {version}</span>
             <Refresh fontSize="small" onClick={playall} />
           </h3>
           <Panel gameState={gameState} config={config} />
