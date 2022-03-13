@@ -76,51 +76,48 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
 
   return (
     <div className={styles.Config}>
-      <TableContainer className={styles.ConfigTableContainer}>
-        <Table size="small" className={styles.ConfigTable}>
-          <TableBody onClick={selectHandler}>
-            {bots.map((bot, iLine) => (
-              <TableRow
-                key={iLine.toString()}
-                id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}>
-                <TableCell>{bot.name}</TableCell>
-              </TableRow>
-            ))}
-            <TableRow />
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div>
-        <Button
-          className={styles.Button}
-          onClick={delPlayerHandler}
-          variant="contained"
-          disabled={!hasSelect}>
-          Delete <Delete />
-        </Button>
+      <div className={styles.ListSection}>
+        <TableContainer className={styles.ConfigTableContainer}>
+          <Table size="small" className={styles.ConfigTable}>
+            <TableBody onClick={selectHandler}>
+              {bots.map((bot, iLine) => (
+                <TableRow
+                  key={iLine.toString()}
+                  id={iLine.toString()}
+                  className={iLine == marker ? styles.MarkRow : ''}>
+                  <TableCell>{bot.name}</TableCell>
+                </TableRow>
+              ))}
+              <TableRow />
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <div>
+          <Button
+            className={styles.Button}
+            onClick={delPlayerHandler}
+            variant="contained"
+            disabled={!hasSelect}>
+            Delete <Delete />
+          </Button>
+        </div>
       </div>
-      <div>&nbsp;</div>
-      <div>
+      <div className={styles.AddSection}>
+        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
+          Add <Add />
+        </Button>{' '}
+        &nbsp;
         <ConfigSelector
           label="Chess Engine"
           choices={engineNames}
           selected={{ name: 'ConfigSelector', value: engine }}
           setSelected={setEngine}
-        />{' '}
-        &nbsp;
+        />
+        <br />
         <TextField label="Skill level" id="skill" size="medium" onChange={skillChange} /> &nbsp;
-        <TextField
-          label="Depth (..not time)"
-          id="depth"
-          size="medium"
-          onChange={depthChange}
-        />{' '}
+        <TextField label="Depth (..not time)" id="depth" size="medium" onChange={depthChange} />
         &nbsp;
         <TextField label="Time (sec)" id="time" size="medium" onChange={timeChange} /> &nbsp;
-        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
-          Add <Add />
-        </Button>
       </div>
     </div>
   );

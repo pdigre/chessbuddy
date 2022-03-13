@@ -11,7 +11,7 @@ body {
 .App {
   width: 1020px;
   height: 654px;
-  background-color: rgb(235, 246, 253);
+  background-color: rgb(235, 255, 235);
   border-width: 0;
   display: flex;
   margin: 0;
@@ -81,7 +81,7 @@ body {
 }
 
 .ConfigTabs {
-  background-color: lightgreen;
+  background-color: rgb(135, 255, 135);
 }
 
 .Panel {
@@ -148,7 +148,7 @@ body {
 
 .ConfigTable td {
   padding: 3px;
-  text-align: center;
+  text-align: left;
   font-size: 1.2em;
 }
 
@@ -163,12 +163,33 @@ body {
   flex-direction: row;
 }
 
+.Selector {
+  min-width: 200px;
+}
+
+.ListSection {
+  border: 1px solid darkgreen;
+  margin: 2px;
+  padding: 2px;
+}
+
+.AddSection {
+  background-color: rgb(235, 255, 235);
+  border: 2px solid darkgreen;
+  margin: 5px;
+  padding: 5px;
+}
+
 .Config {
   display: flex;
   flex-direction: column;
   text-align: center;
   width: 650px;
   height: 400px;
+}
+
+.Config DIV {
+  text-align: left;
 }
 
 .lightSquare {
@@ -216,6 +237,7 @@ body {
   }
   .Button {
     height: 56px;
+    background-color: darkgreen;
   }
   .Config {
     width: 650px;
