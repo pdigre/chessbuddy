@@ -17,3 +17,4 @@
 .env.production.local
 npm-debug.log*
 
+/server/node_modules/

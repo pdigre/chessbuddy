@@ -13,7 +13,7 @@ This has been used as an assistant like chess clock during friendly two player g
 - You can tilt board 90 degress sideways for easy use in a chess clock position alongside the board.
 - You can alternative play against Stockfish or Lozza chess engines
 
-Demo: [https://chess.digre.com/](https://chess.digre.com/)<br>
+Demo: [https://chessbuddy.net/](https://chessbuddy.net/)<br>
 
 ![Chessbuddy](doc/chessbuddy.png)
 
