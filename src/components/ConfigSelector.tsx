@@ -30,7 +30,8 @@ export const ConfigSelector: React.FC<SelectorProps> = ({
         inputProps={{
           name: label,
           id: 'for',
-        }}>
+        }}
+      >
         <option aria-label="None" value="" />
         {choices.map(name => (
           <option key={name} value={name}>

@@ -7,6 +7,7 @@ import { makeAutoObservable } from 'mobx';
 import { helper } from './helper';
 import { Bot } from './bots';
 import { winner } from '../components/Emotion';
+import { Square } from 'chess.js';
 
 /*
  * Start and pause of game, starts the bots if in turn
@@ -39,7 +40,7 @@ export class Game {
   fen = rules.NEW_GAME;
   isWhiteTurn = true;
   isComplete = false;
-  pgns: string[] = [];
+  pgns: Square[] = [];
   private bplayer?: Player;
   private wplayer?: Player;
   private date = Date.now();

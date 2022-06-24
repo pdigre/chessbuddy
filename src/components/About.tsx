@@ -14,7 +14,8 @@ export const About: React.FC = () => (
         <Link
           href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
           target="_blank"
-          rel="noopener">
+          rel="noopener"
+        >
           User Guide / instructions
         </Link>
       </li>

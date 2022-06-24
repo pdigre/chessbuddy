@@ -55,7 +55,8 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
     <ButtonGroup
       color="primary"
       aria-label="outlined primary button group"
-      className={styles.Panel}>
+      className={styles.Panel}
+    >
       <Button className={styles.Button} onClick={playHandler} variant="contained">
         {isHistUndo || isPlayUndo ? (
           <Undo fontSize="large" />

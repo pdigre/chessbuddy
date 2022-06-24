@@ -83,7 +83,8 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
               <TableRow
                 key={iLine.toString()}
                 id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}>
+                className={iLine == marker ? styles.MarkRow : ''}
+              >
                 <TableCell>{bot.name}</TableCell>
               </TableRow>
             ))}
@@ -96,7 +97,8 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           className={styles.Button}
           onClick={delPlayerHandler}
           variant="contained"
-          disabled={!hasSelect}>
+          disabled={!hasSelect}
+        >
           Delete <Delete />
         </Button>
       </div>

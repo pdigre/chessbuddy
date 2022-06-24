@@ -1,6 +1,7 @@
 import type { Fen } from './rules';
 import { UCI_ENGINES } from './bots';
 import { makeAutoObservable } from 'mobx';
+import { Square } from 'chess.js';
 
 type HelperReturn = { moves: string[]; cp: number | undefined };
 type HelpResolver = (ret: HelperReturn) => void;
@@ -76,7 +77,7 @@ const helperBot = new HelperBot();
  * Run Stockfish 1 sec to get best moves and CP
  */
 export class Helper {
-  help: string[] = [];
+  help: Square[] = [];
   cp = 0;
 
   constructor() {
@@ -87,8 +88,8 @@ export class Helper {
   run: (fen: string, isWhiteTurn: boolean) => void = (fen, isWhiteTurn) => {
     this.reset();
     helperBot.run(fen, ({ moves, cp }) => {
-      const squares: Set<string> = new Set();
-      moves.forEach(x => squares.add(x));
+      const squares: Set<Square> = new Set();
+      moves.forEach(x => squares.add(x as Square));
       this.help = [...squares];
       if (cp) this.cp = isWhiteTurn ? cp : -cp;
     });

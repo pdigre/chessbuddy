@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
-    "@types/chess.js": "^0.11.2",
+    "@types/chess.js": "^0.13.1",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
     "chess.js": "^0.13.2",
@@ -15,7 +15,7 @@
     "mobx-react": "^7.5.0",
     "node-sass": "^7.0.1",
     "react": "^18.2.0",
-    "react-chessboard": "^1.2.2",
+    "react-chessboard": "^1.2.5",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
     "typescript": "^4.7.4"

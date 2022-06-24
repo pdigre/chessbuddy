@@ -96,7 +96,8 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
         <Button
           className={styles.Button}
           variant="contained"
-          onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
+          onClick={() => (config.rotation = (config.rotation + 1) % 4)}
+        >
           Rotate chessboard <RotateRight />
         </Button>
       </div>
