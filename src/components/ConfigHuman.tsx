@@ -100,7 +100,8 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
               <TableRow
                 key={iLine.toString()}
                 id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}>
+                className={iLine == marker ? styles.MarkRow : ''}
+              >
                 <TableCell>{human.name}</TableCell>
                 <TableCell>{(human as Human).email}</TableCell>
               </TableRow>
@@ -125,28 +126,32 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           className={styles.Button}
           onClick={doDelPlayer}
           disabled={!hasSelect}
-          variant="contained">
+          variant="contained"
+        >
           Delete <Delete />
         </Button>
         <Button
           className={styles.Button}
           onClick={downloadPlayer}
           disabled={!hasSelect}
-          variant="contained">
+          variant="contained"
+        >
           Download <GetApp />
         </Button>
         <Button
           className={styles.Button}
           onClick={uploadPlayer}
           disabled={!hasSelect}
-          variant="contained">
+          variant="contained"
+        >
           Upload <Publish />
         </Button>
         <Button
           className={styles.Button}
           onClick={connectPlayer}
           disabled={!hasEmail}
-          variant="contained">
+          variant="contained"
+        >
           Connect <Language />
         </Button>
       </div>
@@ -155,7 +160,8 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           className={styles.Button}
           sx={{ backgroundColor: 'darkgreen' }}
           onClick={doAddPlayer}
-          variant="contained">
+          variant="contained"
+        >
           Add <Add />
         </Button>
         &nbsp;
