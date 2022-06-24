@@ -1,36 +1,98 @@
 import type { Move, ShortMove, Square } from 'chess.js';
-import Chess, { ChessInstance } from 'chess.js';
+import { Chess } from 'chess.js';
 
 export type Fen = string;
 export type GameWinner = 'b' | 'w' | null;
 export type { Square, Move, ShortMove };
 
-type ChessType = (fen?: string) => ChessInstance;
-const ChessImport = Chess as unknown;
-const Chess2 = ChessImport as ChessType;
+export const SQUARES: Square[] = [
+  'a8',
+  'b8',
+  'c8',
+  'd8',
+  'e8',
+  'f8',
+  'g8',
+  'h8',
+  'a7',
+  'b7',
+  'c7',
+  'd7',
+  'e7',
+  'f7',
+  'g7',
+  'h7',
+  'a6',
+  'b6',
+  'c6',
+  'd6',
+  'e6',
+  'f6',
+  'g6',
+  'h6',
+  'a5',
+  'b5',
+  'c5',
+  'd5',
+  'e5',
+  'f5',
+  'g5',
+  'h5',
+  'a4',
+  'b4',
+  'c4',
+  'd4',
+  'e4',
+  'f4',
+  'g4',
+  'h4',
+  'a3',
+  'b3',
+  'c3',
+  'd3',
+  'e3',
+  'f3',
+  'g3',
+  'h3',
+  'a2',
+  'b2',
+  'c2',
+  'd2',
+  'e2',
+  'f2',
+  'g2',
+  'h2',
+  'a1',
+  'b1',
+  'c1',
+  'd1',
+  'e1',
+  'f1',
+  'g1',
+  'h1',
+];
 
-export const SQUARES = Chess2().SQUARES;
-export const SQUARES2 = SQUARES.map(x => x.toString());
+const chess = new Chess();
 
 export const NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 export const CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';
 
 export const isNewGame = (fen: Fen): boolean => fen == NEW_GAME;
-export const isBlackTurn = (fen: Fen): boolean => Chess2(fen).turn() === 'b';
-export const isWhiteTurn = (fen: Fen): boolean => Chess2(fen).turn() === 'w';
-export const isCheck = (fen: Fen): boolean => Chess2(fen).in_check();
+export const isBlackTurn = (fen: Fen): boolean => Chess(fen).turn() === 'b';
+export const isWhiteTurn = (fen: Fen): boolean => Chess(fen).turn() === 'w';
+export const isCheck = (fen: Fen): boolean => Chess(fen).in_check();
 
 export const getGameWinner = (fen: Fen): GameWinner => {
-  const game = Chess2(fen);
+  const game = Chess(fen);
   return game.in_checkmate() ? (game.turn() === 'w' ? 'b' : 'w') : null;
 };
 
-export const isGameOver = (fen: Fen): boolean => Chess2(fen).game_over();
+export const isGameOver = (fen: Fen): boolean => Chess(fen).game_over();
 export const isEndMove: (san: string) => boolean = (san: string) =>
   san == '1-0' || san == '0-1' || san == '1/2-1/2' || san?.endsWith('#');
 
 export const isMoveable = (fen: Fen, from: Square): boolean =>
-  Chess2(fen).moves({ square: from }).length > 0;
+  Chess(fen).moves({ square: from }).length > 0;
 
 export const move = (
   fen: Fen,
@@ -38,19 +100,19 @@ export const move = (
   to: Square,
   promotion?: 'b' | 'n' | 'r' | 'q'
 ): [Fen, Move] | null => {
-  const game = Chess2(fen);
+  const game = Chess(fen);
   const action = game.move({ from, to, promotion: promotion ?? 'q' });
   return action ? [game.fen(), action] : null;
 };
 
 export const newFen: (fen: string, san: string) => string = (fen, san) => {
-  const game = Chess2(fen);
+  const game = Chess(fen);
   game.move(san);
   return game.fen();
 };
 
 export const replay = (moves: string[], to?: number): Fen => {
-  const game = Chess2(NEW_GAME);
+  const game = Chess(NEW_GAME);
   const n = to != undefined ? to : moves.length;
   for (let i = 0; i <= n; i++) {
     game.move(moves[i]);
@@ -58,10 +120,10 @@ export const replay = (moves: string[], to?: number): Fen => {
   return game.fen();
 };
 
-export const findInfoMarkers = (moves: string[], fen: string): string[] => {
-  const sqs: string[] = [];
+export const findInfoMarkers = (moves: string[], fen: string): Square[] => {
+  const sqs: Square[] = [];
   moves.forEach(san => {
-    const move = Chess2(fen).move(san);
+    const move = Chess(fen).move(san);
     if (move && !sqs.includes(move.from)) sqs.push(move.from);
     if (move && !sqs.includes(move.to)) sqs.push(move.to);
   });
@@ -144,5 +206,5 @@ export const rightwards: (i: number) => number = i => {
 export const leftSquare: (c: Square) => Square = (c: Square) =>
   SQUARES[leftwards(SQUARES.indexOf(c))];
 
-export const rightSquare: (c: string) => Square = (c: string) =>
-  SQUARES[rightwards(SQUARES2.indexOf(c))];
+export const rightSquare: (c: Square) => Square = (c: Square) =>
+  SQUARES[rightwards(SQUARES.indexOf(c))];

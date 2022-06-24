@@ -74,7 +74,8 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
           className={styles.Button}
           sx={{ backgroundColor: 'darkgreen' }}
           onClick={playAction}
-          variant="contained">
+          variant="contained"
+        >
           Play
           <PlayArrow />
         </Button>
@@ -86,7 +87,8 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
             className={styles.Button}
             sx={{ backgroundColor: 'darkgreen' }}
             onClick={endAction}
-            variant="contained">
+            variant="contained"
+          >
             End game
             <ExitToApp />
           </Button>
@@ -96,7 +98,8 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
           className={styles.Button}
           sx={{ backgroundColor: 'darkgreen' }}
           onClick={resetGame}
-          variant="contained">
+          variant="contained"
+        >
           Reset
           <Clear />
         </Button>

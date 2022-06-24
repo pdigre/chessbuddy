@@ -103,26 +103,27 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           </Button>
         </div>
       </div>
-      <div className={styles.AddSection}>
-        <Button
-          className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
-          onClick={addPlayerHandler}
-          variant="contained">
-          Add <Add />
-        </Button>{' '}
-        &nbsp;
+      <div>&nbsp;</div>
+      <div>
         <StyledSelector
           label="Chess Engine"
           choices={engineNames}
           selected={{ name: 'ConfigSelector', value: engine }}
           setSelected={setEngine}
-        />
-        <br />
+        />{' '}
+        &nbsp;
         <TextField label="Skill level" id="skill" size="medium" onChange={skillChange} /> &nbsp;
-        <TextField label="Depth (..not time)" id="depth" size="medium" onChange={depthChange} />
+        <TextField
+          label="Depth (..not time)"
+          id="depth"
+          size="medium"
+          onChange={depthChange}
+        />{' '}
         &nbsp;
         <TextField label="Time (sec)" id="time" size="medium" onChange={timeChange} /> &nbsp;
+        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
+          Add <Add />
+        </Button>
       </div>
     </div>
   );

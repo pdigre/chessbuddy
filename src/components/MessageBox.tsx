@@ -52,7 +52,8 @@ export const MessageBox = observer(({ messager }: { messager: Messager }) => {
       aria-labelledby="message"
       open={messager.title != undefined}
       onClose={handleClick}
-      className={styles.Dialog}>
+      className={styles.Dialog}
+    >
       <DialogTitle id="message">{messager.title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{messager.msg}</DialogContentText>
@@ -65,7 +66,8 @@ export const MessageBox = observer(({ messager }: { messager: Messager }) => {
             onClick={handleClick}
             color="primary"
             variant="contained"
-            size="large">
+            size="large"
+          >
             {x}
           </Button>
         ))}
