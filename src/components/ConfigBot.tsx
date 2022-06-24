@@ -105,7 +105,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
       </div>
       <div>&nbsp;</div>
       <div>
-        <ConfigSelector
+        <StyledSelector
           label="Chess Engine"
           choices={engineNames}
           selected={{ name: 'ConfigSelector', value: engine }}
