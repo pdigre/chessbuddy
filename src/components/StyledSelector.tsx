@@ -2,6 +2,7 @@ import React, { ChangeEvent } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
+import styles from '../styles.module.scss';
 
 export type SelectorProps = {
   label: string;
@@ -10,7 +11,7 @@ export type SelectorProps = {
   setSelected: (name: string) => void;
 };
 
-export const ConfigSelector: React.FC<SelectorProps> = ({
+export const StyledSelector: React.FC<SelectorProps> = ({
   label: label,
   choices: choices,
   selected: selected,
@@ -25,6 +26,7 @@ export const ConfigSelector: React.FC<SelectorProps> = ({
         {label}
       </InputLabel>
       <NativeSelect
+        className={styles.Selector}
         value={selected?.value as string}
         onChange={handleChange}
         inputProps={{

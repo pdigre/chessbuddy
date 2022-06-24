@@ -4,22 +4,23 @@ import styles from '../styles.module.scss';
 import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
-import { ConfigSelector } from './ConfigSelector';
-import { themes } from '../themes';
 
 export const ConfigDisplay = observer(({ config }: { config: Config }) => {
-  const themeNames = themes.map(x => x.name);
-  const setTheme = (name: string) => (config.theme = themeNames.indexOf(name));
+  /*
+    const themeNames = themes.map(x => x.name);
+    const setTheme = (name: string) => (config.theme = themeNames.indexOf(name));
+          <div>
+          <ConfigSelector
+            label="Theme"
+            choices={themeNames}
+            selected={{ name: themeNames[config.theme], value: themeNames[config.theme] }}
+            setSelected={setTheme}
+          />
+        </div>
+  
+       */
   return (
     <div className={styles.Config}>
-      <div>
-        <ConfigSelector
-          label="Theme"
-          choices={themeNames}
-          selected={{ name: themeNames[config.theme], value: themeNames[config.theme] }}
-          setSelected={setTheme}
-        />
-      </div>
       <div>
         <FormControlLabel
           control={
@@ -95,6 +96,7 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
       <div>
         <Button
           className={styles.Button}
+          sx={{ backgroundColor: 'darkgreen' }}
           variant="contained"
           onClick={() => (config.rotation = (config.rotation + 1) % 4)}
         >

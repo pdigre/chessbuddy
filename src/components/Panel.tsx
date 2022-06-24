@@ -55,9 +55,12 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
     <ButtonGroup
       color="primary"
       aria-label="outlined primary button group"
-      className={styles.Panel}
-    >
-      <Button className={styles.Button} onClick={playHandler} variant="contained">
+      className={styles.Panel}>
+      <Button
+        className={styles.Button}
+        sx={{ backgroundColor: 'darkgreen' }}
+        onClick={playHandler}
+        variant="contained">
         {isHistUndo || isPlayUndo ? (
           <Undo fontSize="large" />
         ) : gameState.isPlaying ? (
@@ -66,7 +69,11 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
           <Pause fontSize="large" />
         )}
       </Button>
-      <Button className={styles.Button} onClick={histHandler} variant="contained">
+      <Button
+        className={styles.Button}
+        sx={{ backgroundColor: 'darkgreen' }}
+        onClick={histHandler}
+        variant="contained">
         {isGotoHist ? (
           <Input fontSize="large" />
         ) : config.showHist ? (
@@ -75,7 +82,11 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
           <EventNote fontSize="large" />
         )}
       </Button>
-      <Button className={styles.Button} onClick={configHandler} variant="contained">
+      <Button
+        className={styles.Button}
+        sx={{ backgroundColor: 'darkgreen' }}
+        onClick={configHandler}
+        variant="contained">
         <Settings fontSize="large" />
       </Button>
     </ButtonGroup>

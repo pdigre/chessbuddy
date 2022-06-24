@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
-import { ConfigSelector } from './ConfigSelector';
+import { StyledSelector } from './StyledSelector';
 import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
 
@@ -76,31 +76,32 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
 
   return (
     <div className={styles.Config}>
-      <TableContainer className={styles.ConfigTableContainer}>
-        <Table size="small" className={styles.ConfigTable}>
-          <TableBody onClick={selectHandler}>
-            {bots.map((bot, iLine) => (
-              <TableRow
-                key={iLine.toString()}
-                id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}
-              >
-                <TableCell>{bot.name}</TableCell>
-              </TableRow>
-            ))}
-            <TableRow />
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div>
-        <Button
-          className={styles.Button}
-          onClick={delPlayerHandler}
-          variant="contained"
-          disabled={!hasSelect}
-        >
-          Delete <Delete />
-        </Button>
+      <div className={styles.ListSection}>
+        <TableContainer className={styles.ConfigTableContainer}>
+          <Table size="small" className={styles.ConfigTable}>
+            <TableBody onClick={selectHandler}>
+              {bots.map((bot, iLine) => (
+                <TableRow
+                  key={iLine.toString()}
+                  id={iLine.toString()}
+                  className={iLine == marker ? styles.MarkRow : ''}>
+                  <TableCell>{bot.name}</TableCell>
+                </TableRow>
+              ))}
+              <TableRow />
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <div>
+          <Button
+            className={styles.Button}
+            sx={{ backgroundColor: 'darkgreen' }}
+            onClick={delPlayerHandler}
+            variant="contained"
+            disabled={!hasSelect}>
+            Delete <Delete />
+          </Button>
+        </div>
       </div>
       <div>&nbsp;</div>
       <div>
