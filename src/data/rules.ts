@@ -72,7 +72,7 @@ export const SQUARES: Square[] = [
   'h1',
 ];
 
-const chess = new Chess();
+// const chess = new Chess();
 
 export const NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 export const CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';

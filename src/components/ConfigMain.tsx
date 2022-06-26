@@ -30,8 +30,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
         role="tabpanel"
         hidden={value !== index}
         id={`nav-tabpanel-${index}`}
-        aria-labelledby={`nav-tab-${index}`}
-      >
+        aria-labelledby={`nav-tab-${index}`}>
         {value === index && (
           <Box p={3}>
             <Typography>{children}</Typography>
@@ -73,8 +72,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
       open={config.showConfig}
       onClose={handleClose}
       maxWidth="xl"
-      className={styles.Dialog}
-    >
+      className={styles.Dialog}>
       <DialogTitle id="simple-dialog-title">Configure</DialogTitle>
 
       <AppBar position="static">
@@ -82,8 +80,7 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
           className={styles.ConfigTabs}
           value={value}
           onChange={handleChange}
-          aria-label="nav tabs example"
-        >
+          aria-label="nav tabs example">
           <LinkTab label="Game" {...linkProps(0)} />
           <LinkTab label="Display" {...linkProps(1)} />
           <LinkTab label="Humans" {...linkProps(2)} />

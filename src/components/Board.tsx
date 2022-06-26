@@ -83,7 +83,7 @@ export const Board = observer(
       return false;
     };
 
-    const onMovePiece = (from: Square, to: Square, piece: string) => {
+    const onMovePiece = (from: Square, to: Square) => {
       if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from) correct();
       config.startUndoTimer(game.log.length);
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
