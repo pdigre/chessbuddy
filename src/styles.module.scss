@@ -10,7 +10,7 @@ body {
 
 .App {
   width: 1020px;
-  height: 810px;
+  height: 768px;
   background-color: rgb(225, 255, 225);
   border-width: 0;
   display: flex;
@@ -57,9 +57,9 @@ body {
 .Player,
 .PlayerRight {
   height: 40px;
-  font-size: 1.5em;
+  font-size: 1.2em;
   margin: 0px;
-  padding: 5px;
+  padding: 4px;
 }
 
 .PlayerRight {
