@@ -102,8 +102,7 @@ export const History = observer(
               <td
                 id={id.toString()}
                 key={id.toString()}
-                className={id == config.markLog ? styles.MarkCell : ''}
-              >
+                className={id == config.markLog ? styles.MarkCell : ''}>
                 {col}
               </td>
             );
@@ -135,8 +134,7 @@ export const History = observer(
             <tr
               key={iRow.toString()}
               id={iRow.toString()}
-              className={iRow == config.markHist ? styles.MarkRow : ''}
-            >
+              className={iRow == config.markHist ? styles.MarkRow : ''}>
               <td>{tim}</td>
               <td>{cols[1].split(' ')[0]}</td>
               <td>{cols[2].split(' ')[0]}</td>
