@@ -6,7 +6,7 @@ import { makeAutoObservable } from 'mobx';
 export class Rendering {
   iPad = navigator.userAgent.includes('(iPad;');
   boardWidth = 680;
-  height = 768;
+  height = 750;
 
   constructor() {
     makeAutoObservable(this);
