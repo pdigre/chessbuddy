@@ -1,7 +1,7 @@
 import React from 'react';
 import { game, gameHistory, gameState } from './data/game';
 import { config } from './data/config';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@material-tailwind/react';
 import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
@@ -10,7 +10,7 @@ import { CP } from './components/CP';
 import { ConfigMain } from './components/ConfigMain';
 import { Board } from './components/Board';
 import { PlayerInfo } from './components/PlayerInfo';
-import { MessageBox, messager } from './components/MessageBox';
+import { MessageBox, messageDialog } from './components/MessageBox';
 import { helper } from './data/helper';
 import { About } from './components/About';
 import { rendering } from './data/rendering';
@@ -18,14 +18,18 @@ import { refreshtimer } from './data/refreshtimer';
 import { playall } from './components/Emotion';
 import { Refresh } from '@mui/icons-material';
 import packageInfo from '../package.json';
-import { themes } from './themes';
 
 const App: React.FC = () => {
-  const about = () => messager.display('About', <About />);
+  const about = () => messageDialog.display('About', <About />);
   const version = packageInfo.version;
-  const theme = createTheme(themes[0].theme);
+
+  const customTheme = {
+    defaultProps: {},
+    valid: {},
+    styles: {},
+  };
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider value={customTheme}>
       <div className={styles.App}>
         <CP helper={helper} rendering={rendering} config={config} />
         <div className={styles.AppLeft}>
@@ -48,7 +52,7 @@ const App: React.FC = () => {
           <FenInfo game={game} />
           <History game={game} gameHistory={gameHistory} config={config} />
         </div>
-        <MessageBox messager={messager} />
+        <MessageBox messageDialog={messageDialog} />
         <ConfigMain config={config} />
       </div>
     </ThemeProvider>

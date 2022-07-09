@@ -3,9 +3,9 @@ import { config } from '../data/config';
 import * as rules from '../data/rules';
 import { StyledSelector } from './StyledSelector';
 import styles from '../styles.module.scss';
-import { Button } from '@mui/material';
+import { Button } from '@material-tailwind/react';
 import { Clear, ExitToApp, PlayArrow } from '@mui/icons-material';
-import { messager } from './MessageBox';
+import { messageDialog } from './MessageBox';
 import { game, gameState } from '../data/game';
 import { observer } from 'mobx-react';
 import { Players } from '../data/players';
@@ -34,20 +34,20 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
     } else if (yes == 'Draw') {
       game.playMove('1/2-1/2');
     }
-    messager.clear();
+    messageDialog.clear();
   };
 
   const endAction = () => {
     const winner = rules.whoWon(game.log);
     if (winner) {
-      messager.display(
+      messageDialog.display(
         'Game has ended',
         <div>{winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'}</div>
       );
     } else {
       const white = 'White - ' + game.white;
       const black = 'Black - ' + game.black;
-      messager.display('End game', 'Who won?', [white, 'Draw', black], recordScore);
+      messageDialog.display('End game', 'Who won?', [white, 'Draw', black], recordScore);
     }
   };
 
@@ -72,9 +72,9 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
       <div>
         <Button
           className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
+          style={{ backgroundColor: 'darkgreen' }}
           onClick={playAction}
-          variant="contained">
+          variant="filled">
           Play
           <PlayArrow />
         </Button>
@@ -84,9 +84,9 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         ) : (
           <Button
             className={styles.Button}
-            sx={{ backgroundColor: 'darkgreen' }}
+            style={{ backgroundColor: 'darkgreen' }}
             onClick={endAction}
-            variant="contained">
+            variant="filled">
             End game
             <ExitToApp />
           </Button>
@@ -94,9 +94,9 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         &nbsp;
         <Button
           className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
+          style={{ backgroundColor: 'darkgreen' }}
           onClick={resetGame}
-          variant="contained">
+          variant="filled">
           Reset
           <Clear />
         </Button>

@@ -1,7 +1,5 @@
-import React, { ChangeEvent } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import NativeSelect from '@mui/material/NativeSelect';
+import React, { ChangeEvent, ReactNode } from 'react';
+import { Select, Option } from '@material-tailwind/react';
 import styles from '../styles.module.scss';
 
 export type SelectorProps = {
@@ -17,29 +15,22 @@ export const StyledSelector: React.FC<SelectorProps> = ({
   selected: selected,
   setSelected: setSelected,
 }) => {
-  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelected(event.target.value as string);
+  const handleChange = (value: ReactNode) => {
+    setSelected(value as string);
   };
   return (
-    <FormControl variant="filled">
-      <InputLabel variant="standard" htmlFor={label}>
-        {label}
-      </InputLabel>
-      <NativeSelect
-        className={styles.Selector}
-        value={selected?.value as string}
-        onChange={handleChange}
-        inputProps={{
-          name: label,
-          id: 'for',
-        }}>
-        <option aria-label="None" value="" />
+    <form>
+      <label htmlFor={label}>{label}</label>
+      <Select className={styles.Selector} value={selected?.value as string} onChange={handleChange}>
+        <Option key="1" value="1">
+          {' '}
+        </Option>
         {choices.map(name => (
-          <option key={name} value={name}>
+          <Option key={name} value={name}>
             {name}
-          </option>
+          </Option>
         ))}
-      </NativeSelect>
-    </FormControl>
+      </Select>
+    </form>
   );
 };

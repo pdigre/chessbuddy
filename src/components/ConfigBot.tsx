@@ -2,19 +2,11 @@ import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Bot, UCI_ENGINES } from '../data/bots';
 import { Players } from '../data/players';
 import styles from '../styles.module.scss';
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-} from '@mui/material';
+import { Button, Input } from '@material-tailwind/react';
 import { Add, Delete } from '@mui/icons-material';
 import { StyledSelector } from './StyledSelector';
 import { observer } from 'mobx-react';
-import { messager } from './MessageBox';
+import { messageDialog } from './MessageBox';
 
 export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [engine, setEngine] = React.useState('');
@@ -23,26 +15,26 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [time, setTime] = useState('');
   const addPlayerHandler = () => {
     if (!engine) {
-      messager.display('Add Bot', 'Need to select a chess engine');
+      messageDialog.display('Add Bot', 'Need to select a chess engine');
       return;
     }
     const nSkill = Number.parseInt(skill);
     if (isNaN(nSkill) || nSkill < 1 || nSkill > 20) {
-      messager.display('Add Bot', 'Need to enter skill level between 1 and 20');
+      messageDialog.display('Add Bot', 'Need to enter skill level between 1 and 20');
       return;
     }
     const nDepth = Number.parseInt(depth);
     if (!time.length == !depth.length) {
-      messager.display('Add Bot', 'Need to enter time or depth, but not both');
+      messageDialog.display('Add Bot', 'Need to enter time or depth, but not both');
       return;
     }
     if (depth.length && (isNaN(nDepth) || nDepth < 6 || nDepth > 30)) {
-      messager.display('Add Bot', 'Need to enter depth between 6 and 30');
+      messageDialog.display('Add Bot', 'Need to enter depth between 6 and 30');
       return;
     }
     const nTime = Number.parseInt(time);
     if (time.length && (isNaN(nTime) || nTime < 1 || nTime > 60)) {
-      messager.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
+      messageDialog.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
       return;
     }
     players.addPlayer(`Bot:${engine}:${skill}:${time}:${depth}`);
@@ -77,33 +69,33 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   return (
     <div className={styles.Config}>
       <div className={styles.ListSection}>
-        <TableContainer className={styles.ConfigTableContainer}>
-          <Table size="small" className={styles.ConfigTable}>
-            <TableBody onClick={selectHandler}>
+        <div className={styles.ConfigTableContainer}>
+          <table className={styles.ConfigTable}>
+            <tbody onClick={selectHandler}>
               {bots.map((bot, iLine) => (
-                <TableRow
+                <tr
                   key={iLine.toString()}
                   id={iLine.toString()}
                   className={iLine == marker ? styles.MarkRow : ''}>
-                  <TableCell>{bot.name}</TableCell>
-                </TableRow>
+                  <td>{bot.name}</td>
+                </tr>
               ))}
-              <TableRow />
-            </TableBody>
-          </Table>
-        </TableContainer>
+              <tr />
+            </tbody>
+          </table>
+        </div>
         <div>
           <Button
             className={styles.Button}
-            sx={{ backgroundColor: 'darkgreen' }}
+            style={{ backgroundColor: 'darkgreen' }}
             onClick={delPlayerHandler}
-            variant="contained"
+            variant="filled"
             disabled={!hasSelect}>
             Delete <Delete />
           </Button>
         </div>
       </div>
-      <div>&nbsp;</div>
+      <div></div>
       <div>
         <StyledSelector
           label="Chess Engine"
@@ -111,17 +103,10 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           selected={{ name: 'ConfigSelector', value: engine }}
           setSelected={setEngine}
         />{' '}
-        &nbsp;
-        <TextField label="Skill level" id="skill" size="medium" onChange={skillChange} /> &nbsp;
-        <TextField
-          label="Depth (..not time)"
-          id="depth"
-          size="medium"
-          onChange={depthChange}
-        />{' '}
-        &nbsp;
-        <TextField label="Time (sec)" id="time" size="medium" onChange={timeChange} /> &nbsp;
-        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
+        <Input label="Skill level" id="skill" onChange={skillChange} />
+        <Input label="Depth (..not time)" id="depth" onChange={depthChange} />
+        <Input label="Time (sec)" id="time" onChange={timeChange} />
+        <Button className={styles.Button} onClick={addPlayerHandler} variant="filled">
           Add <Add />
         </Button>
       </div>

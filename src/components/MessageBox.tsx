@@ -1,17 +1,10 @@
 import React, { MouseEvent } from 'react';
 import styles from '../styles.module.scss';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
 import { makeAutoObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
-export class Messager {
+export class MessageDialog {
   title?: string;
   msg?: JSX.Element;
   buttons?: string[];
@@ -34,42 +27,37 @@ export class Messager {
     this.title = title;
     this.msg = (msg instanceof Element ? msg : <div>{msg}</div>) as JSX.Element;
     this.buttons = buttons;
-    this.response = response ?? (() => messager.clear());
+    this.response = response ?? (() => messageDialog.clear());
   };
 }
 
-export const messager = new Messager();
+export const messageDialog = new MessageDialog();
 
-export const MessageBox = observer(({ messager }: { messager: Messager }) => {
+export const MessageBox = observer(({ messageDialog }: { messageDialog: MessageDialog }) => {
   const handleClick = (event: MouseEvent) => {
-    if (messager.response) {
-      messager.response((event.target as HTMLButtonElement).innerHTML);
+    if (!event) {
+      messageDialog.clear();
+    }
+    if (messageDialog.response) {
+      messageDialog.response((event.target as HTMLButtonElement).innerHTML);
     }
   };
 
   return (
     <Dialog
       aria-labelledby="message"
-      open={messager.title != undefined}
-      onClose={handleClick}
+      open={messageDialog.title != undefined}
+      handler={handleClick}
       className={styles.Dialog}>
-      <DialogTitle id="message">{messager.title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{messager.msg}</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        {messager.buttons?.map(x => (
-          <Button
-            key={x}
-            autoFocus
-            onClick={handleClick}
-            color="primary"
-            variant="contained"
-            size="large">
+      <DialogHeader id="message">{messageDialog.title}</DialogHeader>
+      <DialogBody>{messageDialog.msg}</DialogBody>
+      <DialogFooter>
+        {messageDialog.buttons?.map(x => (
+          <Button key={x} autoFocus onClick={handleClick} variant="filled">
             {x}
           </Button>
         ))}
-      </DialogActions>
+      </DialogFooter>
     </Dialog>
   );
 });

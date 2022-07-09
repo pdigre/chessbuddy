@@ -1,7 +1,7 @@
 import React from 'react';
 import { Config } from '../data/config';
 import styles from '../styles.module.scss';
-import { Button, Checkbox, FormControlLabel } from '@mui/material';
+import { Button, Checkbox } from '@material-tailwind/react';
 import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 
@@ -22,82 +22,58 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   return (
     <div className={styles.Config}>
       <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={config.showFacts}
-              onChange={() => (config.showFacts = !config.showFacts)}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
-          }
-          label="Show openings information"
+        <Checkbox
+          name="1"
+          checked={config.showFacts}
+          onChange={() => (config.showFacts = !config.showFacts)}
         />
+        <label htmlFor="1">Show openings information</label>
       </div>
       <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={config.showHints}
-              onChange={() => (config.showHints = !config.showHints)}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
-          }
-          label="Training mode / Stockfish suggestions"
+        <Checkbox
+          name="2"
+          checked={config.showHints}
+          onChange={() => (config.showHints = !config.showHints)}
         />
+        <label htmlFor="2">Training mode / Stockfish suggestions</label>
       </div>
       <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={config.showCP}
-              onChange={() => (config.showCP = !config.showCP)}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
-          }
-          label="Show CP - CentiPawns estimate"
+        <Checkbox
+          name="3"
+          checked={config.showCP}
+          onChange={() => (config.showCP = !config.showCP)}
         />
+        <label htmlFor="3">Training mode / Stockfish suggestions</label>
       </div>
       <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={config.playCorrect}
-              onChange={() => (config.playCorrect = !config.playCorrect)}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
-          }
-          label="Play giphy for correct moves"
+        <Checkbox
+          name="4"
+          checked={config.playCorrect}
+          onChange={() => (config.playCorrect = !config.playCorrect)}
         />
+        <label htmlFor="4">Play giphy for correct moves</label>
       </div>
       <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={config.playMistake}
-              onChange={() => (config.playMistake = !config.playMistake)}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
-          }
-          label="Play giphy for big mistake"
+        <Checkbox
+          name="5"
+          checked={config.playMistake}
+          onChange={() => (config.playMistake = !config.playMistake)}
         />
+        <label htmlFor="5">Play giphy for big mistake</label>
       </div>
       <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={config.playWinner}
-              onChange={() => (config.playWinner = !config.playWinner)}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
-          }
-          label="Play giphy when game ends"
+        <Checkbox
+          name="6"
+          checked={config.playWinner}
+          onChange={() => (config.playWinner = !config.playWinner)}
         />
+        <label htmlFor="6">Play giphy for correct moves</label>
       </div>
       <div>
         <Button
           className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
-          variant="contained"
+          style={{ backgroundColor: 'darkgreen' }}
+          variant="filled"
           onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
           Rotate chessboard <RotateRight />
         </Button>

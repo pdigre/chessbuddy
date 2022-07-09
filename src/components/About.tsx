@@ -1,22 +1,21 @@
 import React from 'react';
-import { Link } from '@mui/material';
 
 export const About: React.FC = () => (
   <div>
     This chess program is open source and available at github.
     <ul>
       <li>
-        <Link href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noopener">
+        <a href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noopener noreferrer">
           Github pdigre/chessbuddy
-        </Link>
+        </a>
       </li>
       <li>
-        <Link
+        <a
           href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
           target="_blank"
-          rel="noopener">
+          rel="noopener noreferrer">
           User Guide / instructions
-        </Link>
+        </a>
       </li>
     </ul>
   </div>

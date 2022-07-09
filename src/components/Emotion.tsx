@@ -1,5 +1,5 @@
 import React from 'react';
-import { messager } from './MessageBox';
+import { messageDialog } from './MessageBox';
 
 const winner_urls = [
   <iframe
@@ -120,11 +120,11 @@ export const mistake = (): void => emotion('Mistake', mistake_urls, 6);
 export const playall = (): void => {
   prev++;
   if (prev == all_urls.length) prev = 0;
-  window.setTimeout(() => messager.clear(), 9000);
-  messager.display('Url:' + all_urls[prev].key, <div>{all_urls[prev]}</div>);
+  window.setTimeout(() => messageDialog.clear(), 9000);
+  messageDialog.display('Url:' + all_urls[prev].key, <div>{all_urls[prev]}</div>);
 };
 
 const emotion = (title: string, html: JSX.Element[], time: number) => {
-  window.setTimeout(() => messager.clear(), time * 1000);
-  messager.display(title, <div>{html[Math.floor(Math.random() * html.length)]}</div>);
+  window.setTimeout(() => messageDialog.clear(), time * 1000);
+  messageDialog.display(title, <div>{html[Math.floor(Math.random() * html.length)]}</div>);
 };

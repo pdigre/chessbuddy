@@ -1,7 +1,7 @@
 import React, { MouseEvent, TouchEvent, useRef } from 'react';
 import styles from '../styles.module.scss';
 import * as rules from '../data/rules';
-import { messager } from './MessageBox';
+import { messageDialog } from './MessageBox';
 import { GameHistory, Game, gameState } from '../data/game';
 import { observer } from 'mobx-react';
 import { Config } from '../data/config';
@@ -23,17 +23,22 @@ export const History = observer(
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
         const moves = games[config.markHist].split(';')[5].split(' ');
-        messager.display('Load game', 'Do you want to look at this game?', ['Yes', 'No'], reply => {
-          if (reply == 'Yes') {
-            game.log = moves;
-            const mark = moves.length - 1;
-            config.markLog = mark;
-            game.fen = rules.replay(moves, mark);
+        messageDialog.display(
+          'Load game',
+          'Do you want to look at this game?',
+          ['Yes', 'No'],
+          reply => {
+            if (reply == 'Yes') {
+              game.log = moves;
+              const mark = moves.length - 1;
+              config.markLog = mark;
+              game.fen = rules.replay(moves, mark);
+            }
+            messageDialog.clear();
           }
-          messager.clear();
-        });
+        );
       } else {
-        messager.display('Load game', 'You have to end current game to load previous games', [
+        messageDialog.display('Load game', 'You have to end current game to load previous games', [
           'Ok',
         ]);
       }

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, ButtonGroup } from '@mui/material';
+import React, { ReactElement } from 'react';
+import { Button } from '@material-tailwind/react';
 import { EventNote, Input, Pause, PlayArrow, Settings, Timeline, Undo } from '@mui/icons-material';
 import styles from '../styles.module.scss';
 import * as rules from '../data/rules';
@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import { game, GameState } from '../data/game';
 import { refreshtimer } from '../data/refreshtimer';
 import { Config } from '../data/config';
-import { messager } from './MessageBox';
+import { messageDialog } from './MessageBox';
 import { helper } from '../data/helper';
 
 export const Panel = observer(({ gameState, config }: { gameState: GameState; config: Config }) => {
@@ -17,14 +17,14 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
     const isHistUndo = !config.showHist && config.markLog >= 0;
     const isPlayUndo = gameState.isPlaying && config.showUndo;
     if (isHistUndo || isPlayUndo) {
-      messager.display(
+      messageDialog.display(
         'Undo',
         isPlayUndo
           ? 'Do you want to undo last move?'
           : 'Do you want to revert the game to the marked position?',
         ['Yes', 'No'],
         yes => {
-          messager.clear();
+          messageDialog.clear();
           if (yes == 'Yes') {
             game.log = game.log.slice(0, isPlayUndo ? config.undopos : config.markLog);
             game.fen = rules.replay(game.log);
@@ -51,16 +51,20 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
   const isHistUndo = !config.showHist && config.markLog >= 0;
   const isPlayUndo = gameState.isPlaying && config.showUndo;
 
-  return (
-    <ButtonGroup
-      color="primary"
-      aria-label="outlined primary button group"
-      className={styles.Panel}>
+  const PanelButton = (props: { children: ReactElement; onClick: () => void }) => {
+    return (
       <Button
-        className={styles.Button}
-        sx={{ backgroundColor: 'darkgreen' }}
-        onClick={playHandler}
-        variant="contained">
+        className="h-12 flex-grow bg-green-700 text-black rounded-lg"
+        onClick={props.onClick}
+        variant="filled">
+        {props.children}
+      </Button>
+    );
+  };
+
+  return (
+    <div className="flex gap-1 w-full">
+      <PanelButton onClick={playHandler}>
         {isHistUndo || isPlayUndo ? (
           <Undo fontSize="large" />
         ) : gameState.isPlaying ? (
@@ -68,12 +72,8 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
         ) : (
           <Pause fontSize="large" />
         )}
-      </Button>
-      <Button
-        className={styles.Button}
-        sx={{ backgroundColor: 'darkgreen' }}
-        onClick={histHandler}
-        variant="contained">
+      </PanelButton>
+      <PanelButton onClick={histHandler}>
         {isGotoHist ? (
           <Input fontSize="large" />
         ) : config.showHist ? (
@@ -81,14 +81,10 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
         ) : (
           <EventNote fontSize="large" />
         )}
-      </Button>
-      <Button
-        className={styles.Button}
-        sx={{ backgroundColor: 'darkgreen' }}
-        onClick={configHandler}
-        variant="contained">
+      </PanelButton>
+      <PanelButton onClick={configHandler}>
         <Settings fontSize="large" />
-      </Button>
-    </ButtonGroup>
+      </PanelButton>
+    </div>
   );
 });

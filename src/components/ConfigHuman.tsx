@@ -2,19 +2,11 @@ import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'rea
 import { Human, Players } from '../data/players';
 import { Server } from '../data/server';
 import styles from '../styles.module.scss';
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-} from '@mui/material';
+import { Button, Input } from '@material-tailwind/react';
 import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../data/game';
-import { messager } from './MessageBox';
+import { messageDialog } from './MessageBox';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
   const [name, setName] = useState('');
@@ -69,7 +61,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
       players.addPlayer(`Human:${name}:${email}`);
       players.save();
     } else {
-      messager.display('Add Human', 'Need to enter a name');
+      messageDialog.display('Add Human', 'Need to enter a name');
     }
   };
 
@@ -93,22 +85,22 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
   };
   return (
     <div className={styles.Config}>
-      <TableContainer className={styles.ConfigTableContainer}>
-        <Table size="small" className={styles.ConfigTable}>
-          <TableBody onClick={doSelect}>
+      <div className={styles.ConfigTableContainer}>
+        <table className={styles.ConfigTable}>
+          <tbody onClick={doSelect}>
             {humans.map((human, iLine) => (
-              <TableRow
+              <tr
                 key={iLine.toString()}
                 id={iLine.toString()}
                 className={iLine == marker ? styles.MarkRow : ''}>
-                <TableCell>{human.name}</TableCell>
-                <TableCell>{(human as Human).email}</TableCell>
-              </TableRow>
+                <td>{human.name}</td>
+                <td>{(human as Human).email}</td>
+              </tr>
             ))}
-            <TableRow />
-          </TableBody>
-        </Table>
-      </TableContainer>
+            <tr />
+          </tbody>
+        </table>
+      </div>
       <a className={styles.Hidden} download="games.txt" href={downloadLink} ref={downloadRef}>
         download it
       </a>
@@ -125,45 +117,45 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           className={styles.Button}
           onClick={doDelPlayer}
           disabled={!hasSelect}
-          variant="contained">
+          variant="filled">
           Delete <Delete />
         </Button>
         <Button
           className={styles.Button}
           onClick={downloadPlayer}
           disabled={!hasSelect}
-          variant="contained">
+          variant="filled">
           Download <GetApp />
         </Button>
         <Button
           className={styles.Button}
           onClick={uploadPlayer}
           disabled={!hasSelect}
-          variant="contained">
+          variant="filled">
           Upload <Publish />
         </Button>
         <Button
           className={styles.Button}
           onClick={connectPlayer}
           disabled={!hasEmail}
-          variant="contained">
+          variant="filled">
           Connect <Language />
         </Button>
       </div>
       <div className={styles.AddSection}>
         <Button
           className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
+          style={{ backgroundColor: 'darkgreen' }}
           onClick={doAddPlayer}
-          variant="contained">
+          variant="filled">
           Add <Add />
         </Button>
         &nbsp;
-        <TextField label="Player Name" id="name" size="medium" onChange={changeName} />
+        <Input label="Player Name" id="name" onChange={changeName} />
         &nbsp;
-        <TextField label="Player Email" id="email" size="medium" onChange={changeEmail} />
+        <Input label="Player Email" id="email" onChange={changeEmail} />
         &nbsp;
-        <Button className={styles.Button} onClick={doAddPlayer} variant="contained">
+        <Button className={styles.Button} onClick={doAddPlayer} variant="filled">
           Add <Add />
         </Button>
       </div>

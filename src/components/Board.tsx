@@ -6,7 +6,7 @@ import { game, GameState } from '../data/game';
 import { Chessboard } from 'react-chessboard';
 import { Config } from '../data/config';
 import { RefreshTimer } from '../data/refreshtimer';
-import { messager } from './MessageBox';
+import { messageDialog } from './MessageBox';
 import { Rendering } from '../data/rendering';
 import { observer } from 'mobx-react';
 import { correct } from './Emotion';
@@ -54,14 +54,14 @@ export const Board = observer(
         const action = move[1];
         if (action.promotion && isHuman) {
           const buttons = ['Queen', 'Rook', 'Knight', 'Bishop'];
-          messager.display('Promotion', 'Choose promotion piece', buttons, reply => {
+          messageDialog.display('Promotion', 'Choose promotion piece', buttons, reply => {
             let promo: 'b' | 'q' | 'n' | 'r' = 'q';
             if (reply == 'Rook') promo = 'r';
             if (reply == 'Knight') promo = 'n';
             if (reply == 'Bishop') promo = 'b';
             const move = rules.move(game.fen, from, to, promo);
             if (move != null) {
-              messager.clear();
+              messageDialog.clear();
               game.playMove(move[1].san);
             }
           });
