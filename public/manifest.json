@@ -13,7 +13,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "https://chessbuddy.net/",
+  "start_url": "/",
   "background_color": "#3367D6",
   "display": "fullscreen",
   "scope": "/",
@@ -24,7 +24,7 @@
       "name": "Play chess",
       "short_name": "Chess",
       "description": "Open ChessBuddy",
-      "url": "https://chessbuddy.net/",
+      "url": "/",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ],
@@ -34,6 +34,6 @@
       "src": "/screenshot.png",
       "type": "image/png",
       "sizes": "1081x687"
-    },
+    }
   ]
 }
