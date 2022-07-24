@@ -9,8 +9,8 @@ body {
 }
 
 .App {
-  width: 1020px;
-  height: 810px;
+  width: 1024px;
+  height: 748px;
   background-color: rgb(225, 255, 225);
   border-width: 0;
   display: flex;
@@ -56,10 +56,10 @@ body {
 
 .Player,
 .PlayerRight {
-  height: 40px;
-  font-size: 1.5em;
-  margin: 0px;
-  padding: 5px;
+  height: 25px;
+  font-size: 1.3em;
+  margin: 0;
+  padding: 4px;
 }
 
 .PlayerRight {
@@ -208,40 +208,6 @@ body {
 // Use Safari with full screen
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .App {
-    width: 1024px;
-    height: 810px;
     background-color: rgb(240, 223, 223);
-  }
-  .CP {
-    width: 16px;
-  }
-  .AppLeft {
-    width: 604px;
-  }
-
-  .AppRight {
-    width: 404px;
-  }
-
-  .Player,
-  .PlayerRight {
-    height: 27px;
-  }
-  .Log td:first-child {
-    width: 110px;
-  }
-  .Log td:last-child {
-    width: 20px;
-  }
-  .NumberCell {
-    width: 20px;
-  }
-  .Button {
-    height: 56px;
-    background-color: darkgreen;
-  }
-  .Config {
-    width: 650px;
-    height: 400px;
   }
 }
