@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from '../styles.module.scss';
-import { Game } from '../data/game';
-import { toMMSS } from '../data/library';
-import { timeKeeper } from '../data/timekeeper';
+import { Game } from '../logic/game';
+import { toMMSS } from '../logic/library';
+import { timeKeeper } from '../logic/timekeeper';
 import { observer } from 'mobx-react';
-import { Config } from '../data/config';
+import { Config } from '../logic/config';
 
 export const PlayerInfo = observer(
   ({ isTop, game, config }: { isTop: boolean; game: Game; config: Config }) => {

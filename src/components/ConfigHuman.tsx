@@ -1,6 +1,6 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import { Human, Players } from '../data/players';
-import { Server } from '../data/server';
+import { Human, Players } from '../logic/players';
+import { Server } from '../logic/server';
 import styles from '../styles.module.scss';
 import {
   Button,
@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
-import { gameHistory } from '../data/game';
+import { gameHistory } from '../logic/game';
 import { messager } from './MessageBox';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
@@ -100,8 +100,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
               <TableRow
                 key={iLine.toString()}
                 id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}
-              >
+                className={iLine == marker ? styles.MarkRow : ''}>
                 <TableCell>{human.name}</TableCell>
                 <TableCell>{(human as Human).email}</TableCell>
               </TableRow>
@@ -126,32 +125,28 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           className={styles.Button}
           onClick={doDelPlayer}
           disabled={!hasSelect}
-          variant="contained"
-        >
+          variant="contained">
           Delete <Delete />
         </Button>
         <Button
           className={styles.Button}
           onClick={downloadPlayer}
           disabled={!hasSelect}
-          variant="contained"
-        >
+          variant="contained">
           Download <GetApp />
         </Button>
         <Button
           className={styles.Button}
           onClick={uploadPlayer}
           disabled={!hasSelect}
-          variant="contained"
-        >
+          variant="contained">
           Upload <Publish />
         </Button>
         <Button
           className={styles.Button}
           onClick={connectPlayer}
           disabled={!hasEmail}
-          variant="contained"
-        >
+          variant="contained">
           Connect <Language />
         </Button>
       </div>
@@ -160,8 +155,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           className={styles.Button}
           sx={{ backgroundColor: 'darkgreen' }}
           onClick={doAddPlayer}
-          variant="contained"
-        >
+          variant="contained">
           Add <Add />
         </Button>
         &nbsp;

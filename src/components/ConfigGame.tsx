@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { config } from '../data/config';
-import * as rules from '../data/rules';
+import { config } from '../logic/config';
+import * as rules from '../logic/rules';
 import { StyledSelector } from './StyledSelector';
 import styles from '../styles.module.scss';
 import { Button } from '@mui/material';
 import { Clear, ExitToApp, PlayArrow } from '@mui/icons-material';
 import { messager } from './MessageBox';
-import { game, gameState } from '../data/game';
+import { game, gameState } from '../logic/game';
 import { observer } from 'mobx-react';
-import { Players } from '../data/players';
+import { Players } from '../logic/players';
 
 export const ConfigGame = observer(({ players }: { players: Players }) => {
   const [white, setWhite] = useState(game.white);
@@ -74,8 +74,7 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
           className={styles.Button}
           sx={{ backgroundColor: 'darkgreen' }}
           onClick={playAction}
-          variant="contained"
-        >
+          variant="contained">
           Play
           <PlayArrow />
         </Button>
@@ -87,8 +86,7 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
             className={styles.Button}
             sx={{ backgroundColor: 'darkgreen' }}
             onClick={endAction}
-            variant="contained"
-          >
+            variant="contained">
             End game
             <ExitToApp />
           </Button>
@@ -98,8 +96,7 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
           className={styles.Button}
           sx={{ backgroundColor: 'darkgreen' }}
           onClick={resetGame}
-          variant="contained"
-        >
+          variant="contained">
           Reset
           <Clear />
         </Button>

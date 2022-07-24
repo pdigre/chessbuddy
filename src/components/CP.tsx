@@ -1,10 +1,12 @@
 import React from 'react';
 import styles from '../styles.module.scss';
 import { observer } from 'mobx-react';
-import { Helper } from '../data/helper';
-import { Rendering } from '../data/rendering';
-import { Config } from '../data/config';
+import { Helper } from '../logic/helper';
+import { Rendering } from '../logic/rendering';
+import { Config } from '../logic/config';
 import { mistake } from './Emotion';
+import { game, gameState } from '../logic/game';
+import { locate } from '../logic/openings';
 
 let prevcp = 0;
 
@@ -14,7 +16,7 @@ export const CP = observer(
       return <div className={styles.CP}></div>;
     }
     const cp = helper.cp;
-    if (Math.abs(cp - prevcp) > 100) mistake();
+    if (Math.abs(cp - prevcp) > 100 && gameState.isPlaying && !locate(game.log)) mistake();
     prevcp = cp;
     const blackTop = config.rotation > 1;
     const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);

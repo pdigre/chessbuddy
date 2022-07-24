@@ -1,6 +1,6 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
-import { Bot, UCI_ENGINES } from '../data/bots';
-import { Players } from '../data/players';
+import { Bot, UCI_ENGINES } from '../logic/bots';
+import { Players } from '../logic/players';
 import styles from '../styles.module.scss';
 import {
   Button,

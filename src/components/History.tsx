@@ -1,12 +1,12 @@
 import React, { MouseEvent, TouchEvent, useRef } from 'react';
 import styles from '../styles.module.scss';
-import * as rules from '../data/rules';
+import * as rules from '../logic/rules';
 import { messager } from './MessageBox';
-import { GameHistory, Game, gameState } from '../data/game';
+import { GameHistory, Game, gameState } from '../logic/game';
 import { observer } from 'mobx-react';
-import { Config } from '../data/config';
-import { refreshtimer } from '../data/refreshtimer';
-import { helper } from '../data/helper';
+import { Config } from '../logic/config';
+import { refreshtimer } from '../logic/refreshtimer';
+import { helper } from '../logic/helper';
 
 export const History = observer(
   ({ game, gameHistory, config }: { game: Game; gameHistory: GameHistory; config: Config }) => {
@@ -102,8 +102,7 @@ export const History = observer(
               <td
                 id={id.toString()}
                 key={id.toString()}
-                className={id == config.markLog ? styles.MarkCell : ''}
-              >
+                className={id == config.markLog ? styles.MarkCell : ''}>
                 {col}
               </td>
             );
@@ -135,8 +134,7 @@ export const History = observer(
             <tr
               key={iRow.toString()}
               id={iRow.toString()}
-              className={iRow == config.markHist ? styles.MarkRow : ''}
-            >
+              className={iRow == config.markHist ? styles.MarkRow : ''}>
               <td>{tim}</td>
               <td>{cols[1].split(' ')[0]}</td>
               <td>{cols[2].split(' ')[0]}</td>

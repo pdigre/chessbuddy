@@ -1,5 +1,5 @@
 import React from 'react';
-import { Config } from '../data/config';
+import { Config } from '../logic/config';
 import styles from '../styles.module.scss';
 import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import { RotateRight } from '@mui/icons-material';
@@ -98,8 +98,7 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
           className={styles.Button}
           sx={{ backgroundColor: 'darkgreen' }}
           variant="contained"
-          onClick={() => (config.rotation = (config.rotation + 1) % 4)}
-        >
+          onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
           Rotate chessboard <RotateRight />
         </Button>
       </div>
