@@ -13,10 +13,10 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
+  "start_url": "index.html",
   "background_color": "#3367D6",
   "display": "fullscreen",
-  "scope": "/",
+  "scope": "",
   "theme_color": "#3367D6",
   "orientation": "landscape",
   "shortcuts": [
@@ -24,7 +24,7 @@
       "name": "Play chess",
       "short_name": "Chess",
       "description": "Open ChessBuddy",
-      "url": "/",
+      "url": "index.html",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ],
