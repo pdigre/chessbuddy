@@ -2,7 +2,6 @@ import React from 'react';
 import { game, gameHistory, gameState } from './data/game';
 import { config } from './data/config';
 import { ThemeProvider } from '@material-tailwind/react';
-import styles from './styles.module.scss';
 import { History } from './components/History';
 import { Panel } from './components/Panel';
 import { FenInfo } from './components/FenInfo';
@@ -18,6 +17,7 @@ import { refreshtimer } from './data/refreshtimer';
 import { playall } from './components/Emotion';
 import { Refresh } from '@mui/icons-material';
 import packageInfo from '../package.json';
+import Sample from './components/Sample';
 
 const App: React.FC = () => {
   const about = () => messageDialog.display('About', <About />);
@@ -30,9 +30,10 @@ const App: React.FC = () => {
   };
   return (
     <ThemeProvider value={customTheme}>
-      <div className={styles.App}>
+      <Sample />
+      <div className="w-[1024px] h-[748px] bg-green-100 border-0 flex m-0 p-0 flex-row">
         <CP helper={helper} rendering={rendering} config={config} />
-        <div className={styles.AppLeft}>
+        <div className="flex flex-col flex-grow">
           <PlayerInfo isTop={true} game={game} config={config} />
           <Board
             helper={helper}
@@ -43,7 +44,7 @@ const App: React.FC = () => {
           />
           <PlayerInfo isTop={false} game={game} config={config} />
         </div>
-        <div className={styles.AppRight}>
+        <div className="flex flex-col w.full text-center">
           <h3>
             <span onClick={about}>ChessBuddy {version}</span>
             <Refresh fontSize="small" onClick={playall} />
@@ -52,6 +53,8 @@ const App: React.FC = () => {
           <FenInfo game={game} />
           <History game={game} gameHistory={gameHistory} config={config} />
         </div>
+      </div>
+      <div className="bg-gray-400/50">
         <MessageBox messageDialog={messageDialog} />
         <ConfigMain config={config} />
       </div>

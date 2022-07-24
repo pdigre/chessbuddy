@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from '../styles.module.scss';
 import { Game } from '../data/game';
 import { toMMSS } from '../data/library';
 import { timeKeeper } from '../data/timekeeper';
@@ -16,9 +15,11 @@ export const PlayerInfo = observer(
         {toMMSS(Math.floor(timer.elapsed) + Math.floor(g.isWhiteTurn ? g.wtime : g.btime))}
       </span>
     ));
+    const right = isTop && config.rotation % 2 == 1 ? ' text-right' : '';
+    const style = 'h-6 text-xl m-0 p-1';
 
     return (
-      <p className={isTop && config.rotation % 2 == 1 ? styles.PlayerRight : styles.Player}>
+      <p className={style + right}>
         {isWhite ? `White: ${g.white}` : `Black: ${g.black}`} &lt;
         {isWhite == g.isWhiteTurn ? (
           <Ticker timer={timeKeeper} />

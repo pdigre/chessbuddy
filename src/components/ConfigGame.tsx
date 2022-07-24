@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { config } from '../data/config';
 import * as rules from '../data/rules';
-import { StyledSelector } from './StyledSelector';
-import styles from '../styles.module.scss';
-import { Button } from '@material-tailwind/react';
+import { ConfigButton, StyledSelector } from './StyledWidgets';
 import { Clear, ExitToApp, PlayArrow } from '@mui/icons-material';
 import { messageDialog } from './MessageBox';
 import { game, gameState } from '../data/game';
@@ -52,8 +50,8 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
   };
 
   return (
-    <div className={styles.Config}>
-      <div>
+    <div>
+      <div className="text-left">
         <StyledSelector
           label="White"
           choices={playerNames}
@@ -69,37 +67,25 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
         />
       </div>
       <div>&nbsp;</div>
-      <div>
-        <Button
-          className={styles.Button}
-          style={{ backgroundColor: 'darkgreen' }}
-          onClick={playAction}
-          variant="filled">
+      <div className="text-left">
+        <ConfigButton onClick={playAction}>
           Play
           <PlayArrow />
-        </Button>
+        </ConfigButton>
         &nbsp;
         {game.isComplete ? (
           ''
         ) : (
-          <Button
-            className={styles.Button}
-            style={{ backgroundColor: 'darkgreen' }}
-            onClick={endAction}
-            variant="filled">
+          <ConfigButton onClick={endAction}>
             End game
             <ExitToApp />
-          </Button>
+          </ConfigButton>
         )}
         &nbsp;
-        <Button
-          className={styles.Button}
-          style={{ backgroundColor: 'darkgreen' }}
-          onClick={resetGame}
-          variant="filled">
+        <ConfigButton onClick={resetGame}>
           Reset
           <Clear />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

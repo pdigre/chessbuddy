@@ -1,5 +1,4 @@
 import React, { MouseEvent, TouchEvent, useRef } from 'react';
-import styles from '../styles.module.scss';
 import * as rules from '../data/rules';
 import { messageDialog } from './MessageBox';
 import { GameHistory, Game, gameState } from '../data/game';
@@ -96,18 +95,17 @@ export const History = observer(
           c = i % 2;
         rows[l][c] = t;
       });
+      const td_style = 'first:w-50 last:w-5 p-[2px] text-left text-lg';
       return rows.map((row, iRow) => (
-        <tr key={iRow}>
-          <td className={styles.NumberCell}>
-            <span>{iRow}</span>
+        <tr key={iRow} className="[&td]:p-[2px] [&td]:text-left [&td]:text-lg ">
+          <td className={td_style}>
+            <span className="text-red-900 text-sm">{iRow}</span>
           </td>
           {row.map((col, iCol) => {
             const id = iRow * 2 + iCol;
+            const marker = id == config.markLog ? ' bg-green-300' : '';
             return (
-              <td
-                id={id.toString()}
-                key={id.toString()}
-                className={id == config.markLog ? styles.MarkCell : ''}>
+              <td id={id.toString()} key={id.toString()} className={td_style + marker}>
                 {col}
               </td>
             );
@@ -135,11 +133,11 @@ export const History = observer(
           }
           const moves = cols[cols.length - 1].split(' ');
           const win = rules.whoWon(moves)?.substring(0, 1) ?? '?';
+          // {style + marker}
+          const marker = iRow == config.markHist ? ' bg-green-300' : '';
+          const tr_style = '[&td]:p-[3px] [&td]:text-center [&td]:text-lg';
           return (
-            <tr
-              key={iRow.toString()}
-              id={iRow.toString()}
-              className={iRow == config.markHist ? styles.MarkRow : ''}>
+            <tr key={iRow.toString()} id={iRow.toString()} className={tr_style + marker}>
               <td>{tim}</td>
               <td>{cols[1].split(' ')[0]}</td>
               <td>{cols[2].split(' ')[0]}</td>
@@ -147,11 +145,15 @@ export const History = observer(
             </tr>
           );
         });
+
     const chooseClick = config.showHist ? historyClick : logClick;
-    const chooseStyle = config.showHist ? styles.Log : styles.History;
     return (
-      <div className={chooseStyle} ref={scrollRef}>
-        <table onTouchStart={onTouchStart} onTouchMove={onTouchMove} onClick={chooseClick}>
+      <div className="m-0 w-full overflow-auto" ref={scrollRef}>
+        <table
+          className="table-fixed w-full"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onClick={chooseClick}>
           {config.showHist ? viewHistory() : viewLog()}
           <tr ref={endRef} />
         </table>

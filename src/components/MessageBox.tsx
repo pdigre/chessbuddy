@@ -1,5 +1,4 @@
 import React, { MouseEvent } from 'react';
-import styles from '../styles.module.scss';
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
 import { makeAutoObservable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -48,7 +47,7 @@ export const MessageBox = observer(({ messageDialog }: { messageDialog: MessageD
       aria-labelledby="message"
       open={messageDialog.title != undefined}
       handler={handleClick}
-      className={styles.Dialog}>
+      className="text-center text-lg">
       <DialogHeader id="message">{messageDialog.title}</DialogHeader>
       <DialogBody>{messageDialog.msg}</DialogBody>
       <DialogFooter>

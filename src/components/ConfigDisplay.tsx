@@ -1,9 +1,9 @@
 import React from 'react';
 import { Config } from '../data/config';
-import styles from '../styles.module.scss';
-import { Button, Checkbox } from '@material-tailwind/react';
+import { Checkbox } from '@material-tailwind/react';
 import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
+import { ConfigButton } from './StyledWidgets';
 
 export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   /*
@@ -20,7 +20,7 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   
        */
   return (
-    <div className={styles.Config}>
+    <div className="flex flex-col text-center w-px-650 h-px-400 [&>div]:text-left">
       <div>
         <Checkbox
           name="1"
@@ -70,13 +70,9 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
         <label htmlFor="6">Play giphy for correct moves</label>
       </div>
       <div>
-        <Button
-          className={styles.Button}
-          style={{ backgroundColor: 'darkgreen' }}
-          variant="filled"
-          onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
+        <ConfigButton onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
           Rotate chessboard <RotateRight />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Button } from '@material-tailwind/react';
 import { EventNote, Input, Pause, PlayArrow, Settings, Timeline, Undo } from '@mui/icons-material';
-import styles from '../styles.module.scss';
 import * as rules from '../data/rules';
 import { observer } from 'mobx-react';
 import { game, GameState } from '../data/game';

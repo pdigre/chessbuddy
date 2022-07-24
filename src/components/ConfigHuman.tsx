@@ -1,12 +1,12 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { Human, Players } from '../data/players';
 import { Server } from '../data/server';
-import styles from '../styles.module.scss';
-import { Button, Input } from '@material-tailwind/react';
+import { Input } from '@material-tailwind/react';
 import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../data/game';
 import { messageDialog } from './MessageBox';
+import { ConfigButton } from './StyledWidgets';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
   const [name, setName] = useState('');
@@ -84,80 +84,57 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     server.connectREST(humans[marker] as Human);
   };
   return (
-    <div className={styles.Config}>
-      <div className={styles.ConfigTableContainer}>
-        <table className={styles.ConfigTable}>
+    <div className="flex flex-col text-center w-px-650 h-px-400">
+      <div className="m-1 text-left">
+        <table className="table-fixed">
           <tbody onClick={doSelect}>
             {humans.map((human, iLine) => (
-              <tr
-                key={iLine.toString()}
-                id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}>
-                <td>{human.name}</td>
-                <td>{(human as Human).email}</td>
+              <tr key={iLine.toString()} id={iLine.toString()}>
+                <td className={iLine == marker ? 'bg-green-300' : ''}>{human.name}</td>
+                <td className={iLine == marker ? 'bg-green-300' : ''}>{(human as Human).email}</td>
               </tr>
             ))}
             <tr />
           </tbody>
         </table>
       </div>
-      <a className={styles.Hidden} download="games.txt" href={downloadLink} ref={downloadRef}>
+      <a className="hidden" download="games.txt" href={downloadLink} ref={downloadRef}>
         download it
       </a>
       <input
         type="file"
-        className={styles.Hidden}
+        className="hidden"
         multiple={false}
         accept=".txt,text/plain"
         onChange={uploadChange}
         ref={uploadRef}
       />
-      <div className={styles.Buttons}>
-        <Button
-          className={styles.Button}
-          onClick={doDelPlayer}
-          disabled={!hasSelect}
-          variant="filled">
+      <div className="flex flex-row text-left">
+        <ConfigButton onClick={doDelPlayer} disabled={!hasSelect}>
           Delete <Delete />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={downloadPlayer}
-          disabled={!hasSelect}
-          variant="filled">
+        </ConfigButton>
+        <ConfigButton onClick={downloadPlayer} disabled={!hasSelect}>
           Download <GetApp />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={uploadPlayer}
-          disabled={!hasSelect}
-          variant="filled">
+        </ConfigButton>
+        <ConfigButton onClick={uploadPlayer} disabled={!hasSelect}>
           Upload <Publish />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={connectPlayer}
-          disabled={!hasEmail}
-          variant="filled">
+        </ConfigButton>
+        <ConfigButton onClick={connectPlayer} disabled={!hasEmail}>
           Connect <Language />
-        </Button>
+        </ConfigButton>
       </div>
-      <div className={styles.AddSection}>
-        <Button
-          className={styles.Button}
-          style={{ backgroundColor: 'darkgreen' }}
-          onClick={doAddPlayer}
-          variant="filled">
+      <div className="bg-gray-100 border-2 border-green-800 m-2 p-5 text-left">
+        <ConfigButton onClick={doAddPlayer}>
           Add <Add />
-        </Button>
+        </ConfigButton>
         &nbsp;
         <Input label="Player Name" id="name" onChange={changeName} />
         &nbsp;
         <Input label="Player Email" id="email" onChange={changeEmail} />
         &nbsp;
-        <Button className={styles.Button} onClick={doAddPlayer} variant="filled">
+        <ConfigButton onClick={doAddPlayer}>
           Add <Add />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

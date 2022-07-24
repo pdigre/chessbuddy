@@ -1,4 +1,4 @@
-import React, { FormEvent, MouseEvent, ReactElement, ReactNode } from 'react';
+import React, { MouseEvent, ReactElement } from 'react';
 import {
   DialogHeader,
   Dialog,
@@ -10,7 +10,6 @@ import {
   TabPanel,
   DialogBody,
 } from '@material-tailwind/react';
-import styles from '../styles.module.scss';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
@@ -51,8 +50,9 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
   return (
     <Dialog
       aria-labelledby="simple-dialog-title"
+      size="sm"
       open={config.showConfig}
-      className={styles.Dialog}
+      className="text-center text-xl bg-slate-200 w-[600px] h-[400px]"
       handler={handleClose}>
       <DialogTitle>Configuration</DialogTitle>
       <DialogHeader id="simple-dialog-title">Configure</DialogHeader>

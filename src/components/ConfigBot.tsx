@@ -1,10 +1,9 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Bot, UCI_ENGINES } from '../data/bots';
 import { Players } from '../data/players';
-import styles from '../styles.module.scss';
-import { Button, Input } from '@material-tailwind/react';
+import { Input } from '@material-tailwind/react';
 import { Add, Delete } from '@mui/icons-material';
-import { StyledSelector } from './StyledSelector';
+import { ConfigButton, StyledSelector } from './StyledWidgets';
 import { observer } from 'mobx-react';
 import { messageDialog } from './MessageBox';
 
@@ -67,17 +66,14 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   };
 
   return (
-    <div className={styles.Config}>
-      <div className={styles.ListSection}>
-        <div className={styles.ConfigTableContainer}>
-          <table className={styles.ConfigTable}>
+    <div className="flex flex-col text-center w-px-650 h-px-400 [&>div]:text-left">
+      <div className="bg-gray-100 border-2 border-x-green-700 m-1 p-1">
+        <div className="m-1">
+          <table className="p-1 text-left text-lg">
             <tbody onClick={selectHandler}>
               {bots.map((bot, iLine) => (
-                <tr
-                  key={iLine.toString()}
-                  id={iLine.toString()}
-                  className={iLine == marker ? styles.MarkRow : ''}>
-                  <td>{bot.name}</td>
+                <tr key={iLine.toString()} id={iLine.toString()}>
+                  <td className={iLine == marker ? 'bg-green-300' : ''}>{bot.name}</td>
                 </tr>
               ))}
               <tr />
@@ -85,14 +81,9 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           </table>
         </div>
         <div>
-          <Button
-            className={styles.Button}
-            style={{ backgroundColor: 'darkgreen' }}
-            onClick={delPlayerHandler}
-            variant="filled"
-            disabled={!hasSelect}>
+          <ConfigButton onClick={delPlayerHandler} disabled={!hasSelect}>
             Delete <Delete />
-          </Button>
+          </ConfigButton>
         </div>
       </div>
       <div></div>
@@ -106,9 +97,9 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         <Input label="Skill level" id="skill" onChange={skillChange} />
         <Input label="Depth (..not time)" id="depth" onChange={depthChange} />
         <Input label="Time (sec)" id="time" onChange={timeChange} />
-        <Button className={styles.Button} onClick={addPlayerHandler} variant="filled">
+        <ConfigButton onClick={addPlayerHandler}>
           Add <Add />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );
