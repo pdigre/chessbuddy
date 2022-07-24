@@ -1,6 +1,6 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import { Human, Players } from '../data/players';
-import { Server } from '../data/server';
+import { Human, Players } from '../logic/players';
+import { Server } from '../logic/server';
 import styles from '../styles.module.scss';
 import {
   Button,
@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
-import { gameHistory } from '../data/game';
+import { gameHistory } from '../logic/game';
 import { messager } from './MessageBox';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {

@@ -148,8 +148,8 @@ export class Game {
     const san = this.log[this.log.length - 1];
     this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
     if (this.isComplete) {
+      if (gameState.isPlaying) winner();
       gameState.isPlaying = false;
-      winner();
     }
     this.isWhiteTurn = rules.isWhiteTurn(this.fen);
     this.pgns = [];

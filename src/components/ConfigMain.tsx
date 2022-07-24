@@ -5,11 +5,11 @@ import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
-import { players } from '../data/players';
-import { server } from '../data/server';
+import { players } from '../logic/players';
+import { server } from '../logic/server';
 import { observer } from 'mobx-react';
-import { Config } from '../data/config';
-import { refreshtimer } from '../data/refreshtimer';
+import { Config } from '../logic/config';
+import { refreshtimer } from '../logic/refreshtimer';
 
 export const ConfigMain = observer(({ config }: { config: Config }) => {
   type TabProps = {

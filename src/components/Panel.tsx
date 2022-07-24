@@ -2,13 +2,13 @@ import React from 'react';
 import { Button, ButtonGroup } from '@mui/material';
 import { EventNote, Input, Pause, PlayArrow, Settings, Timeline, Undo } from '@mui/icons-material';
 import styles from '../styles.module.scss';
-import * as rules from '../data/rules';
+import * as rules from '../logic/rules';
 import { observer } from 'mobx-react';
-import { game, GameState } from '../data/game';
-import { refreshtimer } from '../data/refreshtimer';
-import { Config } from '../data/config';
+import { game, GameState } from '../logic/game';
+import { refreshtimer } from '../logic/refreshtimer';
+import { Config } from '../logic/config';
 import { messager } from './MessageBox';
-import { helper } from '../data/helper';
+import { helper } from '../logic/helper';
 
 export const Panel = observer(({ gameState, config }: { gameState: GameState; config: Config }) => {
   const isGotoHist = config.showHist && config.markHist >= 0;

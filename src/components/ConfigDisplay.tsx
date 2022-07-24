@@ -1,5 +1,5 @@
 import React from 'react';
-import { Config } from '../data/config';
+import { Config } from '../logic/config';
 import styles from '../styles.module.scss';
 import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import { RotateRight } from '@mui/icons-material';
