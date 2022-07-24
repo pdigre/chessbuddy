@@ -1,0 +1,39 @@
+{
+  "short_name": "ChessBuddy",
+  "name": "ChessBuddy",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#3367D6",
+  "display": "fullscreen",
+  "scope": "/",
+  "theme_color": "#3367D6",
+  "orientation": "landscape",
+  "shortcuts": [
+    {
+      "name": "Play chess",
+      "short_name": "Chess",
+      "description": "Open ChessBuddy",
+      "url": "/",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "description": "ChessBuddy Chess Companion",
+  "screenshots": [
+    {
+      "src": "/screenshot.png",
+      "type": "image/png",
+      "sizes": "1081x687"
+    }
+  ]
+}

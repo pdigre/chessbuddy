@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/chessbuddy.iml" filepath="$PROJECT_DIR$/chessbuddy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../warp/warp.iml" filepath="$PROJECT_DIR$/../warp/warp.iml" />
     </modules>
   </component>
 </project>
