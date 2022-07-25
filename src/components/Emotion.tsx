@@ -1,116 +1,26 @@
 import React from 'react';
-import { messager } from './MessageBox';
+import { emotioner, EmotionType } from './EmotionBox';
 
-const winner_urls = [
-  <iframe
-    key="w1"
-    allow="fullscreen"
-    frameBorder="0"
-    height="270"
-    src="https://giphy.com/embed/jJjb9AUHOiP3nJJMdy/video"
-    width="480"
-  />,
-  <iframe
-    key="w2"
-    allow="fullscreen"
-    frameBorder="0"
-    height="480"
-    src="https://giphy.com/embed/a42CE9jJY8zYGU51bG/video"
-    width="480"
-  />,
-  <iframe
-    key="w3"
-    allow="fullscreen"
-    frameBorder="0"
-    height="270"
-    src="https://giphy.com/embed/LSdCB1uizqnZn69Vzv/video"
-    width="480"
-  />,
-  <iframe
-    key="w4"
-    allow="fullscreen"
-    frameBorder="0"
-    height="360"
-    src="https://giphy.com/embed/lYv10cDlosFnA0toPb/video"
-    width="480"
-  />,
+const winner_urls: EmotionType[] = [
+  { src: '/mp4/win1.mp4' },
+  { src: '/mp4/win2.mp4' },
+  { src: '/mp4/win3.mp4' },
+  { src: '/mp4/win4.mp4' },
 ];
-const correct_urls = [
-  <iframe
-    key="c1"
-    allow="fullscreen"
-    frameBorder="0"
-    height="203"
-    src="https://giphy.com/embed/PFs9HklIZefehcOphI/video"
-    width="480"
-  />,
-  <iframe
-    key="c2"
-    allow="fullscreen"
-    frameBorder="0"
-    height="270"
-    src="https://giphy.com/embed/W3IjOobmcXX56Ib0nh/video"
-    width="480"
-  />,
-  <iframe
-    key="c3"
-    allow="fullscreen"
-    frameBorder="0"
-    height="286"
-    src="https://giphy.com/embed/D5xExRTaM0G5k5GdzY/video"
-    width="480"
-  />,
-  <iframe
-    key="c4"
-    allow="fullscreen"
-    frameBorder="0"
-    height="480"
-    src="https://giphy.com/embed/t34U2oXtwwgIjURdOw/video"
-    width="480"
-  />,
-  <iframe
-    key="c5"
-    allow="fullscreen"
-    frameBorder="0"
-    height="360"
-    src="https://giphy.com/embed/y68J3KAxOA3NRd85Tw/video"
-    width="480"
-  />,
+const correct_urls: EmotionType[] = [
+  { src: '/mp4/yes1.mp4' },
+  { src: '/mp4/yes2.mp4' },
+  { src: '/mp4/yes3.mp4' },
+  { src: '/mp4/yes4.mp4' },
+  { src: '/mp4/yes5.mp4' },
 ];
-const mistake_urls = [
-  <iframe
-    key="m1"
-    allow="fullscreen"
-    frameBorder="0"
-    height="270"
-    src="https://giphy.com/embed/CJyRX8btFziYLt3WAT/video"
-    width="480"
-  />,
-  <iframe
-    key="m2"
-    allow="fullscreen"
-    frameBorder="0"
-    height="480"
-    src="https://giphy.com/embed/lkibHaGO1xmJXapEdq/video"
-    width="480"
-  />,
-  <iframe
-    key="m3"
-    allow="fullscreen"
-    frameBorder="0"
-    height="200"
-    src="https://giphy.com/embed/ZiwaXDesiehu2CTvRN/video"
-    width="480"
-  />,
-  <iframe
-    key="m4"
-    allow="fullscreen"
-    frameBorder="0"
-    height="200"
-    src="https://giphy.com/embed/BCqsNQRtZZf8QJnK5b/video"
-    width="480"
-  />,
+const mistake_urls: EmotionType[] = [
+  { src: '/mp4/no1.mp4' },
+  { src: '/mp4/no2.mp4' },
+  { src: '/mp4/no3.mp4' },
+  { src: '/mp4/no4.mp4' },
 ];
+
 const all_urls = [...winner_urls, ...correct_urls, ...mistake_urls];
 let prev = 0;
 
@@ -120,11 +30,11 @@ export const mistake = (): void => emotion('Mistake', mistake_urls, 6);
 export const playall = (): void => {
   prev++;
   if (prev == all_urls.length) prev = 0;
-  window.setTimeout(() => messager.clear(), 9000);
-  messager.display('Url:' + all_urls[prev].key, <div>{all_urls[prev]}</div>);
+  window.setTimeout(() => emotioner.clear(), 9000);
+  emotioner.display('Url:' + all_urls[prev].src, all_urls[prev]);
 };
 
-const emotion = (title: string, html: JSX.Element[], time: number) => {
-  window.setTimeout(() => messager.clear(), time * 1000);
-  messager.display(title, <div>{html[Math.floor(Math.random() * html.length)]}</div>);
+const emotion = (title: string, html: EmotionType[], time: number) => {
+  window.setTimeout(() => emotioner.clear(), time * 1000);
+  emotioner.display(title, html[Math.floor(Math.random() * html.length)]);
 };

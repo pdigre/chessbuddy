@@ -31,6 +31,10 @@ const blackSquareStyle: React.CSSProperties = {
   backgroundColor: 'rgb(181, 136, 99)',
 };
 
+const sound_click = new Audio('/mp3/click.mp3');
+const sound_move = new Audio('/mp3/move1.mp3');
+const sound_error = new Audio('/mp3/buzzer.mp3');
+
 export const Board = observer(
   ({
     helper,
@@ -78,7 +82,9 @@ export const Board = observer(
       const player = game.nextPlayer();
       if (player instanceof Human && !game.isComplete) {
         const from2 = r90 ? rules.leftSquare(from) : from;
-        return rules.isMoveable(game.fen, from2);
+        const movable = rules.isMoveable(game.fen, from2);
+        if (movable) sound_click.play().then();
+        return movable;
       }
       return false;
     };
@@ -86,7 +92,13 @@ export const Board = observer(
     const onMovePiece = (from: Square, to: Square) => {
       if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from) correct();
       config.startUndoTimer(game.log.length);
+      const state = game.log.length;
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
+      if (state != game.log.length) {
+        sound_move.play().then();
+      } else {
+        sound_error.play().then();
+      }
       return true;
     };
 

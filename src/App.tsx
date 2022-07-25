@@ -19,6 +19,7 @@ import { playall } from './components/Emotion';
 import { Refresh } from '@mui/icons-material';
 import packageInfo from '../package.json';
 import { themes } from './themes';
+import { EmotionBox, emotioner } from './components/EmotionBox';
 
 const App: React.FC = () => {
   const about = () => messager.display('About', <About />);
@@ -49,6 +50,7 @@ const App: React.FC = () => {
           <History game={game} gameHistory={gameHistory} config={config} />
         </div>
         <MessageBox messager={messager} />
+        <EmotionBox emotioner={emotioner} />
         <ConfigMain config={config} />
       </div>
     </ThemeProvider>
