@@ -3,12 +3,12 @@
   "name": "ChessBuddy",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/png/icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/png/icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -25,13 +25,13 @@
       "short_name": "Chess",
       "description": "Open ChessBuddy",
       "url": "index.html",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/png/icon-192.png", "sizes": "192x192" }]
     }
   ],
   "description": "ChessBuddy Chess Companion",
   "screenshots": [
     {
-      "src": "/screenshot.png",
+      "src": "/png/screenshot.png",
       "type": "image/png",
       "sizes": "1081x687"
     }
