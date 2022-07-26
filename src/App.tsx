@@ -49,10 +49,10 @@ const App: React.FC = () => {
           <FenInfo game={game} />
           <History game={game} gameHistory={gameHistory} config={config} />
         </div>
-        <MessageBox messager={messager} />
-        <EmotionBox emotioner={emotioner} />
-        <ConfigMain config={config} />
       </div>
+      <MessageBox messager={messager} />
+      <EmotionBox emotioner={emotioner} />
+      <ConfigMain config={config} />
     </ThemeProvider>
   );
 };
