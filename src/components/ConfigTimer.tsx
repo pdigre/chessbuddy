@@ -5,7 +5,7 @@ import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 
-export const ConfigDisplay = observer(({ config }: { config: Config }) => {
+export const ConfigTimer = observer(({ config }: { config: Config }) => {
   return (
     <div className={styles.Config}>
       <div>

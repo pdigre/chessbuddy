@@ -11,7 +11,7 @@ export type EmotionType = {
   length?: number;
 };
 
-export class Emotioner {
+class Emotioner {
   title?: string;
   msg?: EmotionType;
   show = false;
@@ -23,12 +23,7 @@ export class Emotioner {
   clear: () => void = () => {
     this.title = undefined;
   };
-  display: (
-    title: string,
-    msg: EmotionType,
-    buttons?: string[],
-    response?: (button: string) => void
-  ) => void = (title, msg) => {
+  display: (title: string, msg: EmotionType) => void = (title, msg) => {
     this.title = title;
     this.msg = msg;
   };

@@ -11,7 +11,7 @@ import {
 import { makeAutoObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
-export class Messager {
+class Messager {
   title?: string;
   msg?: JSX.Element;
   buttons?: string[];
