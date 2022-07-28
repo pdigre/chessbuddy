@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
 import { EventNote, Input, Pause, PlayArrow, Settings, Timeline, Undo } from '@mui/icons-material';
-import styles from '../styles.module.scss';
 import * as rules from '../logic/rules';
 import { observer } from 'mobx-react';
 import { game, GameState } from '../logic/game';
@@ -51,16 +50,21 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
   const isHistUndo = !config.showHist && config.markLog >= 0;
   const isPlayUndo = gameState.isPlaying && config.showUndo;
 
-  return (
-    <ButtonGroup
-      color="primary"
-      aria-label="outlined primary button group"
-      className={styles.Panel}>
+  const PanelButton = (props: { children: ReactElement; onClick: () => void }) => {
+    return (
       <Button
-        className={styles.Button}
+        className="h-14 flex-grow bg-green-700"
         sx={{ backgroundColor: 'darkgreen' }}
-        onClick={playHandler}
+        onClick={props.onClick}
         variant="contained">
+        {props.children}
+      </Button>
+    );
+  };
+
+  return (
+    <ButtonGroup color="primary" aria-label="outlined primary button group" className="w-full">
+      <PanelButton onClick={playHandler}>
         {isHistUndo || isPlayUndo ? (
           <Undo fontSize="large" />
         ) : gameState.isPlaying ? (
@@ -68,12 +72,8 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
         ) : (
           <Pause fontSize="large" />
         )}
-      </Button>
-      <Button
-        className={styles.Button}
-        sx={{ backgroundColor: 'darkgreen' }}
-        onClick={histHandler}
-        variant="contained">
+      </PanelButton>
+      <PanelButton onClick={histHandler}>
         {isGotoHist ? (
           <Input fontSize="large" />
         ) : config.showHist ? (
@@ -81,14 +81,10 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
         ) : (
           <EventNote fontSize="large" />
         )}
-      </Button>
-      <Button
-        className={styles.Button}
-        sx={{ backgroundColor: 'darkgreen' }}
-        onClick={configHandler}
-        variant="contained">
+      </PanelButton>
+      <PanelButton onClick={configHandler}>
         <Settings fontSize="large" />
-      </Button>
+      </PanelButton>
     </ButtonGroup>
   );
 });

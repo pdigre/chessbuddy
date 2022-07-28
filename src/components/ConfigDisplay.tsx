@@ -1,13 +1,13 @@
 import React from 'react';
 import { Config } from '../logic/config';
-import styles from '../styles.module.scss';
-import { Button, Checkbox, FormControlLabel } from '@mui/material';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
+import { ConfigButton } from './StyledSelector';
 
 export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   return (
-    <div className={styles.Config}>
+    <div className="flex flex-col text-center w-[650px] h-[400px] [&>div]:text-left">
       <div>
         <FormControlLabel
           control={
@@ -81,13 +81,9 @@ export const ConfigDisplay = observer(({ config }: { config: Config }) => {
         />
       </div>
       <div>
-        <Button
-          className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
-          variant="contained"
-          onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
+        <ConfigButton onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
           Rotate chessboard <RotateRight />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

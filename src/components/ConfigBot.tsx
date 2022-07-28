@@ -1,18 +1,9 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Bot, UCI_ENGINES } from '../logic/bots';
 import { Players } from '../logic/players';
-import styles from '../styles.module.scss';
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
-import { StyledSelector } from './StyledSelector';
+import { ConfigButton, StyledSelector } from './StyledSelector';
 import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
 
@@ -93,14 +84,9 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           </Table>
         </TableContainer>
         <div>
-          <Button
-            className={styles.Button}
-            sx={{ backgroundColor: 'darkgreen' }}
-            onClick={delPlayerHandler}
-            variant="contained"
-            disabled={!hasSelect}>
+          <ConfigButton onClick={delPlayerHandler} disabled={!hasSelect}>
             Delete <Delete />
-          </Button>
+          </ConfigButton>
         </div>
       </div>
       <div>&nbsp;</div>
@@ -121,9 +107,9 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         />{' '}
         &nbsp;
         <TextField label="Time (sec)" id="time" size="medium" onChange={timeChange} /> &nbsp;
-        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
+        <ConfigButton onClick={addPlayerHandler}>
           Add <Add />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { config } from '../logic/config';
 import * as rules from '../logic/rules';
-import { StyledSelector } from './StyledSelector';
-import styles from '../styles.module.scss';
-import { Button } from '@mui/material';
+import { ConfigButton, StyledSelector } from './StyledSelector';
 import { Clear, ExitToApp, PlayArrow } from '@mui/icons-material';
 import { messager } from './MessageBox';
 import { game, gameState } from '../logic/game';
@@ -52,7 +50,7 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
   };
 
   return (
-    <div className={styles.Config}>
+    <div className="flex flex-col text-center w-[650px] h-[400px] [&>div]:text-left">
       <div>
         <StyledSelector
           label="White"
@@ -70,36 +68,24 @@ export const ConfigGame = observer(({ players }: { players: Players }) => {
       </div>
       <div>&nbsp;</div>
       <div>
-        <Button
-          className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
-          onClick={playAction}
-          variant="contained">
+        <ConfigButton onClick={playAction}>
           Play
           <PlayArrow />
-        </Button>
+        </ConfigButton>
         &nbsp;
         {game.isComplete ? (
           ''
         ) : (
-          <Button
-            className={styles.Button}
-            sx={{ backgroundColor: 'darkgreen' }}
-            onClick={endAction}
-            variant="contained">
+          <ConfigButton onClick={endAction}>
             End game
             <ExitToApp />
-          </Button>
+          </ConfigButton>
         )}
         &nbsp;
-        <Button
-          className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
-          onClick={resetGame}
-          variant="contained">
+        <ConfigButton onClick={resetGame}>
           Reset
           <Clear />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

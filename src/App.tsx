@@ -39,8 +39,8 @@ const App: React.FC = () => {
           />
           <PlayerInfo isTop={false} game={game} config={config} />
         </div>
-        <div className="flex flex-col w.full text-center">
-          <h3>
+        <div className="flex flex-col w-full text-center">
+          <h3 className="h-8 text-lg">
             <span onClick={about}>ChessBuddy {version}</span>
             <Refresh fontSize="small" onClick={playall} />
           </h3>

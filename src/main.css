@@ -557,6 +557,14 @@ video {
   margin: 0px;
 }
 
+.m-1 {
+  margin: 0.25rem;
+}
+
+.m-2 {
+  margin: 0.5rem;
+}
+
 .flex {
   display: flex;
 }
@@ -573,12 +581,56 @@ video {
   height: 748px;
 }
 
+.h-8 {
+  height: 2rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-\[400px\] {
+  height: 400px;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-\[31px\] {
+  height: 31px;
+}
+
 .w-\[1024px\] {
   width: 1024px;
 }
 
+.w-full {
+  width: 100%;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-\[650px\] {
+  width: 650px;
+}
+
+.w-5 {
+  width: 1.25rem;
+}
+
+.min-w-\[200px\] {
+  min-width: 200px;
+}
+
 .flex-grow {
   flex-grow: 1;
+}
+
+.table-fixed {
+  table-layout: fixed;
 }
 
 .flex-row {
@@ -589,8 +641,27 @@ video {
   flex-direction: column;
 }
 
+.overflow-auto {
+  overflow: auto;
+}
+
 .border-0 {
   border-width: 0px;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-green-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(22 101 52 / var(--tw-border-opacity));
+}
+
+.border-x-green-700 {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(21 128 61 / var(--tw-border-opacity));
+  border-right-color: rgb(21 128 61 / var(--tw-border-opacity));
 }
 
 .bg-green-100 {
@@ -598,12 +669,91 @@ video {
   background-color: rgb(220 252 231 / var(--tw-bg-opacity));
 }
 
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+
+.bg-green-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+}
+
+.bg-green-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+}
+
 .p-0 {
   padding: 0px;
 }
 
+.p-1 {
+  padding: 0.25rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
+.p-\[2px\] {
+  padding: 2px;
+}
+
+.text-left {
+  text-align: left;
+}
+
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.text-red-900 {
+  --tw-text-opacity: 1;
+  color: rgb(127 29 29 / var(--tw-text-opacity));
 }
 
 .filter {
@@ -619,4 +769,38 @@ body {
 #root {
   margin: 0;
   padding: 0;
+}
+
+.\[\&\>div\]\:text-left>div {
+  text-align: left;
+}
+
+.\[\&\>div\]\:text-center>div {
+  text-align: center;
+}
+
+.\[\&\>div\]\:\[writing-mode\:vertical-lr\]>div {
+  -webkit-writing-mode: vertical-lr;
+          writing-mode: vertical-lr;
+}
+
+.\[\&td\]\:p-\[2px\]td {
+  padding: 2px;
+}
+
+.\[\&td\]\:p-\[3px\]td {
+  padding: 3px;
+}
+
+.\[\&td\]\:text-lefttd {
+  text-align: left;
+}
+
+.\[\&td\]\:text-centertd {
+  text-align: center;
+}
+
+.\[\&td\]\:text-lgtd {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
