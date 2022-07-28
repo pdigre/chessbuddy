@@ -1,6 +1,6 @@
 {
   "name": "chesbuddy",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -13,19 +13,18 @@
     "chess.js": "^0.13.2",
     "mobx": "^6.6.0",
     "mobx-react": "^7.5.0",
-    "node-sass": "^7.0.1",
     "react": "^18.2.0",
     "react-chessboard": "^1.2.5",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
-    "web-vitals": "^2.1.4",
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "start": "react-scripts start --watch",
-    "build": "react-scripts build",
+    "start": "npm run watch:css && react-scripts start --watch",
+    "build": "npm run watch:css && react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject",
+    "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
   },
@@ -50,12 +49,16 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
+    "autoprefixer": "^9.8.6",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.24.0"
+    "eslint-plugin-react": "^7.24.0",
+    "postcss": "^8.4.14",
+    "postcss-cli": "^10.0.0",
+    "tailwindcss": "^3.1.5"
   }
 }

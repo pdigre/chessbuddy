@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from '../styles.module.scss';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { makeAutoObservable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -38,7 +37,7 @@ export const EmotionBox = observer(({ emotioner }: { emotioner: Emotioner }) => 
       aria-labelledby="emotion"
       open={emotioner.title != undefined}
       onClose={emotioner.clear}
-      className={styles.Dialog}>
+      className="text-center text-lg">
       <DialogTitle id="emotion">{emotioner.title}</DialogTitle>
       <DialogContent>
         <video id="myVideo" autoPlay={true} width={width}>

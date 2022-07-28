@@ -1,6 +1,5 @@
 import React, { ChangeEvent, MouseEvent, ReactElement } from 'react';
 import { AppBar, Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@mui/material';
-import styles from '../styles.module.scss';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
@@ -56,11 +55,11 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
       open={config.showConfig}
       onClose={handleClose}
       maxWidth="xl"
-      className={styles.Dialog}>
+      className="text-center text-xl">
       <DialogTitle id="simple-dialog-title">Configure</DialogTitle>
       <AppBar position="static">
         <Tabs
-          className={styles.ConfigTabs}
+          className="bg-green-300"
           value={value}
           onChange={handleChange}
           aria-label="Config tabs">

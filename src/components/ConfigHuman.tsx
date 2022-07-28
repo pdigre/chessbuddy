@@ -1,20 +1,12 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { Human, Players } from '../logic/players';
 import { Server } from '../logic/server';
-import styles from '../styles.module.scss';
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../logic/game';
 import { messager } from './MessageBox';
+import { ConfigButton } from './StyledSelector';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
   const [name, setName] = useState('');
@@ -92,15 +84,15 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     server.connectREST(humans[marker] as Human);
   };
   return (
-    <div className={styles.Config}>
-      <TableContainer className={styles.ConfigTableContainer}>
-        <Table size="small" className={styles.ConfigTable}>
+    <div className="flex flex-col text-center w-[650px] h-[400px] [&>div]:text-left">
+      <TableContainer className="m-1">
+        <Table size="small" className="p-3 text-left text-xl">
           <TableBody onClick={doSelect}>
             {humans.map((human, iLine) => (
               <TableRow
                 key={iLine.toString()}
                 id={iLine.toString()}
-                className={iLine == marker ? styles.MarkRow : ''}>
+                className={iLine == marker ? 'bg-green-300' : ''}>
                 <TableCell>{human.name}</TableCell>
                 <TableCell>{(human as Human).email}</TableCell>
               </TableRow>
@@ -109,63 +101,43 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           </TableBody>
         </Table>
       </TableContainer>
-      <a className={styles.Hidden} download="games.txt" href={downloadLink} ref={downloadRef}>
+      <a className="hidden" download="games.txt" href={downloadLink} ref={downloadRef}>
         download it
       </a>
       <input
         type="file"
-        className={styles.Hidden}
+        className="hidden"
         multiple={false}
         accept=".txt,text/plain"
         onChange={uploadChange}
         ref={uploadRef}
       />
-      <div className={styles.Buttons}>
-        <Button
-          className={styles.Button}
-          onClick={doDelPlayer}
-          disabled={!hasSelect}
-          variant="contained">
+      <div className="flex flex-row">
+        <ConfigButton onClick={doDelPlayer} disabled={!hasSelect}>
           Delete <Delete />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={downloadPlayer}
-          disabled={!hasSelect}
-          variant="contained">
+        </ConfigButton>
+        <ConfigButton onClick={downloadPlayer} disabled={!hasSelect}>
           Download <GetApp />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={uploadPlayer}
-          disabled={!hasSelect}
-          variant="contained">
+        </ConfigButton>
+        <ConfigButton onClick={uploadPlayer} disabled={!hasSelect}>
           Upload <Publish />
-        </Button>
-        <Button
-          className={styles.Button}
-          onClick={connectPlayer}
-          disabled={!hasEmail}
-          variant="contained">
+        </ConfigButton>
+        <ConfigButton onClick={connectPlayer} disabled={!hasEmail}>
           Connect <Language />
-        </Button>
+        </ConfigButton>
       </div>
-      <div className={styles.AddSection}>
-        <Button
-          className={styles.Button}
-          sx={{ backgroundColor: 'darkgreen' }}
-          onClick={doAddPlayer}
-          variant="contained">
+      <div className="bg-gray-100 border-2 border-green-800 m-2 p-5 text-left">
+        <ConfigButton onClick={doAddPlayer}>
           Add <Add />
-        </Button>
+        </ConfigButton>
         &nbsp;
         <TextField label="Player Name" id="name" size="medium" onChange={changeName} />
         &nbsp;
         <TextField label="Player Email" id="email" size="medium" onChange={changeEmail} />
         &nbsp;
-        <Button className={styles.Button} onClick={doAddPlayer} variant="contained">
+        <ConfigButton onClick={doAddPlayer}>
           Add <Add />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

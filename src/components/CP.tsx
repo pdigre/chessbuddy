@@ -1,22 +1,19 @@
 import React from 'react';
-import styles from '../styles.module.scss';
 import { observer } from 'mobx-react';
 import { Helper } from '../logic/helper';
 import { Rendering } from '../logic/rendering';
 import { Config } from '../logic/config';
 import { mistake } from './Emotion';
-import { game, gameState } from '../logic/game';
-import { locate } from '../logic/openings';
 
 let prevcp = 0;
 
 export const CP = observer(
   ({ helper, rendering, config }: { helper: Helper; rendering: Rendering; config: Config }) => {
     if (!config.showCP) {
-      return <div className={styles.CP}></div>;
+      return <div className="w-6 h-full flex flex-col flex-grow"></div>;
     }
     const cp = helper.cp;
-    if (Math.abs(cp - prevcp) > 100 && gameState.isPlaying && !locate(game.log)) mistake();
+    if (Math.abs(cp - prevcp) > 100) mistake();
     prevcp = cp;
     const blackTop = config.rotation > 1;
     const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);
@@ -28,12 +25,13 @@ export const CP = observer(
     const isW = whiteLead != blackTop;
     const h1 = (isW ? 0 : x) + s + 'px';
     const h2 = (isW ? x : 0) + s + 'px';
+    const coloring = (black: boolean) => (black ? 'bg-black text-white' : 'bg-white text-black');
     return (
-      <div className={styles.CP}>
-        <div className={!blackTop ? styles.CPBLACK : styles.CPWHITE} style={{ height: h1 }}>
+      <div className="w-6 h-full flex flex-col flex-grow [&>div]:[writing-mode:vertical-lr] [&>div]:text-center">
+        <div className={coloring(!blackTop)} style={{ height: h1 }}>
           {txt}
         </div>
-        <div className={blackTop ? styles.CPBLACK : styles.CPWHITE} style={{ height: h2 }}>
+        <div className={coloring(blackTop)} style={{ height: h2 }}>
           {txt}
         </div>
       </div>

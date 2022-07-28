@@ -1,18 +1,9 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Bot, UCI_ENGINES } from '../logic/bots';
 import { Players } from '../logic/players';
-import styles from '../styles.module.scss';
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
-import { StyledSelector } from './StyledSelector';
+import { ConfigButton, StyledSelector } from './StyledSelector';
 import { observer } from 'mobx-react';
 import { messager } from './MessageBox';
 
@@ -75,16 +66,16 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   };
 
   return (
-    <div className={styles.Config}>
-      <div className={styles.ListSection}>
-        <TableContainer className={styles.ConfigTableContainer}>
-          <Table size="small" className={styles.ConfigTable}>
+    <div className="flex flex-col text-center w-px-650 h-px-400 [&>div]:text-left">
+      <div className="bg-gray-100 border-2 border-x-green-700 m-1 p-1">
+        <TableContainer className="m-1">
+          <Table size="small" className="p-1 text-left text-lg">
             <TableBody onClick={selectHandler}>
               {bots.map((bot, iLine) => (
                 <TableRow
                   key={iLine.toString()}
                   id={iLine.toString()}
-                  className={iLine == marker ? styles.MarkRow : ''}>
+                  className={iLine == marker ? 'bg-green-300' : ''}>
                   <TableCell>{bot.name}</TableCell>
                 </TableRow>
               ))}
@@ -93,14 +84,9 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           </Table>
         </TableContainer>
         <div>
-          <Button
-            className={styles.Button}
-            sx={{ backgroundColor: 'darkgreen' }}
-            onClick={delPlayerHandler}
-            variant="contained"
-            disabled={!hasSelect}>
+          <ConfigButton onClick={delPlayerHandler} disabled={!hasSelect}>
             Delete <Delete />
-          </Button>
+          </ConfigButton>
         </div>
       </div>
       <div>&nbsp;</div>
@@ -121,9 +107,9 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
         />{' '}
         &nbsp;
         <TextField label="Time (sec)" id="time" size="medium" onChange={timeChange} /> &nbsp;
-        <Button className={styles.Button} onClick={addPlayerHandler} variant="contained">
+        <ConfigButton onClick={addPlayerHandler}>
           Add <Add />
-        </Button>
+        </ConfigButton>
       </div>
     </div>
   );

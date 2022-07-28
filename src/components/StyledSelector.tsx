@@ -1,8 +1,8 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, ReactNode, MouseEvent } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
-import styles from '../styles.module.scss';
+import { Button } from '@mui/material';
 
 export type SelectorProps = {
   label: string;
@@ -26,7 +26,7 @@ export const StyledSelector: React.FC<SelectorProps> = ({
         {label}
       </InputLabel>
       <NativeSelect
-        className={styles.Selector}
+        className="min-w-[200px]"
         value={selected?.value as string}
         onChange={handleChange}
         inputProps={{
@@ -41,5 +41,28 @@ export const StyledSelector: React.FC<SelectorProps> = ({
         ))}
       </NativeSelect>
     </FormControl>
+  );
+};
+
+export type ConfigButtonProps = {
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  children: ReactNode[];
+  disabled?: boolean;
+};
+
+export const ConfigButton: React.FC<ConfigButtonProps> = ({
+  onClick: onClick,
+  children: children,
+  disabled: disabled,
+}) => {
+  return (
+    <Button
+      className="flex-grow bg-green-100 h-14"
+      sx={{ backgroundColor: 'darkgreen' }}
+      onClick={onClick}
+      variant="contained"
+      disabled={disabled ?? false}>
+      {children}
+    </Button>
   );
 };

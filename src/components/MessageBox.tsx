@@ -1,5 +1,4 @@
 import React, { MouseEvent } from 'react';
-import styles from '../styles.module.scss';
 import {
   Button,
   Dialog,
@@ -52,7 +51,7 @@ export const MessageBox = observer(({ messager }: { messager: Messager }) => {
       aria-labelledby="message"
       open={messager.title != undefined}
       onClose={handleClick}
-      className={styles.Dialog}>
+      className="text-center text-lg">
       <DialogTitle id="message">{messager.title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{messager.msg}</DialogContentText>
