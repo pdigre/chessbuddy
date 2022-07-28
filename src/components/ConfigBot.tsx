@@ -75,16 +75,16 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   };
 
   return (
-    <div className={styles.Config}>
-      <div className={styles.ListSection}>
-        <TableContainer className={styles.ConfigTableContainer}>
-          <Table size="small" className={styles.ConfigTable}>
+    <div className="flex flex-col text-center w-px-650 h-px-400 [&>div]:text-left">
+      <div className="bg-gray-100 border-2 border-x-green-700 m-1 p-1">
+        <TableContainer className="m-1">
+          <Table size="small" className="p-1 text-left text-lg">
             <TableBody onClick={selectHandler}>
               {bots.map((bot, iLine) => (
                 <TableRow
                   key={iLine.toString()}
                   id={iLine.toString()}
-                  className={iLine == marker ? styles.MarkRow : ''}>
+                  className={iLine == marker ? 'bg-green-300' : ''}>
                   <TableCell>{bot.name}</TableCell>
                 </TableRow>
               ))}
