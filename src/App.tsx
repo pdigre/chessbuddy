@@ -6,22 +6,23 @@ import { History } from './components/History';
 import { Panel } from './components/Panel';
 import { FenInfo } from './components/FenInfo';
 import { CP } from './components/CP';
-import { ConfigMain } from './components/ConfigMain';
+import { ConfigDialog } from './components/ConfigDialog';
 import { Board } from './components/Board';
 import { PlayerInfo } from './components/PlayerInfo';
-import { MessageBox, messager } from './components/MessageBox';
 import { helper } from './logic/helper';
 import { About } from './components/About';
 import { rendering } from './logic/rendering';
 import { refreshtimer } from './logic/refreshtimer';
-import { playall } from './components/Emotion';
 import { Refresh } from '@mui/icons-material';
 import packageInfo from '../package.json';
 import { themes } from './themes';
-import { EmotionBox, emotioner } from './components/EmotionBox';
+import { message } from './logic/message';
+import { mp4, playAll } from './logic/mp4';
+import { Mp4Dialog } from './components/Mp4Dialog';
+import { MessageDialog } from './components/MessageDialog';
 
 const App: React.FC = () => {
-  const about = () => messager.display('About', <About />);
+  const about = () => message.display('About', <About />);
   const version = packageInfo.version;
   const theme = createTheme(themes[0].theme);
   return (
@@ -42,16 +43,16 @@ const App: React.FC = () => {
         <div className="flex flex-col w-full text-center">
           <h3 className="h-8 text-lg">
             <span onClick={about}>ChessBuddy {version}</span>
-            <Refresh fontSize="small" onClick={playall} />
+            <Refresh fontSize="small" onClick={playAll} />
           </h3>
           <Panel gameState={gameState} config={config} />
           <FenInfo game={game} />
           <History game={game} gameHistory={gameHistory} config={config} />
         </div>
       </div>
-      <MessageBox messager={messager} />
-      <EmotionBox emotioner={emotioner} />
-      <ConfigMain config={config} />
+      <MessageDialog message={message} />
+      <Mp4Dialog mp4={mp4} />
+      <ConfigDialog config={config} />
     </ThemeProvider>
   );
 };

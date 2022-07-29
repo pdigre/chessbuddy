@@ -6,8 +6,8 @@ import { observer } from 'mobx-react';
 import { game, GameState } from '../logic/game';
 import { refreshtimer } from '../logic/refreshtimer';
 import { Config } from '../logic/config';
-import { messager } from './MessageBox';
 import { helper } from '../logic/helper';
+import { message } from '../logic/message';
 
 export const Panel = observer(({ gameState, config }: { gameState: GameState; config: Config }) => {
   const isGotoHist = config.showHist && config.markHist >= 0;
@@ -16,14 +16,14 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
     const isHistUndo = !config.showHist && config.markLog >= 0;
     const isPlayUndo = gameState.isPlaying && config.showUndo;
     if (isHistUndo || isPlayUndo) {
-      messager.display(
+      message.display(
         'Undo',
         isPlayUndo
           ? 'Do you want to undo last move?'
           : 'Do you want to revert the game to the marked position?',
         ['Yes', 'No'],
         yes => {
-          messager.clear();
+          message.clear();
           if (yes == 'Yes') {
             game.log = game.log.slice(0, isPlayUndo ? config.undopos : config.markLog);
             game.fen = rules.replay(game.log);
@@ -43,7 +43,7 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
   const histHandler = () => (config.showHist = !config.showHist);
 
   const configHandler = () => {
-    config.showConfig = true;
+    config.showTab = 0;
     gameState.isPlaying = false;
   };
 

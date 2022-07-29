@@ -5,8 +5,8 @@ import { Table, TableBody, TableCell, TableContainer, TableRow, TextField } from
 import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../logic/game';
-import { messager } from './MessageBox';
-import { ConfigButton } from './StyledSelector';
+import { ConfigButton } from './ConfigWidgets';
+import { message } from '../logic/message';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
   const [name, setName] = useState('');
@@ -61,7 +61,7 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
       players.addPlayer(`Human:${name}:${email}`);
       players.save();
     } else {
-      messager.display('Add Human', 'Need to enter a name');
+      message.display('Add Human', 'Need to enter a name');
     }
   };
 

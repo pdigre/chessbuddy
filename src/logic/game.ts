@@ -1,12 +1,12 @@
 import * as rules from './rules';
 import { Human, players } from './players';
 import { Player } from './player';
-import { timeKeeper } from './timekeeper';
+import { clock } from './clock';
 import { locate, San, tree } from './openings';
 import { makeAutoObservable } from 'mobx';
 import { helper } from './helper';
 import { Bot } from './bots';
-import { winner } from '../components/Emotion';
+import { playWinner } from './mp4';
 import { Square } from 'chess.js';
 
 /*
@@ -76,15 +76,15 @@ export class Game {
     helper.reset();
     this.fen = rules.newFen(this.fen, san);
     if (this.isWhiteTurn) {
-      this.wtime += timeKeeper.elapsed;
+      this.wtime += clock.elapsed;
     } else {
-      this.btime += timeKeeper.elapsed;
+      this.btime += clock.elapsed;
     }
-    timeKeeper.reset();
+    clock.reset();
     this.run();
   };
   run: VoidFunction = () => {
-    timeKeeper.reset();
+    clock.reset();
     this.calculate();
     const next = this.nextPlayer();
     if (next instanceof Human) {
@@ -148,7 +148,7 @@ export class Game {
     const san = this.log[this.log.length - 1];
     this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
     if (this.isComplete) {
-      if (gameState.isPlaying) winner();
+      if (gameState.isPlaying) playWinner();
       gameState.isPlaying = false;
     }
     this.isWhiteTurn = rules.isWhiteTurn(this.fen);

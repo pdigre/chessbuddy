@@ -6,11 +6,11 @@ import { game, GameState } from '../logic/game';
 import { Chessboard } from 'react-chessboard';
 import { Config } from '../logic/config';
 import { RefreshTimer } from '../logic/refreshtimer';
-import { messager } from './MessageBox';
 import { Rendering } from '../logic/rendering';
 import { observer } from 'mobx-react';
-import { correct } from './Emotion';
 import { Square } from 'chess.js';
+import { message } from '../logic/message';
+import { playCorrect } from '../logic/mp4';
 
 const pgnStyle: React.CSSProperties = {
   background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
@@ -58,14 +58,14 @@ export const Board = observer(
         const action = move[1];
         if (action.promotion && isHuman) {
           const buttons = ['Queen', 'Rook', 'Knight', 'Bishop'];
-          messager.display('Promotion', 'Choose promotion piece', buttons, reply => {
+          message.display('Promotion', 'Choose promotion piece', buttons, reply => {
             let promo: 'b' | 'q' | 'n' | 'r' = 'q';
             if (reply == 'Rook') promo = 'r';
             if (reply == 'Knight') promo = 'n';
             if (reply == 'Bishop') promo = 'b';
             const move = rules.move(game.fen, from, to, promo);
             if (move != null) {
-              messager.clear();
+              message.clear();
               game.playMove(move[1].san);
             }
           });
@@ -90,7 +90,7 @@ export const Board = observer(
     };
 
     const onMovePiece = (from: Square, to: Square) => {
-      if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from) correct();
+      if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from) playCorrect();
       config.startUndoTimer(game.log.length);
       const state = game.log.length;
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
