@@ -1,11 +1,11 @@
 import React, { MouseEvent, TouchEvent, useRef } from 'react';
 import * as rules from '../logic/rules';
-import { messager } from './MessageBox';
 import { GameHistory, Game, gameState } from '../logic/game';
 import { observer } from 'mobx-react';
 import { Config } from '../logic/config';
 import { refreshtimer } from '../logic/refreshtimer';
 import { helper } from '../logic/helper';
+import { message } from '../logic/message';
 
 export const History = observer(
   ({ game, gameHistory, config }: { game: Game; gameHistory: GameHistory; config: Config }) => {
@@ -22,19 +22,17 @@ export const History = observer(
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
         const moves = games[config.markHist].split(';')[5].split(' ');
-        messager.display('Load game', 'Do you want to look at this game?', ['Yes', 'No'], reply => {
+        message.display('Load game', 'Do you want to look at this game?', ['Yes', 'No'], reply => {
           if (reply == 'Yes') {
             game.log = moves;
             const mark = moves.length - 1;
             config.markLog = mark;
             game.fen = rules.replay(moves, mark);
           }
-          messager.clear();
+          message.clear();
         });
       } else {
-        messager.display('Load game', 'You have to end current game to load previous games', [
-          'Ok',
-        ]);
+        message.display('Load game', 'You have to end current game to load previous games', ['Ok']);
       }
       config.markHist = -1;
     }

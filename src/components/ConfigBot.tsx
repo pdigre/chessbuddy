@@ -3,9 +3,9 @@ import { Bot, UCI_ENGINES } from '../logic/bots';
 import { Players } from '../logic/players';
 import { Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
-import { ConfigButton, StyledSelector } from './StyledSelector';
+import { ConfigButton, ConfigSelect } from './ConfigWidgets';
 import { observer } from 'mobx-react';
-import { messager } from './MessageBox';
+import { message } from '../logic/message';
 
 export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [engine, setEngine] = React.useState('');
@@ -14,26 +14,26 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [time, setTime] = useState('');
   const addPlayerHandler = () => {
     if (!engine) {
-      messager.display('Add Bot', 'Need to select a chess engine');
+      message.display('Add Bot', 'Need to select a chess engine');
       return;
     }
     const nSkill = Number.parseInt(skill);
     if (isNaN(nSkill) || nSkill < 1 || nSkill > 20) {
-      messager.display('Add Bot', 'Need to enter skill level between 1 and 20');
+      message.display('Add Bot', 'Need to enter skill level between 1 and 20');
       return;
     }
     const nDepth = Number.parseInt(depth);
     if (!time.length == !depth.length) {
-      messager.display('Add Bot', 'Need to enter time or depth, but not both');
+      message.display('Add Bot', 'Need to enter time or depth, but not both');
       return;
     }
     if (depth.length && (isNaN(nDepth) || nDepth < 6 || nDepth > 30)) {
-      messager.display('Add Bot', 'Need to enter depth between 6 and 30');
+      message.display('Add Bot', 'Need to enter depth between 6 and 30');
       return;
     }
     const nTime = Number.parseInt(time);
     if (time.length && (isNaN(nTime) || nTime < 1 || nTime > 60)) {
-      messager.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
+      message.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
       return;
     }
     players.addPlayer(`Bot:${engine}:${skill}:${time}:${depth}`);
@@ -91,7 +91,7 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
       </div>
       <div>&nbsp;</div>
       <div>
-        <StyledSelector
+        <ConfigSelect
           label="Chess Engine"
           choices={engineNames}
           selected={{ name: 'ConfigSelector', value: engine }}

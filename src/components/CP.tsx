@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Helper } from '../logic/helper';
 import { Rendering } from '../logic/rendering';
 import { Config } from '../logic/config';
-import { mistake } from './Emotion';
+import { playMistake } from '../logic/mp4';
 
 let prevcp = 0;
 
@@ -13,7 +13,7 @@ export const CP = observer(
       return <div className="w-6 h-full flex flex-col flex-grow"></div>;
     }
     const cp = helper.cp;
-    if (Math.abs(cp - prevcp) > 100) mistake();
+    if (Math.abs(cp - prevcp) > 100) playMistake();
     prevcp = cp;
     const blackTop = config.rotation > 1;
     const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);

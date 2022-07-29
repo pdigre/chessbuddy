@@ -4,7 +4,7 @@ export class Config {
   rotation = 0;
   markLog = -1;
   markHist = -1;
-  showConfig = false;
+  showTab = -1;
   showHist = false;
   showUndo = false;
 

@@ -3,7 +3,7 @@ import { Config } from '../logic/config';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
-import { ConfigButton } from './StyledSelector';
+import { ConfigButton } from './ConfigWidgets';
 
 export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   return (

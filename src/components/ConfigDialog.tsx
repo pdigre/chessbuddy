@@ -9,9 +9,9 @@ import { server } from '../logic/server';
 import { observer } from 'mobx-react';
 import { Config } from '../logic/config';
 import { refreshtimer } from '../logic/refreshtimer';
-import { ConfigTimer } from './ConfigTimer';
+import { clock } from '../logic/clock';
 
-export const ConfigMain = observer(({ config }: { config: Config }) => {
+export const ConfigDialog = observer(({ config }: { config: Config }) => {
   const TabLink = (props: { label: string; id: string }) => {
     return (
       <Tab
@@ -27,10 +27,10 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
     return (
       <div
         role="tabpanel"
-        hidden={value !== index}
+        hidden={config.showTab !== index}
         id={`nav-tabpanel-${index}`}
         aria-labelledby={`nav-tab-${index}`}>
-        {value === index && (
+        {config.showTab === index && (
           <Box p={3}>
             <Typography>{children}</Typography>
           </Box>
@@ -39,20 +39,20 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
     );
   };
 
-  const [value, setValue] = React.useState(0);
-
   // eslint-disable-next-line
-  const handleChange = (event: ChangeEvent<{}>, newValue: number) => setValue(newValue as number);
+  const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
+    config.showTab = newValue as number;
+  };
 
   const handleClose = () => {
-    config.showConfig = false;
+    config.showTab = -1;
     refreshtimer.startRefreshTimer();
   };
 
   return (
     <Dialog
       aria-labelledby="simple-dialog-title"
-      open={config.showConfig}
+      open={config.showTab >= 0}
       onClose={handleClose}
       maxWidth="xl"
       className="text-center text-xl">
@@ -60,18 +60,17 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
       <AppBar position="static">
         <Tabs
           className="bg-green-300"
-          value={value}
+          value={config.showTab}
           onChange={handleChange}
           aria-label="Config tabs">
           <TabLink label="Game" id="nav-tab-0" />
           <TabLink label="Display" id="nav-tab-1" />
           <TabLink label="Humans" id="nav-tab-2" />
           <TabLink label="Bots" id="nav-tab-3" />
-          <TabLink label="Timer" id="nav-tab-4" />
         </Tabs>
       </AppBar>
       <TabPanel index={0}>
-        <ConfigGame players={players} />
+        <ConfigGame players={players} clock={clock} />
       </TabPanel>
       <TabPanel index={1}>
         <ConfigDisplay config={config} />
@@ -81,9 +80,6 @@ export const ConfigMain = observer(({ config }: { config: Config }) => {
       </TabPanel>
       <TabPanel index={3}>
         <ConfigBot players={players} />
-      </TabPanel>
-      <TabPanel index={4}>
-        <ConfigTimer config={config} />
       </TabPanel>
     </Dialog>
   );
