@@ -7,8 +7,6 @@ export class Config {
   showTab = -1;
   showHist = false;
   showUndo = false;
-
-  theme = 0;
   showHints = false;
   showCP = true;
   showFacts = true;

@@ -1,11 +1,12 @@
 import React, { MouseEvent, TouchEvent, useRef } from 'react';
 import * as rules from '../logic/rules';
-import { GameHistory, Game, gameState } from '../logic/game';
+import { Game, gameState } from '../logic/game';
 import { observer } from 'mobx-react';
 import { Config } from '../logic/config';
 import { refreshtimer } from '../logic/refreshtimer';
 import { helper } from '../logic/helper';
 import { message } from '../logic/message';
+import { GameHistory } from '../logic/history';
 
 export const History = observer(
   ({ game, gameHistory, config }: { game: Game; gameHistory: GameHistory; config: Config }) => {
@@ -89,9 +90,9 @@ export const History = observer(
         rows[l][c] = t;
       });
       return rows.map((row, iRow) => (
-        <tr key={iRow} className="[&td]:p-[2px] [&td]:text-left [&td]:text-lg ">
+        <tr key={iRow} className="[&td]:p-[2px] [&td]:text-left [&td]:text-lg dark:text-white">
           <td className="w-5">
-            <span className="text-red-900 text-sm">{iRow}</span>
+            <span className="text-red-900 text-sm dark:text-red-200">{iRow}</span>
           </td>
           {row.map((col, iCol) => {
             const id = iRow * 2 + iCol;
@@ -100,7 +101,7 @@ export const History = observer(
               <td
                 id={id.toString()}
                 key={id.toString()}
-                className={'w-30 p-[2px] text-center text-lg' + marker}>
+                className={'w-30 p-[2px] text-center text-lg dark:text-white' + marker}>
                 {col}
               </td>
             );
@@ -134,7 +135,7 @@ export const History = observer(
             <tr
               key={iRow.toString()}
               id={iRow.toString()}
-              className={'[&td]:p-[3px] [&td]:text-center [&td]:text-lg' + marker}>
+              className={'[&td]:p-[3px] [&td]:text-center [&td]:text-lg dark:text-white' + marker}>
               <td>{tim}</td>
               <td>{cols[1].split(' ')[0]}</td>
               <td>{cols[2].split(' ')[0]}</td>
