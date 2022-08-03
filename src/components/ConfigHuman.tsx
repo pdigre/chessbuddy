@@ -1,11 +1,10 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { Human, Players } from '../logic/players';
 import { Server } from '../logic/server';
-import { Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
-import { gameHistory } from '../logic/game';
-import { ConfigButton } from './ConfigWidgets';
+import { gameHistory } from '../logic/history';
+import { ConfigButton, ConfigText } from './ConfigWidgets';
 import { message } from '../logic/message';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
@@ -68,39 +67,29 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
   const uploadChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const files = evt.currentTarget?.files;
     if (files && files.length) {
-      const file = files[0];
-      new Promise(function (resolve, reject) {
-        const reader = new FileReader();
-        reader.onerror = reject;
-        reader.onload = function () {
-          gameHistory.upload(reader.result as string);
-        };
-        reader.readAsBinaryString(file); // here the file can be read in different way Text, DataUrl, ArrayBuffer
-      });
+      gameHistory.uploadHistory(files[0]);
     }
   };
+
   const connectPlayer = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     server.connectREST(humans[marker] as Human);
   };
   return (
     <div className="flex flex-col text-center w-[650px] h-[400px] [&>div]:text-left">
-      <TableContainer className="m-1">
-        <Table size="small" className="p-3 text-left text-xl">
-          <TableBody onClick={doSelect}>
-            {humans.map((human, iLine) => (
-              <TableRow
-                key={iLine.toString()}
-                id={iLine.toString()}
-                className={iLine == marker ? 'bg-green-300' : ''}>
-                <TableCell>{human.name}</TableCell>
-                <TableCell>{(human as Human).email}</TableCell>
-              </TableRow>
-            ))}
-            <TableRow />
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <table className="p-3 m-1 text-left text-xl dark:bg-slate-800">
+        <tbody onClick={doSelect}>
+          {humans.map((human, iLine) => (
+            <tr
+              key={iLine.toString()}
+              id={iLine.toString()}
+              className={iLine == marker ? 'bg-green-300 dark:bg-green-700' : ''}>
+              <td className="dark:text-white">{human.name}</td>
+              <td className="dark:text-white">{(human as Human).email}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <a className="hidden" download="games.txt" href={downloadLink} ref={downloadRef}>
         download it
       </a>
@@ -126,14 +115,11 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           Connect <Language />
         </ConfigButton>
       </div>
-      <div className="bg-gray-100 border-2 border-green-800 m-2 p-5 text-left">
-        <ConfigButton onClick={doAddPlayer}>
-          Add <Add />
-        </ConfigButton>
+      <div className="bg-gray-100 dark:bg-green-900 border-2 border-green-800 dark:border-green-300 m-2 p-5 text-left">
         &nbsp;
-        <TextField label="Player Name" id="name" size="medium" onChange={changeName} />
+        <ConfigText label="Player Name" id="name" onChange={changeName} />
         &nbsp;
-        <TextField label="Player Email" id="email" size="medium" onChange={changeEmail} />
+        <ConfigText label="Player Email" id="email" onChange={changeEmail} />
         &nbsp;
         <ConfigButton onClick={doAddPlayer}>
           Add <Add />

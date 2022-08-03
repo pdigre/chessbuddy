@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { config } from './config';
 
 type Mp4Type = {
   src: string;
@@ -52,13 +53,14 @@ const play = (emo: Mp4Type, title: string) => {
   mp4.display(title, emo);
 };
 
-const playRandom = (title: string, emos: Mp4Type[]) => {
-  play(emos[Math.floor(Math.random() * emos.length)], title);
+const playRandom = (enable: boolean, title: string, emos: Mp4Type[]) => {
+  if (enable) play(emos[Math.floor(Math.random() * emos.length)], title);
 };
 
-export const playWinner = (): void => playRandom('Winner', winner_urls);
-export const playCorrect = (): void => playRandom('Stockfish would do the same', correct_urls);
-export const playMistake = (): void => playRandom('Mistake', mistake_urls);
+export const playWinner = (): void => playRandom(config.playWinner, 'Winner', winner_urls);
+export const playCorrect = (): void =>
+  playRandom(config.playCorrect, 'Stockfish would do the same', correct_urls);
+export const playMistake = (): void => playRandom(config.playMistake, 'Mistake', mistake_urls);
 
 let prev = 0;
 

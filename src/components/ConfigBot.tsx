@@ -1,9 +1,8 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Bot, UCI_ENGINES } from '../logic/bots';
 import { Players } from '../logic/players';
-import { Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
-import { ConfigButton, ConfigSelect } from './ConfigWidgets';
+import { ConfigButton, ConfigSelect, ConfigText } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { message } from '../logic/message';
 
@@ -68,21 +67,18 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   return (
     <div className="flex flex-col text-center w-px-650 h-px-400 [&>div]:text-left">
       <div className="bg-gray-100 border-2 border-x-green-700 m-1 p-1">
-        <TableContainer className="m-1">
-          <Table size="small" className="p-1 text-left text-lg">
-            <TableBody onClick={selectHandler}>
-              {bots.map((bot, iLine) => (
-                <TableRow
-                  key={iLine.toString()}
-                  id={iLine.toString()}
-                  className={iLine == marker ? 'bg-green-300' : ''}>
-                  <TableCell>{bot.name}</TableCell>
-                </TableRow>
-              ))}
-              <TableRow />
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <table className="m-1 p-1 text-left text-lg dark:bg-slate-800">
+          <tbody onClick={selectHandler}>
+            {bots.map((bot, iLine) => (
+              <tr
+                key={iLine.toString()}
+                id={iLine.toString()}
+                className={iLine == marker ? 'bg-green-300' : ''}>
+                <td className="dark:text-white">{bot.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <div>
           <ConfigButton onClick={delPlayerHandler} disabled={!hasSelect}>
             Delete <Delete />
@@ -98,15 +94,9 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
           setSelected={setEngine}
         />{' '}
         &nbsp;
-        <TextField label="Skill level" id="skill" size="medium" onChange={skillChange} /> &nbsp;
-        <TextField
-          label="Depth (..not time)"
-          id="depth"
-          size="medium"
-          onChange={depthChange}
-        />{' '}
-        &nbsp;
-        <TextField label="Time (sec)" id="time" size="medium" onChange={timeChange} /> &nbsp;
+        <ConfigText label="Skill level" id="skill" onChange={skillChange} /> &nbsp;
+        <ConfigText label="Depth (..not time)" id="depth" onChange={depthChange} /> &nbsp;
+        <ConfigText label="Time (sec)" id="time" onChange={timeChange} /> &nbsp;
         <ConfigButton onClick={addPlayerHandler}>
           Add <Add />
         </ConfigButton>

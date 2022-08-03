@@ -1,32 +1,35 @@
 import React, { ChangeEvent, ReactNode, MouseEvent } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import NativeSelect from '@mui/material/NativeSelect';
-import { Button } from '@mui/material';
+import {
+  Button,
+  TextField,
+  InputLabel,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+  NativeSelect,
+} from '@mui/material';
+import { theme } from '../logic/theme';
 
-export type SelectorProps = {
+export const ConfigSelect: React.FC<{
   label: string;
   choices: string[];
   selected: { name?: string | undefined; value: unknown } | undefined;
   setSelected: (name: string) => void;
-};
-
-export const ConfigSelect: React.FC<SelectorProps> = ({
-  label: label,
-  choices: choices,
-  selected: selected,
-  setSelected: setSelected,
-}) => {
+}> = ({ label, choices, selected, setSelected }) => {
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelected(event.target.value as string);
   };
   return (
     <FormControl variant="filled">
-      <InputLabel variant="standard" htmlFor={label}>
+      <InputLabel
+        variant="standard"
+        htmlFor={label}
+        sx={{ color: theme.darkTheme ? 'white' : 'black' }}>
         {label}
       </InputLabel>
       <NativeSelect
         className="min-w-[200px]"
+        sx={{ color: theme.darkTheme ? 'white' : 'black' }}
         value={selected?.value as string}
         onChange={handleChange}
         inputProps={{
@@ -44,25 +47,55 @@ export const ConfigSelect: React.FC<SelectorProps> = ({
   );
 };
 
-export type ConfigButtonProps = {
+export const ConfigButton: React.FC<{
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
   children: ReactNode[];
   disabled?: boolean;
-};
-
-export const ConfigButton: React.FC<ConfigButtonProps> = ({
-  onClick: onClick,
-  children: children,
-  disabled: disabled,
-}) => {
+}> = ({ onClick, children, disabled }) => {
   return (
     <Button
       className="flex-grow bg-green-100 h-14"
-      sx={{ backgroundColor: 'darkgreen' }}
+      sx={{ backgroundColor: theme.darkTheme ? 'green' : 'darkgreen' }}
       onClick={onClick}
       variant="contained"
       disabled={disabled ?? false}>
       {children}
     </Button>
+  );
+};
+
+export const ConfigText: React.FC<{
+  onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  label: string;
+  id: string;
+  disabled?: boolean;
+}> = ({ onChange, label, id }) => {
+  return (
+    <TextField
+      label={label}
+      id={id}
+      size="medium"
+      onChange={onChange}
+      sx={{ input: { color: theme.darkTheme ? 'white' : 'black' } }}
+    />
+  );
+};
+
+export const ConfigCheckbox: React.FC<{
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+  checked: boolean;
+}> = ({ onChange, label, checked }) => {
+  return (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={checked}
+          onChange={onChange}
+          inputProps={{ 'aria-label': 'primary checkbox' }}
+        />
+      }
+      label={label}
+    />
   );
 };

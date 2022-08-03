@@ -1,5 +1,5 @@
 import { Human } from './players';
-import { gameHistory } from './game';
+import { gameHistory } from './history';
 import { deviceInfo } from './library';
 import { makeAutoObservable } from 'mobx';
 import { message } from './message';

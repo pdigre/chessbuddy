@@ -16,7 +16,7 @@ export const PlayerInfo = observer(
       </span>
     ));
     const right = isTop && config.rotation % 2 == 1 ? ' text-right' : '';
-    const style = 'h-[31px] text-xl m-0 p-1';
+    const style = 'h-[31px] text-xl dark:text-white m-0 p-1';
 
     return (
       <p className={style + right}>
