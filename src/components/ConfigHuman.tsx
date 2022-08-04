@@ -1,11 +1,11 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { Human, Players } from '../logic/players';
 import { Server } from '../logic/server';
-import { Add, Delete, GetApp, Language, Publish } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../logic/history';
 import { ConfigButton, ConfigText } from './ConfigWidgets';
 import { message } from '../logic/message';
+import { MdAdd, MdDelete, MdDownload, MdOnlinePrediction, MdUpload } from 'react-icons/md';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
   const [name, setName] = useState('');
@@ -76,8 +76,8 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     server.connectREST(humans[marker] as Human);
   };
   return (
-    <div className="flex flex-col text-center w-[650px] h-[400px] [&>div]:text-left">
-      <table className="p-3 m-1 text-left text-xl dark:bg-slate-800">
+    <div className="flex flex-col text-center w-[950px] h-[500px] [&>div]:text-left">
+      <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
         <tbody onClick={doSelect}>
           {humans.map((human, iLine) => (
             <tr
@@ -101,29 +101,36 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
         onChange={uploadChange}
         ref={uploadRef}
       />
-      <div className="flex flex-row">
-        <ConfigButton onClick={doDelPlayer} disabled={!hasSelect}>
-          Delete <Delete />
-        </ConfigButton>
-        <ConfigButton onClick={downloadPlayer} disabled={!hasSelect}>
-          Download <GetApp />
-        </ConfigButton>
-        <ConfigButton onClick={uploadPlayer} disabled={!hasSelect}>
-          Upload <Publish />
-        </ConfigButton>
-        <ConfigButton onClick={connectPlayer} disabled={!hasEmail}>
-          Connect <Language />
-        </ConfigButton>
+      <div className="[&>button]:mx-2">
+        <ConfigButton
+          onClick={doDelPlayer}
+          label="Delete"
+          icon={<MdDelete />}
+          disabled={!hasSelect}
+        />
+        <ConfigButton
+          onClick={downloadPlayer}
+          label="Download"
+          icon={<MdDownload />}
+          disabled={!hasSelect}
+        />
+        <ConfigButton
+          onClick={uploadPlayer}
+          label="Upload"
+          icon={<MdUpload />}
+          disabled={!hasSelect}
+        />
+        <ConfigButton
+          onClick={connectPlayer}
+          label="Update"
+          icon={<MdOnlinePrediction />}
+          disabled={!hasEmail}
+        />
       </div>
-      <div className="bg-gray-100 dark:bg-green-900 border-2 border-green-800 dark:border-green-300 m-2 p-5 text-left">
-        &nbsp;
+      <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
         <ConfigText label="Player Name" id="name" onChange={changeName} />
-        &nbsp;
         <ConfigText label="Player Email" id="email" onChange={changeEmail} />
-        &nbsp;
-        <ConfigButton onClick={doAddPlayer}>
-          Add <Add />
-        </ConfigButton>
+        <ConfigButton onClick={doAddPlayer} label="Add" icon={<MdAdd />} />
       </div>
     </div>
   );

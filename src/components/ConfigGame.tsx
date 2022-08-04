@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ConfigButton, ConfigSelect } from './ConfigWidgets';
-import { Clear, ExitToApp, PlayArrow } from '@mui/icons-material';
+import { MdExitToApp, MdPlayCircle, MdClear } from 'react-icons/md';
 import { game } from '../logic/game';
 import { observer } from 'mobx-react';
 import { Players } from '../logic/players';
@@ -13,7 +13,7 @@ export const ConfigGame = observer(({ players, clock }: { players: Players; cloc
   game.setPlayers(white, black);
 
   return (
-    <div className="flex flex-col text-center w-[650px] h-[400px] [&>div]:text-left">
+    <div className="flex flex-col text-center w-[950px] h-[500px] [&>div]:text-left">
       <div>
         <ConfigSelect
           label="White"
@@ -39,25 +39,15 @@ export const ConfigGame = observer(({ players, clock }: { players: Players; cloc
         }}
       />
       <div>&nbsp;</div>
-      <div>
-        <ConfigButton onClick={game.playAction}>
-          Play
-          <PlayArrow />
-        </ConfigButton>
-        &nbsp;
-        {game.isComplete ? (
-          ''
-        ) : (
-          <ConfigButton onClick={game.endAction}>
-            End game
-            <ExitToApp />
-          </ConfigButton>
-        )}
-        &nbsp;
-        <ConfigButton onClick={game.reset}>
-          Reset
-          <Clear />
-        </ConfigButton>
+      <div className="[&>button]:mx-2">
+        <ConfigButton onClick={game.playAction} label="Play" icon={<MdPlayCircle />} />
+        <ConfigButton
+          onClick={game.endAction}
+          label="End game"
+          icon={<MdExitToApp />}
+          disabled={game.isComplete}
+        />
+        <ConfigButton onClick={game.reset} label="Reset" icon={<MdClear />} />
       </div>
     </div>
   );

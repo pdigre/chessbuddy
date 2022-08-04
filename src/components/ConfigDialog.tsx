@@ -53,43 +53,41 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
   };
 
   return (
-    <div className={theme.darkTheme ? 'dark' : 'light'}>
-      <Dialog
-        aria-labelledby="simple-dialog-title"
-        open={config.showTab >= 0}
-        onClose={handleClose}
-        maxWidth="xl"
-        className={'text-center text-xl'}>
-        <DialogTitle
-          id="simple-dialog-title"
-          className={theme.darkTheme ? 'bg-green-900 text-white' : ''}>
-          Configure
-        </DialogTitle>
-        <AppBar position="static">
-          <Tabs
-            className={theme.darkTheme ? 'bg-green-600 text-white' : 'bg-green-300'}
-            value={config.showTab}
-            onChange={handleChange}
-            aria-label="Config tabs">
-            <TabLink label="Game" id="nav-tab-0" />
-            <TabLink label="Display" id="nav-tab-1" />
-            <TabLink label="Humans" id="nav-tab-2" />
-            <TabLink label="Bots" id="nav-tab-3" />
-          </Tabs>
-        </AppBar>
-        <TabPanel index={0}>
-          <ConfigGame players={players} clock={clock} />
-        </TabPanel>
-        <TabPanel index={1}>
-          <ConfigDisplay config={config} theme={theme} />
-        </TabPanel>
-        <TabPanel index={2}>
-          <ConfigHuman players={players} server={server} />
-        </TabPanel>
-        <TabPanel index={3}>
-          <ConfigBot players={players} />
-        </TabPanel>
-      </Dialog>
-    </div>
+    <Dialog
+      aria-labelledby="simple-dialog-title"
+      open={config.showTab >= 0}
+      onClose={handleClose}
+      maxWidth="xl"
+      className={'text-center text-xl'}>
+      <DialogTitle
+        id="simple-dialog-title"
+        className={theme.darkTheme ? 'bg-green-900 text-white' : ''}>
+        Configure
+      </DialogTitle>
+      <AppBar position="static">
+        <Tabs
+          className={theme.darkTheme ? 'bg-green-600 text-white' : 'bg-green-300'}
+          value={config.showTab}
+          onChange={handleChange}
+          aria-label="Config tabs">
+          <TabLink label="Game" id="nav-tab-0" />
+          <TabLink label="Display" id="nav-tab-1" />
+          <TabLink label="Humans" id="nav-tab-2" />
+          <TabLink label="Bots" id="nav-tab-3" />
+        </Tabs>
+      </AppBar>
+      <TabPanel index={0}>
+        <ConfigGame players={players} clock={clock} />
+      </TabPanel>
+      <TabPanel index={1}>
+        <ConfigDisplay config={config} theme={theme} />
+      </TabPanel>
+      <TabPanel index={2}>
+        <ConfigHuman players={players} server={server} />
+      </TabPanel>
+      <TabPanel index={3}>
+        <ConfigBot players={players} />
+      </TabPanel>
+    </Dialog>
   );
 });

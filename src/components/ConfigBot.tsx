@@ -1,10 +1,10 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Bot, UCI_ENGINES } from '../logic/bots';
 import { Players } from '../logic/players';
-import { Add, Delete } from '@mui/icons-material';
 import { ConfigButton, ConfigSelect, ConfigText } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { message } from '../logic/message';
+import { MdAdd, MdDelete } from 'react-icons/md';
 
 export const ConfigBot = observer(({ players }: { players: Players }) => {
   const [engine, setEngine] = React.useState('');
@@ -65,41 +65,36 @@ export const ConfigBot = observer(({ players }: { players: Players }) => {
   };
 
   return (
-    <div className="flex flex-col text-center w-px-650 h-px-400 [&>div]:text-left">
-      <div className="bg-gray-100 border-2 border-x-green-700 m-1 p-1">
-        <table className="m-1 p-1 text-left text-lg dark:bg-slate-800">
-          <tbody onClick={selectHandler}>
-            {bots.map((bot, iLine) => (
-              <tr
-                key={iLine.toString()}
-                id={iLine.toString()}
-                className={iLine == marker ? 'bg-green-300' : ''}>
-                <td className="dark:text-white">{bot.name}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div>
-          <ConfigButton onClick={delPlayerHandler} disabled={!hasSelect}>
-            Delete <Delete />
-          </ConfigButton>
-        </div>
-      </div>
-      <div>&nbsp;</div>
-      <div>
+    <div className="w-[950px] h-[500px] [&>div]:text-left">
+      <table className="w-full text-left text-lg dark:bg-slate-800 border-2 border-separate p-2">
+        <tbody onClick={selectHandler}>
+          {bots.map((bot, iLine) => (
+            <tr
+              key={iLine.toString()}
+              id={iLine.toString()}
+              className={iLine == marker ? 'bg-green-300' : ''}>
+              <td className="dark:text-white">{bot.name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ConfigButton
+        onClick={delPlayerHandler}
+        label="Delete"
+        icon={<MdDelete />}
+        disabled={!hasSelect}
+      />
+      <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
         <ConfigSelect
           label="Chess Engine"
           choices={engineNames}
           selected={{ name: 'ConfigSelector', value: engine }}
           setSelected={setEngine}
-        />{' '}
-        &nbsp;
+        />
         <ConfigText label="Skill level" id="skill" onChange={skillChange} /> &nbsp;
         <ConfigText label="Depth (..not time)" id="depth" onChange={depthChange} /> &nbsp;
         <ConfigText label="Time (sec)" id="time" onChange={timeChange} /> &nbsp;
-        <ConfigButton onClick={addPlayerHandler}>
-          Add <Add />
-        </ConfigButton>
+        <ConfigButton onClick={addPlayerHandler} label="Add" icon={<MdAdd />} />
       </div>
     </div>
   );
