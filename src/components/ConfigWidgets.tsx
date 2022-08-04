@@ -21,15 +21,11 @@ export const ConfigSelect: React.FC<{
   };
   return (
     <FormControl variant="filled">
-      <InputLabel
-        variant="standard"
-        htmlFor={label}
-        sx={{ color: theme.darkTheme ? 'white' : 'black' }}>
+      <InputLabel variant="standard" htmlFor={label}>
         {label}
       </InputLabel>
       <NativeSelect
         className="min-w-[200px]"
-        sx={{ color: theme.darkTheme ? 'white' : 'black' }}
         value={selected?.value as string}
         onChange={handleChange}
         inputProps={{
@@ -49,17 +45,19 @@ export const ConfigSelect: React.FC<{
 
 export const ConfigButton: React.FC<{
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
-  children: ReactNode[];
+  label: ReactNode;
+  icon: ReactNode;
   disabled?: boolean;
-}> = ({ onClick, children, disabled }) => {
+}> = ({ onClick, label, icon, disabled }) => {
   return (
     <Button
-      className="flex-grow bg-green-100 h-14"
+      className="flex-grow h-14 text-lg m-2"
       sx={{ backgroundColor: theme.darkTheme ? 'green' : 'darkgreen' }}
       onClick={onClick}
       variant="contained"
       disabled={disabled ?? false}>
-      {children}
+      <span className="text-3xl">{icon}</span>
+      <span className="text-lg ml-2">{label}</span>
     </Button>
   );
 };
@@ -70,15 +68,7 @@ export const ConfigText: React.FC<{
   id: string;
   disabled?: boolean;
 }> = ({ onChange, label, id }) => {
-  return (
-    <TextField
-      label={label}
-      id={id}
-      size="medium"
-      onChange={onChange}
-      sx={{ input: { color: theme.darkTheme ? 'white' : 'black' } }}
-    />
-  );
+  return <TextField label={label} id={id} size="medium" onChange={onChange} />;
 };
 
 export const ConfigCheckbox: React.FC<{

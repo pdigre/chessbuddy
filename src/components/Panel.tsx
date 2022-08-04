@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
-import { EventNote, Input, Pause, PlayArrow, Settings, Timeline, Undo } from '@mui/icons-material';
 import * as rules from '../logic/rules';
 import { observer } from 'mobx-react';
 import { game, GameState } from '../logic/game';
@@ -8,6 +7,15 @@ import { refreshtimer } from '../logic/refreshtimer';
 import { Config } from '../logic/config';
 import { helper } from '../logic/helper';
 import { message } from '../logic/message';
+import {
+  MdInput,
+  MdOutlineFolderOpen,
+  MdOutlineHistory,
+  MdPause,
+  MdPlayArrow,
+  MdSettings,
+  MdUndo,
+} from 'react-icons/md';
 
 export const Panel = observer(({ gameState, config }: { gameState: GameState; config: Config }) => {
   const isGotoHist = config.showHist && config.markHist >= 0;
@@ -66,24 +74,24 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
     <ButtonGroup color="primary" aria-label="outlined primary button group" className="w-full">
       <PanelButton onClick={playHandler}>
         {isHistUndo || isPlayUndo ? (
-          <Undo fontSize="large" />
+          <MdUndo className="text-3xl" />
         ) : gameState.isPlaying ? (
-          <PlayArrow fontSize="large" />
+          <MdPlayArrow className="text-3xl" />
         ) : (
-          <Pause fontSize="large" />
+          <MdPause className="text-3xl" />
         )}
       </PanelButton>
       <PanelButton onClick={histHandler}>
         {isGotoHist ? (
-          <Input fontSize="large" />
+          <MdInput className="text-3xl" />
         ) : config.showHist ? (
-          <Timeline fontSize="large" />
+          <MdOutlineFolderOpen className="text-3xl" />
         ) : (
-          <EventNote fontSize="large" />
+          <MdOutlineHistory className="text-3xl" />
         )}
       </PanelButton>
       <PanelButton onClick={configHandler}>
-        <Settings fontSize="large" />
+        <MdSettings className="text-3xl" />
       </PanelButton>
     </ButtonGroup>
   );

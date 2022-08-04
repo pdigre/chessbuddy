@@ -1,13 +1,13 @@
 import React from 'react';
 import { Config } from '../logic/config';
-import { RotateRight } from '@mui/icons-material';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigCheckbox } from './ConfigWidgets';
 import { Theme } from '../logic/theme';
+import { MdRotateRight } from 'react-icons/md';
 
 export const ConfigDisplay = observer(({ config, theme }: { config: Config; theme: Theme }) => {
   return (
-    <div className="flex flex-col text-center w-[650px] h-[400px] [&>div]:text-left">
+    <div className="flex flex-col text-center w-[950px] h-[500px] [&>div]:text-left">
       <div>
         <ConfigCheckbox
           checked={theme.darkTheme}
@@ -58,9 +58,11 @@ export const ConfigDisplay = observer(({ config, theme }: { config: Config; them
         />
       </div>
       <div>
-        <ConfigButton onClick={() => (config.rotation = (config.rotation + 1) % 4)}>
-          Rotate chessboard <RotateRight />
-        </ConfigButton>
+        <ConfigButton
+          onClick={() => (config.rotation = (config.rotation + 1) % 4)}
+          label="Rotate chessboard"
+          icon={<MdRotateRight />}
+        />
       </div>
     </div>
   );
