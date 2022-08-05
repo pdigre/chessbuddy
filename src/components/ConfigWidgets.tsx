@@ -42,11 +42,17 @@ export const ConfigSelect: React.FC<{
     </FormControl>
   );
 };
+export type ButtonType = {
+  label: string;
+  icon?: ReactNode;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
+};
 
 export const ConfigButton: React.FC<{
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
-  label: ReactNode;
-  icon: ReactNode;
+  label: string;
+  icon?: ReactNode;
   disabled?: boolean;
 }> = ({ onClick, label, icon, disabled }) => {
   return (

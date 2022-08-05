@@ -8,6 +8,8 @@ import { Config } from '../logic/config';
 import { helper } from '../logic/helper';
 import { message } from '../logic/message';
 import {
+  MdCancel,
+  MdCheck,
   MdInput,
   MdOutlineFolderOpen,
   MdOutlineHistory,
@@ -29,7 +31,10 @@ export const Panel = observer(({ gameState, config }: { gameState: GameState; co
         isPlayUndo
           ? 'Do you want to undo last move?'
           : 'Do you want to revert the game to the marked position?',
-        ['Yes', 'No'],
+        [
+          { label: 'Yes', icon: <MdCheck /> },
+          { label: 'No', icon: <MdCancel /> },
+        ],
         yes => {
           message.clear();
           if (yes == 'Yes') {

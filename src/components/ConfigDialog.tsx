@@ -1,5 +1,5 @@
 import React, { ChangeEvent, MouseEvent, ReactElement } from 'react';
-import { AppBar, Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@mui/material';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
@@ -11,19 +11,10 @@ import { Config } from '../logic/config';
 import { refreshtimer } from '../logic/refreshtimer';
 import { clock } from '../logic/clock';
 import { theme } from '../logic/theme';
+import { FaChess, FaRobot } from 'react-icons/fa';
+import { MdMonitor, MdPeople } from 'react-icons/md';
 
 export const ConfigDialog = observer(({ config }: { config: Config }) => {
-  const TabLink = (props: { label: string; id: string }) => {
-    return (
-      <Tab
-        component="a"
-        className={theme.darkTheme ? 'bg-green-900 text-white' : ''}
-        onClick={(event: MouseEvent<HTMLAnchorElement>) => event.preventDefault()}
-        {...props}
-      />
-    );
-  };
-
   const TabPanel = (props: { children: ReactElement; index: number }) => {
     const { children, index } = props;
     return (
@@ -32,7 +23,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
         hidden={config.showTab !== index}
         id={`nav-tabpanel-${index}`}
         aria-labelledby={`nav-tab-${index}`}
-        className={theme.darkTheme ? 'bg-green-900 text-white' : ''}>
+        className="dark:bg-green-900 dark:text-white">
         {config.showTab === index && (
           <Box p={3}>
             <Typography>{children}</Typography>
@@ -52,6 +43,8 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
     refreshtimer.startRefreshTimer();
   };
 
+  const prevent = (event: MouseEvent<HTMLAnchorElement>) => event.preventDefault();
+
   return (
     <Dialog
       aria-labelledby="simple-dialog-title"
@@ -59,23 +52,47 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
       onClose={handleClose}
       maxWidth="xl"
       className={'text-center text-xl'}>
-      <DialogTitle
-        id="simple-dialog-title"
-        className={theme.darkTheme ? 'bg-green-900 text-white' : ''}>
-        Configure
+      <DialogTitle id="simple-dialog-title" className="dark:bg-green-700 dark:text-white">
+        Settings
       </DialogTitle>
-      <AppBar position="static">
-        <Tabs
-          className={theme.darkTheme ? 'bg-green-600 text-white' : 'bg-green-300'}
-          value={config.showTab}
-          onChange={handleChange}
-          aria-label="Config tabs">
-          <TabLink label="Game" id="nav-tab-0" />
-          <TabLink label="Display" id="nav-tab-1" />
-          <TabLink label="Humans" id="nav-tab-2" />
-          <TabLink label="Bots" id="nav-tab-3" />
-        </Tabs>
-      </AppBar>
+      <Tabs
+        value={config.showTab}
+        onChange={handleChange}
+        aria-label="Settings"
+        variant="fullWidth">
+        <Tab
+          component="a"
+          onClick={prevent}
+          label={<div className="text-xl">Game</div>}
+          icon={<FaChess className="text-3xl" />}
+          iconPosition="start"
+          id="nav-tab-0"
+        />
+        <Tab
+          component="a"
+          onClick={prevent}
+          label={<div className="text-xl">Display</div>}
+          icon={<MdMonitor className="text-3xl" />}
+          iconPosition="start"
+          id="nav-tab-1"
+        />
+        <Tab
+          component="a"
+          onClick={prevent}
+          label={<div className="text-xl">Humans</div>}
+          icon={<MdPeople className="text-3xl" />}
+          iconPosition="start"
+          id="nav-tab-2"
+        />
+        <Tab
+          component="a"
+          onClick={prevent}
+          label={<div className="text-xl">Bots</div>}
+          icon={<FaRobot className="text-3xl" />}
+          iconPosition="start"
+          id="nav-tab-3"
+        />
+      </Tabs>
       <TabPanel index={0}>
         <ConfigGame players={players} clock={clock} />
       </TabPanel>

@@ -5,12 +5,40 @@ import { game } from '../logic/game';
 import { observer } from 'mobx-react';
 import { Players } from '../logic/players';
 import { Clock, Clocks, ClockType } from '../logic/clock';
+import { message } from '../logic/message';
+import { FaRegHandshake, FaChessKing } from 'react-icons/fa';
 
 export const ConfigGame = observer(({ players, clock }: { players: Players; clock: Clock }) => {
   const [white, setWhite] = useState(game.white);
   const [black, setBlack] = useState(game.black);
   const playerNames = Array.from(players.players.map(x => x.name));
   game.setPlayers(white, black);
+
+  const endAction = () => {
+    const winner = game.whoWon();
+    if (winner) {
+      message.display(
+        'Game has ended',
+        winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'
+      );
+    } else {
+      const white = game.white.split(' ')[0];
+      const black = game.black.split(' ')[0];
+      message.display(
+        'End game',
+        <div className="text-3xl">
+          Who won?
+          <img src="/png/win.png" />
+        </div>,
+        [
+          { label: white, icon: <FaChessKing className="text-white" /> },
+          { label: 'Draw', icon: <FaRegHandshake /> },
+          { label: black, icon: <FaChessKing className="text-black" /> },
+        ],
+        game.recordScore
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col text-center w-[950px] h-[500px] [&>div]:text-left">
@@ -42,7 +70,7 @@ export const ConfigGame = observer(({ players, clock }: { players: Players; cloc
       <div className="[&>button]:mx-2">
         <ConfigButton onClick={game.playAction} label="Play" icon={<MdPlayCircle />} />
         <ConfigButton
-          onClick={game.endAction}
+          onClick={endAction}
           label="End game"
           icon={<MdExitToApp />}
           disabled={game.isComplete}
