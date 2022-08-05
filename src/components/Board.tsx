@@ -11,6 +11,8 @@ import { observer } from 'mobx-react';
 import { Square } from 'chess.js';
 import { message } from '../logic/message';
 import { playCorrect } from '../logic/mp4';
+import { ButtonType } from './ConfigWidgets';
+import { FaChessBishop, FaChessKnight, FaChessQueen, FaChessRook } from 'react-icons/fa';
 
 const pgnStyle: React.CSSProperties = {
   background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
@@ -57,7 +59,12 @@ export const Board = observer(
       if (gameState.isPlaying || isHuman) {
         const action = move[1];
         if (action.promotion && isHuman) {
-          const buttons = ['Queen', 'Rook', 'Knight', 'Bishop'];
+          const buttons: ButtonType[] = [
+            { label: 'Queen', icon: <FaChessQueen /> },
+            { label: 'Rook', icon: <FaChessRook /> },
+            { label: 'Knight', icon: <FaChessKnight /> },
+            { label: 'Bishop', icon: <FaChessBishop /> },
+          ];
           message.display('Promotion', 'Choose promotion piece', buttons, reply => {
             let promo: 'b' | 'q' | 'n' | 'r' = 'q';
             if (reply == 'Rook') promo = 'r';

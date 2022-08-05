@@ -1,10 +1,11 @@
 import { makeAutoObservable } from 'mobx';
 import { ReactNode } from 'react';
+import { ButtonType } from '../components/ConfigWidgets';
 
 export class Message {
   title?: string;
   msg?: ReactNode;
-  buttons?: string[];
+  buttons?: ButtonType[];
   response?: (button: string) => void;
   show = false;
 
@@ -15,14 +16,15 @@ export class Message {
   clear: () => void = () => {
     this.title = undefined;
   };
+
   display: (
     title: string,
     msg: ReactNode,
-    buttons?: string[],
+    buttons?: ButtonType[],
     response?: (button: string) => void
   ) => void = (title, msg, buttons?, response?) => {
     this.title = title;
-    this.msg = msg; // (msg instanceof Element ? msg : <div>{msg}</div>) as JSX.Element;
+    this.msg = msg;
     this.buttons = buttons;
     this.response = response ?? (() => message.clear());
   };

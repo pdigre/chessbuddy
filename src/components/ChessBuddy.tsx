@@ -24,14 +24,53 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { MdRefresh } from 'react-icons/md';
 
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+  components: {
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'lightgreen',
+          '&$selected': {
+            backgroundColor: 'blue',
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'green',
+        },
+      },
+    },
+  },
+});
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
-});
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
+  components: {
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'darkgreen',
+          '&$selected': {
+            backgroundColor: 'blue',
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'darkgreen',
+        },
+      },
+    },
   },
 });
 

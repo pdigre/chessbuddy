@@ -175,25 +175,13 @@ export class Game {
     message.clear();
   };
 
-  endAction = () => {
-    const winner = rules.whoWon(game.log);
-    if (winner) {
-      message.display(
-        'Game has ended',
-        winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'
-      );
-    } else {
-      const white = 'White - ' + game.white;
-      const black = 'Black - ' + game.black;
-      message.display('End game', 'Who won?', [white, 'Draw', black], this.recordScore);
-    }
-  };
-
   playAction = () => {
     config.showTab = -1;
     gameState.isPlaying = true;
     gameState.run();
   };
+
+  whoWon = () => rules.whoWon(game.log);
 }
 
 export const game = new Game();

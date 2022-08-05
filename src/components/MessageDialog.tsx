@@ -1,6 +1,5 @@
 import React, { MouseEvent } from 'react';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -9,6 +8,7 @@ import {
 } from '@mui/material';
 import { observer } from 'mobx-react';
 import { Message } from '../logic/message';
+import { ConfigButton } from './ConfigWidgets';
 
 export const MessageDialog = observer(({ message }: { message: Message }) => {
   const handleClick = (event: MouseEvent) => {
@@ -29,15 +29,7 @@ export const MessageDialog = observer(({ message }: { message: Message }) => {
       </DialogContent>
       <DialogActions>
         {message.buttons?.map(x => (
-          <Button
-            key={x}
-            autoFocus
-            onClick={handleClick}
-            color="primary"
-            variant="contained"
-            size="large">
-            {x}
-          </Button>
+          <ConfigButton key={x.label} onClick={handleClick} label={x.label} icon={x.icon} />
         ))}
       </DialogActions>
     </Dialog>
