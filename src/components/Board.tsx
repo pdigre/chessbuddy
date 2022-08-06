@@ -126,11 +126,16 @@ export const Board = observer(
       return markers;
     };
     const fen = refreshTimer.showBlank ? rules.CLEAR_GAME : game.fen;
+
+    const onSquareClick = (square: Square) => {
+      console.log('hi:' + square);
+    };
     return (
       <Chessboard
         position={r90 ? rules.leftFen(fen) : fen}
         onPieceDragBegin={onDragStart}
         onPieceDrop={onMovePiece}
+        onSquareClick={onSquareClick}
         boardOrientation={!r180 ? 'white' : 'black'}
         boardWidth={rendering.boardWidth}
         customSquareStyles={showMarkers()}

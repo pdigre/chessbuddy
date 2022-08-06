@@ -1,8 +1,6 @@
 import React from 'react';
 import { game, gameState } from '../logic/game';
 import { config } from '../logic/config';
-import { History } from './History';
-import { Panel } from './Panel';
 import { FenInfo } from './FenInfo';
 import { CP } from './CP';
 import { ConfigDialog } from './ConfigDialog';
@@ -17,12 +15,13 @@ import { message } from '../logic/message';
 import { mp4, playAll } from '../logic/mp4';
 import { Mp4Dialog } from './Mp4Dialog';
 import { MessageDialog } from './MessageDialog';
-import { gameHistory } from '../logic/history';
 import { Theme } from '../logic/theme';
 import { observer } from 'mobx-react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { MdRefresh } from 'react-icons/md';
+import { PanelButtons } from './PanelButtons';
+import { StatusPanel } from './StatusPanel';
 
 const lightTheme = createTheme({
   palette: {
@@ -101,9 +100,9 @@ export const ChessBuddy = observer(({ theme }: { theme: Theme }) => {
               </span>
               <MdRefresh className="text-lg mx-5" onClick={playAll} />
             </h3>
-            <Panel gameState={gameState} config={config} />
+            <PanelButtons gameState={gameState} config={config} />
             <FenInfo game={game} />
-            <History game={game} gameHistory={gameHistory} config={config} />
+            <StatusPanel config={config} />
           </div>
           <MessageDialog message={message} />
           <Mp4Dialog mp4={mp4} />

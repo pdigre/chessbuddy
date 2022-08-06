@@ -15,11 +15,13 @@ export const PlayerInfo = observer(
         {toMMSS(Math.floor(timer.elapsed) + Math.floor(g.isWhiteTurn ? g.wtime : g.btime))}
       </span>
     ));
-    const right = isTop && config.rotation % 2 == 1 ? ' text-right' : '';
-    const style = 'h-[31px] text-xl dark:text-white m-0 p-1';
 
     return (
-      <p className={style + right}>
+      <p
+        className={
+          'h-[31px] text-xl dark:text-white m-0 p-1' +
+          (isTop && config.rotation % 2 == 1 ? ' text-right' : '')
+        }>
         {isWhite ? `White: ${g.white}` : `Black: ${g.black}`} &lt;
         {isWhite == g.isWhiteTurn ? (
           <Ticker timer={clock} />
