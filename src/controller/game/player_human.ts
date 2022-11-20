@@ -28,6 +28,8 @@ Bot:Lozza:20:1:
  */
 export class Players {
   players: Player[] = [];
+  addHuman = false;
+  addBot = false;
   constructor() {
     makeAutoObservable(this);
     const pdata = localStorage.getItem('playerdata') ?? playerInit;

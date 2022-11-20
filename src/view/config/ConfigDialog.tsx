@@ -1,5 +1,5 @@
 import React, { ChangeEvent, MouseEvent, ReactElement } from 'react';
-import { Box, Dialog, DialogTitle, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Dialog, Tab, Tabs, Typography } from '@mui/material';
 import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';

@@ -3,13 +3,11 @@ import { Human, Players } from '../../controller/game/player_human';
 import { Server } from '../../controller/integration/server';
 import { observer } from 'mobx-react';
 import { gameHistory } from '../../controller/game/history';
-import { ConfigButton, ConfigText } from './ConfigWidgets';
-import { message } from '../../controller/control/message';
+import { ConfigButton } from './ConfigWidgets';
 import { MdAdd, MdDelete, MdDownload, MdOnlinePrediction, MdUpload } from 'react-icons/md';
+import { AddPlayerDialog } from './AddPlayerDialog';
 
 export const ConfigHuman = observer(({ players, server }: { players: Players; server: Server }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [marker, setMarker] = useState(-1);
   const humans = players.players.filter(x => x instanceof Human);
   const uploadRef = useRef<HTMLInputElement>(null);
@@ -50,19 +48,6 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
     event.preventDefault();
     uploadRef.current?.click();
   };
-  const changeName = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setName(e.target.value as string);
-  const changeEmail = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setEmail(e.target.value as string);
-
-  const doAddPlayer = () => {
-    if (name.length) {
-      players.addPlayer(`Human:${name}:${email}`);
-      players.save();
-    } else {
-      message.display('Add Human', 'Need to enter a name');
-    }
-  };
 
   const uploadChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const files = evt.currentTarget?.files;
@@ -101,13 +86,8 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
         onChange={uploadChange}
         ref={uploadRef}
       />
-      <div className="[&>button]:mx-2">
-        <ConfigButton
-          onClick={doDelPlayer}
-          label="Delete"
-          icon={<MdDelete />}
-          disabled={!hasSelect}
-        />
+      <div className="[&>button]:mx-1">
+        <ConfigButton onClick={() => (players.addHuman = true)} label="Add" icon={<MdAdd />} />
         <ConfigButton
           onClick={downloadPlayer}
           label="Download"
@@ -126,12 +106,14 @@ export const ConfigHuman = observer(({ players, server }: { players: Players; se
           icon={<MdOnlinePrediction />}
           disabled={!hasEmail}
         />
+        <ConfigButton
+          onClick={doDelPlayer}
+          label="Delete"
+          icon={<MdDelete />}
+          disabled={!hasSelect}
+        />
       </div>
-      <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
-        <ConfigText label="Player Name" id="name" onChange={changeName} />
-        <ConfigText label="Player Email" id="email" onChange={changeEmail} />
-        <ConfigButton onClick={doAddPlayer} label="Add" icon={<MdAdd />} />
-      </div>
+      <AddPlayerDialog players={players} />
     </div>
   );
 });
