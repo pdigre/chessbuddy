@@ -1,79 +1,43 @@
-import type { Fen, ShortMove } from '../util/rules';
+import { RunBot, UciCallback, initUciEngine, LoadBot } from './uci_engine';
 import { Player } from './player';
 
-type UninitialisedBot = () => InitialisedBot;
-type InitialisedBot = (fen: Fen) => Promise<ShortMove>;
-type Resolver = (move: ShortMove) => void;
-
-class UCI_ENGINE {
-  name: string;
-  path: string;
-  constructor(name: string, path: string) {
-    this.name = name;
-    this.path = path;
-  }
+class UciEngineDef {
+  constructor(public name: string, public path: string) {}
 }
-export const UCI_ENGINES: UCI_ENGINE[] = [
-  new UCI_ENGINE('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
-  new UCI_ENGINE('Lozza', 'bots/lozza-1.18/lozza.js'),
+
+export const UciEngineDefs: UciEngineDef[] = [
+  new UciEngineDef('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
+  new UciEngineDef('Lozza', 'bots/lozza-1.18/lozza.js'),
 ];
 
 export class Bot extends Player {
-  type: UCI_ENGINE = UCI_ENGINES[0];
-  skill: number;
-  time?: number;
-  depth?: number;
-  engine: UninitialisedBot;
-  instance?: InitialisedBot;
+  uciEngineDef: UciEngineDef = UciEngineDefs[0];
+  workerClass: LoadBot;
+  workerInstance?: RunBot;
   isRunning = false;
 
-  constructor(engine: string, skill: number, time?: number, depth?: number) {
+  constructor(
+    public engine: string,
+    public skill: number,
+    public depth: number,
+    public time: number
+  ) {
     super(`${engine} skill=${skill} ` + (time ? ` time=${time}` : `depth=${depth}`));
-    const type = UCI_ENGINES.find(x => x.name == engine) as UCI_ENGINE;
-    this.type = type;
-    this.skill = skill;
-    this.time = time;
-    this.depth = depth;
-    const options = [`setoption name Skill Level value ${skill}`];
-    options.push(time ? `go movetime ${time}000` : `go depth ${depth}`);
-    this.engine = uciWorker(type.path, options);
+    this.uciEngineDef = UciEngineDefs.find(x => x.name == engine) as UciEngineDef;
+    this.workerClass = initUciEngine(this.uciEngineDef.path, skill, depth, time);
   }
 
-  runBot: (fen: string, resolver: Resolver) => void = (fen, resolver) => {
+  toString: () => string = () =>
+    `Bot:${this.uciEngineDef.name}:${this.skill}:${this.time ?? ''}:${this.depth ?? ''}`;
+
+  processFen: (fen: string, callback: UciCallback) => void = (fen, callback) => {
     if (!this.isRunning) {
-      if (!this.instance) this.instance = this.engine();
+      if (!this.workerInstance) this.workerInstance = this.workerClass();
       this.isRunning = true;
-      this.instance(fen).then(move => {
-        resolver(move);
+      this.workerInstance(fen).then(move => {
+        callback(move);
         this.isRunning = false;
       });
     }
   };
-  toString: () => string = () =>
-    `Bot:${this.type.name}:${this.skill}:${this.time ?? ''}:${this.depth ?? ''}`;
 }
-
-type UCI_WORKER = (file: string, actions: Array<string>) => UninitialisedBot;
-const uciWorker: UCI_WORKER = (file, actions) => () => {
-  const worker = new Worker(file);
-  let resolver: Resolver | null = null;
-
-  worker.addEventListener('message', e => {
-    const move = e.data.match(/^bestmove\s([a-h][1-8])([a-h][1-8])/);
-    if (move && resolver) {
-      resolver({ from: move[1], to: move[2] });
-      resolver = null;
-    }
-  });
-
-  return fen =>
-    new Promise((resolve, reject) => {
-      if (resolver) {
-        reject('Pending move is present');
-        return;
-      }
-      resolver = resolve;
-      worker.postMessage(`position fen ${fen}`);
-      actions.forEach(action => worker.postMessage(action));
-    });
-};

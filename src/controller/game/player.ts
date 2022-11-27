@@ -1,8 +1,4 @@
 export abstract class Player {
-  name: string;
-  abstract toString: () => string;
-
-  protected constructor(name: string) {
-    this.name = name;
-  }
+  toString: () => string = () => this.name;
+  protected constructor(public name: string) {}
 }

@@ -1,16 +1,16 @@
 import type { Fen } from '../util/rules';
-import { UCI_ENGINES } from './player_bot';
+import { UciEngineDefs } from './player_bot';
 import { makeAutoObservable } from 'mobx';
 import { Square } from 'chess.js';
 
 type HelperReturn = { moves: string[]; cp: number | undefined };
-type HelpResolver = (ret: HelperReturn) => void;
-type UninitialisedHelper = () => InitialisedHelper;
-type InitialisedHelper = (fen: Fen) => Promise<HelperReturn>;
+type HelpCallback = (ret: HelperReturn) => void;
+type LoadHelper = () => RunHelper;
+type RunHelper = (fen: Fen) => Promise<HelperReturn>;
 
-const helpWorker = (): UninitialisedHelper => () => {
-  const worker = new Worker(UCI_ENGINES[0].path);
-  let resolver: HelpResolver | null = null;
+const helpWorker = (): LoadHelper => () => {
+  const worker = new Worker(UciEngineDefs[0].path);
+  let resolver: HelpCallback | null = null;
   let cp: number | undefined = 0;
   let moves: string[] = [];
   worker.addEventListener('message', e => {
@@ -53,14 +53,14 @@ const helpWorker = (): UninitialisedHelper => () => {
 };
 
 class HelperBot {
-  instance: InitialisedHelper;
+  instance: RunHelper;
   isRunning = false;
 
   constructor() {
     this.instance = helpWorker()();
   }
 
-  run = (fen: string, resolver: HelpResolver) => {
+  run = (fen: string, resolver: HelpCallback) => {
     if (!this.isRunning) {
       this.isRunning = true;
       this.instance(fen).then(ret => {

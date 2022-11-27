@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Players } from '../../controller/game/player_human';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigText } from './ConfigWidgets';
 import { message } from '../../controller/control/message';
@@ -11,9 +10,10 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { MdAdd } from 'react-icons/md';
+import { ClockList } from '../../controller/config/clocklist';
 
-export const AddPlayerDialog = observer(({ players }: { players: Players }) => {
-  const handleClick = () => (players.addHuman = false);
+export const AddClockDialog = observer(({ clockList }: { clockList: ClockList }) => {
+  const handleClick = () => (clockList.addDialog = false);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -25,9 +25,9 @@ export const AddPlayerDialog = observer(({ players }: { players: Players }) => {
 
   const doAddPlayer = () => {
     if (name.length) {
-      players.addPlayer(`Human:${name}:${email}`);
-      players.save();
-      players.addHuman = false;
+      clockList.addClock(`Human:${name}:${email}`);
+      clockList.save();
+      clockList.addDialog = false;
     } else {
       message.display('Add Human', 'Need to enter a name');
     }
@@ -38,8 +38,8 @@ export const AddPlayerDialog = observer(({ players }: { players: Players }) => {
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={players.addHuman}>
-      <DialogTitle id="message">Add Human Player</DialogTitle>
+      open={clockList.addDialog}>
+      <DialogTitle id="message">Add Clock</DialogTitle>
       <DialogContent>
         <DialogContentText>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">

@@ -559,6 +559,10 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.static {
+  position: static;
+}
+
 .m-1 {
   margin: 0.25rem;
 }
@@ -800,14 +804,14 @@ body {
   background-color: rgb(30 41 59 / var(--tw-bg-opacity));
 }
 
-.dark .dark\:bg-green-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(20 83 45 / var(--tw-bg-opacity));
-}
-
 .dark .dark\:bg-green-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+}
+
+.dark .dark\:bg-green-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(20 83 45 / var(--tw-bg-opacity));
 }
 
 .dark .dark\:text-white {
@@ -818,6 +822,16 @@ body {
 .dark .dark\:text-red-200 {
   --tw-text-opacity: 1;
   color: rgb(254 202 202 / var(--tw-text-opacity));
+}
+
+.\[\&\>button\]\:mx-2>button {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.\[\&\>button\]\:mx-1>button {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 .\[\&\>div\]\:mx-2>div {
@@ -836,11 +850,6 @@ body {
 .\[\&\>div\]\:\[writing-mode\:vertical-lr\]>div {
   -webkit-writing-mode: vertical-lr;
           writing-mode: vertical-lr;
-}
-
-.\[\&\>button\]\:mx-2>button {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
 }
 
 .\[\&td\]\:p-\[2px\]td {

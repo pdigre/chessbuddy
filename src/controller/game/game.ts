@@ -1,7 +1,8 @@
 import * as rules from '../util/rules';
-import { Human, players } from './player_human';
+import { Human } from './player_human';
 import { Player } from './player';
-import { clock } from '../config/clock';
+import { playerList } from './playerlist';
+import { clockList } from '../config/clocklist';
 import { locate, San, tree } from '../util/openings';
 import { makeAutoObservable } from 'mobx';
 import { helper } from './helper';
@@ -102,8 +103,8 @@ export class Game {
   setPlayers: (white: string, black: string) => void = (white, black) => {
     this.white = white;
     this.black = black;
-    this.wplayer = players.players.find(p => p.name == white);
-    this.bplayer = players.players.find(p => p.name == black);
+    this.wplayer = playerList.players.find(p => p.name == white);
+    this.bplayer = playerList.players.find(p => p.name == black);
   };
 
   addMove: (san: string) => void = san => {
@@ -114,15 +115,15 @@ export class Game {
     helper.reset();
     this.fen = rules.newFen(this.fen, san);
     if (this.isWhiteTurn) {
-      this.wtime += clock.elapsed;
+      this.wtime += clockList.elapsed;
     } else {
-      this.btime += clock.elapsed;
+      this.btime += clockList.elapsed;
     }
-    clock.reset();
+    clockList.reset();
     this.run();
   };
   run: VoidFunction = () => {
-    clock.reset();
+    clockList.reset();
     this.calculate();
     const next = this.nextPlayer();
     if (next instanceof Human) {
@@ -134,7 +135,7 @@ export class Game {
   playBot: VoidFunction = () => {
     const next = this.nextPlayer();
     if (next instanceof Bot) {
-      next.runBot(this.fen, ({ from, to }) => {
+      next.processFen(this.fen, ({ from, to }) => {
         const move = rules.move(game.fen, from, to);
         if (move) {
           this.playMove(move[1].san);

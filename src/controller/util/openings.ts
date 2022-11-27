@@ -1,12 +1,9 @@
 import moves from './openingdata';
 
 export class San {
-  san: string;
   info: string | undefined;
   children: San[] = [];
-  constructor(san: string) {
-    this.san = san;
-  }
+  constructor(public san: string) {}
 }
 
 export const tree: San[] = [];

@@ -1,52 +1,63 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent } from 'react';
 import { Bot } from '../../controller/game/player_bot';
-import { Players } from '../../controller/game/player_human';
+import { EditMode, PlayerList } from '../../controller/game/playerlist';
 import { ConfigButton } from './ConfigWidgets';
 import { observer } from 'mobx-react';
-import { MdAdd, MdDelete } from 'react-icons/md';
+import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { AddBotDialog } from './AddBotDialog';
 
-export const ConfigBot = observer(({ players }: { players: Players }) => {
-  const [marker, setMarker] = useState(-1);
-  const selectHandler = (event: MouseEvent<HTMLTableSectionElement>) => {
+export const ConfigBot = observer(({ players: playerList }: { players: PlayerList }) => {
+  const bots = playerList.bots;
+  const hasSelect = playerList.cursor >= 0;
+
+  const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
     if (event.target instanceof HTMLTableCellElement) {
       const id = (event.target.parentNode as HTMLTableRowElement).id;
       const num = Number.parseInt(id);
-      setMarker(num == marker ? -1 : num);
+      playerList.cursor = num == playerList.cursor ? -1 : num;
     }
   };
-  const hasSelect = marker >= 0;
-  const bots = players.players.filter(x => x instanceof Bot);
-  const delPlayerHandler = () => {
-    if (marker >= 0) {
-      players.delPlayer(bots[marker].name);
-      setMarker(-1);
-      players.save();
+  const doDelPlayer = () => {
+    if (hasSelect) {
+      playerList.bots.splice(playerList.cursor, 1);
+      playerList.save();
+      playerList.cursor = -1;
     }
+  };
+  const doEditPlayer = () => {
+    if (hasSelect) {
+      playerList.addBot = EditMode.Edit;
+      playerList.edited = bots[playerList.cursor];
+    }
+  };
+  const doAddPlayer = () => {
+    playerList.addBot = EditMode.Add;
+    playerList.edited = new Bot('', 0, 0, 0);
   };
 
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">
       <table className="w-full text-left text-lg dark:bg-slate-800 border-2 border-separate p-2">
-        <tbody onClick={selectHandler}>
+        <tbody onClick={doSelect}>
           {bots.map((bot, iLine) => (
             <tr
               key={iLine.toString()}
               id={iLine.toString()}
-              className={iLine == marker ? 'bg-green-300' : ''}>
+              className={iLine == playerList.cursor ? 'bg-green-300' : ''}>
               <td className="dark:text-white">{bot.name}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <ConfigButton onClick={() => (players.addBot = true)} label="Add" icon={<MdAdd />} />
+      <ConfigButton onClick={doAddPlayer} label="Add" icon={<MdAdd />} />
+      <ConfigButton onClick={doEditPlayer} label="Edit" icon={<MdEdit />} disabled={!hasSelect} />
       <ConfigButton
-        onClick={delPlayerHandler}
+        onClick={doDelPlayer}
         label="Delete"
         icon={<MdDelete />}
         disabled={!hasSelect}
       />
-      <AddBotDialog players={players} />
+      <AddBotDialog players={playerList} />
     </div>
   );
 });
