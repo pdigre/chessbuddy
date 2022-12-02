@@ -4,8 +4,8 @@ export type LoadBot = () => RunBot;
 export type RunBot = (fen: Fen) => Promise<ShortMove>;
 export type UciCallback = (move: ShortMove) => void;
 
-export const initUciEngine: (file: string, skill: number, depth: number, time: number) => LoadBot =
-  (file, skill, depth, time) => () => {
+export const initUciEngine: (file: string, skill: number, time: number, depth: number) => LoadBot =
+  (file, skill, time, depth) => () => {
     const actions = [`setoption name Skill Level value ${skill}`];
     actions.push(time ? `go movetime ${time}000` : `go depth ${depth}`);
 

@@ -33,12 +33,12 @@ export const ConfigHuman = observer(
     };
     const doEditPlayer = () => {
       if (hasSelect) {
-        playerList.addHuman = EditMode.Edit;
+        playerList.dialog = EditMode.EditHuman;
         playerList.edited = humans[playerList.cursor];
       }
     };
     const doAddPlayer = () => {
-      playerList.addHuman = EditMode.Add;
+      playerList.dialog = EditMode.AddHuman;
       playerList.edited = new Human('', '');
     };
     const [downloadLink, setDownloadLink] = useState('');

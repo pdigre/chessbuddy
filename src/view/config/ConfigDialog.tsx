@@ -14,6 +14,7 @@ import { theme } from '../../controller/control/theme';
 import { FaChess, FaClock, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';
+import { game } from '../../controller/game/game';
 
 export const ConfigDialog = observer(({ config }: { config: Config }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {
@@ -100,7 +101,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
         />
       </Tabs>
       <TabPanel index={0}>
-        <ConfigGame players={playerList} clockList={clockList} />
+        <ConfigGame game={game} playerList={playerList} clockList={clockList} />
       </TabPanel>
       <TabPanel index={1}>
         <ConfigDisplay config={config} theme={theme} />

@@ -26,12 +26,12 @@ export const ConfigBot = observer(({ players: playerList }: { players: PlayerLis
   };
   const doEditPlayer = () => {
     if (hasSelect) {
-      playerList.addBot = EditMode.Edit;
+      playerList.dialog = EditMode.EditBot;
       playerList.edited = bots[playerList.cursor];
     }
   };
   const doAddPlayer = () => {
-    playerList.addBot = EditMode.Add;
+    playerList.dialog = EditMode.AddBot;
     playerList.edited = new Bot('', 0, 0, 0);
   };
 

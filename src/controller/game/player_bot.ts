@@ -19,12 +19,12 @@ export class Bot extends Player {
   constructor(
     public engine: string,
     public skill: number,
-    public depth: number,
-    public time: number
+    public time: number,
+    public depth: number
   ) {
     super(`${engine} skill=${skill} ` + (time ? ` time=${time}` : `depth=${depth}`));
     this.uciEngineDef = UciEngineDefs.find(x => x.name == engine) as UciEngineDef;
-    this.workerClass = initUciEngine(this.uciEngineDef.path, skill, depth, time);
+    this.workerClass = initUciEngine(this.uciEngineDef.path, skill, time, depth);
   }
 
   toString: () => string = () =>

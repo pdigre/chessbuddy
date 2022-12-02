@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ConfigButton, ConfigSelect } from './ConfigWidgets';
 import { MdExitToApp, MdPlayCircle, MdClear, MdEdit } from 'react-icons/md';
-import { game } from '../../controller/game/game';
+import { Game } from '../../controller/game/game';
 import { observer } from 'mobx-react';
 import { PlayerList } from '../../controller/game/playerlist';
 import { ClockList, Clock } from '../../controller/config/clocklist';
@@ -9,11 +9,17 @@ import { message } from '../../controller/control/message';
 import { FaRegHandshake, FaChessKing } from 'react-icons/fa';
 
 export const ConfigGame = observer(
-  ({ players, clockList }: { players: PlayerList; clockList: ClockList }) => {
-    const [white, setWhite] = useState(game.white);
-    const [black, setBlack] = useState(game.black);
-    const playerNames = Array.from(players.players.map(x => x.name));
-    game.setPlayers(white, black);
+  ({
+    game,
+    playerList,
+    clockList,
+  }: {
+    game: Game;
+    playerList: PlayerList;
+    clockList: ClockList;
+  }) => {
+    const players = [...playerList.humans, ...playerList.bots];
+    const playerNames = Array.from(players.map(x => x.name));
 
     const endAction = () => {
       const winner = game.whoWon();
@@ -47,15 +53,15 @@ export const ConfigGame = observer(
           <ConfigSelect
             label="White"
             choices={playerNames}
-            selected={{ name: white, value: white }}
-            setSelected={setWhite}
+            selected={{ name: game.white, value: game.white }}
+            setSelected={value => (game.white = value)}
           />
           &nbsp;
           <ConfigSelect
             label="Black"
             choices={playerNames}
-            selected={{ name: black, value: black }}
-            setSelected={setBlack}
+            selected={{ name: game.black, value: game.black }}
+            setSelected={value => (game.black = value)}
           />
         </div>
         <div>&nbsp;</div>

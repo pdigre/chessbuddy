@@ -14,8 +14,8 @@ import { MdAdd, MdSave } from 'react-icons/md';
 import { Human } from '../../controller/game/player_human';
 
 export const AddHumanDialog = observer(({ players }: { players: PlayerList }) => {
-  const handleClick = () => (players.addHuman = EditMode.None);
-  const isEdit = players.addHuman === EditMode.Edit;
+  const handleClick = () => (players.dialog = EditMode.None);
+  const isEdit = players.dialog === EditMode.EditHuman;
   const player = players.edited as Human;
 
   const savePlayer = () => {
@@ -23,10 +23,10 @@ export const AddHumanDialog = observer(({ players }: { players: PlayerList }) =>
       if (isEdit) {
         players.humans[players.cursor] = player;
       } else {
-        players.players.push(player);
+        players.humans.push(player);
       }
       players.save();
-      players.addHuman = EditMode.None;
+      players.dialog = EditMode.None;
       players.cursor = -1;
     } else {
       message.display('Add Human', 'Need to enter a name');
@@ -38,7 +38,7 @@ export const AddHumanDialog = observer(({ players }: { players: PlayerList }) =>
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={players.addHuman !== EditMode.None}>
+      open={players.dialog === EditMode.AddHuman || players.dialog === EditMode.EditHuman}>
       <DialogTitle id="message">{isEdit ? 'Edit' : 'Add'} Human Player</DialogTitle>
       <DialogContent>
         <DialogContentText>

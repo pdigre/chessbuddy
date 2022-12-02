@@ -16,25 +16,25 @@ Bot:Lozza:20:1:
 `;
 export const enum EditMode {
   None = 1,
-  Edit,
-  Add,
+  EditHuman,
+  AddHuman,
+  EditBot,
+  AddBot,
 }
 
 /*
  * List of playable bots and humans, is persisted
  */
 export class PlayerList {
-  players: Player[] = [];
   humans: Human[] = [];
   bots: Bot[] = [];
   edited: Player = new Human('', '');
   cursor = -1;
-  addHuman = EditMode.None;
-  addBot = EditMode.None;
+  dialog = EditMode.None;
   constructor() {
     makeAutoObservable(this);
-    this.restore(localStorage.getItem('humans') ?? humansInit);
-    this.restore(localStorage.getItem('bots') ?? botsInit);
+    this.restore(localStorage.getItem('humans'), humansInit);
+    this.restore(localStorage.getItem('bots'), botsInit);
   }
 
   save: VoidFunction = () => {
@@ -46,11 +46,6 @@ export class PlayerList {
     const player = this.createPlayer(data);
     if (player instanceof Human) this.humans.push(player);
     if (player instanceof Bot) this.bots.push(player);
-  };
-
-  delPlayer: (name: string) => void = name => {
-    const i = this.players.findIndex(x => x.name == name);
-    if (i >= 0) this.players.splice(i, 1);
   };
 
   private createPlayer = (data: string) => {
@@ -70,13 +65,13 @@ export class PlayerList {
         return undefined;
     }
   };
-  private toString = () => this.players.map(x => x.toString()).join('\n');
 
-  private restore = (data: string) =>
-    data
+  private restore = (data: string | null, init: string) => {
+    return (data ? data : init)
       .replace(/\r/, '')
       .split('\n')
       .forEach(x => this.parsePlayer(x));
+  };
 }
 
 export const playerList = new PlayerList();

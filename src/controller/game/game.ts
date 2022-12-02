@@ -103,8 +103,9 @@ export class Game {
   setPlayers: (white: string, black: string) => void = (white, black) => {
     this.white = white;
     this.black = black;
-    this.wplayer = playerList.players.find(p => p.name == white);
-    this.bplayer = playerList.players.find(p => p.name == black);
+    const players = [...playerList.humans, ...playerList.bots];
+    this.wplayer = players.find(p => p.name == white);
+    this.bplayer = players.find(p => p.name == black);
   };
 
   addMove: (san: string) => void = san => {

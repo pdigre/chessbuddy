@@ -12,9 +12,9 @@ export class Config {
   editSquare = '';
   showCP = true;
   showFacts = true;
-  playMistake = true;
-  playCorrect = true;
-  playWinner = true;
+  playMistake = false;
+  playCorrect = false;
+  playWinner = false;
   undopos = 0;
 
   constructor() {
