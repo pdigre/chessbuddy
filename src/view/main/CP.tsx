@@ -1,9 +1,9 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Helper } from '../../controller/game/helper';
-import { Rendering } from '../../controller/control/rendering';
-import { Config } from '../../controller/config/config';
-import { playMistake } from '../../controller/config/mp4';
+import { Helper } from '../../services/game/helper';
+import { Rendering } from '../../services/control/rendering';
+import { Config } from '../../model/config';
+import { playMistake } from '../../services/config/mp4';
 
 let prevcp = 0;
 

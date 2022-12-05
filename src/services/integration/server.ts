@@ -1,8 +1,8 @@
-import { Human } from '../game/player_human';
+import { Human } from '../../model/human';
 import { gameHistory } from '../game/history';
 import { deviceInfo } from '../util/library';
 import { makeAutoObservable } from 'mobx';
-import { message } from '../control/message';
+import { messageService } from '../message.service';
 
 export type RESP = { stored: number; games: string[] };
 
@@ -28,14 +28,14 @@ export class Server {
     })
       .then(resp => resp.json())
       .then(resp => this.importFromServer(resp as RESP))
-      .catch(err => message.display('Connect Error', (err as Error).message));
+      .catch(err => messageService.display('Connect Error', (err as Error).message));
   };
 
   importFromServer: (resp: RESP) => void = resp => {
     const i1 = gameHistory.history.length;
     gameHistory.importFromServer(resp.games);
     const i2 = gameHistory.history.length;
-    message.display(
+    messageService.display(
       'Connect Success',
       `Stored ${(resp as RESP).stored} games and fetched ${i2 - i1} games` + ''
     );

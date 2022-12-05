@@ -1,6 +1,6 @@
 import React from 'react';
-import { Game } from '../../controller/game/game';
-import { locate, sanText } from '../../controller/util/openings';
+import { Game } from '../../services/game/game';
+import { locate, sanText } from '../../services/util/openings';
 import { observer } from 'mobx-react';
 
 export const FenInfo = observer(({ game }: { game: Game }) => {

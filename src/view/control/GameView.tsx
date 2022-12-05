@@ -1,12 +1,12 @@
 import React, { MouseEvent } from 'react';
-import * as rules from '../../controller/util/rules';
-import { Game, gameState } from '../../controller/game/game';
+import * as rules from '../../services/util/rules';
+import { Game, gameState } from '../../services/game/game';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
-import { refreshtimer } from '../../controller/control/refreshtimer';
-import { helper } from '../../controller/game/helper';
-import { message } from '../../controller/control/message';
-import { GameHistory } from '../../controller/game/history';
+import { Config } from '../../model/config';
+import { refreshtimer } from '../../services/control/refreshtimer';
+import { helper } from '../../services/game/helper';
+import { messageService } from '../../services/message.service';
+import { GameHistory } from '../../services/game/history';
 import { MdCancel, MdCheck } from 'react-icons/md';
 import { GridWidget } from './GridWidget';
 
@@ -16,7 +16,7 @@ export const GameView = observer(
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
         const moves = games[config.markHist].split(';')[5].split(' ');
-        message.display(
+        messageService.display(
           'Load game',
           'Do you want to look at this game?',
           [
@@ -30,11 +30,11 @@ export const GameView = observer(
               config.markLog = mark;
               game.fen = rules.replay(moves, mark);
             }
-            message.clear();
+            messageService.clear();
           }
         );
       } else {
-        message.display('Load game', 'You have to end current game to load previous games', [
+        messageService.display('Load game', 'You have to end current game to load previous games', [
           { label: 'Ok' },
         ]);
       }

@@ -4,17 +4,15 @@ import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
-import { playerList } from '../../controller/game/playerlist';
-import { server } from '../../controller/integration/server';
+import { server } from '../../services/integration/server';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
-import { refreshtimer } from '../../controller/control/refreshtimer';
-import { clockList } from '../../controller/config/clocklist';
-import { theme } from '../../controller/control/theme';
+import { Config } from '../../model/config';
+import { refreshtimer } from '../../services/control/refreshtimer';
+import { theme } from '../../services/control/theme';
 import { FaChess, FaClock, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';
-import { game } from '../../controller/game/game';
+import { game } from '../../services/game/game';
 
 export const ConfigDialog = observer(({ config }: { config: Config }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {
@@ -101,19 +99,19 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
         />
       </Tabs>
       <TabPanel index={0}>
-        <ConfigGame game={game} playerList={playerList} clockList={clockList} />
+        <ConfigGame game={game} config={config} />
       </TabPanel>
       <TabPanel index={1}>
         <ConfigDisplay config={config} theme={theme} />
       </TabPanel>
       <TabPanel index={2}>
-        <ConfigHuman playerList={playerList} server={server} />
+        <ConfigHuman config={config} server={server} />
       </TabPanel>
       <TabPanel index={3}>
-        <ConfigBot players={playerList} />
+        <ConfigBot config={config} />
       </TabPanel>
       <TabPanel index={4}>
-        <ConfigClock clockList={clockList} />
+        <ConfigClock config={config} />
       </TabPanel>
     </Dialog>
   );

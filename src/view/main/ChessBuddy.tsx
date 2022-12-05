@@ -1,21 +1,21 @@
 import React from 'react';
-import { game, gameState } from '../../controller/game/game';
-import { config } from '../../controller/config/config';
+import { game, gameState } from '../../services/game/game';
+import { config } from '../../model/config';
 import { FenInfo } from './FenInfo';
 import { CP } from './CP';
 import { ConfigDialog } from '../config/ConfigDialog';
 import { Board } from './Board';
 import { PlayerInfoBar } from './PlayerInfoBar';
-import { helper } from '../../controller/game/helper';
+import { helper } from '../../services/game/helper';
 import { AboutDialog } from '../dialogs/AboutDialog';
-import { rendering } from '../../controller/control/rendering';
-import { refreshtimer } from '../../controller/control/refreshtimer';
+import { rendering } from '../../services/control/rendering';
+import { refreshtimer } from '../../services/control/refreshtimer';
 import packageInfo from '../../../package.json';
-import { message } from '../../controller/control/message';
-import { mp4, playAll } from '../../controller/config/mp4';
+import { messageService } from '../../services/message.service';
+import { mp4, playAll } from '../../services/config/mp4';
 import { Mp4Dialog } from '../dialogs/Mp4Dialog';
 import { MessageDialog } from '../dialogs/MessageDialog';
-import { Theme } from '../../controller/control/theme';
+import { Theme } from '../../services/control/theme';
 import { observer } from 'mobx-react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -74,7 +74,7 @@ const darkTheme = createTheme({
 });
 
 export const ChessBuddy = observer(({ theme }: { theme: Theme }) => {
-  const about = () => message.display('About', <AboutDialog />);
+  const about = () => messageService.display('About', <AboutDialog />);
   const version = packageInfo.version;
   return (
     <ThemeProvider theme={theme.darkTheme ? darkTheme : lightTheme}>
@@ -104,7 +104,7 @@ export const ChessBuddy = observer(({ theme }: { theme: Theme }) => {
             <FenInfo game={game} />
             <MainView config={config} />
           </div>
-          <MessageDialog message={message} />
+          <MessageDialog message={messageService} />
           <Mp4Dialog mp4={mp4} />
           <ConfigDialog config={config} />
         </div>

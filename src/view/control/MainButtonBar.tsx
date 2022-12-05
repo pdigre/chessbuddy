@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
-import * as rules from '../../controller/util/rules';
+import * as rules from '../../services/util/rules';
 import { observer } from 'mobx-react';
-import { game, GameState } from '../../controller/game/game';
-import { refreshtimer } from '../../controller/control/refreshtimer';
-import { Config } from '../../controller/config/config';
-import { helper } from '../../controller/game/helper';
-import { message } from '../../controller/control/message';
+import { game, GameState } from '../../services/game/game';
+import { refreshtimer } from '../../services/control/refreshtimer';
+import { Config } from '../../model/config';
+import { helper } from '../../services/game/helper';
+import { messageService } from '../../services/message.service';
 import {
   MdCancel,
   MdCheck,
@@ -28,7 +28,7 @@ export const MainButtonBar = observer(
       const isHistUndo = !config.showHist && config.markLog >= 0;
       const isPlayUndo = gameState.isPlaying && config.showUndo;
       if (isHistUndo || isPlayUndo) {
-        message.display(
+        messageService.display(
           'Undo',
           isPlayUndo
             ? 'Do you want to undo last move?'
@@ -38,7 +38,7 @@ export const MainButtonBar = observer(
             { label: 'No', icon: <MdCancel /> },
           ],
           yes => {
-            message.clear();
+            messageService.clear();
             if (yes == 'Yes') {
               game.log = game.log.slice(0, isPlayUndo ? config.undopos : config.markLog);
               game.fen = rules.replay(game.log);

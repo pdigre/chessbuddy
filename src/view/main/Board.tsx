@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
-import * as rules from '../../controller/util/rules';
-import { Helper } from '../../controller/game/helper';
-import { Human } from '../../controller/game/player_human';
-import { game, GameState } from '../../controller/game/game';
+import * as rules from '../../services/util/rules';
+import { Helper } from '../../services/game/helper';
+import { Human } from '../../model/human';
+import { game, GameState } from '../../services/game/game';
 import { Chessboard } from 'react-chessboard';
-import { Config } from '../../controller/config/config';
-import { RefreshTimer } from '../../controller/control/refreshtimer';
-import { Rendering } from '../../controller/control/rendering';
+import { Config } from '../../model/config';
+import { RefreshTimer } from '../../services/control/refreshtimer';
+import { Rendering } from '../../services/control/rendering';
 import { observer } from 'mobx-react';
 import { Square } from 'chess.js';
-import { message } from '../../controller/control/message';
-import { playCorrect } from '../../controller/config/mp4';
+import { messageService } from '../../services/message.service';
+import { playCorrect } from '../../services/config/mp4';
 import { ButtonType } from '../config/ConfigWidgets';
 import { FaChessBishop, FaChessKnight, FaChessQueen, FaChessRook } from 'react-icons/fa';
 
@@ -69,14 +69,14 @@ export const Board = observer(
             { label: 'Knight', icon: <FaChessKnight /> },
             { label: 'Bishop', icon: <FaChessBishop /> },
           ];
-          message.display('Promotion', 'Choose promotion piece', buttons, reply => {
+          messageService.display('Promotion', 'Choose promotion piece', buttons, reply => {
             let promo: 'b' | 'q' | 'n' | 'r' = 'q';
             if (reply == 'Rook') promo = 'r';
             if (reply == 'Knight') promo = 'n';
             if (reply == 'Bishop') promo = 'b';
             const move = rules.move(game.fen, from, to, promo);
             if (move != null) {
-              message.clear();
+              messageService.clear();
               game.playMove(move[1].san);
             }
           });

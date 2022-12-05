@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { observer } from 'mobx-react';
-import { Mp4 } from '../../controller/config/mp4';
+import { Mp4 } from '../../services/config/mp4';
 
 export const Mp4Dialog = observer(({ mp4 }: { mp4: Mp4 }) => {
   const width = Math.min(mp4.msg?.width ?? 480, 500);

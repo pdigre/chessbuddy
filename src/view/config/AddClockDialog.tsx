@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useState } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigText } from './ConfigWidgets';
-import { message } from '../../controller/control/message';
+import { messageService } from '../../services/message.service';
 import {
   Dialog,
   DialogActions,
@@ -9,27 +9,29 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import { MdAdd } from 'react-icons/md';
-import { ClockList } from '../../controller/config/clocklist';
+import { MdAdd, MdSave } from 'react-icons/md';
+import { Clock } from '../../model/clock';
+import { storage } from '../../services/storage.service';
+import { Config, EditMode } from '../../model/config';
 
-export const AddClockDialog = observer(({ clockList }: { clockList: ClockList }) => {
-  const handleClick = () => (clockList.addDialog = false);
+export const AddClockDialog = observer(({ config }: { config: Config }) => {
+  const handleClick = () => (config.dialog = EditMode.None);
+  const isEdit = config.dialog === EditMode.EditClock;
+  const items = config.clocks;
+  const item = isEdit ? (items[config.cursor] as Clock) : new Clock('', []);
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-
-  const changeName = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setName(e.target.value as string);
-  const changeEmail = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setEmail(e.target.value as string);
-
-  const doAddPlayer = () => {
-    if (name.length) {
-      clockList.addClock(`Human:${name}:${email}`);
-      clockList.save();
-      clockList.addDialog = false;
+  const save = () => {
+    if (item.name.length) {
+      if (isEdit) {
+        items[config.cursor] = item;
+      } else {
+        items.push(item);
+      }
+      storage.storeList(Clock.storage, items);
+      config.dialog = EditMode.None;
+      config.cursor = -1;
     } else {
-      message.display('Add Human', 'Need to enter a name');
+      messageService.display('Add Clock', 'Need to enter a name');
     }
   };
 
@@ -38,14 +40,22 @@ export const AddClockDialog = observer(({ clockList }: { clockList: ClockList })
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={clockList.addDialog}>
+      open={config.dialog === EditMode.AddClock || config.dialog === EditMode.EditClock}>
       <DialogTitle id="message">Add Clock</DialogTitle>
       <DialogContent>
         <DialogContentText>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
-            <ConfigText label="Player Name" id="name" onChange={changeName} />
-            <ConfigText label="Player Email" id="email" onChange={changeEmail} />
-            <ConfigButton onClick={doAddPlayer} label="Add" icon={<MdAdd />} />
+            <ConfigText
+              label="Clock name"
+              id="name"
+              onChange={e => (item.name = e.target.value as string)}
+              value={item.name}
+            />
+            <ConfigButton
+              onClick={save}
+              label={isEdit ? 'Save' : 'Add'}
+              icon={isEdit ? <MdSave /> : <MdAdd />}
+            />
           </div>
         </DialogContentText>
       </DialogContent>

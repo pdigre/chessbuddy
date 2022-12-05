@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { config } from './config';
+import { config } from '../../model/config';
 
 type Mp4Type = {
   src: string;

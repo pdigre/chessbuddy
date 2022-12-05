@@ -1,7 +1,7 @@
 import type { Fen } from '../util/rules';
-import { UciEngineDefs } from './player_bot';
 import { makeAutoObservable } from 'mobx';
 import { Square } from 'chess.js';
+import { UciEngineDefs } from './uci_engine';
 
 type HelperReturn = { moves: string[]; cp: number | undefined };
 type HelpCallback = (ret: HelperReturn) => void;

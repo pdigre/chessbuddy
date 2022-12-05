@@ -8,7 +8,7 @@ import {
   Checkbox,
   NativeSelect,
 } from '@mui/material';
-import { theme } from '../../controller/control/theme';
+import { theme } from '../../services/control/theme';
 
 export const ConfigSelect: React.FC<{
   label: string;

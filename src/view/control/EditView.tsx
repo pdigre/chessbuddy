@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { game } from '../../controller/game/game';
+import { game } from '../../services/game/game';
 import {
   FaChessBishop,
   FaChessKing,
@@ -11,7 +11,7 @@ import {
 import { ConfigButton, ConfigCheckbox } from '../config/ConfigWidgets';
 import { MdCheck, MdDelete } from 'react-icons/md';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
+import { Config } from '../../model/config';
 
 export const EditView = observer(({ config }: { config: Config }) => {
   const [wcck, setWcck] = useState(false);

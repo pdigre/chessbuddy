@@ -1,8 +1,8 @@
 import React from 'react';
-import { Config } from '../../controller/config/config';
+import { Config } from '../../model/config';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigCheckbox } from './ConfigWidgets';
-import { Theme } from '../../controller/control/theme';
+import { Theme } from '../../services/control/theme';
 import { MdRotateRight } from 'react-icons/md';
 
 export const ConfigDisplay = observer(({ config, theme }: { config: Config; theme: Theme }) => {

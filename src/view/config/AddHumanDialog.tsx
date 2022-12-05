@@ -1,8 +1,7 @@
 import React from 'react';
-import { EditMode, PlayerList } from '../../controller/game/playerlist';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigText } from './ConfigWidgets';
-import { message } from '../../controller/control/message';
+import { messageService } from '../../services/message.service';
 import {
   Dialog,
   DialogActions,
@@ -11,25 +10,28 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { MdAdd, MdSave } from 'react-icons/md';
-import { Human } from '../../controller/game/player_human';
+import { Human } from '../../model/human';
+import { storage } from '../../services/storage.service';
+import { Config, EditMode } from '../../model/config';
 
-export const AddHumanDialog = observer(({ players }: { players: PlayerList }) => {
-  const handleClick = () => (players.dialog = EditMode.None);
-  const isEdit = players.dialog === EditMode.EditHuman;
-  const player = players.edited as Human;
+export const AddHumanDialog = observer(({ config }: { config: Config }) => {
+  const handleClick = () => (config.dialog = EditMode.None);
+  const isEdit = config.dialog === EditMode.EditHuman;
+  const items = config.humans;
+  const item = isEdit ? (items[config.cursor] as Human) : new Human('', '');
 
-  const savePlayer = () => {
-    if (player.name.length) {
+  const save = () => {
+    if (item.name.length) {
       if (isEdit) {
-        players.humans[players.cursor] = player;
+        items[config.cursor] = item;
       } else {
-        players.humans.push(player);
+        items.push(item);
       }
-      players.save();
-      players.dialog = EditMode.None;
-      players.cursor = -1;
+      storage.storeList(Human.storage, items);
+      config.dialog = EditMode.None;
+      config.cursor = -1;
     } else {
-      message.display('Add Human', 'Need to enter a name');
+      messageService.display('Add Human', 'Need to enter a name');
     }
   };
 
@@ -38,25 +40,25 @@ export const AddHumanDialog = observer(({ players }: { players: PlayerList }) =>
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={players.dialog === EditMode.AddHuman || players.dialog === EditMode.EditHuman}>
+      open={config.dialog === EditMode.AddHuman || config.dialog === EditMode.EditHuman}>
       <DialogTitle id="message">{isEdit ? 'Edit' : 'Add'} Human Player</DialogTitle>
       <DialogContent>
         <DialogContentText>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
             <ConfigText
-              label="Player Name"
+              label="Name"
               id="name"
-              onChange={e => (player.name = e.target.value as string)}
-              value={player.name}
+              onChange={e => (item.name = e.target.value as string)}
+              value={item.name}
             />
             <ConfigText
-              label="Player Email"
+              label="Email"
               id="email"
-              onChange={e => (player.email = e.target.value as string)}
-              value={player.email}
+              onChange={e => (item.email = e.target.value as string)}
+              value={item.email}
             />
             <ConfigButton
-              onClick={savePlayer}
+              onClick={save}
               label={isEdit ? 'Save' : 'Add'}
               icon={isEdit ? <MdSave /> : <MdAdd />}
             />

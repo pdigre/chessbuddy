@@ -1,8 +1,8 @@
 import React, { MouseEvent } from 'react';
-import * as rules from '../../controller/util/rules';
+import * as rules from '../../services/util/rules';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
-import { GameHistory } from '../../controller/game/history';
+import { Config } from '../../model/config';
+import { GameHistory } from '../../services/game/history';
 import { GridWidget as GridWidget } from './GridWidget';
 
 export const HistoryView = observer(

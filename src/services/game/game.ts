@@ -1,17 +1,17 @@
 import * as rules from '../util/rules';
-import { Human } from './player_human';
-import { Player } from './player';
-import { playerList } from './playerlist';
+import { Human } from '../../model/human';
 import { clockList } from '../config/clocklist';
 import { locate, San, tree } from '../util/openings';
 import { makeAutoObservable } from 'mobx';
 import { helper } from './helper';
-import { Bot } from './player_bot';
+import { Bot } from '../../model/bot';
 import { playWinner } from '../config/mp4';
 import { Square } from 'chess.js';
 import { gameHistory } from './history';
-import { message } from '../control/message';
-import { config } from '../config/config';
+import { messageService } from '../message.service';
+import { config } from '../../model/config';
+import { Clock } from '../../model/clock';
+import { WorkerBot } from './uci_engine';
 
 /*
  * Start and pause of game, starts the bots if in turn
@@ -38,6 +38,7 @@ export const gameState = new GameState();
 export class Game {
   white = '';
   black = '';
+  clock = '';
   wtime = 0;
   btime = 0;
   log: string[] = [];
@@ -45,8 +46,9 @@ export class Game {
   isWhiteTurn = true;
   isComplete = false;
   pgns: Square[] = [];
-  private bplayer?: Player;
-  private wplayer?: Player;
+  private bplayer?: WorkerBot | Human;
+  private wplayer?: WorkerBot | Human;
+  private _clock?: Clock;
   private date = Date.now();
 
   constructor() {
@@ -103,10 +105,17 @@ export class Game {
   setPlayers: (white: string, black: string) => void = (white, black) => {
     this.white = white;
     this.black = black;
-    const players = [...playerList.humans, ...playerList.bots];
-    this.wplayer = players.find(p => p.name == white);
-    this.bplayer = players.find(p => p.name == black);
+    const players = [...config.humans, ...config.bots];
+    this.wplayer = this.instantiate(players.find(p => p.getName() == white));
+    this.bplayer = this.instantiate(players.find(p => p.getName() == black));
   };
+
+  instantiate: (player: Human | Bot | undefined) => Human | WorkerBot | undefined = (
+    player: Human | Bot | undefined
+  ) =>
+    player instanceof Bot
+      ? new WorkerBot(player.uciEngineDef.path, player.skill, player.depth, player.time)
+      : player;
 
   addMove: (san: string) => void = san => {
     const prev = this.nextPlayer();
@@ -127,7 +136,7 @@ export class Game {
     clockList.reset();
     this.calculate();
     const next = this.nextPlayer();
-    if (next instanceof Human) {
+    if (!(next instanceof WorkerBot)) {
       helper.run(this.fen, this.isWhiteTurn);
     }
     gameState.run();
@@ -135,7 +144,7 @@ export class Game {
 
   playBot: VoidFunction = () => {
     const next = this.nextPlayer();
-    if (next instanceof Bot) {
+    if (next instanceof WorkerBot) {
       next.processFen(this.fen, ({ from, to }) => {
         const move = rules.move(game.fen, from, to);
         if (move) {
@@ -152,7 +161,7 @@ export class Game {
     );
   };
 
-  nextPlayer: () => Player | undefined = () => {
+  nextPlayer: () => WorkerBot | Human | undefined = () => {
     return this.isWhiteTurn ? this.wplayer : this.bplayer;
   };
 
@@ -209,7 +218,7 @@ export class Game {
     } else if (yes == 'Draw') {
       game.playMove('1/2-1/2');
     }
-    message.clear();
+    messageService.clear();
   };
 
   playAction = () => {

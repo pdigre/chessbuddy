@@ -6,45 +6,47 @@ import {
   DialogTitle,
 } from '@mui/material';
 import React from 'react';
-import { Bot, UciEngineDefs } from '../../controller/game/player_bot';
-import { EditMode, PlayerList } from '../../controller/game/playerlist';
+import { Bot } from '../../model/bot';
 import { ConfigButton, ConfigSelect, ConfigText } from './ConfigWidgets';
 import { observer } from 'mobx-react';
-import { message } from '../../controller/control/message';
+import { messageService } from '../../services/message.service';
 import { MdAdd, MdSave } from 'react-icons/md';
+import { storage } from '../../services/storage.service';
+import { Config, EditMode } from '../../model/config';
+import { UciEngineDefs } from '../../services/game/uci_engine';
 
-export const AddBotDialog = observer(({ players }: { players: PlayerList }) => {
-  const handleClick = () => (players.dialog = EditMode.None);
-  const isEdit = players.dialog === EditMode.EditBot;
-  const player = players.edited as Bot;
+export const AddBotDialog = observer(({ config }: { config: Config }) => {
+  const handleClick = () => (config.dialog = EditMode.None);
+  const isEdit = config.dialog === EditMode.EditBot;
+  const items = config.bots;
+  const item = isEdit ? (items[config.cursor] as Bot) : new Bot('', UciEngineDefs[0].name, 0, 0, 0);
 
   const savePlayer = () => {
-    if (!player.engine) {
-      message.display('Add Bot', 'Need to select a chess engine');
+    if (!item.engine) {
+      messageService.display('Add Bot', 'Need to select a chess engine');
       return;
     }
-    const nSkill = player.skill;
+    const nSkill = item.skill;
     if (isNaN(nSkill) || nSkill < 1 || nSkill > 20) {
-      message.display('Add Bot', 'Need to enter skill level between 1 and 20');
+      messageService.display('Add Bot', 'Need to enter skill level between 1 and 20');
       return;
     }
-    const nTime = player.time;
-    if (player.time && (isNaN(nTime) || nTime < 1 || nTime > 60)) {
-      message.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
+    const nTime = item.time;
+    if (item.time && (isNaN(nTime) || nTime < 1 || nTime > 60)) {
+      messageService.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
       return;
     }
-    const nDepth = player.depth;
-    if (!player.time == !player.depth) {
-      message.display('Add Bot', 'Need to enter time or depth, but not both');
+    const nDepth = item.depth;
+    if (!item.time == !item.depth) {
+      messageService.display('Add Bot', 'Need to enter time or depth, but not both');
       return;
     }
-    if (player.depth && (isNaN(nDepth) || nDepth < 6 || nDepth > 30)) {
-      message.display('Add Bot', 'Need to enter depth between 6 and 30');
+    if (item.depth && (isNaN(nDepth) || nDepth < 6 || nDepth > 30)) {
+      messageService.display('Add Bot', 'Need to enter depth between 6 and 30');
       return;
     }
-    players.parsePlayer(`Bot:${player.engine}:${player.skill}:${player.time}:${player.depth}`);
-    players.save();
-    players.dialog = EditMode.None;
+    storage.storeList(Bot.storage, items);
+    config.dialog = EditMode.None;
   };
   const engineNames = Array.from(UciEngineDefs.map(x => x.name));
 
@@ -62,37 +64,43 @@ export const AddBotDialog = observer(({ players }: { players: PlayerList }) => {
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={players.dialog === EditMode.AddBot || players.dialog === EditMode.EditBot}>
+      open={config.dialog === EditMode.AddBot || config.dialog === EditMode.EditBot}>
       <DialogTitle id="message">{isEdit ? 'Edit' : 'Add'} Bot Player</DialogTitle>
       <DialogContent>
         <DialogContentText>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
+            <ConfigText
+              label="Name"
+              id="name"
+              onChange={e => (item.name = e.target.value as string)}
+              value={item.name}
+            />
             <ConfigSelect
               label="Chess Engine"
               choices={engineNames}
-              selected={{ name: 'ConfigSelector', value: player.engine }}
-              setSelected={value => (player.engine = value)}
+              selected={{ name: 'ConfigSelector', value: item.engine }}
+              setSelected={value => (item.engine = value)}
             />
             <br />
             <ConfigText
               label="Skill level"
               id="skill"
-              onChange={e => (player.skill = toInt(e.target.value))}
-              value={intToTxt(player.skill)}
+              onChange={e => (item.skill = toInt(e.target.value))}
+              value={intToTxt(item.skill)}
             />{' '}
             <br />
             <ConfigText
               label="Time (sec)"
               id="time"
-              onChange={e => (player.time = toInt(e.target.value))}
-              value={intToTxt(player.time)}
+              onChange={e => (item.time = toInt(e.target.value))}
+              value={intToTxt(item.time)}
             />{' '}
             <br />
             <ConfigText
               label="Depth (..not time)"
               id="depth"
-              onChange={e => (player.depth = toInt(e.target.value))}
-              value={intToTxt(player.depth)}
+              onChange={e => (item.depth = toInt(e.target.value))}
+              value={intToTxt(item.depth)}
             />
             <ConfigButton
               onClick={savePlayer}

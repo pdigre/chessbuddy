@@ -1,8 +1,8 @@
 import React from 'react';
-import { game } from '../../controller/game/game';
+import { game } from '../../services/game/game';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
-import { gameHistory } from '../../controller/game/history';
+import { Config } from '../../model/config';
+import { gameHistory } from '../../services/game/history';
 import { HistoryView } from './HistoryView';
 import { GameView } from './GameView';
 import { EditView } from './EditView';
