@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx';
-import { gameState } from '../game/game';
-import { Clock } from '../../model/clock';
+import { gameState } from '../services/game/game';
+import { Clock } from './clock';
 
-export class ClockList {
+export class Timer {
   current: Clock = new Clock('', []);
   elapsed = 0;
 
@@ -20,4 +20,4 @@ export class ClockList {
     this.elapsed = 0;
   };
 }
-export const clockList = new ClockList();
+export const clockList = new Timer();

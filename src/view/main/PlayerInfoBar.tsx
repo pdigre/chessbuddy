@@ -1,7 +1,7 @@
 import React from 'react';
 import { Game } from '../../services/game/game';
 import { toMMSS } from '../../services/util/library';
-import { ClockList, clockList } from '../../services/config/clocklist';
+import { Timer, clockList } from '../../model/timer';
 import { observer } from 'mobx-react';
 import { Config } from '../../model/config';
 
@@ -9,7 +9,7 @@ export const PlayerInfoBar = observer(
   ({ isTop, game, config }: { isTop: boolean; game: Game; config: Config }) => {
     const g = game;
     const isWhite = isTop == config.rotation > 1;
-    type TIMER = { clockList: ClockList };
+    type TIMER = { clockList: Timer };
     const Ticker = observer(({ clockList }: TIMER) => (
       <span>
         {toMMSS(Math.floor(clockList.elapsed) + Math.floor(g.isWhiteTurn ? g.wtime : g.btime))}

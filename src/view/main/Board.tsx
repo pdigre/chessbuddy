@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import * as rules from '../../services/util/rules';
-import { Helper } from '../../services/game/helper';
+import { chessRulesService as rules, Square } from '../../services/chessrules.service';
+import { AnalyzerService } from '../../services/analyzer.service';
 import { Human } from '../../model/human';
 import { game, GameState } from '../../services/game/game';
 import { Chessboard } from 'react-chessboard';
@@ -8,11 +8,10 @@ import { Config } from '../../model/config';
 import { RefreshTimer } from '../../services/control/refreshtimer';
 import { Rendering } from '../../services/control/rendering';
 import { observer } from 'mobx-react';
-import { Square } from 'chess.js';
 import { messageService } from '../../services/message.service';
-import { playCorrect } from '../../services/config/mp4';
 import { ButtonType } from '../config/ConfigWidgets';
 import { FaChessBishop, FaChessKnight, FaChessQueen, FaChessRook } from 'react-icons/fa';
+import { mp4service } from '../../services/mp4.service';
 
 const pgnStyle: React.CSSProperties = {
   background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
@@ -49,13 +48,13 @@ export const Board = observer(
     config,
     refreshTimer,
   }: {
-    helper: Helper;
+    helper: AnalyzerService;
     gameState: GameState;
     rendering: Rendering;
     config: Config;
     refreshTimer: RefreshTimer;
   }) => {
-    const doMove = useCallback((from: rules.Square, to: rules.Square, isHuman: boolean) => {
+    const doMove = useCallback((from: Square, to: Square, isHuman: boolean) => {
       const move = rules.move(game.fen, from, to);
       if (!move) {
         return;
@@ -106,7 +105,8 @@ export const Board = observer(
         game.editMove(from, to);
         return true;
       }
-      if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from) playCorrect();
+      if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from)
+        mp4service.playCorrect();
       config.startUndoTimer(game.log.length);
       const state = game.log.length;
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);

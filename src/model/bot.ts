@@ -1,6 +1,14 @@
-import { UciEngineDef, UciEngineDefs } from '../services/game/uci_engine';
 import { Storable } from '../services/storage.service';
 import { ListItem } from './config';
+
+export class UciEngineDef {
+  constructor(public name: string, public path: string) {}
+}
+
+export const UciEngineDefs: UciEngineDef[] = [
+  new UciEngineDef('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
+  new UciEngineDef('Lozza', 'bots/lozza-1.18/lozza.js'),
+];
 
 export class Bot implements ListItem, Storable {
   uciEngineDef: UciEngineDef = UciEngineDefs[0];

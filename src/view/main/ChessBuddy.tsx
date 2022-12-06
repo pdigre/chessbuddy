@@ -6,13 +6,13 @@ import { CP } from './CP';
 import { ConfigDialog } from '../config/ConfigDialog';
 import { Board } from './Board';
 import { PlayerInfoBar } from './PlayerInfoBar';
-import { helper } from '../../services/game/helper';
+import { analyzerService } from '../../services/analyzer.service';
 import { AboutDialog } from '../dialogs/AboutDialog';
 import { rendering } from '../../services/control/rendering';
 import { refreshtimer } from '../../services/control/refreshtimer';
 import packageInfo from '../../../package.json';
 import { messageService } from '../../services/message.service';
-import { mp4, playAll } from '../../services/config/mp4';
+import { mp4service } from '../../services/mp4.service';
 import { Mp4Dialog } from '../dialogs/Mp4Dialog';
 import { MessageDialog } from '../dialogs/MessageDialog';
 import { Theme } from '../../services/control/theme';
@@ -81,11 +81,11 @@ export const ChessBuddy = observer(({ theme }: { theme: Theme }) => {
       <CssBaseline />
       <div className={theme.darkTheme ? 'dark' : 'light'}>
         <div className="w-[1024px] h-[748px] bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row">
-          <CP helper={helper} rendering={rendering} config={config} />
+          <CP helper={analyzerService} rendering={rendering} config={config} />
           <div className="flex flex-col flex-grow">
             <PlayerInfoBar isTop={true} game={game} config={config} />
             <Board
-              helper={helper}
+              helper={analyzerService}
               gameState={gameState}
               rendering={rendering}
               config={config}
@@ -98,14 +98,14 @@ export const ChessBuddy = observer(({ theme }: { theme: Theme }) => {
               <span onClick={about} className="mx-5 text-xl">
                 ChessBuddy {version}
               </span>
-              <MdRefresh className="text-lg mx-5" onClick={playAll} />
+              <MdRefresh className="text-lg mx-5" onClick={mp4service.playAll} />
             </h3>
             <MainButtonBar gameState={gameState} config={config} />
             <FenInfo game={game} />
             <MainView config={config} />
           </div>
           <MessageDialog message={messageService} />
-          <Mp4Dialog mp4={mp4} />
+          <Mp4Dialog mp4={mp4service} />
           <ConfigDialog config={config} />
         </div>
       </div>

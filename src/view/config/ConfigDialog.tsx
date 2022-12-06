@@ -4,7 +4,7 @@ import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
-import { server } from '../../services/integration/server';
+import { connectService } from '../../services/connect.service';
 import { observer } from 'mobx-react';
 import { Config } from '../../model/config';
 import { refreshtimer } from '../../services/control/refreshtimer';
@@ -105,7 +105,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
         <ConfigDisplay config={config} theme={theme} />
       </TabPanel>
       <TabPanel index={2}>
-        <ConfigHuman config={config} server={server} />
+        <ConfigHuman config={config} server={connectService} />
       </TabPanel>
       <TabPanel index={3}>
         <ConfigBot config={config} />

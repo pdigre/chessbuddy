@@ -1,17 +1,16 @@
-import * as rules from '../util/rules';
 import { Human } from '../../model/human';
-import { clockList } from '../config/clocklist';
-import { locate, San, tree } from '../util/openings';
+import { clockList } from '../../model/timer';
+import { openingsService, San } from '../openings.service';
 import { makeAutoObservable } from 'mobx';
-import { helper } from './helper';
-import { Bot } from '../../model/bot';
-import { playWinner } from '../config/mp4';
-import { Square } from 'chess.js';
-import { gameHistory } from './history';
+import { analyzerService } from '../analyzer.service';
+import { mp4service } from '../mp4.service';
+import { Square, SQUARES } from 'chess.js';
+import { historyService } from '../history.service';
 import { messageService } from '../message.service';
 import { config } from '../../model/config';
 import { Clock } from '../../model/clock';
-import { WorkerBot } from './uci_engine';
+import { BotRunner, botService } from '../bot.service';
+import { chessRulesService as chess } from '../chessrules.service';
 
 /*
  * Start and pause of game, starts the bots if in turn
@@ -42,12 +41,12 @@ export class Game {
   wtime = 0;
   btime = 0;
   log: string[] = [];
-  fen = rules.NEW_GAME;
+  fen = chess.NEW_GAME;
   isWhiteTurn = true;
   isComplete = false;
   pgns: Square[] = [];
-  private bplayer?: WorkerBot | Human;
-  private wplayer?: WorkerBot | Human;
+  private bplayer?: BotRunner | Human;
+  private wplayer?: BotRunner | Human;
   private _clock?: Clock;
   private date = Date.now();
 
@@ -60,10 +59,10 @@ export class Game {
     this.wtime = 0;
     this.btime = 0;
     this.log = [];
-    this.fen = rules.NEW_GAME;
+    this.fen = chess.NEW_GAME;
     this.isWhiteTurn = true;
     this.isComplete = false;
-    helper.reset();
+    analyzerService.reset();
     this.run();
   };
 
@@ -83,22 +82,22 @@ export class Game {
 
   editMove = (from: Square, to: Square) => {
     const fenArr = this.fen.split(' ');
-    const brd = rules.getBrd(this.fen).split('');
-    const p1 = rules.SQUARES.indexOf(from);
-    const p2 = rules.SQUARES.indexOf(to);
+    const brd = chess.getBrd(this.fen).split('');
+    const p1 = SQUARES.indexOf(from);
+    const p2 = SQUARES.indexOf(to);
     const swap = brd[p1];
     brd[p1] = brd[p2];
     brd[p2] = swap;
-    fenArr[0] = rules.brd2fen(brd.join(''));
+    fenArr[0] = chess.brd2fen(brd.join(''));
     this.fen = fenArr.join(' ');
   };
 
   editPiece = (piece: string) => {
     const fenArr = this.fen.split(' ');
-    const brd = rules.getBrd(this.fen).split('');
-    const p = rules.SQUARES.indexOf(config.editSquare as Square);
+    const brd = chess.getBrd(this.fen).split('');
+    const p = SQUARES.indexOf(config.editSquare as Square);
     brd[p] = piece;
-    fenArr[0] = rules.brd2fen(brd.join(''));
+    fenArr[0] = chess.brd2fen(brd.join(''));
     this.fen = fenArr.join(' ');
   };
 
@@ -106,24 +105,17 @@ export class Game {
     this.white = white;
     this.black = black;
     const players = [...config.humans, ...config.bots];
-    this.wplayer = this.instantiate(players.find(p => p.getName() == white));
-    this.bplayer = this.instantiate(players.find(p => p.getName() == black));
+    this.wplayer = botService.instantiate(players.find(p => p.getName() == white));
+    this.bplayer = botService.instantiate(players.find(p => p.getName() == black));
   };
-
-  instantiate: (player: Human | Bot | undefined) => Human | WorkerBot | undefined = (
-    player: Human | Bot | undefined
-  ) =>
-    player instanceof Bot
-      ? new WorkerBot(player.uciEngineDef.path, player.skill, player.depth, player.time)
-      : player;
 
   addMove: (san: string) => void = san => {
     const prev = this.nextPlayer();
     if (prev instanceof Human) gameState.isPlaying = true;
     this.date = Date.now();
     this.log.push(san);
-    helper.reset();
-    this.fen = rules.newFen(this.fen, san);
+    analyzerService.reset();
+    this.fen = chess.newFen(this.fen, san);
     if (this.isWhiteTurn) {
       this.wtime += clockList.elapsed;
     } else {
@@ -136,17 +128,17 @@ export class Game {
     clockList.reset();
     this.calculate();
     const next = this.nextPlayer();
-    if (!(next instanceof WorkerBot)) {
-      helper.run(this.fen, this.isWhiteTurn);
+    if (!(next instanceof BotRunner)) {
+      analyzerService.run(this.fen, this.isWhiteTurn);
     }
     gameState.run();
   };
 
   playBot: VoidFunction = () => {
     const next = this.nextPlayer();
-    if (next instanceof WorkerBot) {
+    if (next instanceof BotRunner) {
       next.processFen(this.fen, ({ from, to }) => {
-        const move = rules.move(game.fen, from, to);
+        const move = chess.move(game.fen, from, to);
         if (move) {
           this.playMove(move[1].san);
         }
@@ -155,13 +147,13 @@ export class Game {
   };
 
   setPGNS: (sans: San[]) => void = sans => {
-    this.pgns = rules.findInfoMarkers(
+    this.pgns = chess.findInfoMarkers(
       sans.map(x => x.san),
       this.fen
     );
   };
 
-  nextPlayer: () => WorkerBot | Human | undefined = () => {
+  nextPlayer: () => BotRunner | Human | undefined = () => {
     return this.isWhiteTurn ? this.wplayer : this.bplayer;
   };
 
@@ -176,7 +168,7 @@ export class Game {
     );
     this.log = _game[5] ? _game[5].split(' ') : [];
     this.setPlayers(_game[1], _game[2]);
-    this.fen = rules.replay(this.log);
+    this.fen = chess.replay(this.log);
     this.wtime = Number.parseInt(_game[3], 36);
     this.btime = Number.parseInt(_game[4], 36);
     this.date = Number.parseInt(_game[0]);
@@ -189,23 +181,23 @@ export class Game {
     this.addMove(san);
     localStorage.setItem('game', this.toString());
     if (this.isComplete) {
-      gameHistory.storeGame();
+      historyService.storeGame();
     }
   };
 
   private calculate = () => {
     const san = this.log[this.log.length - 1];
-    this.isComplete = rules.isEndMove(san) || rules.isGameOver(this.fen);
+    this.isComplete = chess.isEndMove(san) || chess.isGameOver(this.fen);
     if (this.isComplete) {
-      if (gameState.isPlaying) playWinner();
+      if (gameState.isPlaying) mp4service.playWinner();
       gameState.isPlaying = false;
     }
-    this.isWhiteTurn = rules.isWhiteTurn(this.fen);
+    this.isWhiteTurn = chess.isWhiteTurn(this.fen);
     this.pgns = [];
     if (this.log.length == 0) {
-      this.setPGNS(tree);
+      this.setPGNS(openingsService.tree);
     } else {
-      const pgn: San | undefined = locate(this.log);
+      const pgn: San | undefined = openingsService.locate(this.log);
       if (pgn) this.setPGNS(pgn.children);
     }
   };
@@ -227,7 +219,7 @@ export class Game {
     gameState.run();
   };
 
-  whoWon = () => rules.whoWon(game.log);
+  whoWon = () => chess.whoWon(game.log);
 }
 
 export const game = new Game();

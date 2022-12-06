@@ -1,19 +1,27 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Helper } from '../../services/game/helper';
+import { AnalyzerService } from '../../services/analyzer.service';
 import { Rendering } from '../../services/control/rendering';
 import { Config } from '../../model/config';
-import { playMistake } from '../../services/config/mp4';
+import { mp4service } from '../../services/mp4.service';
 
 let prevcp = 0;
 
 export const CP = observer(
-  ({ helper, rendering, config }: { helper: Helper; rendering: Rendering; config: Config }) => {
+  ({
+    helper,
+    rendering,
+    config,
+  }: {
+    helper: AnalyzerService;
+    rendering: Rendering;
+    config: Config;
+  }) => {
     if (!config.showCP) {
       return <div className="w-6 h-full flex flex-col flex-grow"></div>;
     }
     const cp = helper.cp;
-    if (Math.abs(cp - prevcp) > 100) playMistake();
+    if (Math.abs(cp - prevcp) > 100) mp4service.playMistake();
     prevcp = cp;
     const blackTop = config.rotation > 1;
     const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);

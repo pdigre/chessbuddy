@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
-import * as rules from '../../services/util/rules';
+import { chessRulesService as rules } from '../../services/chessrules.service';
 import { observer } from 'mobx-react';
 import { game, GameState } from '../../services/game/game';
 import { refreshtimer } from '../../services/control/refreshtimer';
 import { Config } from '../../model/config';
-import { helper } from '../../services/game/helper';
+import { analyzerService } from '../../services/analyzer.service';
 import { messageService } from '../../services/message.service';
 import {
   MdCancel,
@@ -43,8 +43,8 @@ export const MainButtonBar = observer(
               game.log = game.log.slice(0, isPlayUndo ? config.undopos : config.markLog);
               game.fen = rules.replay(game.log);
               refreshtimer.startRefreshTimer();
-              helper.cp = 0;
-              helper.help = [];
+              analyzerService.cp = 0;
+              analyzerService.help = [];
             }
             config.markLog = -1;
           }

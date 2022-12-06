@@ -1,10 +1,12 @@
-import type { Fen, ShortMove } from '../util/rules';
+import { Bot } from '../model/bot';
+import { Human } from '../model/human';
+import type { Fen, ShortMove } from './chessrules.service';
 
-export type LoadBot = () => RunBot;
-export type RunBot = (fen: Fen) => Promise<ShortMove>;
-export type UciCallback = (move: ShortMove) => void;
+type LoadBot = () => RunBot;
+type RunBot = (fen: Fen) => Promise<ShortMove>;
+type UciCallback = (move: ShortMove) => void;
 
-export class WorkerBot {
+export class BotRunner {
   workerClass: LoadBot;
   workerInstance?: RunBot;
   isRunning = false;
@@ -53,11 +55,13 @@ export class WorkerBot {
   };
 }
 
-export class UciEngineDef {
-  constructor(public name: string, public path: string) {}
+export class BotService {
+  instantiate: (player: Human | Bot | undefined) => Human | BotRunner | undefined = (
+    player: Human | Bot | undefined
+  ) =>
+    player instanceof Bot
+      ? new BotRunner(player.uciEngineDef.path, player.skill, player.depth, player.time)
+      : player;
 }
 
-export const UciEngineDefs: UciEngineDef[] = [
-  new UciEngineDef('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
-  new UciEngineDef('Lozza', 'bots/lozza-1.18/lozza.js'),
-];
+export const botService = new BotService();

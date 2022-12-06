@@ -1,12 +1,12 @@
 import React, { MouseEvent } from 'react';
-import * as rules from '../../services/util/rules';
+import { chessRulesService as rules } from '../../services/chessrules.service';
 import { observer } from 'mobx-react';
 import { Config } from '../../model/config';
-import { GameHistory } from '../../services/game/history';
+import { HistoryService } from '../../services/history.service';
 import { GridWidget as GridWidget } from './GridWidget';
 
 export const HistoryView = observer(
-  ({ gameHistory, config }: { gameHistory: GameHistory; config: Config }) => {
+  ({ gameHistory, config }: { gameHistory: HistoryService; config: Config }) => {
     const historyClick = (event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt(

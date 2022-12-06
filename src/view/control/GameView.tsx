@@ -1,17 +1,17 @@
 import React, { MouseEvent } from 'react';
-import * as rules from '../../services/util/rules';
+import { chessRulesService as rules } from '../../services/chessrules.service';
 import { Game, gameState } from '../../services/game/game';
 import { observer } from 'mobx-react';
 import { Config } from '../../model/config';
 import { refreshtimer } from '../../services/control/refreshtimer';
-import { helper } from '../../services/game/helper';
+import { analyzerService } from '../../services/analyzer.service';
 import { messageService } from '../../services/message.service';
-import { GameHistory } from '../../services/game/history';
+import { HistoryService } from '../../services/history.service';
 import { MdCancel, MdCheck } from 'react-icons/md';
 import { GridWidget } from './GridWidget';
 
 export const GameView = observer(
-  ({ game, gameHistory, config }: { game: Game; gameHistory: GameHistory; config: Config }) => {
+  ({ game, gameHistory, config }: { game: Game; gameHistory: HistoryService; config: Config }) => {
     if (config.markHist >= 0) {
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
@@ -45,8 +45,8 @@ export const GameView = observer(
       if (gameState.isPlaying) gameState.isPlaying = false;
       game.fen = rules.replay(game.log, mark >= 0 ? mark : game.log.length);
       refreshtimer.startRefreshTimer();
-      helper.cp = 0;
-      helper.help = [];
+      analyzerService.cp = 0;
+      analyzerService.help = [];
     };
 
     const logClick = (event: MouseEvent<HTMLTableElement>) => {

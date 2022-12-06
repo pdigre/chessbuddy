@@ -6,14 +6,13 @@ import {
   DialogTitle,
 } from '@mui/material';
 import React from 'react';
-import { Bot } from '../../model/bot';
+import { Bot, UciEngineDefs } from '../../model/bot';
 import { ConfigButton, ConfigSelect, ConfigText } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { messageService } from '../../services/message.service';
 import { MdAdd, MdSave } from 'react-icons/md';
 import { storage } from '../../services/storage.service';
 import { Config, EditMode } from '../../model/config';
-import { UciEngineDefs } from '../../services/game/uci_engine';
 
 export const AddBotDialog = observer(({ config }: { config: Config }) => {
   const handleClick = () => (config.dialog = EditMode.None);

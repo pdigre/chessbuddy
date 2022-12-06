@@ -1,18 +1,18 @@
-import { Human } from '../../model/human';
-import { gameHistory } from '../game/history';
-import { deviceInfo } from '../util/library';
+import { Human } from '../model/human';
+import { historyService } from './history.service';
+import { deviceInfo } from './util/library';
 import { makeAutoObservable } from 'mobx';
-import { messageService } from '../message.service';
+import { messageService } from './message.service';
 
 export type RESP = { stored: number; games: string[] };
 
-export class Server {
+export class ConnectService {
   constructor() {
     makeAutoObservable(this);
   }
 
   connectREST: (human: Human) => void = async human => {
-    const games1 = gameHistory.getFilteredGames(human.name);
+    const games1 = historyService.getFilteredGames(human.name);
     const connect = { email: human.email, device: deviceInfo, games: games1.join('\n') };
     const url =
       window.document.location.hostname == 'localhost'
@@ -32,13 +32,13 @@ export class Server {
   };
 
   importFromServer: (resp: RESP) => void = resp => {
-    const i1 = gameHistory.history.length;
-    gameHistory.importFromServer(resp.games);
-    const i2 = gameHistory.history.length;
+    const i1 = historyService.history.length;
+    historyService.importFromServer(resp.games);
+    const i2 = historyService.history.length;
     messageService.display(
       'Connect Success',
       `Stored ${(resp as RESP).stored} games and fetched ${i2 - i1} games` + ''
     );
   };
 }
-export const server = new Server();
+export const connectService = new ConnectService();
