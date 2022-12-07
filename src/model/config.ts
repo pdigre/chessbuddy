@@ -18,31 +18,39 @@ export const enum EditMode {
   EditClock,
   AddClock,
 }
+type ConfigProps = {
+  white: string;
+  black: string;
+  clock: string;
+  rotation: number;
+  showHints: boolean;
+  showCP: boolean;
+  showFacts: boolean;
+  playMistake: boolean;
+  playCorrect: boolean;
+  playWinner: boolean;
+};
 
 export class Config {
+  storage = 'config';
+  white: string;
+  black: string;
+  clock: string;
+  // Features config
+  rotation: number;
+  showHints: boolean;
+  showCP: boolean;
+  showFacts: boolean;
+  playMistake: boolean;
+  playCorrect: boolean;
+  playWinner: boolean;
   // Config to store
   humans: Human[];
   bots: Bot[];
   clocks: Clock[];
 
-  // Other game config
-  showHist = false;
-  showUndo = false;
-  showHints = false;
-  showCP = true;
-  showFacts = true;
-  playMistake = false;
-  playCorrect = false;
-  playWinner = false;
-
-  // Game play config
-  rotation = 0;
-  markLog = -1;
-  markHist = -1;
+  // Config runtime - no persist
   showTab = -1;
-  undopos = 0;
-  editMode = false;
-  editSquare = '';
   cursor = -1;
   dialog = EditMode.None;
 
@@ -51,19 +59,46 @@ export class Config {
     this.humans = storage.restoreList(Human.storage, Human.init, Human.create);
     this.bots = storage.restoreList(Bot.storage, Bot.init, Bot.create);
     this.clocks = storage.restoreList(Clock.storage, Clock.init, Clock.create);
+
+    const initProps: ConfigProps = {
+      white: '',
+      black: '',
+      clock: '',
+      rotation: 0,
+      showHints: false,
+      showCP: true,
+      showFacts: true,
+      playMistake: false,
+      playCorrect: false,
+      playWinner: false,
+    };
+    const restore = storage.restoreObject(this.storage, initProps);
+    this.white = restore.white;
+    this.black = restore.black;
+    this.clock = restore.clock;
+    this.rotation = restore.rotation;
+    this.showHints = restore.showHints;
+    this.showCP = restore.showCP;
+    this.showFacts = restore.showFacts;
+    this.playMistake = restore.playMistake;
+    this.playCorrect = restore.playCorrect;
+    this.playWinner = restore.playWinner;
   }
 
-  undoTimer: TimerHandler = () => {
-    if (this.showUndo) {
-      this.undopos = 0; // In the case you're already in a UNDO confirmation box.
-    }
-    this.showUndo = false;
-  };
-
-  startUndoTimer: (pos: number) => void = pos => {
-    this.showUndo = true;
-    this.undopos = pos;
-    window.setTimeout(this.undoTimer, 9000);
+  store: VoidFunction = () => {
+    const props: ConfigProps = {
+      white: this.white,
+      black: this.black,
+      clock: this.clock,
+      rotation: this.rotation,
+      showHints: this.showHints,
+      showCP: this.showCP,
+      showFacts: this.showFacts,
+      playMistake: this.playMistake,
+      playCorrect: this.playCorrect,
+      playWinner: this.playWinner,
+    };
+    storage.storeObject(this.storage, props);
   };
 }
 

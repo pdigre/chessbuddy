@@ -2,9 +2,9 @@ import React, { ReactElement } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
 import { chessRulesService as rules } from '../../services/chessrules.service';
 import { observer } from 'mobx-react';
-import { game, GameState } from '../../services/game/game';
+import { playService, GameState } from '../../services/play.service';
 import { refreshtimer } from '../../services/control/refreshtimer';
-import { Config } from '../../model/config';
+import { config } from '../../model/config';
 import { analyzerService } from '../../services/analyzer.service';
 import { messageService } from '../../services/message.service';
 import {
@@ -19,14 +19,15 @@ import {
   MdUndo,
   MdEdit,
 } from 'react-icons/md';
+import { HistoryService } from '../../services/history.service';
 
 export const MainButtonBar = observer(
-  ({ gameState, config }: { gameState: GameState; config: Config }) => {
-    const isGotoHist = config.showHist && config.markHist >= 0;
+  ({ gameState, history: gameHistory }: { gameState: GameState; history: HistoryService }) => {
+    const isGotoHist = gameState.showHist && gameHistory.markHist >= 0;
     const playHandler = () => {
-      if (game.isComplete) game.reset();
-      const isHistUndo = !config.showHist && config.markLog >= 0;
-      const isPlayUndo = gameState.isPlaying && config.showUndo;
+      if (playService.isComplete) playService.reset();
+      const isHistUndo = !gameState.showHist && gameState.markLog >= 0;
+      const isPlayUndo = gameState.isPlaying && gameState.showUndo;
       if (isHistUndo || isPlayUndo) {
         messageService.display(
           'Undo',
@@ -40,13 +41,16 @@ export const MainButtonBar = observer(
           yes => {
             messageService.clear();
             if (yes == 'Yes') {
-              game.log = game.log.slice(0, isPlayUndo ? config.undopos : config.markLog);
-              game.fen = rules.replay(game.log);
+              playService.log = playService.log.slice(
+                0,
+                isPlayUndo ? gameState.undopos : gameState.markLog
+              );
+              playService.fen = rules.replay(playService.log);
               refreshtimer.startRefreshTimer();
               analyzerService.cp = 0;
               analyzerService.help = [];
             }
-            config.markLog = -1;
+            gameState.markLog = -1;
           }
         );
         return;
@@ -55,15 +59,15 @@ export const MainButtonBar = observer(
       gameState.run();
     };
 
-    const histHandler = () => (config.showHist = !config.showHist);
+    const histHandler = () => (gameState.showHist = !gameState.showHist);
 
     const configHandler = () => {
       config.showTab = 0;
       gameState.isPlaying = false;
     };
 
-    const isHistUndo = !config.showHist && config.markLog >= 0;
-    const isPlayUndo = gameState.isPlaying && config.showUndo;
+    const isHistUndo = !gameState.showHist && gameState.markLog >= 0;
+    const isPlayUndo = gameState.isPlaying && gameState.showUndo;
 
     const PanelButton = (props: { children: ReactElement; onClick: () => void }) => {
       return (
@@ -91,9 +95,9 @@ export const MainButtonBar = observer(
         <PanelButton onClick={histHandler}>
           {isGotoHist ? (
             <MdInput className="text-3xl" />
-          ) : config.editMode ? (
+          ) : gameState.editMode ? (
             <MdEdit className="text-3xl" />
-          ) : config.showHist ? (
+          ) : gameState.showHist ? (
             <MdOutlineFolderOpen className="text-3xl" />
           ) : (
             <MdOutlineHistory className="text-3xl" />

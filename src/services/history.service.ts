@@ -1,12 +1,13 @@
 import { makeAutoObservable } from 'mobx';
 import { storage } from './storage.service';
-import { game } from './game/game';
+import { playService } from './play.service';
 
 /*
  * History of previous games, should store a maximum locally
  */
 export class HistoryService {
   history: string[];
+  markHist = -1;
 
   constructor() {
     makeAutoObservable(this);
@@ -14,7 +15,7 @@ export class HistoryService {
   }
 
   storeGame: VoidFunction = () => {
-    this.history.push(game.toString());
+    this.history.push(playService.toString());
     this.history.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
     storage.storeLines(HistoryService.storage, this.history);
   };

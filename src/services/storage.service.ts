@@ -11,7 +11,7 @@ export class Storage {
     return (data && !data.includes('undefined') ? data : init)
       .replace(/\r/, '')
       .split('\n')
-      .filter(line => line?.split(':')?.length > 2)
+      .filter(line => line?.split(':')?.length > 1)
       .map(line => create(line.split(':')));
   };
 

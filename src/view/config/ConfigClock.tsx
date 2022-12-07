@@ -38,13 +38,13 @@ export const ConfigClock = observer(({ config }: { config: Config }) => {
     <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
       <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
         <tbody onClick={doSelect}>
-          {config.clocks.map((clock, iLine) => (
+          {config.clocks.map((item, iLine) => (
             <tr
               key={iLine.toString()}
               id={iLine.toString()}
               className={iLine == config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}>
-              <td className="dark:text-white">{clock.name}</td>
-              <td className="dark:text-white">{clock.printTime()}</td>
+              <td className="dark:text-white">{item.getName()}</td>
+              <td className="dark:text-white">{item.getDescription()}</td>
             </tr>
           ))}
         </tbody>

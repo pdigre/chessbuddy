@@ -24,7 +24,7 @@ export class Bot implements ListItem, Storable {
   getUciEngineDef = () => UciEngineDefs.find(x => x.name == this.engine);
 
   toString: () => string = () =>
-    `Bot:${this.name}:${this.uciEngineDef.name},${this.skill},${this.time ?? ''},${
+    `${this.name.trim()}:${this.uciEngineDef.name},${this.skill},${this.time ?? ''},${
       this.depth ?? ''
     }`;
   getName: () => string = () => this.name;
@@ -33,9 +33,9 @@ export class Bot implements ListItem, Storable {
   public static storage = 'bots';
 
   public static create(split: string[]): Bot {
-    const skill = split[2].split(',');
+    const skill = split[1].split(',');
     return new Bot(
-      split[1],
+      split[0],
       skill[0],
       Bot.parseNum(skill[1]),
       Bot.parseNum(skill[2]),
@@ -49,11 +49,11 @@ export class Bot implements ListItem, Storable {
   }
 
   public static init = `
-    Bot:Stockfish easy:Stockfish,20,1,
-    Bot:Stockfish med:Stockfish,1,,10
-    Bot:Stockfish hard:Stockfish,20,,10
-    Bot:Lozza easy:Lozza,20,1,
-    Bot:Lozza med:Lozza,1,,10
-    Bot:Lozza hard:Lozza,20,,10
+    Stockfish easy:Stockfish,20,1,
+    Stockfish med:Stockfish,1,,10
+    Stockfish hard:Stockfish,20,,10
+    Lozza easy:Lozza,20,1,
+    Lozza med:Lozza,1,,10
+    Lozza hard:Lozza,20,,10
     `;
 }

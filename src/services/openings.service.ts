@@ -1,4 +1,4 @@
-import moves from './util/openingdata';
+import moves from '../resources/openingdata';
 
 export class San {
   info: string | undefined;

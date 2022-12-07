@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { chessRulesService as rules, Square } from '../../services/chessrules.service';
 import { AnalyzerService } from '../../services/analyzer.service';
 import { Human } from '../../model/human';
-import { game, GameState } from '../../services/game/game';
+import { playService, GameState } from '../../services/play.service';
 import { Chessboard } from 'react-chessboard';
 import { Config } from '../../model/config';
 import { RefreshTimer } from '../../services/control/refreshtimer';
@@ -23,6 +23,10 @@ const editStyle: React.CSSProperties = {
 };
 const helpStyle: React.CSSProperties = {
   background: 'radial-gradient(circle, #00ff4c 36%, transparent 50%)',
+  borderRadius: '10%',
+};
+const castlingStyle: React.CSSProperties = {
+  background: 'radial-gradient(circle, #505050 36%, transparent 80%)',
   borderRadius: '10%',
 };
 const helpStyle2: React.CSSProperties = {
@@ -55,7 +59,7 @@ export const Board = observer(
     refreshTimer: RefreshTimer;
   }) => {
     const doMove = useCallback((from: Square, to: Square, isHuman: boolean) => {
-      const move = rules.move(game.fen, from, to);
+      const move = rules.move(playService.fen, from, to);
       if (!move) {
         return;
       }
@@ -73,14 +77,14 @@ export const Board = observer(
             if (reply == 'Rook') promo = 'r';
             if (reply == 'Knight') promo = 'n';
             if (reply == 'Bishop') promo = 'b';
-            const move = rules.move(game.fen, from, to, promo);
+            const move = rules.move(playService.fen, from, to, promo);
             if (move != null) {
               messageService.clear();
-              game.playMove(move[1].san);
+              playService.playMove(move[1].san);
             }
           });
         } else {
-          game.playMove(action.san);
+          playService.playMove(action.san);
         }
       }
     }, []);
@@ -89,11 +93,11 @@ export const Board = observer(
     const r180 = config.rotation > 1;
 
     const onDragStart = (piece: string, from: Square) => {
-      if (config.editMode) return true;
-      const player = game.nextPlayer();
-      if (player instanceof Human && !game.isComplete) {
+      if (gameState.editMode) return true;
+      const player = playService.nextPlayer();
+      if (player instanceof Human && !playService.isComplete) {
         const from2 = r90 ? rules.leftSquare(from) : from;
-        const movable = rules.isMoveable(game.fen, from2);
+        const movable = playService.isMoveable(from2);
         if (movable) sound_click.play().then();
         return movable;
       }
@@ -101,16 +105,16 @@ export const Board = observer(
     };
 
     const onMovePiece = (from: Square, to: Square) => {
-      if (config.editMode) {
-        game.editMove(from, to);
+      if (gameState.editMode) {
+        playService.editMove(from, to);
         return true;
       }
       if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from)
         mp4service.playCorrect();
-      config.startUndoTimer(game.log.length);
-      const state = game.log.length;
+      gameState.startUndoTimer(playService.log.length);
+      const state = playService.log.length;
       doMove(r90 ? rules.leftSquare(from) : from, r90 ? rules.leftSquare(to) : to, true);
-      if (state != game.log.length) {
+      if (state != playService.log.length) {
         sound_move.play().then();
       } else {
         sound_error.play().then();
@@ -120,13 +124,13 @@ export const Board = observer(
 
     const showMarkers = () => {
       const markers = {};
-      if (config.editMode) {
-        if (config.editSquare != '') {
-          Object.assign(markers, { [config.editSquare]: editStyle });
+      if (gameState.editMode) {
+        if (gameState.editSquare != '') {
+          Object.assign(markers, { [gameState.editSquare]: editStyle });
         }
       }
       if (config.showFacts) {
-        game.pgns.forEach(x =>
+        playService.pgns.forEach(x =>
           Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle })
         );
       }
@@ -137,12 +141,17 @@ export const Board = observer(
           });
         });
       }
+      playService.findCastlingMarkers().forEach(x =>
+        Object.assign(markers, {
+          [r90 ? rules.rightSquare(x) : x]: castlingStyle,
+        })
+      );
       return markers;
     };
-    const fen = refreshTimer.showBlank ? rules.CLEAR_GAME : game.fen;
+    const fen = refreshTimer.showBlank ? rules.CLEAR_GAME : playService.fen;
 
     const onSquareClick = (square: Square) => {
-      if (config.editMode) config.editSquare = square;
+      if (gameState.editMode) gameState.editSquare = square;
       console.log('hi:' + square);
     };
     return (

@@ -12,7 +12,6 @@ import { theme } from '../../services/control/theme';
 import { FaChess, FaClock, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';
-import { game } from '../../services/game/game';
 
 export const ConfigDialog = observer(({ config }: { config: Config }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {
@@ -40,6 +39,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
 
   const handleClose = () => {
     config.showTab = -1;
+    config.store();
     refreshtimer.startRefreshTimer();
   };
 
@@ -99,7 +99,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
         />
       </Tabs>
       <TabPanel index={0}>
-        <ConfigGame game={game} config={config} />
+        <ConfigGame config={config} />
       </TabPanel>
       <TabPanel index={1}>
         <ConfigDisplay config={config} theme={theme} />

@@ -44,12 +44,19 @@ export const AddClockDialog = observer(({ config }: { config: Config }) => {
       <DialogTitle id="message">Add Clock</DialogTitle>
       <DialogContent>
         <DialogContentText>
+          <p>(from move)+(plus minutes)/(seconds each move) comma separated</p>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
             <ConfigText
               label="Clock name"
               id="name"
               onChange={e => (item.name = e.target.value as string)}
               value={item.name}
+            />
+            <ConfigText
+              label="Timings"
+              id="timings"
+              onChange={e => (item.time = Clock.string2time(e.target.value as string))}
+              value={item.getDescription()}
             />
             <ConfigButton
               onClick={save}

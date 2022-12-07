@@ -1,8 +1,8 @@
 import React from 'react';
-import { Game } from '../../services/game/game';
+import { PlayService } from '../../services/play.service';
 import { openingsService } from '../../services/openings.service';
 import { observer } from 'mobx-react';
 
-export const FenInfo = observer(({ game }: { game: Game }) => {
+export const FenInfo = observer(({ game }: { game: PlayService }) => {
   return <p>{openingsService.sanTextLocate(game.log)}</p>;
 });

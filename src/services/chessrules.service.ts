@@ -3,29 +3,13 @@ import { Chess, SQUARES } from 'chess.js';
 
 export type Fen = string;
 export type { Square, Move, ShortMove };
-type GameWinner = 'b' | 'w' | null;
-
-// const chess = new Chess();
 
 export class ChessRulesService {
   NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
   CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';
 
-  isNewGame = (fen: Fen): boolean => fen == this.NEW_GAME;
-  isBlackTurn = (fen: Fen): boolean => Chess(fen).turn() === 'b';
-  isWhiteTurn = (fen: Fen): boolean => Chess(fen).turn() === 'w';
-  isCheck = (fen: Fen): boolean => Chess(fen).in_check();
-
-  getGameWinner = (fen: Fen): GameWinner => {
-    const game = Chess(fen);
-    return game.in_checkmate() ? (game.turn() === 'w' ? 'b' : 'w') : null;
-  };
-
-  isGameOver = (fen: Fen): boolean => Chess(fen).game_over();
   isEndMove: (san: string) => boolean = (san: string) =>
     san == '1-0' || san == '0-1' || san == '1/2-1/2' || san?.endsWith('#');
-
-  isMoveable = (fen: Fen, from: Square): boolean => Chess(fen).moves({ square: from }).length > 0;
 
   move = (
     fen: Fen,
@@ -51,16 +35,6 @@ export class ChessRulesService {
       game.move(moves[i]);
     }
     return game.fen();
-  };
-
-  findInfoMarkers = (moves: string[], fen: string): Square[] => {
-    const sqs: Square[] = [];
-    moves.forEach(san => {
-      const move = Chess(fen).move(san);
-      if (move && !sqs.includes(move.from)) sqs.push(move.from);
-      if (move && !sqs.includes(move.to)) sqs.push(move.to);
-    });
-    return sqs;
   };
 
   whoWon: (game: string[]) => string | undefined = (game: string[]) => {

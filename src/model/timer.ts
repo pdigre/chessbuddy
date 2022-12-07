@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { gameState } from '../services/game/game';
+import { gameState } from '../services/play.service';
 import { Clock } from './clock';
 
 export class Timer {

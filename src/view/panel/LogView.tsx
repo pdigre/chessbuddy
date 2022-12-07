@@ -1,8 +1,7 @@
 import React, { MouseEvent } from 'react';
 import { chessRulesService as rules } from '../../services/chessrules.service';
-import { Game, gameState } from '../../services/game/game';
+import { PlayService, gameState } from '../../services/play.service';
 import { observer } from 'mobx-react';
-import { Config } from '../../model/config';
 import { refreshtimer } from '../../services/control/refreshtimer';
 import { analyzerService } from '../../services/analyzer.service';
 import { messageService } from '../../services/message.service';
@@ -10,12 +9,12 @@ import { HistoryService } from '../../services/history.service';
 import { MdCancel, MdCheck } from 'react-icons/md';
 import { GridWidget } from './GridWidget';
 
-export const GameView = observer(
-  ({ game, gameHistory, config }: { game: Game; gameHistory: HistoryService; config: Config }) => {
-    if (config.markHist >= 0) {
+export const LogView = observer(
+  ({ game, gameHistory }: { game: PlayService; gameHistory: HistoryService }) => {
+    if (gameHistory.markHist >= 0) {
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
-        const moves = games[config.markHist].split(';')[5].split(' ');
+        const moves = games[gameHistory.markHist].split(';')[5].split(' ');
         messageService.display(
           'Load game',
           'Do you want to look at this game?',
@@ -27,7 +26,7 @@ export const GameView = observer(
             if (reply == 'Yes') {
               game.log = moves;
               const mark = moves.length - 1;
-              config.markLog = mark;
+              gameState.markLog = mark;
               game.fen = rules.replay(moves, mark);
             }
             messageService.clear();
@@ -38,7 +37,7 @@ export const GameView = observer(
           { label: 'Ok' },
         ]);
       }
-      config.markHist = -1;
+      gameHistory.markHist = -1;
     }
 
     const gotoMark = (mark: number) => {
@@ -52,8 +51,8 @@ export const GameView = observer(
     const logClick = (event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
-      const id2 = id == config.markLog ? -1 : id;
-      config.markLog = id2;
+      const id2 = id == gameState.markLog ? -1 : id;
+      gameState.markLog = id2;
       gotoMark(id2);
     };
 
@@ -75,7 +74,7 @@ export const GameView = observer(
         </td>
         {row.map((col, iCol) => {
           const id = iRow * 2 + iCol;
-          const marker = id == config.markLog ? ' bg-green-300' : '';
+          const marker = id == gameState.markLog ? ' bg-green-300' : '';
           return (
             <td
               id={id.toString()}
@@ -89,7 +88,7 @@ export const GameView = observer(
     ));
 
     return (
-      <GridWidget onClick={logClick} scroll={config.markLog == -1}>
+      <GridWidget onClick={logClick} scroll={gameState.markLog == -1}>
         {viewLog}
       </GridWidget>
     );

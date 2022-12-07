@@ -1,4 +1,4 @@
-import { storage } from '../storage.service';
+import { storage } from '../services/storage.service';
 
 /*
  * Utilities

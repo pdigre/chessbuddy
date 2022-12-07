@@ -1,18 +1,19 @@
 import React from 'react';
-import { Game } from '../../services/game/game';
-import { toMMSS } from '../../services/util/library';
+import { PlayService } from '../../services/play.service';
+import { toMMSS } from '../../resources/library';
 import { Timer, clockList } from '../../model/timer';
 import { observer } from 'mobx-react';
 import { Config } from '../../model/config';
 
 export const PlayerInfoBar = observer(
-  ({ isTop, game, config }: { isTop: boolean; game: Game; config: Config }) => {
-    const g = game;
+  ({ isTop, game, config }: { isTop: boolean; game: PlayService; config: Config }) => {
     const isWhite = isTop == config.rotation > 1;
     type TIMER = { clockList: Timer };
     const Ticker = observer(({ clockList }: TIMER) => (
       <span>
-        {toMMSS(Math.floor(clockList.elapsed) + Math.floor(g.isWhiteTurn ? g.wtime : g.btime))}
+        {toMMSS(
+          Math.floor(clockList.elapsed) + Math.floor(game.isWhiteTurn ? game.wtime : game.btime)
+        )}
       </span>
     ));
 
@@ -22,14 +23,14 @@ export const PlayerInfoBar = observer(
           'h-[31px] text-xl dark:text-white m-0 p-1' +
           (isTop && config.rotation % 2 == 1 ? ' text-right' : '')
         }>
-        {isWhite ? `White: ${g.white}` : `Black: ${g.black}`} &lt;
-        {isWhite == g.isWhiteTurn ? (
+        {isWhite ? `White: ${config.white}` : `Black: ${config.black}`} &lt;
+        {isWhite == game.isWhiteTurn ? (
           <Ticker clockList={clockList} />
         ) : (
-          toMMSS(isWhite ? g.wtime : g.btime)
+          toMMSS(isWhite ? game.wtime : game.btime)
         )}{' '}
         &gt;
-        {isWhite != g.isWhiteTurn && g.isComplete ? ' ** Winner **' : ''}
+        {isWhite != game.isWhiteTurn && game.isComplete ? ' ** Winner **' : ''}
       </p>
     );
   }

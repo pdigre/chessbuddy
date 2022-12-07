@@ -1,6 +1,6 @@
 import { Human } from '../model/human';
 import { historyService } from './history.service';
-import { deviceInfo } from './util/library';
+import { deviceInfo } from '../resources/library';
 import { makeAutoObservable } from 'mobx';
 import { messageService } from './message.service';
 
