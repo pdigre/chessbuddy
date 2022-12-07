@@ -8,7 +8,7 @@ import {
   Checkbox,
   NativeSelect,
 } from '@mui/material';
-import { theme } from '../../controller/control/theme';
+import { theme } from '../../services/control/theme';
 
 export const ConfigSelect: React.FC<{
   label: string;
@@ -72,9 +72,10 @@ export const ConfigText: React.FC<{
   onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   label: string;
   id: string;
+  value?: string;
   disabled?: boolean;
-}> = ({ onChange, label, id }) => {
-  return <TextField label={label} id={id} size="medium" onChange={onChange} />;
+}> = ({ onChange, label, id, value }) => {
+  return <TextField label={label} id={id} size="medium" onChange={onChange} defaultValue={value} />;
 };
 
 export const ConfigCheckbox: React.FC<{

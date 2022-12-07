@@ -4,15 +4,14 @@ import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
-import { players } from '../../controller/game/player_human';
-import { server } from '../../controller/integration/server';
+import { connectService } from '../../services/connect.service';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
-import { refreshtimer } from '../../controller/control/refreshtimer';
-import { clock } from '../../controller/config/clock';
-import { theme } from '../../controller/control/theme';
-import { FaChess, FaRobot } from 'react-icons/fa';
+import { Config } from '../../model/config';
+import { refreshtimer } from '../../services/control/refreshtimer';
+import { theme } from '../../services/control/theme';
+import { FaChess, FaClock, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
+import { ConfigClock } from './ConfigClock';
 
 export const ConfigDialog = observer(({ config }: { config: Config }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {
@@ -40,6 +39,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
 
   const handleClose = () => {
     config.showTab = -1;
+    config.store();
     refreshtimer.startRefreshTimer();
   };
 
@@ -89,18 +89,29 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
           iconPosition="start"
           id="nav-tab-3"
         />
+        <Tab
+          component="a"
+          onClick={prevent}
+          label={<div className="text-xl">Clocks</div>}
+          icon={<FaClock className="text-3xl" />}
+          iconPosition="start"
+          id="nav-tab-3"
+        />
       </Tabs>
       <TabPanel index={0}>
-        <ConfigGame players={players} clock={clock} />
+        <ConfigGame config={config} />
       </TabPanel>
       <TabPanel index={1}>
         <ConfigDisplay config={config} theme={theme} />
       </TabPanel>
       <TabPanel index={2}>
-        <ConfigHuman players={players} server={server} />
+        <ConfigHuman config={config} server={connectService} />
       </TabPanel>
       <TabPanel index={3}>
-        <ConfigBot players={players} />
+        <ConfigBot config={config} />
+      </TabPanel>
+      <TabPanel index={4}>
+        <ConfigClock config={config} />
       </TabPanel>
     </Dialog>
   );

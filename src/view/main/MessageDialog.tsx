@@ -7,10 +7,10 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { observer } from 'mobx-react';
-import { Message } from '../../controller/control/message';
+import { MessageService } from '../../services/message.service';
 import { ConfigButton } from '../config/ConfigWidgets';
 
-export const MessageDialog = observer(({ message }: { message: Message }) => {
+export const MessageDialog = observer(({ message }: { message: MessageService }) => {
   const handleClick = (event: MouseEvent) => {
     if (message.response) {
       message.response((event.target as HTMLButtonElement).innerHTML);

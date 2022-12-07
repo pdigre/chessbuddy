@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 import { ReactNode } from 'react';
-import { ButtonType } from '../../view/config/ConfigWidgets';
+import { ButtonType } from '../view/config/ConfigWidgets';
 
-export class Message {
+export class MessageService {
   title?: string;
   msg?: ReactNode;
   buttons?: ButtonType[];
@@ -26,8 +26,8 @@ export class Message {
     this.title = title;
     this.msg = msg;
     this.buttons = buttons;
-    this.response = response ?? (() => message.clear());
+    this.response = response ?? (() => messageService.clear());
   };
 }
 
-export const message = new Message();
+export const messageService = new MessageService();

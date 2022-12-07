@@ -5,78 +5,107 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import React, { ChangeEvent, useState } from 'react';
-import { UCI_ENGINES } from '../../controller/game/player_bot';
-import { Players } from '../../controller/game/player_human';
+import React from 'react';
+import { Bot, UciEngineDefs } from '../../model/bot';
 import { ConfigButton, ConfigSelect, ConfigText } from './ConfigWidgets';
 import { observer } from 'mobx-react';
-import { message } from '../../controller/control/message';
-import { MdAdd } from 'react-icons/md';
+import { messageService } from '../../services/message.service';
+import { MdAdd, MdSave } from 'react-icons/md';
+import { storage } from '../../services/storage.service';
+import { Config, EditMode } from '../../model/config';
 
-export const AddBotDialog = observer(({ players }: { players: Players }) => {
-  const handleClick = () => (players.addBot = false);
+export const AddBotDialog = observer(({ config }: { config: Config }) => {
+  const handleClick = () => (config.dialog = EditMode.None);
+  const isEdit = config.dialog === EditMode.EditBot;
+  const items = config.bots;
+  const item = isEdit ? (items[config.cursor] as Bot) : new Bot('', UciEngineDefs[0].name, 0, 0, 0);
 
-  const [engine, setEngine] = React.useState('');
-  const [skill, setSkill] = useState('');
-  const [depth, setDepth] = useState('');
-  const [time, setTime] = useState('');
-  const addPlayerHandler = () => {
-    if (!engine) {
-      message.display('Add Bot', 'Need to select a chess engine');
+  const savePlayer = () => {
+    if (!item.engine) {
+      messageService.display('Add Bot', 'Need to select a chess engine');
       return;
     }
-    const nSkill = Number.parseInt(skill);
+    const nSkill = item.skill;
     if (isNaN(nSkill) || nSkill < 1 || nSkill > 20) {
-      message.display('Add Bot', 'Need to enter skill level between 1 and 20');
+      messageService.display('Add Bot', 'Need to enter skill level between 1 and 20');
       return;
     }
-    const nDepth = Number.parseInt(depth);
-    if (!time.length == !depth.length) {
-      message.display('Add Bot', 'Need to enter time or depth, but not both');
+    const nTime = item.time;
+    if (item.time && (isNaN(nTime) || nTime < 1 || nTime > 60)) {
+      messageService.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
       return;
     }
-    if (depth.length && (isNaN(nDepth) || nDepth < 6 || nDepth > 30)) {
-      message.display('Add Bot', 'Need to enter depth between 6 and 30');
+    const nDepth = item.depth;
+    if (!item.time == !item.depth) {
+      messageService.display('Add Bot', 'Need to enter time or depth, but not both');
       return;
     }
-    const nTime = Number.parseInt(time);
-    if (time.length && (isNaN(nTime) || nTime < 1 || nTime > 60)) {
-      message.display('Add Bot', 'Need to enter a time between 1 and 60 seconds');
+    if (item.depth && (isNaN(nDepth) || nDepth < 6 || nDepth > 30)) {
+      messageService.display('Add Bot', 'Need to enter depth between 6 and 30');
       return;
     }
-    players.addPlayer(`Bot:${engine}:${skill}:${time}:${depth}`);
-    players.save();
-    players.addBot = false;
+    storage.storeList(Bot.storage, items);
+    config.dialog = EditMode.None;
   };
-  const engineNames = Array.from(UCI_ENGINES.map(x => x.name));
-  const skillChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setSkill(event.target.value as string);
-  const timeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setTime(event.target.value as string);
-  const depthChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setDepth(event.target.value as string);
+  const engineNames = Array.from(UciEngineDefs.map(x => x.name));
+
+  const toInt: (num: string) => number = (num: string) => {
+    const parsed = Number.parseInt(num);
+    return isNaN(parsed) ? 0 : parsed;
+  };
+
+  const intToTxt: (num: number) => string = (num: number) => {
+    return isNaN(num) ? '0' : num.toString();
+  };
 
   return (
     <Dialog
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={players.addBot}>
-      <DialogTitle id="message">Add Bot Player</DialogTitle>
+      open={config.dialog === EditMode.AddBot || config.dialog === EditMode.EditBot}>
+      <DialogTitle id="message">{isEdit ? 'Edit' : 'Add'} Bot Player</DialogTitle>
       <DialogContent>
         <DialogContentText>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
+            <ConfigText
+              label="Name"
+              id="name"
+              onChange={e => (item.name = e.target.value as string)}
+              value={item.name}
+            />
             <ConfigSelect
               label="Chess Engine"
               choices={engineNames}
-              selected={{ name: 'ConfigSelector', value: engine }}
-              setSelected={setEngine}
+              selected={{ name: 'ConfigSelector', value: item.engine }}
+              setSelected={value => (item.engine = value)}
             />
             <br />
-            <ConfigText label="Skill level" id="skill" onChange={skillChange} /> <br />
-            <ConfigText label="Depth (..not time)" id="depth" onChange={depthChange} />
-            <ConfigText label="Time (sec)" id="time" onChange={timeChange} /> <br />
-            <ConfigButton onClick={addPlayerHandler} label="Add" icon={<MdAdd />} />
+            <ConfigText
+              label="Skill level"
+              id="skill"
+              onChange={e => (item.skill = toInt(e.target.value))}
+              value={intToTxt(item.skill)}
+            />{' '}
+            <br />
+            <ConfigText
+              label="Time (sec)"
+              id="time"
+              onChange={e => (item.time = toInt(e.target.value))}
+              value={intToTxt(item.time)}
+            />{' '}
+            <br />
+            <ConfigText
+              label="Depth (..not time)"
+              id="depth"
+              onChange={e => (item.depth = toInt(e.target.value))}
+              value={intToTxt(item.depth)}
+            />
+            <ConfigButton
+              onClick={savePlayer}
+              label={isEdit ? 'Save' : 'Add'}
+              icon={isEdit ? <MdSave /> : <MdAdd />}
+            />
           </div>
         </DialogContentText>
       </DialogContent>

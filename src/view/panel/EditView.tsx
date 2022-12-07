@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { game } from '../../controller/game/game';
+import { GameState, playService } from '../../services/play.service';
 import {
   FaChessBishop,
   FaChessKing,
@@ -11,9 +11,9 @@ import {
 import { ConfigButton, ConfigCheckbox } from '../config/ConfigWidgets';
 import { MdCheck, MdDelete } from 'react-icons/md';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
+import { config } from '../../model/config';
 
-export const EditView = observer(({ config }: { config: Config }) => {
+export const EditView = observer(({ gameState }: { gameState: GameState }) => {
   const [wcck, setWcck] = useState(false);
   const [wccq, setWccq] = useState(false);
   const [bcck, setBcck] = useState(false);
@@ -24,7 +24,7 @@ export const EditView = observer(({ config }: { config: Config }) => {
     return (
       <td
         onClick={() => {
-          game.editPiece(name);
+          playService.editPiece(name);
         }}>
         {img}
       </td>
@@ -32,7 +32,9 @@ export const EditView = observer(({ config }: { config: Config }) => {
   };
 
   const editDone = () => {
-    game.editDone(wcck, wccq, bcck, bccq, bFirst);
+    playService.editDone(wcck, wccq, bcck, bccq, bFirst);
+    gameState.editMode = false;
+    config.showTab = 0;
   };
 
   return (
@@ -51,7 +53,7 @@ export const EditView = observer(({ config }: { config: Config }) => {
         <tr>
           <td
             onClick={() => {
-              game.editPiece(' ');
+              playService.editPiece(' ');
             }}>
             <MdDelete className="text-7xl text-red-500" />
           </td>

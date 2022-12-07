@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ConfigButton, ConfigSelect } from './ConfigWidgets';
 import { MdExitToApp, MdPlayCircle, MdClear, MdEdit } from 'react-icons/md';
-import { game } from '../../controller/game/game';
+import { gameState, playService } from '../../services/play.service';
 import { observer } from 'mobx-react';
-import { Players } from '../../controller/game/player_human';
-import { Clock, Clocks, ClockType } from '../../controller/config/clock';
-import { message } from '../../controller/control/message';
+import { messageService } from '../../services/message.service';
 import { FaRegHandshake, FaChessKing } from 'react-icons/fa';
+import { Config } from '../../model/config';
 
-export const ConfigGame = observer(({ players, clock }: { players: Players; clock: Clock }) => {
-  const [white, setWhite] = useState(game.white);
-  const [black, setBlack] = useState(game.black);
-  const playerNames = Array.from(players.players.map(x => x.name));
-  game.setPlayers(white, black);
+export const ConfigGame = observer(({ config }: { config: Config }) => {
+  const players = [...config.humans, ...config.bots];
+  const playerNames = Array.from(players.map(x => x.getName()));
 
   const endAction = () => {
-    const winner = game.whoWon();
+    const winner = playService.whoWon();
     if (winner) {
-      message.display(
+      messageService.display(
         'Game has ended',
         winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'
       );
     } else {
-      const white = game.white.split(' ')[0];
-      const black = game.black.split(' ')[0];
-      message.display(
+      const white = config.white.split(' ')[0];
+      const black = config.black.split(' ')[0];
+      messageService.display(
         'End game',
         <div className="text-3xl">
           Who won?
@@ -35,9 +32,21 @@ export const ConfigGame = observer(({ players, clock }: { players: Players; cloc
           { label: 'Draw', icon: <FaRegHandshake /> },
           { label: black, icon: <FaChessKing className="text-black" /> },
         ],
-        game.recordScore
+        playService.recordScore
       );
     }
+  };
+
+  const playAction = () => {
+    config.store();
+    config.showTab = -1;
+    playService.playAction();
+  };
+
+  const editAction = () => {
+    config.store();
+    gameState.editMode = true;
+    config.showTab = -1;
   };
 
   return (
@@ -46,37 +55,35 @@ export const ConfigGame = observer(({ players, clock }: { players: Players; cloc
         <ConfigSelect
           label="White"
           choices={playerNames}
-          selected={{ name: white, value: white }}
-          setSelected={setWhite}
+          selected={{ name: config.white, value: config.white }}
+          setSelected={value => (config.white = value)}
         />
         &nbsp;
         <ConfigSelect
           label="Black"
           choices={playerNames}
-          selected={{ name: black, value: black }}
-          setSelected={setBlack}
+          selected={{ name: config.black, value: config.black }}
+          setSelected={value => (config.black = value)}
         />
       </div>
       <div>&nbsp;</div>
       <ConfigSelect
         label="Timer setting"
-        choices={Clocks.map(x => x.name)}
-        selected={{ name: clock.clockType.name, value: clock.clockType.name }}
-        setSelected={name => {
-          clock.clockType = Clocks.find(x => x.name == name) as ClockType;
-        }}
+        choices={config.clocks.map(x => x.name)}
+        selected={{ name: config.clock, value: config.clock }}
+        setSelected={value => (config.clock = value)}
       />
       <div>&nbsp;</div>
       <div className="[&>button]:mx-2">
-        <ConfigButton onClick={game.playAction} label="Play" icon={<MdPlayCircle />} />
+        <ConfigButton onClick={playAction} label="Play" icon={<MdPlayCircle />} />
         <ConfigButton
           onClick={endAction}
           label="End game"
           icon={<MdExitToApp />}
-          disabled={game.isComplete}
+          disabled={playService.isComplete}
         />
-        <ConfigButton onClick={game.reset} label="Reset" icon={<MdClear />} />
-        <ConfigButton onClick={game.edit} label="Edit" icon={<MdEdit />} />
+        <ConfigButton onClick={playService.reset} label="Reset" icon={<MdClear />} />
+        <ConfigButton onClick={editAction} label="Edit" icon={<MdEdit />} />
       </div>
     </div>
   );

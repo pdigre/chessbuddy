@@ -1,22 +1,21 @@
 import React, { MouseEvent } from 'react';
-import * as rules from '../../controller/util/rules';
-import { Game, gameState } from '../../controller/game/game';
+import { chessRulesService as rules } from '../../services/chessrules.service';
+import { PlayService, gameState } from '../../services/play.service';
 import { observer } from 'mobx-react';
-import { Config } from '../../controller/config/config';
-import { refreshtimer } from '../../controller/control/refreshtimer';
-import { helper } from '../../controller/game/helper';
-import { message } from '../../controller/control/message';
-import { GameHistory } from '../../controller/game/history';
+import { refreshtimer } from '../../services/control/refreshtimer';
+import { analyzerService } from '../../services/analyzer.service';
+import { messageService } from '../../services/message.service';
+import { HistoryService } from '../../services/history.service';
 import { MdCancel, MdCheck } from 'react-icons/md';
 import { GridWidget } from './GridWidget';
 
-export const GameView = observer(
-  ({ game, gameHistory, config }: { game: Game; gameHistory: GameHistory; config: Config }) => {
-    if (config.markHist >= 0) {
+export const LogView = observer(
+  ({ game, gameHistory }: { game: PlayService; gameHistory: HistoryService }) => {
+    if (gameHistory.markHist >= 0) {
       if (game.isComplete || game.log.length == 0) {
         const games = gameHistory.history;
-        const moves = games[config.markHist].split(';')[5].split(' ');
-        message.display(
+        const moves = games[gameHistory.markHist].split(';')[5].split(' ');
+        messageService.display(
           'Load game',
           'Do you want to look at this game?',
           [
@@ -27,33 +26,33 @@ export const GameView = observer(
             if (reply == 'Yes') {
               game.log = moves;
               const mark = moves.length - 1;
-              config.markLog = mark;
+              gameState.markLog = mark;
               game.fen = rules.replay(moves, mark);
             }
-            message.clear();
+            messageService.clear();
           }
         );
       } else {
-        message.display('Load game', 'You have to end current game to load previous games', [
+        messageService.display('Load game', 'You have to end current game to load previous games', [
           { label: 'Ok' },
         ]);
       }
-      config.markHist = -1;
+      gameHistory.markHist = -1;
     }
 
     const gotoMark = (mark: number) => {
       if (gameState.isPlaying) gameState.isPlaying = false;
       game.fen = rules.replay(game.log, mark >= 0 ? mark : game.log.length);
       refreshtimer.startRefreshTimer();
-      helper.cp = 0;
-      helper.help = [];
+      analyzerService.cp = 0;
+      analyzerService.help = [];
     };
 
     const logClick = (event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
-      const id2 = id == config.markLog ? -1 : id;
-      config.markLog = id2;
+      const id2 = id == gameState.markLog ? -1 : id;
+      gameState.markLog = id2;
       gotoMark(id2);
     };
 
@@ -75,7 +74,7 @@ export const GameView = observer(
         </td>
         {row.map((col, iCol) => {
           const id = iRow * 2 + iCol;
-          const marker = id == config.markLog ? ' bg-green-300' : '';
+          const marker = id == gameState.markLog ? ' bg-green-300' : '';
           return (
             <td
               id={id.toString()}
@@ -89,7 +88,7 @@ export const GameView = observer(
     ));
 
     return (
-      <GridWidget onClick={logClick} scroll={config.markLog == -1}>
+      <GridWidget onClick={logClick} scroll={gameState.markLog == -1}>
         {viewLog}
       </GridWidget>
     );

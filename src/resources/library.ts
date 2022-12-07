@@ -1,3 +1,5 @@
+import { storage } from '../services/storage.service';
+
 /*
  * Utilities
  */
@@ -9,8 +11,6 @@ export const toMMSS: (sec_num: number) => string = sec_num => {
 };
 
 const getDeviceInfo = () => {
-  const dev1 = localStorage.getItem('device');
-  if (dev1) return dev1;
   const dev = {
     first: Date.now().toString(36),
     userAgent: navigator.userAgent,
@@ -21,9 +21,8 @@ const getDeviceInfo = () => {
     innerWidth: window.innerWidth,
     innerHeight: window.innerHeight,
   };
-  const dev2 = JSON.stringify(dev);
-  localStorage.setItem('device', dev2);
-  return dev2;
+  storage.storeObject('device', dev);
+  return dev;
 };
 
 export const deviceInfo = getDeviceInfo();
