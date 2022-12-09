@@ -1,10 +1,8 @@
 import React, { MouseEvent } from 'react';
-import { Bot } from '../../model/bot';
 import { ConfigButton } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { AddBotDialog } from './AddBotDialog';
-import { storage } from '../../services/storage.service';
 import { Config, EditMode } from '../../model/config';
 
 export const ConfigBot = observer(({ config }: { config: Config }) => {
@@ -19,20 +17,11 @@ export const ConfigBot = observer(({ config }: { config: Config }) => {
     }
   };
   const doDelete = () => {
-    if (hasSelect) {
-      items.splice(config.cursor, 1);
-      storage.storeList(Bot.storage, items);
-      config.cursor = -1;
-    }
+    items.splice(config.cursor, 1);
+    config.cursor = -1;
   };
-  const doEdit = () => {
-    if (hasSelect) {
-      config.dialog = EditMode.EditBot;
-    }
-  };
-  const doAdd = () => {
-    config.dialog = EditMode.AddBot;
-  };
+  const doEdit = () => (config.dialog = EditMode.EditBot);
+  const doAdd = () => (config.dialog = EditMode.AddBot);
 
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">

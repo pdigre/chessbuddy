@@ -9,9 +9,10 @@ type UciCallback = (move: ShortMove) => void;
 export class BotRunner {
   workerClass: LoadBot;
   workerInstance?: RunBot;
+  worker?: Worker;
   isRunning = false;
 
-  constructor(path: string, skill: number, time: number, depth: number) {
+  constructor(public name: string, path: string, skill: number, time: number, depth: number) {
     this.workerClass = this.createWorker(path, skill, time, depth);
   }
 
@@ -19,8 +20,8 @@ export class BotRunner {
     (path, skill, time, depth) => () => {
       const actions = [`setoption name Skill Level value ${skill}`];
       actions.push(time ? `go movetime ${time}000` : `go depth ${depth}`);
-
       const worker = new Worker(path);
+      this.worker = worker;
       let uciCallback: UciCallback | null = null;
 
       worker.addEventListener('message', e => {
@@ -56,12 +57,25 @@ export class BotRunner {
 }
 
 export class BotService {
-  instantiate: (player: Human | Bot | undefined) => Human | BotRunner | undefined = (
-    player: Human | Bot | undefined
-  ) =>
-    player instanceof Bot
-      ? new BotRunner(player.uciEngineDef.path, player.skill, player.depth, player.time)
-      : player;
+  public instantiate(
+    player: Human | Bot | undefined,
+    current: Human | Bot | BotRunner | undefined
+  ): BotRunner | undefined {
+    if (current instanceof BotRunner && current.name !== player?.name) {
+      if (current.isRunning) {
+        current.worker?.terminate();
+      }
+    }
+    return player instanceof Bot
+      ? new BotRunner(
+          player.name,
+          player.uciEngineDef.path,
+          player.skill,
+          player.depth,
+          player.time
+        )
+      : undefined;
+  }
 }
 
 export const botService = new BotService();

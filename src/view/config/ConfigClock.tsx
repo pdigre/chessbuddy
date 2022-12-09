@@ -3,8 +3,6 @@ import { observer } from 'mobx-react';
 import { ConfigButton } from './ConfigWidgets';
 import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { AddClockDialog } from './AddClockDialog';
-import { Clock } from '../../model/clock';
-import { storage } from '../../services/storage.service';
 import { Config, EditMode } from '../../model/config';
 
 export const ConfigClock = observer(({ config }: { config: Config }) => {
@@ -19,19 +17,8 @@ export const ConfigClock = observer(({ config }: { config: Config }) => {
     }
   };
   const doDelete = () => {
-    if (hasSelect) {
-      items.splice(config.cursor, 1);
-      storage.storeList(Clock.storage, items);
-      config.cursor = -1;
-    }
-  };
-  const doEdit = () => {
-    if (hasSelect) {
-      config.dialog = EditMode.EditClock;
-    }
-  };
-  const doAdd = () => {
-    config.dialog = EditMode.AddBot;
+    items.splice(config.cursor, 1);
+    config.cursor = -1;
   };
 
   return (
@@ -50,8 +37,17 @@ export const ConfigClock = observer(({ config }: { config: Config }) => {
         </tbody>
       </table>
       <div className="[&>button]:mx-1">
-        <ConfigButton onClick={doAdd} label="Add" icon={<MdAdd />} />
-        <ConfigButton onClick={doEdit} label="Edit" icon={<MdEdit />} disabled={!hasSelect} />
+        <ConfigButton
+          onClick={() => (config.dialog = EditMode.AddClock)}
+          label="Add"
+          icon={<MdAdd />}
+        />
+        <ConfigButton
+          onClick={() => (config.dialog = EditMode.EditClock)}
+          label="Edit"
+          icon={<MdEdit />}
+          disabled={!hasSelect}
+        />
         <ConfigButton onClick={doDelete} label="Delete" icon={<MdDelete />} disabled={!hasSelect} />
       </div>
       <AddClockDialog config={config} />

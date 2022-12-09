@@ -1,20 +1,6 @@
-export interface Storable {
-  toString: () => string;
-}
+import { jsonIgnoreReplacer } from 'json-ignore';
 
 export class Storage {
-  storeList = (name: string, items: Storable[]) => {
-    localStorage.setItem(name, items.map(x => x.toString()).join('\n'));
-  };
-  restoreList = <T>(name: string, init: string, create: (x: string[]) => T) => {
-    const data = localStorage.getItem(name);
-    return (data && !data.includes('undefined') ? data : init)
-      .replace(/\r/, '')
-      .split('\n')
-      .filter(line => line?.split(':')?.length > 1)
-      .map(line => create(line.split(':')));
-  };
-
   storeLines = (name: string, lines: string[]) => {
     localStorage.setItem(name, lines.join('\n') ?? []);
   };
@@ -22,7 +8,7 @@ export class Storage {
     localStorage.getItem(name)?.replace(/\r/, '').split('\n') ?? init;
 
   storeObject = <T>(name: string, obj: T) => {
-    localStorage.setItem(name, JSON.stringify(obj));
+    localStorage.setItem(name, JSON.stringify(obj, jsonIgnoreReplacer));
   };
   restoreObject = <T>(name: string, init: T) => {
     const data = localStorage.getItem(name);

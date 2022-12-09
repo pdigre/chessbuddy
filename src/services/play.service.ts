@@ -1,17 +1,19 @@
 import { Human } from '../model/human';
-import { clockList } from '../model/timer';
+import { timer } from '../model/timer';
 import { openingsService, San } from './openings.service';
 import { makeAutoObservable } from 'mobx';
 import { analyzerService } from './analyzer.service';
 import { mp4service } from './mp4.service';
-import { Chess, Square, SQUARES } from 'chess.js';
+import { BLACK, Chess, Move, Square, SQUARES, WHITE } from 'chess.js';
 import { historyService } from './history.service';
 import { messageService } from './message.service';
 import { config } from '../model/config';
 import { Clock } from '../model/clock';
 import { BotRunner, botService } from './bot.service';
-import { chessRulesService as chess } from './chessrules.service';
+import { chessRulesService as chess, ChessRulesService } from './chessrules.service';
 import { storage } from './storage.service';
+import { jsonIgnore } from 'json-ignore';
+import { FaThinkPeaks } from 'react-icons/fa';
 
 /**
  * Start and pause of game, starts the bots if in turn
@@ -25,6 +27,7 @@ export class GameState {
   undopos = 0;
   editMode = false;
   editSquare = '';
+  pgns: Square[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -52,43 +55,34 @@ export class GameState {
 
 export const gameState = new GameState();
 
-type PlayProps = {
-  wtime: number;
-  btime: number;
-  log: string[];
-  fen: string;
-};
-
 /*
  * Everything about the current game (can be restored when returning to browser later)
  */
 export class PlayService {
-  storage = 'play';
+  static storage = 'play';
   wtime = 0;
   btime = 0;
   log: string[] = [];
-  fen = chess.NEW_GAME;
+  fen = ChessRulesService.NEW_GAME;
 
   // runtime does not need persisting
   private chess = Chess(this.fen);
-  isWhiteTurn = true;
-  isComplete = false;
-  pgns: Square[] = [];
-
-  private bplayer?: BotRunner | Human;
-  private wplayer?: BotRunner | Human;
-  private clock?: Clock;
+  @jsonIgnore() isWhiteTurn = true;
+  @jsonIgnore() isComplete = false;
+  @jsonIgnore() private bplayer?: BotRunner;
+  @jsonIgnore() private wplayer?: BotRunner;
+  @jsonIgnore() private clock?: Clock;
+  @jsonIgnore() allowed = 0;
   private date = Date.now();
 
   constructor() {
     makeAutoObservable(this);
-    const initProps: PlayProps = {
+    const restore = storage.restoreObject(PlayService.storage, {
       wtime: 0,
       btime: 0,
       log: [],
-      fen: chess.NEW_GAME,
-    };
-    const restore = storage.restoreObject(this.storage, initProps);
+      fen: ChessRulesService.NEW_GAME,
+    });
     this.wtime = restore.wtime;
     this.btime = restore.btime;
     this.log = restore.log;
@@ -97,32 +91,39 @@ export class PlayService {
   }
 
   store: VoidFunction = () => {
-    const props: PlayProps = {
-      wtime: this.wtime,
-      btime: this.btime,
-      log: this.log,
-      fen: this.fen,
-    };
-    storage.storeObject(this.storage, props);
+    storage.storeObject(PlayService.storage, this);
   };
 
-  private calculate = () => {
+  private calculate() {
     const san = this.log[this.log.length - 1];
     this.chess = Chess(this.fen);
     this.isComplete = chess.isEndMove(san) || this.chess.game_over();
     if (this.isComplete) {
-      if (gameState.isPlaying) mp4service.playWinner();
+      if (gameState.isPlaying) {
+        mp4service.playWinner();
+      }
       gameState.isPlaying = false;
     }
-    this.isWhiteTurn = this.chess.turn() === 'w';
-    this.pgns = [];
+    this.clock = config.clocks.find(p => p.getName() == config.clock) || new Clock('', []);
+    this.allowed = this.clock.getAllowed(this.log.length / 2);
+    this.isWhiteTurn = this.chess.turn() === WHITE;
+    gameState.pgns = this.calculatePgns();
+  }
+
+  private calculatePgns(): Square[] {
     if (this.log.length == 0) {
-      this.setPGNS(openingsService.tree);
-    } else {
-      const pgn: San | undefined = openingsService.locate(this.log);
-      if (pgn) this.setPGNS(pgn.children);
+      return this.getPGNS(openingsService.tree);
     }
-  };
+    const pgn: San | undefined = openingsService.locate(this.log);
+    return pgn ? this.getPGNS(pgn.children) : [];
+  }
+
+  private getPGNS(sans: San[]): Square[] {
+    const sqs = sans
+      .map(san => Chess(this.fen).move(san.san))
+      .flatMap(move => (move ? [move.from, move.to] : []));
+    return Array.from(new Set(sqs).values());
+  }
 
   isMoveable = (from: Square): boolean => this.chess.moves({ square: from }).length > 0;
 
@@ -130,7 +131,7 @@ export class PlayService {
     this.wtime = 0;
     this.btime = 0;
     this.log = [];
-    this.fen = chess.NEW_GAME;
+    this.fen = ChessRulesService.NEW_GAME;
     this.isWhiteTurn = true;
     this.isComplete = false;
     analyzerService.reset();
@@ -139,7 +140,7 @@ export class PlayService {
 
   editDone = (wcck: boolean, wccq: boolean, bcck: boolean, bccq: boolean, bf: boolean) => {
     const fenArr = this.fen.split(' ');
-    fenArr[1] = bf ? 'b' : 'w';
+    fenArr[1] = bf ? BLACK : WHITE;
     fenArr[2] = (wcck ? 'K' : '') + (wccq ? 'Q' : '') + (bcck ? 'k' : '') + (bccq ? 'q' : '');
     this.fen = fenArr.join(' ');
   };
@@ -167,8 +168,10 @@ export class PlayService {
 
   initBots: VoidFunction = () => {
     const players = [...config.humans, ...config.bots];
-    this.wplayer = botService.instantiate(players.find(p => p.getName() == config.white));
-    this.bplayer = botService.instantiate(players.find(p => p.getName() == config.black));
+    const w = players.find(p => p.getName() == config.white);
+    this.wplayer = botService.instantiate(w, this.wplayer);
+    const b = players.find(p => p.getName() == config.black);
+    this.bplayer = botService.instantiate(b, this.bplayer);
   };
 
   addMove: (san: string) => void = san => {
@@ -179,16 +182,16 @@ export class PlayService {
     analyzerService.reset();
     this.fen = chess.newFen(this.fen, san);
     if (this.isWhiteTurn) {
-      this.wtime += clockList.elapsed;
+      this.wtime += timer.elapsed;
     } else {
-      this.btime += clockList.elapsed;
+      this.btime += timer.elapsed;
     }
-    clockList.reset();
+    timer.reset();
     this.run();
   };
 
   run: VoidFunction = () => {
-    clockList.reset();
+    timer.reset();
     if (!this.wplayer) {
       this.initBots();
     }
@@ -197,6 +200,7 @@ export class PlayService {
     if (!(next instanceof BotRunner)) {
       analyzerService.run(this.fen, this.isWhiteTurn);
     }
+    this.store();
     gameState.run();
   };
 
@@ -210,18 +214,6 @@ export class PlayService {
         }
       });
     }
-  };
-
-  setPGNS: (sans: San[]) => void = sans => {
-    const sqs: Square[] = [];
-    sans
-      .map(x => x.san)
-      .forEach(san => {
-        const move = this.chess.move(san);
-        if (move && !sqs.includes(move.from)) sqs.push(move.from);
-        if (move && !sqs.includes(move.to)) sqs.push(move.to);
-      });
-    this.pgns = sqs;
   };
 
   findCastlingMarkers = () => {
@@ -263,6 +255,11 @@ export class PlayService {
       this.playMove('1/2-1/2');
     }
     messageService.clear();
+  };
+
+  outOfTime = () => {
+    this.playMove(this.isWhiteTurn ? '1-0' : '0-1');
+    gameState.isPlaying = false;
   };
 
   playAction = () => {

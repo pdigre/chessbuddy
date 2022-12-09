@@ -1,9 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { gameState } from '../services/play.service';
-import { Clock } from './clock';
 
 export class Timer {
-  current: Clock = new Clock('', []);
   elapsed = 0;
 
   constructor() {
@@ -20,4 +18,4 @@ export class Timer {
     this.elapsed = 0;
   };
 }
-export const clockList = new Timer();
+export const timer = new Timer();

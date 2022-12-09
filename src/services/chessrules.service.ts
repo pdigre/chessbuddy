@@ -1,12 +1,12 @@
 import type { Move, ShortMove, Square } from 'chess.js';
-import { Chess, SQUARES } from 'chess.js';
+import { Chess, SQUARES, QUEEN } from 'chess.js';
 
 export type Fen = string;
 export type { Square, Move, ShortMove };
 
 export class ChessRulesService {
-  NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-  CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';
+  static NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  static CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';
 
   isEndMove: (san: string) => boolean = (san: string) =>
     san == '1-0' || san == '0-1' || san == '1/2-1/2' || san?.endsWith('#');
@@ -18,7 +18,7 @@ export class ChessRulesService {
     promotion?: 'b' | 'n' | 'r' | 'q'
   ): [Fen, Move] | null => {
     const game = Chess(fen);
-    const action = game.move({ from, to, promotion: promotion ?? 'q' });
+    const action = game.move({ from, to, promotion: promotion ?? QUEEN });
     return action ? [game.fen(), action] : null;
   };
 
@@ -29,7 +29,7 @@ export class ChessRulesService {
   };
 
   replay = (moves: string[], to?: number): Fen => {
-    const game = Chess(this.NEW_GAME);
+    const game = Chess(ChessRulesService.NEW_GAME);
     const n = to != undefined ? to : moves.length;
     for (let i = 0; i <= n; i++) {
       game.move(moves[i]);

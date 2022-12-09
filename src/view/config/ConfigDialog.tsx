@@ -12,6 +12,7 @@ import { theme } from '../../services/control/theme';
 import { FaChess, FaClock, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';
+import { runInAction } from 'mobx';
 
 export const ConfigDialog = observer(({ config }: { config: Config }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {
@@ -34,11 +35,15 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
 
   // eslint-disable-next-line
   const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
-    config.showTab = newValue as number;
+    runInAction(() => {
+      config.showTab = newValue as number;
+    });
   };
 
   const handleClose = () => {
-    config.showTab = -1;
+    runInAction(() => {
+      config.showTab = -1;
+    });
     config.store();
     refreshtimer.startRefreshTimer();
   };

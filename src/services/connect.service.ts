@@ -14,10 +14,7 @@ export class ConnectService {
   connectREST: (human: Human) => void = async human => {
     const games1 = historyService.getFilteredGames(human.name);
     const connect = { email: human.email, device: deviceInfo, games: games1.join('\n') };
-    const url =
-      window.document.location.hostname == 'localhost'
-        ? 'http://localhost:1234'
-        : 'https://chess.digre.com';
+    const url = window.document.location.hostname == 'http://chess.digre.com';
     await fetch(url + '/api.php', {
       method: 'POST',
       body: JSON.stringify(connect),
