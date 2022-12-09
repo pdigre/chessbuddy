@@ -3,6 +3,7 @@ import { Bot } from './bot';
 import { Human } from './human';
 import { Clock } from './clock';
 import { storage } from '../services/storage.service';
+import { jsonIgnore } from 'json-ignore';
 
 export interface ListItem {
   getName: () => string;
@@ -19,6 +20,9 @@ export const enum EditMode {
   AddClock,
 }
 type ConfigProps = {
+  humans: Human[];
+  bots: Bot[];
+  clocks: Clock[];
   white: string;
   black: string;
   clock: string;
@@ -32,35 +36,31 @@ type ConfigProps = {
 };
 
 export class Config {
-  storage = 'config';
-  white: string;
-  black: string;
-  clock: string;
+  static storage = 'config';
+  white!: string;
+  black!: string;
+  clock!: string;
   // Features config
-  rotation: number;
-  showHints: boolean;
-  showCP: boolean;
-  showFacts: boolean;
-  playMistake: boolean;
-  playCorrect: boolean;
-  playWinner: boolean;
+  rotation!: number;
+  showHints!: boolean;
+  showCP!: boolean;
+  showFacts!: boolean;
+  playMistake!: boolean;
+  playCorrect!: boolean;
+  playWinner!: boolean;
   // Config to store
-  humans: Human[];
-  bots: Bot[];
-  clocks: Clock[];
+  humans!: Human[];
+  bots!: Bot[];
+  clocks!: Clock[];
 
   // Config runtime - no persist
-  showTab = -1;
-  cursor = -1;
-  dialog = EditMode.None;
+  @jsonIgnore() showTab = -1;
+  @jsonIgnore() cursor = -1;
+  @jsonIgnore() dialog = EditMode.None;
 
   constructor() {
     makeAutoObservable(this);
-    this.humans = storage.restoreList(Human.storage, Human.init, Human.create);
-    this.bots = storage.restoreList(Bot.storage, Bot.init, Bot.create);
-    this.clocks = storage.restoreList(Clock.storage, Clock.init, Clock.create);
-
-    const initProps: ConfigProps = {
+    const restore = storage.restoreObject(Config.storage, {
       white: '',
       black: '',
       clock: '',
@@ -71,8 +71,17 @@ export class Config {
       playMistake: false,
       playCorrect: false,
       playWinner: false,
-    };
-    const restore = storage.restoreObject(this.storage, initProps);
+    }) as ConfigProps;
+    // Cannot use object assign directly on "this" due to MOBX
+    this.humans = (restore.humans?.length ? restore.humans : Human.init).map(
+      x => new Human(x.name, x.email)
+    );
+    this.bots = (restore.bots?.length ? restore.bots : Bot.init).map(
+      x => new Bot(x.name, x.engine, x.skill, x.time, x.depth)
+    );
+    this.clocks = (restore.clocks?.length ? restore.clocks : Clock.init).map(
+      x => new Clock(x.name, x.time)
+    );
     this.white = restore.white;
     this.black = restore.black;
     this.clock = restore.clock;
@@ -85,21 +94,7 @@ export class Config {
     this.playWinner = restore.playWinner;
   }
 
-  store: VoidFunction = () => {
-    const props: ConfigProps = {
-      white: this.white,
-      black: this.black,
-      clock: this.clock,
-      rotation: this.rotation,
-      showHints: this.showHints,
-      showCP: this.showCP,
-      showFacts: this.showFacts,
-      playMistake: this.playMistake,
-      playCorrect: this.playCorrect,
-      playWinner: this.playWinner,
-    };
-    storage.storeObject(this.storage, props);
-  };
+  store: VoidFunction = () => storage.storeObject(Config.storage, this);
 }
 
 export const config = new Config();

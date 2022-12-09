@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { MdAdd, MdSave } from 'react-icons/md';
 import { Human } from '../../model/human';
-import { storage } from '../../services/storage.service';
 import { Config, EditMode } from '../../model/config';
 
 export const AddHumanDialog = observer(({ config }: { config: Config }) => {
@@ -21,18 +20,16 @@ export const AddHumanDialog = observer(({ config }: { config: Config }) => {
   const item = isEdit ? (items[config.cursor] as Human) : new Human('', '');
 
   const save = () => {
-    if (item.name.length) {
-      if (isEdit) {
-        items[config.cursor] = item;
-      } else {
-        items.push(item);
-      }
-      storage.storeList(Human.storage, items);
-      config.dialog = EditMode.None;
-      config.cursor = -1;
-    } else {
+    if (!item.name.length) {
       messageService.display('Add Human', 'Need to enter a name');
     }
+    if (isEdit) {
+      items[config.cursor] = item;
+    } else {
+      items.push(item);
+    }
+    config.dialog = EditMode.None;
+    config.cursor = -1;
   };
 
   return (

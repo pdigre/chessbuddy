@@ -6,7 +6,6 @@ import { historyService } from '../../services/history.service';
 import { ConfigButton } from './ConfigWidgets';
 import { MdAdd, MdDelete, MdDownload, MdEdit, MdOnlinePrediction, MdUpload } from 'react-icons/md';
 import { AddHumanDialog } from './AddHumanDialog';
-import { storage } from '../../services/storage.service';
 import { Config, EditMode } from '../../model/config';
 
 export const ConfigHuman = observer(
@@ -26,20 +25,10 @@ export const ConfigHuman = observer(
       }
     };
     const doDelete = () => {
-      if (hasSelect) {
-        items.splice(config.cursor, 1);
-        storage.storeList(Human.storage, items);
-        config.cursor = -1;
-      }
+      items.splice(config.cursor, 1);
+      config.cursor = -1;
     };
-    const doEdit = () => {
-      if (hasSelect) {
-        config.dialog = EditMode.EditHuman;
-      }
-    };
-    const doAdd = () => {
-      config.dialog = EditMode.AddHuman;
-    };
+
     const [downloadLink, setDownloadLink] = useState('');
     const downloadPlayer = (event: MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
@@ -97,8 +86,17 @@ export const ConfigHuman = observer(
           ref={uploadRef}
         />
         <div className="[&>button]:mx-1">
-          <ConfigButton onClick={doAdd} label="Add" icon={<MdAdd />} />
-          <ConfigButton onClick={doEdit} label="Edit" icon={<MdEdit />} disabled={!hasSelect} />
+          <ConfigButton
+            onClick={() => (config.dialog = EditMode.AddHuman)}
+            label="Add"
+            icon={<MdAdd />}
+          />
+          <ConfigButton
+            onClick={() => (config.dialog = EditMode.EditHuman)}
+            label="Edit"
+            icon={<MdEdit />}
+            disabled={!hasSelect}
+          />
           <ConfigButton
             onClick={downloadPlayer}
             label="Download"

@@ -1,4 +1,3 @@
-import { Storable } from '../services/storage.service';
 import { ListItem } from './config';
 
 export class UciEngineDef {
@@ -10,7 +9,7 @@ export const UciEngineDefs: UciEngineDef[] = [
   new UciEngineDef('Lozza', 'bots/lozza-1.18/lozza.js'),
 ];
 
-export class Bot implements ListItem, Storable {
+export class Bot implements ListItem {
   uciEngineDef: UciEngineDef = UciEngineDefs[0];
 
   constructor(
@@ -23,37 +22,16 @@ export class Bot implements ListItem, Storable {
 
   getUciEngineDef = () => UciEngineDefs.find(x => x.name == this.engine);
 
-  toString: () => string = () =>
-    `${this.name.trim()}:${this.uciEngineDef.name},${this.skill},${this.time ?? ''},${
-      this.depth ?? ''
-    }`;
   getName: () => string = () => this.name;
-  getDescription: () => string = () => this.toString();
+  getDescription: () => string = () =>
+    `${this.uciEngineDef.name},${this.skill},${this.time ?? ''},${this.depth ?? ''}`;
 
-  public static storage = 'bots';
-
-  public static create(split: string[]): Bot {
-    const skill = split[1].split(',');
-    return new Bot(
-      split[0],
-      skill[0],
-      Bot.parseNum(skill[1]),
-      Bot.parseNum(skill[2]),
-      Bot.parseNum(skill[3])
-    );
-  }
-
-  public static parseNum(num: string) {
-    const val = Number.parseInt(num);
-    return isNaN(val) ? 0 : val;
-  }
-
-  public static init = `
-    Stockfish easy:Stockfish,20,1,
-    Stockfish med:Stockfish,1,,10
-    Stockfish hard:Stockfish,20,,10
-    Lozza easy:Lozza,20,1,
-    Lozza med:Lozza,1,,10
-    Lozza hard:Lozza,20,,10
-    `;
+  public static init = [
+    new Bot('Stockfish easy', 'Stockfish', 20, 1, 0),
+    new Bot('Stockfish med', 'Stockfish', 1, 0, 10),
+    new Bot('Stockfish hard', 'Stockfish', 20, 0, 1),
+    new Bot('Lozza easy', 'Lozza', 20, 1, 0),
+    new Bot('Lozza med', 'Lozza', 1, 0, 10),
+    new Bot('Lozza hard', 'Lozza', 20, 0, 1),
+  ];
 }

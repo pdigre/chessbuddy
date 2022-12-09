@@ -20,6 +20,7 @@ import {
   MdEdit,
 } from 'react-icons/md';
 import { HistoryService } from '../../services/history.service';
+import { runInAction } from 'mobx';
 
 export const MainButtonBar = observer(
   ({ gameState, history: gameHistory }: { gameState: GameState; history: HistoryService }) => {
@@ -62,8 +63,10 @@ export const MainButtonBar = observer(
     const histHandler = () => (gameState.showHist = !gameState.showHist);
 
     const configHandler = () => {
-      config.showTab = 0;
-      gameState.isPlaying = false;
+      runInAction(() => {
+        config.showTab = 0;
+        gameState.isPlaying = false;
+      });
     };
 
     const isHistUndo = !gameState.showHist && gameState.markLog >= 0;

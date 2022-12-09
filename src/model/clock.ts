@@ -1,4 +1,3 @@
-import { Storable } from '../services/storage.service';
 import { ListItem } from './config';
 
 export type TimeRule = {
@@ -7,9 +6,19 @@ export type TimeRule = {
   each: number;
 };
 
-export class Clock implements Storable, ListItem {
-  constructor(public name: string, public time: TimeRule[]) {}
+export class Clock implements ListItem {
   public static storage = 'clocks';
+  constructor(public name: string, public time: TimeRule[]) {}
+
+  getAllowed(moves: number): number {
+    let t = 0;
+    this.time.forEach(time => {
+      if (moves >= time.from) {
+        t += time.plus * 60 + time.each * (moves - time.from);
+      }
+    });
+    return t;
+  }
 
   static string2time: (text: string) => TimeRule[] = text =>
     text.split(',').map(x => {
@@ -25,8 +34,6 @@ export class Clock implements Storable, ListItem {
       };
     });
 
-  toString: () => string = () => `${this.getName()}:${this.getDescription()}`;
-
   static time2string: (time: TimeRule[]) => string = time =>
     time
       .map(s => `${s.from ? s.plus : ''}${s.plus ? '+' + s.plus : ''}${s.each ? '/' + s.each : ''}`)
@@ -35,16 +42,16 @@ export class Clock implements Storable, ListItem {
   getName: () => string = () => this.name.trim();
   getDescription: () => string = () => Clock.time2string(this.time);
 
-  public static create(split: string[]): Clock {
-    return new Clock(split[0].trim(), Clock.string2time(split[1]));
-  }
-
-  public static init = `
-    No limit:
-    FIDE Classic - 120/60/13/30:+120,40+60,60+15/10
-    FIDE Rapid - 15/10:+15/10
-    Rapid - 10/10:+10/10
-    FIDE Blitz - 3/2:+3/2
-    Blitz - 5/0:+5
-    `;
+  public static init = [
+    new Clock('No limit', []),
+    new Clock('FIDE Classic - 120/60/13/30', [
+      { from: 0, plus: 120, each: 0 },
+      { from: 40, plus: 60, each: 0 },
+      { from: 60, plus: 15, each: 10 },
+    ]),
+    new Clock('FIDE Rapid - 15/10', [{ from: 0, plus: 15, each: 10 }]),
+    new Clock('Rapid - 10/10', [{ from: 0, plus: 10, each: 10 }]),
+    new Clock('FIDE Blitz - 3/2', [{ from: 0, plus: 3, each: 2 }]),
+    new Clock('Blitz - 5/0', [{ from: 0, plus: 5, each: 0 }]),
+  ];
 }

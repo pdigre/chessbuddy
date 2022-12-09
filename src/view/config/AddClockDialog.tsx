@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { MdAdd, MdSave } from 'react-icons/md';
 import { Clock } from '../../model/clock';
-import { storage } from '../../services/storage.service';
 import { Config, EditMode } from '../../model/config';
 
 export const AddClockDialog = observer(({ config }: { config: Config }) => {
@@ -21,18 +20,17 @@ export const AddClockDialog = observer(({ config }: { config: Config }) => {
   const item = isEdit ? (items[config.cursor] as Clock) : new Clock('', []);
 
   const save = () => {
-    if (item.name.length) {
-      if (isEdit) {
-        items[config.cursor] = item;
-      } else {
-        items.push(item);
-      }
-      storage.storeList(Clock.storage, items);
-      config.dialog = EditMode.None;
-      config.cursor = -1;
-    } else {
+    if (!item.name.length) {
       messageService.display('Add Clock', 'Need to enter a name');
+      return;
     }
+    if (isEdit) {
+      items[config.cursor] = item;
+    } else {
+      items.push(item);
+    }
+    config.dialog = EditMode.None;
+    config.cursor = -1;
   };
 
   return (

@@ -1,5 +1,9 @@
 import React, { useCallback } from 'react';
-import { chessRulesService as rules, Square } from '../../services/chessrules.service';
+import {
+  ChessRulesService,
+  chessRulesService as rules,
+  Square,
+} from '../../services/chessrules.service';
 import { AnalyzerService } from '../../services/analyzer.service';
 import { Human } from '../../model/human';
 import { playService, GameState } from '../../services/play.service';
@@ -12,37 +16,6 @@ import { messageService } from '../../services/message.service';
 import { ButtonType } from '../config/ConfigWidgets';
 import { FaChessBishop, FaChessKnight, FaChessQueen, FaChessRook } from 'react-icons/fa';
 import { mp4service } from '../../services/mp4.service';
-
-const pgnStyle: React.CSSProperties = {
-  background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
-  borderRadius: '50%',
-};
-const editStyle: React.CSSProperties = {
-  background: 'radial-gradient(circle, #ff0000 36%, transparent 40%)',
-  borderRadius: '50%',
-};
-const helpStyle: React.CSSProperties = {
-  background: 'radial-gradient(circle, #00ff4c 36%, transparent 50%)',
-  borderRadius: '10%',
-};
-const castlingStyle: React.CSSProperties = {
-  background: 'radial-gradient(circle, #505050 36%, transparent 80%)',
-  borderRadius: '10%',
-};
-const helpStyle2: React.CSSProperties = {
-  background: 'radial-gradient(circle, #00ff4c 36%, transparent 30%)',
-  borderRadius: '10%',
-};
-const whiteSquareStyle: React.CSSProperties = {
-  backgroundColor: 'rgb(240, 217, 181)',
-};
-const blackSquareStyle: React.CSSProperties = {
-  backgroundColor: 'rgb(181, 136, 99)',
-};
-
-const sound_click = new Audio('/mp3/click.mp3');
-const sound_move = new Audio('/mp3/move1.mp3');
-const sound_error = new Audio('/mp3/buzzer.mp3');
 
 export const Board = observer(
   ({
@@ -58,6 +31,36 @@ export const Board = observer(
     config: Config;
     refreshTimer: RefreshTimer;
   }) => {
+    const sound_click = new Audio('/mp3/click.mp3');
+    const sound_move = new Audio('/mp3/move1.mp3');
+    const sound_error = new Audio('/mp3/buzzer.mp3');
+    const pgnStyle: React.CSSProperties = {
+      background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
+      borderRadius: '50%',
+    };
+    const editStyle: React.CSSProperties = {
+      background: 'radial-gradient(circle, #ff0000 36%, transparent 40%)',
+      borderRadius: '50%',
+    };
+    const helpStyle: React.CSSProperties = {
+      background: 'radial-gradient(circle, #00ff4c 36%, transparent 50%)',
+      borderRadius: '10%',
+    };
+    const castlingStyle: React.CSSProperties = {
+      background: 'radial-gradient(circle, #505050 36%, transparent 80%)',
+      borderRadius: '10%',
+    };
+    const helpStyle2: React.CSSProperties = {
+      background: 'radial-gradient(circle, #00ff4c 36%, transparent 30%)',
+      borderRadius: '10%',
+    };
+    const whiteSquareStyle: React.CSSProperties = {
+      backgroundColor: 'rgb(240, 217, 181)',
+    };
+    const blackSquareStyle: React.CSSProperties = {
+      backgroundColor: 'rgb(181, 136, 99)',
+    };
+
     const doMove = useCallback((from: Square, to: Square, isHuman: boolean) => {
       const move = rules.move(playService.fen, from, to);
       if (!move) {
@@ -98,7 +101,9 @@ export const Board = observer(
       if (player instanceof Human && !playService.isComplete) {
         const from2 = r90 ? rules.leftSquare(from) : from;
         const movable = playService.isMoveable(from2);
-        if (movable) sound_click.play().then();
+        if (movable) {
+          sound_click.play().then();
+        }
         return movable;
       }
       return false;
@@ -130,7 +135,7 @@ export const Board = observer(
         }
       }
       if (config.showFacts) {
-        playService.pgns.forEach(x =>
+        gameState.pgns.forEach(x =>
           Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle })
         );
       }
@@ -148,7 +153,7 @@ export const Board = observer(
       );
       return markers;
     };
-    const fen = refreshTimer.showBlank ? rules.CLEAR_GAME : playService.fen;
+    const fen = refreshTimer.showBlank ? ChessRulesService.CLEAR_GAME : playService.fen;
 
     const onSquareClick = (square: Square) => {
       if (gameState.editMode) gameState.editSquare = square;

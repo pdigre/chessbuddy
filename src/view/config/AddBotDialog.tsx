@@ -11,7 +11,6 @@ import { ConfigButton, ConfigSelect, ConfigText } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { messageService } from '../../services/message.service';
 import { MdAdd, MdSave } from 'react-icons/md';
-import { storage } from '../../services/storage.service';
 import { Config, EditMode } from '../../model/config';
 
 export const AddBotDialog = observer(({ config }: { config: Config }) => {
@@ -20,7 +19,11 @@ export const AddBotDialog = observer(({ config }: { config: Config }) => {
   const items = config.bots;
   const item = isEdit ? (items[config.cursor] as Bot) : new Bot('', UciEngineDefs[0].name, 0, 0, 0);
 
-  const savePlayer = () => {
+  const save = () => {
+    if (!item.name.length) {
+      messageService.display('Add Bot', 'Need to enter a name');
+      return;
+    }
     if (!item.engine) {
       messageService.display('Add Bot', 'Need to select a chess engine');
       return;
@@ -44,8 +47,13 @@ export const AddBotDialog = observer(({ config }: { config: Config }) => {
       messageService.display('Add Bot', 'Need to enter depth between 6 and 30');
       return;
     }
-    storage.storeList(Bot.storage, items);
+    if (isEdit) {
+      items[config.cursor] = item;
+    } else {
+      items.push(item);
+    }
     config.dialog = EditMode.None;
+    config.cursor = -1;
   };
   const engineNames = Array.from(UciEngineDefs.map(x => x.name));
 
@@ -102,7 +110,7 @@ export const AddBotDialog = observer(({ config }: { config: Config }) => {
               value={intToTxt(item.depth)}
             />
             <ConfigButton
-              onClick={savePlayer}
+              onClick={save}
               label={isEdit ? 'Save' : 'Add'}
               icon={isEdit ? <MdSave /> : <MdAdd />}
             />
