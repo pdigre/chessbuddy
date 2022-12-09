@@ -1,6 +1,6 @@
 {
   "name": "chesbuddy",
-  "version": "0.16.2",
+  "version": "0.17.0",
   "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.10.5",
