@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 import { messageService } from '../../services/message.service';
 import { FaRegHandshake, FaChessKing } from 'react-icons/fa';
 import { Config } from '../../model/config';
+import { runInAction } from 'mobx';
 
 export const ConfigGame = observer(({ config }: { config: Config }) => {
   const players = [...config.humans, ...config.bots];
@@ -39,14 +40,18 @@ export const ConfigGame = observer(({ config }: { config: Config }) => {
 
   const playAction = () => {
     config.store();
-    config.showTab = -1;
-    playService.playAction();
+    runInAction(() => {
+      config.showConfig = false;
+      playService.playAction();
+    });
   };
 
   const editAction = () => {
     config.store();
-    gameState.editMode = true;
-    config.showTab = -1;
+    runInAction(() => {
+      gameState.editMode = true;
+      config.showConfig = false;
+    });
   };
 
   return (
@@ -56,14 +61,22 @@ export const ConfigGame = observer(({ config }: { config: Config }) => {
           label="White"
           choices={playerNames}
           selected={{ name: config.white, value: config.white }}
-          setSelected={value => (config.white = value)}
+          setSelected={value =>
+            runInAction(() => {
+              config.white = value;
+            })
+          }
         />
         &nbsp;
         <ConfigSelect
           label="Black"
           choices={playerNames}
           selected={{ name: config.black, value: config.black }}
-          setSelected={value => (config.black = value)}
+          setSelected={value =>
+            runInAction(() => {
+              config.black = value;
+            })
+          }
         />
       </div>
       <div>&nbsp;</div>
@@ -71,7 +84,11 @@ export const ConfigGame = observer(({ config }: { config: Config }) => {
         label="Timer setting"
         choices={config.clocks.map(x => x.name)}
         selected={{ name: config.clock, value: config.clock }}
-        setSelected={value => (config.clock = value)}
+        setSelected={value =>
+          runInAction(() => {
+            config.clock = value;
+          })
+        }
       />
       <div>&nbsp;</div>
       <div className="[&>button]:mx-2">
