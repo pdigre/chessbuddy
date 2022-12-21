@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { AddBotDialog } from './AddBotDialog';
 import { Config, EditMode } from '../../model/config';
+import { runInAction } from 'mobx';
 
 export const ConfigBot = observer(({ config }: { config: Config }) => {
   const items = config.bots;
@@ -13,15 +14,26 @@ export const ConfigBot = observer(({ config }: { config: Config }) => {
     if (event.target instanceof HTMLTableCellElement) {
       const id = (event.target.parentNode as HTMLTableRowElement).id;
       const num = Number.parseInt(id);
-      config.cursor = num == config.cursor ? -1 : num;
+      runInAction(() => {
+        config.cursor = num == config.cursor ? -1 : num;
+      });
     }
   };
   const doDelete = () => {
     items.splice(config.cursor, 1);
     config.cursor = -1;
+    runInAction(() => {
+      config.cursor = -1;
+    });
   };
-  const doEdit = () => (config.dialog = EditMode.EditBot);
-  const doAdd = () => (config.dialog = EditMode.AddBot);
+  const doEdit = () =>
+    runInAction(() => {
+      config.dialog = EditMode.EditBot;
+    });
+  const doAdd = () =>
+    runInAction(() => {
+      config.dialog = EditMode.AddBot;
+    });
 
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">

@@ -31,8 +31,10 @@ export const GridWidget = (props: {
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onClick={props.onClick}>
-        {props.children}
-        <tr ref={endRef} />
+        <tbody>
+          {props.children}
+          <tr ref={endRef} />
+        </tbody>
       </table>
     </div>
   );

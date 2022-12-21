@@ -4,6 +4,7 @@ import { ConfigButton } from './ConfigWidgets';
 import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { AddClockDialog } from './AddClockDialog';
 import { Config, EditMode } from '../../model/config';
+import { runInAction } from 'mobx';
 
 export const ConfigClock = observer(({ config }: { config: Config }) => {
   const items = config.clocks;
@@ -13,13 +14,25 @@ export const ConfigClock = observer(({ config }: { config: Config }) => {
     if (event.target instanceof HTMLTableCellElement) {
       const id = (event.target.parentNode as HTMLTableRowElement).id;
       const num = Number.parseInt(id);
-      config.cursor = num == config.cursor ? -1 : num;
+      runInAction(() => {
+        config.cursor = num == config.cursor ? -1 : num;
+      });
     }
   };
   const doDelete = () => {
     items.splice(config.cursor, 1);
-    config.cursor = -1;
+    runInAction(() => {
+      config.cursor = -1;
+    });
   };
+  const doEdit = () =>
+    runInAction(() => {
+      config.dialog = EditMode.EditBot;
+    });
+  const doAdd = () =>
+    runInAction(() => {
+      config.dialog = EditMode.AddBot;
+    });
 
   return (
     <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
@@ -37,17 +50,8 @@ export const ConfigClock = observer(({ config }: { config: Config }) => {
         </tbody>
       </table>
       <div className="[&>button]:mx-1">
-        <ConfigButton
-          onClick={() => (config.dialog = EditMode.AddClock)}
-          label="Add"
-          icon={<MdAdd />}
-        />
-        <ConfigButton
-          onClick={() => (config.dialog = EditMode.EditClock)}
-          label="Edit"
-          icon={<MdEdit />}
-          disabled={!hasSelect}
-        />
+        <ConfigButton onClick={doAdd} label="Add" icon={<MdAdd />} />
+        <ConfigButton onClick={doEdit} label="Edit" icon={<MdEdit />} disabled={!hasSelect} />
         <ConfigButton onClick={doDelete} label="Delete" icon={<MdDelete />} disabled={!hasSelect} />
       </div>
       <AddClockDialog config={config} />

@@ -34,7 +34,7 @@ export const EditView = observer(({ gameState }: { gameState: GameState }) => {
   const editDone = () => {
     playService.editDone(wcck, wccq, bcck, bccq, bFirst);
     gameState.editMode = false;
-    config.showTab = 0;
+    config.showConfig = true;
   };
 
   return (

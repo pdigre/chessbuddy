@@ -51,20 +51,27 @@ export const MainButtonBar = observer(
               analyzerService.cp = 0;
               analyzerService.help = [];
             }
-            gameState.markLog = -1;
+            runInAction(() => {
+              gameState.markLog = -1;
+            });
           }
         );
         return;
       }
-      gameState.isPlaying = !gameState.isPlaying;
+      runInAction(() => {
+        gameState.isPlaying = !gameState.isPlaying;
+      });
       gameState.run();
     };
 
-    const histHandler = () => (gameState.showHist = !gameState.showHist);
+    const histHandler = () =>
+      runInAction(() => {
+        gameState.showHist = !gameState.showHist;
+      });
 
     const configHandler = () => {
       runInAction(() => {
-        config.showTab = 0;
+        config.showConfig = true;
         gameState.isPlaying = false;
       });
     };

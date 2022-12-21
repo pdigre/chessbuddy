@@ -42,7 +42,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
 
   const handleClose = () => {
     runInAction(() => {
-      config.showTab = -1;
+      config.showConfig = false;
     });
     config.store();
     refreshtimer.startRefreshTimer();
@@ -53,7 +53,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
   return (
     <Dialog
       aria-labelledby="simple-dialog-title"
-      open={config.showTab >= 0}
+      open={config.showConfig}
       onClose={handleClose}
       maxWidth="xl"
       className={'text-center text-xl'}>

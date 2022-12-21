@@ -7,6 +7,7 @@ import { ConfigButton } from './ConfigWidgets';
 import { MdAdd, MdDelete, MdDownload, MdEdit, MdOnlinePrediction, MdUpload } from 'react-icons/md';
 import { AddHumanDialog } from './AddHumanDialog';
 import { Config, EditMode } from '../../model/config';
+import { runInAction } from 'mobx';
 
 export const ConfigHuman = observer(
   ({ config, server }: { config: Config; server: ConnectService }) => {
@@ -21,13 +22,25 @@ export const ConfigHuman = observer(
       if (event.target instanceof HTMLTableCellElement) {
         const id = (event.target.parentNode as HTMLTableRowElement).id;
         const num = Number.parseInt(id);
-        config.cursor = num == config.cursor ? -1 : num;
+        runInAction(() => {
+          config.cursor = num == config.cursor ? -1 : num;
+        });
       }
     };
     const doDelete = () => {
       items.splice(config.cursor, 1);
-      config.cursor = -1;
+      runInAction(() => {
+        config.cursor = -1;
+      });
     };
+    const doEdit = () =>
+      runInAction(() => {
+        config.dialog = EditMode.EditHuman;
+      });
+    const doAdd = () =>
+      runInAction(() => {
+        config.dialog = EditMode.AddHuman;
+      });
 
     const [downloadLink, setDownloadLink] = useState('');
     const downloadPlayer = (event: MouseEvent<HTMLButtonElement>) => {
@@ -86,17 +99,8 @@ export const ConfigHuman = observer(
           ref={uploadRef}
         />
         <div className="[&>button]:mx-1">
-          <ConfigButton
-            onClick={() => (config.dialog = EditMode.AddHuman)}
-            label="Add"
-            icon={<MdAdd />}
-          />
-          <ConfigButton
-            onClick={() => (config.dialog = EditMode.EditHuman)}
-            label="Edit"
-            icon={<MdEdit />}
-            disabled={!hasSelect}
-          />
+          <ConfigButton onClick={doAdd} label="Add" icon={<MdAdd />} />
+          <ConfigButton onClick={doEdit} label="Edit" icon={<MdEdit />} disabled={!hasSelect} />
           <ConfigButton
             onClick={downloadPlayer}
             label="Download"

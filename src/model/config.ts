@@ -54,7 +54,8 @@ export class Config {
   clocks!: Clock[];
 
   // Config runtime - no persist
-  @jsonIgnore() showTab = -1;
+  @jsonIgnore() showConfig = false;
+  @jsonIgnore() showTab = 0;
   @jsonIgnore() cursor = -1;
   @jsonIgnore() dialog = EditMode.None;
 
