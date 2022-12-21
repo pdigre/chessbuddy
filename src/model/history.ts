@@ -1,4 +1,5 @@
 import { ChessRulesService } from '../services/chessrules.service';
+import { FEN } from './fen';
 
 export class Games {
   constructor(public games: Game[]) {}
@@ -27,7 +28,7 @@ export class Game {
           Number.parseInt(split[3], 36),
           Number.parseInt(split[4], 36),
           split[5].split(' '),
-          ChessRulesService.NEW_GAME
+          FEN.NEW_GAME
         )
       : undefined;
   }
