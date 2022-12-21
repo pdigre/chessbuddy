@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigText } from './ConfigWidgets';
-import { messageService } from '../../services/message.service';
+import { messageService } from '../../services/index.service';
 import {
   Dialog,
   DialogActions,
@@ -11,11 +11,11 @@ import {
 } from '@mui/material';
 import { MdAdd, MdSave } from 'react-icons/md';
 import { Human } from '../../model/human';
-import { Config, EditMode } from '../../model/config';
+import { Config, ConfigMode } from '../../model/config';
 
 export const AddHumanDialog = observer(({ config }: { config: Config }) => {
-  const handleClick = () => (config.dialog = EditMode.None);
-  const isEdit = config.dialog === EditMode.EditHuman;
+  const handleClick = () => (config.dialog = ConfigMode.None);
+  const isEdit = config.dialog === ConfigMode.EditHuman;
   const items = config.humans;
   const item = isEdit ? (items[config.cursor] as Human) : new Human('', '');
 
@@ -28,8 +28,7 @@ export const AddHumanDialog = observer(({ config }: { config: Config }) => {
     } else {
       items.push(item);
     }
-    config.dialog = EditMode.None;
-    config.cursor = -1;
+    config.closeDialog();
   };
 
   return (
@@ -37,7 +36,7 @@ export const AddHumanDialog = observer(({ config }: { config: Config }) => {
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={config.dialog === EditMode.AddHuman || config.dialog === EditMode.EditHuman}>
+      open={config.dialog === ConfigMode.AddHuman || config.dialog === ConfigMode.EditHuman}>
       <DialogTitle id="message">{isEdit ? 'Edit' : 'Add'} Human Player</DialogTitle>
       <DialogContent>
         <DialogContentText>

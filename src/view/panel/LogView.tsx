@@ -1,20 +1,16 @@
 import React, { MouseEvent } from 'react';
-import { chessRulesService as rules } from '../../services/chessrules.service';
-import { PlayService, gameState } from '../../services/play.service';
+
+import { PlayService } from '../../services/play.service';
 import { observer } from 'mobx-react';
-import { refreshtimer } from '../../services/control/refreshtimer';
-import { analyzerService } from '../../services/analyzer.service';
-import { messageService } from '../../services/message.service';
+import { messageService, gameState } from '../../services/index.service';
 import { HistoryService } from '../../services/history.service';
 import { MdCancel, MdCheck } from 'react-icons/md';
 import { GridWidget } from './GridWidget';
 
 export const LogView = observer(
-  ({ game, gameHistory }: { game: PlayService; gameHistory: HistoryService }) => {
+  ({ game: playService, gameHistory }: { game: PlayService; gameHistory: HistoryService }) => {
     if (gameHistory.markHist >= 0) {
-      if (game.isComplete || game.log.length == 0) {
-        const games = gameHistory.history;
-        const moves = games[gameHistory.markHist].split(';')[5].split(' ');
+      if (playService.isComplete || playService.log.length == 0) {
         messageService.display(
           'Load game',
           'Do you want to look at this game?',
@@ -24,10 +20,7 @@ export const LogView = observer(
           ],
           reply => {
             if (reply == 'Yes') {
-              game.log = moves;
-              const mark = moves.length - 1;
-              gameState.markLog = mark;
-              game.fen = rules.replay(moves, mark);
+              playService.loadGame();
             }
             messageService.clear();
           }
@@ -37,27 +30,17 @@ export const LogView = observer(
           { label: 'Ok' },
         ]);
       }
-      gameHistory.markHist = -1;
+      gameHistory.setMarkHist(-1);
     }
-
-    const gotoMark = (mark: number) => {
-      if (gameState.isPlaying) gameState.isPlaying = false;
-      game.fen = rules.replay(game.log, mark >= 0 ? mark : game.log.length);
-      refreshtimer.startRefreshTimer();
-      analyzerService.cp = 0;
-      analyzerService.help = [];
-    };
 
     const logClick = (event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
-      const id2 = id == gameState.markLog ? -1 : id;
-      gameState.markLog = id2;
-      gotoMark(id2);
+      playService.undoTo(id == gameState.markLog ? -1 : id);
     };
 
     const rows: string[][] = [];
-    const log = game.log;
+    const log = playService.log;
     for (let i = 0; i < log.length / 2; i++) {
       rows[i] = ['', ''];
     }

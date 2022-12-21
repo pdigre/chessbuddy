@@ -3,8 +3,7 @@ import { ConfigButton } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { AddBotDialog } from './AddBotDialog';
-import { Config, EditMode } from '../../model/config';
-import { runInAction } from 'mobx';
+import { Config, ConfigMode } from '../../model/config';
 
 export const ConfigBot = observer(({ config }: { config: Config }) => {
   const items = config.bots;
@@ -12,40 +11,24 @@ export const ConfigBot = observer(({ config }: { config: Config }) => {
 
   const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
     if (event.target instanceof HTMLTableCellElement) {
-      const id = (event.target.parentNode as HTMLTableRowElement).id;
-      const num = Number.parseInt(id);
-      runInAction(() => {
-        config.cursor = num == config.cursor ? -1 : num;
-      });
+      config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
     }
   };
-  const doDelete = () => {
-    items.splice(config.cursor, 1);
-    config.cursor = -1;
-    runInAction(() => {
-      config.cursor = -1;
-    });
-  };
-  const doEdit = () =>
-    runInAction(() => {
-      config.dialog = EditMode.EditBot;
-    });
-  const doAdd = () =>
-    runInAction(() => {
-      config.dialog = EditMode.AddBot;
-    });
+  const doAdd = () => config.openDialog(ConfigMode.AddBot);
+  const doEdit = () => config.openDialog(ConfigMode.EditBot);
+  const doDelete = () => config.deleteItem(items);
 
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">
       <table className="w-full text-left text-lg dark:bg-slate-800 border-2 border-separate p-2">
         <tbody onClick={doSelect}>
-          {items.map((bot, iLine) => (
+          {items.map((item, iLine) => (
             <tr
               key={iLine.toString()}
               id={iLine.toString()}
               className={iLine == config.cursor ? 'bg-green-300' : ''}>
-              <td className="dark:text-white">{bot.getName()}</td>
-              <td className="dark:text-white">{bot.getDescription()}</td>
+              <td className="dark:text-white">{item.getName()}</td>
+              <td className="dark:text-white">{item.getDescription()}</td>
             </tr>
           ))}
         </tbody>

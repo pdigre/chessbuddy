@@ -1,16 +1,17 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Bot } from './bot';
 import { Human } from './human';
 import { Clock } from './clock';
-import { storage } from '../services/storage.service';
 import { jsonIgnore } from 'json-ignore';
+import { refreshtimer } from '../services/control/refreshtimer';
+import { playService, storageService } from '../services/index.service';
 
 export interface ListItem {
   getName: () => string;
   getDescription: () => string;
 }
 
-export const enum EditMode {
+export const enum ConfigMode {
   None = 1,
   EditHuman,
   AddHuman,
@@ -57,11 +58,11 @@ export class Config {
   @jsonIgnore() showConfig = false;
   @jsonIgnore() showTab = 0;
   @jsonIgnore() cursor = -1;
-  @jsonIgnore() dialog = EditMode.None;
+  @jsonIgnore() dialog = ConfigMode.None;
 
   constructor() {
     makeAutoObservable(this);
-    const restore = storage.restoreObject(Config.storage, {
+    const restore = storageService.restoreObject(Config.storage, {
       white: '',
       black: '',
       clock: '',
@@ -95,7 +96,54 @@ export class Config {
     this.playWinner = restore.playWinner;
   }
 
-  store: VoidFunction = () => storage.storeObject(Config.storage, this);
-}
+  store: VoidFunction = () => storageService.storeObject(Config.storage, this);
 
-export const config = new Config();
+  // ****************************
+  // Actions
+  // ****************************
+  openConfig() {
+    runInAction(() => {
+      this.showConfig = true;
+      playService.isPlaying = false;
+    });
+  }
+
+  closeConfig() {
+    runInAction(() => {
+      this.showConfig = false;
+    });
+    this.store();
+    refreshtimer.startRefreshTimer();
+  }
+
+  switchTab(n: number) {
+    runInAction(() => {
+      this.showTab = n;
+      this.cursor = -1;
+    });
+  }
+
+  setCursor(id: string) {
+    runInAction(() => {
+      const num = Number.parseInt(id);
+      this.cursor = num == this.cursor ? -1 : num;
+    });
+  }
+  deleteItem<T>(items: T[]) {
+    runInAction(() => {
+      items.splice(this.cursor, 1);
+      this.cursor = -1;
+    });
+  }
+  closeDialog() {
+    runInAction(() => {
+      this.cursor = -1;
+      this.dialog = ConfigMode.None;
+    });
+  }
+  openDialog(mode: ConfigMode) {
+    runInAction(() => {
+      this.dialog = mode;
+    });
+  }
+}

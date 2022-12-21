@@ -9,12 +9,15 @@ import {
 import { observer } from 'mobx-react';
 import { MessageService } from '../../services/message.service';
 import { ConfigButton } from '../config/ConfigWidgets';
+import { runInAction } from 'mobx';
 
 export const MessageDialog = observer(({ message }: { message: MessageService }) => {
   const handleClick = (event: MouseEvent) => {
-    if (message.response) {
-      message.response((event.target as HTMLButtonElement).innerHTML);
-    }
+    runInAction(() => {
+      if (message.response) {
+        message.response((event.target as HTMLButtonElement).innerHTML);
+      }
+    });
   };
 
   return (

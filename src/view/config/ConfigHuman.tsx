@@ -2,12 +2,11 @@ import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'rea
 import { Human } from '../../model/human';
 import { ConnectService } from '../../services/connect.service';
 import { observer } from 'mobx-react';
-import { historyService } from '../../services/history.service';
+import { historyService } from '../../services/index.service';
 import { ConfigButton } from './ConfigWidgets';
 import { MdAdd, MdDelete, MdDownload, MdEdit, MdOnlinePrediction, MdUpload } from 'react-icons/md';
 import { AddHumanDialog } from './AddHumanDialog';
-import { Config, EditMode } from '../../model/config';
-import { runInAction } from 'mobx';
+import { Config, ConfigMode } from '../../model/config';
 
 export const ConfigHuman = observer(
   ({ config, server }: { config: Config; server: ConnectService }) => {
@@ -20,27 +19,12 @@ export const ConfigHuman = observer(
 
     const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
       if (event.target instanceof HTMLTableCellElement) {
-        const id = (event.target.parentNode as HTMLTableRowElement).id;
-        const num = Number.parseInt(id);
-        runInAction(() => {
-          config.cursor = num == config.cursor ? -1 : num;
-        });
+        config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
       }
     };
-    const doDelete = () => {
-      items.splice(config.cursor, 1);
-      runInAction(() => {
-        config.cursor = -1;
-      });
-    };
-    const doEdit = () =>
-      runInAction(() => {
-        config.dialog = EditMode.EditHuman;
-      });
-    const doAdd = () =>
-      runInAction(() => {
-        config.dialog = EditMode.AddHuman;
-      });
+    const doAdd = () => config.openDialog(ConfigMode.AddHuman);
+    const doEdit = () => config.openDialog((config.dialog = ConfigMode.EditHuman));
+    const doDelete = () => config.deleteItem(items);
 
     const [downloadLink, setDownloadLink] = useState('');
     const downloadPlayer = (event: MouseEvent<HTMLButtonElement>) => {

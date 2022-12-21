@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { GameState, playService } from '../../services/play.service';
+import { DashboardService } from '../../services/dashboard.service';
 import {
   FaChessBishop,
   FaChessKing,
@@ -11,31 +11,19 @@ import {
 import { ConfigButton, ConfigCheckbox } from '../config/ConfigWidgets';
 import { MdCheck, MdDelete } from 'react-icons/md';
 import { observer } from 'mobx-react';
-import { config } from '../../model/config';
 
-export const EditView = observer(({ gameState }: { gameState: GameState }) => {
+export const EditView = observer(({ gameState }: { gameState: DashboardService }) => {
   const [wcck, setWcck] = useState(false);
   const [wccq, setWccq] = useState(false);
   const [bcck, setBcck] = useState(false);
   const [bccq, setBccq] = useState(false);
   const [bFirst, setBFirst] = useState(false);
 
-  const TD = (name: string, img: ReactNode) => {
-    return (
-      <td
-        onClick={() => {
-          playService.editPiece(name);
-        }}>
-        {img}
-      </td>
-    );
-  };
+  const TD = (name: string, img: ReactNode) => (
+    <td onClick={() => gameState.editPiece(name)}>{img}</td>
+  );
 
-  const editDone = () => {
-    playService.editDone(wcck, wccq, bcck, bccq, bFirst);
-    gameState.editMode = false;
-    config.showConfig = true;
-  };
+  const editDone = () => gameState.editDone(wcck, wccq, bcck, bccq, bFirst);
 
   return (
     <div>
@@ -51,10 +39,7 @@ export const EditView = observer(({ gameState }: { gameState: GameState }) => {
           {TD('p', <FaChessPawn className="text-7xl text-black" />)}
         </tr>
         <tr>
-          <td
-            onClick={() => {
-              playService.editPiece(' ');
-            }}>
+          <td onClick={() => gameState.editPiece(' ')}>
             <MdDelete className="text-7xl text-red-500" />
           </td>
           <td colSpan={2}>

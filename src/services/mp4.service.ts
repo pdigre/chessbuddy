@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { config } from '../model/config';
+import { configService } from './index.service';
 
 type Mp4Type = {
   src: string;
@@ -29,13 +29,14 @@ export class Mp4Service {
     if (enable) this.play(emos[Math.floor(Math.random() * emos.length)], title);
   };
   play = (emo: Mp4Type, title: string) => {
-    window.setTimeout(() => mp4service.clear(), (emo.length ?? 10) * 1000 + 1000);
-    mp4service.display(title, emo);
+    window.setTimeout(() => this.clear(), (emo.length ?? 10) * 1000 + 1000);
+    this.display(title, emo);
   };
-  playWinner = (): void => this.playRandom(config.playWinner, 'Winner', this.winner_urls);
+  playWinner = (): void => this.playRandom(configService.playWinner, 'Winner', this.winner_urls);
   playCorrect = (): void =>
-    this.playRandom(config.playCorrect, 'Stockfish would do the same', this.correct_urls);
-  playMistake = (): void => this.playRandom(config.playMistake, 'Mistake', this.mistake_urls);
+    this.playRandom(configService.playCorrect, 'Stockfish would do the same', this.correct_urls);
+  playMistake = (): void =>
+    this.playRandom(configService.playMistake, 'Mistake', this.mistake_urls);
 
   playAll = (): void => {
     this.prev++;
@@ -64,5 +65,3 @@ export class Mp4Service {
     { src: '/mp4/no4.mp4', width: 640, height: 360, length: 5 },
   ];
 }
-
-export const mp4service = new Mp4Service();

@@ -4,15 +4,13 @@ import { ConfigGame } from './ConfigGame';
 import { ConfigHuman } from './ConfigHuman';
 import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
-import { connectService } from '../../services/connect.service';
+import { connectService } from '../../services/index.service';
 import { observer } from 'mobx-react';
 import { Config } from '../../model/config';
-import { refreshtimer } from '../../services/control/refreshtimer';
 import { theme } from '../../services/control/theme';
 import { FaChess, FaClock, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';
-import { runInAction } from 'mobx';
 
 export const ConfigDialog = observer(({ config }: { config: Config }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {
@@ -34,19 +32,9 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
   };
 
   // eslint-disable-next-line
-  const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
-    runInAction(() => {
-      config.showTab = newValue as number;
-    });
-  };
-
-  const handleClose = () => {
-    runInAction(() => {
-      config.showConfig = false;
-    });
-    config.store();
-    refreshtimer.startRefreshTimer();
-  };
+  const handleChange = (event: ChangeEvent<{}>, newValue: number) =>
+    config.switchTab(newValue as number);
+  const handleClose = () => config.closeConfig();
 
   const prevent = (event: MouseEvent<HTMLAnchorElement>) => event.preventDefault();
 

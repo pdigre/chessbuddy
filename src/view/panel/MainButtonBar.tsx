@@ -1,12 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
-import { chessRulesService as rules } from '../../services/chessrules.service';
 import { observer } from 'mobx-react';
-import { playService, GameState } from '../../services/play.service';
-import { refreshtimer } from '../../services/control/refreshtimer';
-import { config } from '../../model/config';
-import { analyzerService } from '../../services/analyzer.service';
-import { messageService } from '../../services/message.service';
+import { playService, messageService, configService } from '../../services/index.service';
+import { DashboardService } from '../../services/dashboard.service';
 import {
   MdCancel,
   MdCheck,
@@ -20,15 +16,21 @@ import {
   MdEdit,
 } from 'react-icons/md';
 import { HistoryService } from '../../services/history.service';
-import { runInAction } from 'mobx';
 
 export const MainButtonBar = observer(
-  ({ gameState, history: gameHistory }: { gameState: GameState; history: HistoryService }) => {
+  ({
+    gameState,
+    history: gameHistory,
+  }: {
+    gameState: DashboardService;
+    history: HistoryService;
+  }) => {
     const isGotoHist = gameState.showHist && gameHistory.markHist >= 0;
+    const isHistUndo = !gameState.showHist && gameState.markLog >= 0;
+    const isPlayUndo = playService.isPlaying && gameState.showUndo;
+
     const playHandler = () => {
       if (playService.isComplete) playService.reset();
-      const isHistUndo = !gameState.showHist && gameState.markLog >= 0;
-      const isPlayUndo = gameState.isPlaying && gameState.showUndo;
       if (isHistUndo || isPlayUndo) {
         messageService.display(
           'Undo',
@@ -42,42 +44,17 @@ export const MainButtonBar = observer(
           yes => {
             messageService.clear();
             if (yes == 'Yes') {
-              playService.log = playService.log.slice(
-                0,
-                isPlayUndo ? gameState.undopos : gameState.markLog
+              playService.initGame(
+                playService.log.slice(0, isPlayUndo ? gameState.undopos : gameState.markLog)
               );
-              playService.fen = rules.replay(playService.log);
-              refreshtimer.startRefreshTimer();
-              analyzerService.cp = 0;
-              analyzerService.help = [];
             }
-            runInAction(() => {
-              gameState.markLog = -1;
-            });
+            gameState.setMarkLog(-1);
           }
         );
         return;
       }
-      runInAction(() => {
-        gameState.isPlaying = !gameState.isPlaying;
-      });
-      gameState.run();
+      playService.setPlaying(!playService.isPlaying);
     };
-
-    const histHandler = () =>
-      runInAction(() => {
-        gameState.showHist = !gameState.showHist;
-      });
-
-    const configHandler = () => {
-      runInAction(() => {
-        config.showConfig = true;
-        gameState.isPlaying = false;
-      });
-    };
-
-    const isHistUndo = !gameState.showHist && gameState.markLog >= 0;
-    const isPlayUndo = gameState.isPlaying && gameState.showUndo;
 
     const PanelButton = (props: { children: ReactElement; onClick: () => void }) => {
       return (
@@ -96,16 +73,16 @@ export const MainButtonBar = observer(
         <PanelButton onClick={playHandler}>
           {isHistUndo || isPlayUndo ? (
             <MdUndo className="text-3xl" />
-          ) : gameState.isPlaying ? (
+          ) : playService.isPlaying ? (
             <MdPlayArrow className="text-3xl" />
           ) : (
             <MdPause className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={histHandler}>
+        <PanelButton onClick={() => gameState.toggleHistory()}>
           {isGotoHist ? (
             <MdInput className="text-3xl" />
-          ) : gameState.editMode ? (
+          ) : gameState.showEdit ? (
             <MdEdit className="text-3xl" />
           ) : gameState.showHist ? (
             <MdOutlineFolderOpen className="text-3xl" />
@@ -113,7 +90,7 @@ export const MainButtonBar = observer(
             <MdOutlineHistory className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={configHandler}>
+        <PanelButton onClick={() => configService.openConfig()}>
           <MdSettings className="text-3xl" />
         </PanelButton>
       </ButtonGroup>

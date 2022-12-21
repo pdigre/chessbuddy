@@ -56,4 +56,3 @@ export class OpeningsService {
     return '';
   };
 }
-export const openingsService = new OpeningsService();

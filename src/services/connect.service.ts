@@ -1,8 +1,7 @@
 import { Human } from '../model/human';
-import { historyService } from './history.service';
-import { deviceInfo } from '../resources/library';
+import {} from '../resources/library';
 import { makeAutoObservable } from 'mobx';
-import { messageService } from './message.service';
+import { historyService, messageService, utilService } from './index.service';
 
 export type RESP = { stored: number; games: string[] };
 
@@ -13,7 +12,7 @@ export class ConnectService {
 
   connectREST: (human: Human) => void = async human => {
     const games1 = historyService.getFilteredGames(human.name);
-    const connect = { email: human.email, device: deviceInfo, games: games1.join('\n') };
+    const connect = { email: human.email, device: utilService, games: games1.join('\n') };
     const url = window.document.location.hostname == 'http://chess.digre.com';
     await fetch(url + '/api.php', {
       method: 'POST',
@@ -38,4 +37,3 @@ export class ConnectService {
     );
   };
 }
-export const connectService = new ConnectService();

@@ -26,8 +26,6 @@ export class MessageService {
     this.title = title;
     this.msg = msg;
     this.buttons = buttons;
-    this.response = response ?? (() => messageService.clear());
+    this.response = response ?? (() => this.clear());
   };
 }
-
-export const messageService = new MessageService();
