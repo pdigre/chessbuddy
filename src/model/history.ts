@@ -2,10 +2,10 @@ import { ChessRulesService } from '../services/chessrules.service';
 import { FEN } from './fen';
 
 export class Games {
-  constructor(public games: Game[]) {}
+  constructor(public games: History[]) {}
 }
 
-export class Game {
+export class History {
   constructor(
     public id: string,
     public date: Date,
@@ -17,10 +17,10 @@ export class Game {
     public fen: string
   ) {}
 
-  public static create(txt: string): Game | undefined {
-    const split = Game.readGame(txt)?.split(';');
+  public static create(txt: string): History | undefined {
+    const split = History.readHistory(txt)?.split(';');
     return split
-      ? new Game(
+      ? new History(
           split[0],
           new Date(Number.parseInt(split[0], 36)),
           split[1],
@@ -33,9 +33,9 @@ export class Game {
       : undefined;
   }
 
-  public static readGame: (x: string) => string | undefined = x => {
+  public static readHistory: (x: string) => string | undefined = x => {
     const s = x.split(';');
-    const date = Game.readDate(s[0]);
+    const date = History.readDate(s[0]);
     if (!date) return undefined;
     if (s.length == 6) {
       return date + ';' + s[1] + ';' + s[2] + ';' + s[3] + ';' + s[4] + ';' + s[5];

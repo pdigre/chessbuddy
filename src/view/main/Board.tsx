@@ -1,21 +1,22 @@
 import React, { useCallback } from 'react';
-import {
-  ChessRulesService,
-  chessRulesService as rules,
-  Square,
-} from '../../services/chessrules.service';
 import { AnalyzerService } from '../../services/analyzer.service';
 import { Human } from '../../model/human';
-import { playService, GameState } from '../../services/play.service';
+import { DashboardService } from '../../services/dashboard.service';
 import { Chessboard } from 'react-chessboard';
 import { Config } from '../../model/config';
 import { RefreshTimer } from '../../services/control/refreshtimer';
 import { Rendering } from '../../services/control/rendering';
 import { observer } from 'mobx-react';
-import { messageService } from '../../services/message.service';
+import {
+  messageService,
+  mp4service,
+  chessRulesService as rules,
+  playService,
+} from '../../services/index.service';
 import { ButtonType } from '../config/ConfigWidgets';
 import { FaChessBishop, FaChessKnight, FaChessQueen, FaChessRook } from 'react-icons/fa';
-import { mp4service } from '../../services/mp4.service';
+import { FEN } from '../../model/fen';
+import { Square } from 'chess.js';
 
 export const Board = observer(
   ({
@@ -26,7 +27,7 @@ export const Board = observer(
     refreshTimer,
   }: {
     helper: AnalyzerService;
-    gameState: GameState;
+    gameState: DashboardService;
     rendering: Rendering;
     config: Config;
     refreshTimer: RefreshTimer;
@@ -66,7 +67,7 @@ export const Board = observer(
       if (!move) {
         return;
       }
-      if (gameState.isPlaying || isHuman) {
+      if (playService.isPlaying || isHuman) {
         const action = move[1];
         if (action.promotion && isHuman) {
           const buttons: ButtonType[] = [
@@ -96,7 +97,7 @@ export const Board = observer(
     const r180 = config.rotation > 1;
 
     const onDragStart = (piece: string, from: Square) => {
-      if (gameState.editMode) return true;
+      if (gameState.showEdit) return true;
       const player = playService.nextPlayer();
       if (player instanceof Human && !playService.isComplete) {
         const from2 = r90 ? rules.leftSquare(from) : from;
@@ -110,8 +111,8 @@ export const Board = observer(
     };
 
     const onMovePiece = (from: Square, to: Square) => {
-      if (gameState.editMode) {
-        playService.editMove(from, to);
+      if (gameState.showEdit) {
+        gameState.editMove(from, to);
         return true;
       }
       if (helper.help.length > 1 && helper.help[0] == to && helper.help[1] == from)
@@ -129,13 +130,13 @@ export const Board = observer(
 
     const showMarkers = () => {
       const markers = {};
-      if (gameState.editMode) {
+      if (gameState.showEdit) {
         if (gameState.editSquare != '') {
           Object.assign(markers, { [gameState.editSquare]: editStyle });
         }
       }
       if (config.showFacts) {
-        gameState.pgns.forEach(x =>
+        playService.pgns.forEach(x =>
           Object.assign(markers, { [r90 ? rules.rightSquare(x) : x]: pgnStyle })
         );
       }
@@ -153,10 +154,14 @@ export const Board = observer(
       );
       return markers;
     };
-    const fen = refreshTimer.showBlank ? ChessRulesService.CLEAR_GAME : playService.fen;
+    const fen = refreshTimer.showBlank
+      ? FEN.CLEAR_GAME
+      : gameState.showEdit
+      ? gameState.editFen
+      : playService.fen;
 
     const onSquareClick = (square: Square) => {
-      if (gameState.editMode) gameState.editSquare = square;
+      if (gameState.showEdit) gameState.editSquare = square;
       console.log('hi:' + square);
     };
     return (

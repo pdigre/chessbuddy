@@ -1,7 +1,6 @@
-import { makeAutoObservable } from 'mobx';
-import { storage } from './storage.service';
-import { playService } from './play.service';
-import { Game, Games } from '../model/game';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { History, Games } from '../model/history';
+import { storageService, playService, historyService } from './index.service';
 
 /*
  * History of previous games, should store a maximum locally
@@ -13,15 +12,15 @@ export class HistoryService {
   constructor() {
     makeAutoObservable(this);
     this.history = this.loadHistory();
-    Game.oldgames.forEach(x => this.history.push(x));
-    const arr = this.history.map(x => Game.create(x)).filter(x => x) as Game[];
+    History.oldgames.forEach(x => this.history.push(x));
+    const arr = this.history.map(x => History.create(x)).filter(x => x) as History[];
     const games = new Games(arr);
-    storage.storeObject('games', games);
+    storageService.storeObject('games', games);
   }
 
   storeGame: VoidFunction = () => {
     this.history.push(playService.toString());
-    storage.storeLines(HistoryService.storage, this.history);
+    storageService.storeLines(HistoryService.storage, this.history);
   };
 
   importFromServer: (games: string[]) => void = games => {
@@ -65,7 +64,7 @@ export class HistoryService {
 
   private static upload: (text: string, history: string[]) => void = (text, history) => {
     const lines = text.replace(/\r/gi, '').split('\n');
-    const games = lines.map(x => Game.readGame(x)).filter(x => x) as string[];
+    const games = lines.map(x => History.readHistory(x)).filter(x => x) as string[];
     const h1 = history;
     games.forEach(game => {
       const key = game.split(';')[0];
@@ -75,13 +74,21 @@ export class HistoryService {
   };
 
   private loadHistory() {
-    const h1 = storage.restoreLines(HistoryService.storage, []);
-    const h2 = h1.map(x => Game.readGame(x)).filter(x => x) as string[];
+    const h1 = storageService.restoreLines(HistoryService.storage, []);
+    const h2 = h1.map(x => History.readHistory(x)).filter(x => x) as string[];
     h2.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
     return h2;
   }
 
   public static storage = 'log';
-}
 
-export const historyService = new HistoryService();
+  // ****************************
+  // Actions
+  // ****************************
+
+  setMarkHist(n: number) {
+    runInAction(() => {
+      this.markHist = n;
+    });
+  }
+}

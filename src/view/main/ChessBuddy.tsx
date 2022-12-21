@@ -1,18 +1,23 @@
 import React from 'react';
-import { playService, gameState } from '../../services/play.service';
-import { config } from '../../model/config';
+import {
+  playService,
+  analyzerService,
+  messageService,
+  mp4service,
+  gameState,
+  historyService,
+  configService,
+} from '../../services/index.service';
 import { FenInfo } from './FenInfo';
 import { CP } from './CP';
 import { ConfigDialog } from '../config/ConfigDialog';
 import { Board } from './Board';
 import { PlayerInfoBar } from './PlayerInfoBar';
-import { analyzerService } from '../../services/analyzer.service';
+import {} from '../../services/analyzer.service';
 import { AboutDialog } from './AboutDialog';
 import { rendering } from '../../services/control/rendering';
 import { refreshtimer } from '../../services/control/refreshtimer';
 import packageInfo from '../../../package.json';
-import { messageService } from '../../services/message.service';
-import { mp4service } from '../../services/mp4.service';
 import { Mp4Dialog } from './Mp4Dialog';
 import { MessageDialog } from './MessageDialog';
 import { Theme } from '../../services/control/theme';
@@ -22,7 +27,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { MdRefresh } from 'react-icons/md';
 import { MainButtonBar } from '../panel/MainButtonBar';
 import { MainView } from '../panel/MainView';
-import { historyService } from '../../services/history.service';
 
 const lightTheme = createTheme({
   palette: {
@@ -82,17 +86,17 @@ export const ChessBuddy = observer(({ theme }: { theme: Theme }) => {
       <CssBaseline />
       <div className={theme.darkTheme ? 'dark' : 'light'}>
         <div className="w-[1024px] h-[748px] bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row">
-          <CP helper={analyzerService} rendering={rendering} config={config} />
+          <CP helper={analyzerService} rendering={rendering} config={configService} />
           <div className="flex flex-col flex-grow">
-            <PlayerInfoBar isTop={true} game={playService} config={config} />
+            <PlayerInfoBar isTop={true} game={playService} config={configService} />
             <Board
               helper={analyzerService}
               gameState={gameState}
               rendering={rendering}
-              config={config}
+              config={configService}
               refreshTimer={refreshtimer}
             />
-            <PlayerInfoBar isTop={false} game={playService} config={config} />
+            <PlayerInfoBar isTop={false} game={playService} config={configService} />
           </div>
           <div className="flex flex-col w-full text-center">
             <h3 className="h-8 text-lg dark:text-white flex flex-row">
@@ -107,7 +111,7 @@ export const ChessBuddy = observer(({ theme }: { theme: Theme }) => {
           </div>
           <MessageDialog message={messageService} />
           <Mp4Dialog mp4={mp4service} />
-          <ConfigDialog config={config} />
+          <ConfigDialog config={configService} />
         </div>
       </div>
     </ThemeProvider>

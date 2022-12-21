@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { gameState } from '../services/play.service';
+import { playService } from '../services/index.service';
 
 export class Timer {
   elapsed = 0;
@@ -7,7 +7,7 @@ export class Timer {
   constructor() {
     makeAutoObservable(this);
     setInterval(() => {
-      this.update(gameState.isPlaying);
+      this.update(playService.isPlaying);
     }, 1000);
   }
 

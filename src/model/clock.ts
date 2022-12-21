@@ -7,17 +7,15 @@ export type TimeRule = {
 };
 
 export class Clock implements ListItem {
-  public static storage = 'clocks';
   constructor(public name: string, public time: TimeRule[]) {}
+  getName: () => string = () => this.name.trim();
+  getDescription: () => string = () => Clock.time2string(this.time);
 
   getAllowed(moves: number): number {
-    let t = 0;
-    this.time.forEach(time => {
-      if (moves >= time.from) {
-        t += time.plus * 60 + time.each * (moves - time.from);
-      }
-    });
-    return t;
+    const total = this.time
+      .filter(time => moves >= time.from)
+      .reduce((total, time) => time.plus * 60 + time.each * (moves - time.from), 0);
+    return total;
   }
 
   static string2time: (text: string) => TimeRule[] = text =>
@@ -38,9 +36,6 @@ export class Clock implements ListItem {
     time
       .map(s => `${s.from ? s.plus : ''}${s.plus ? '+' + s.plus : ''}${s.each ? '/' + s.each : ''}`)
       .join(',');
-
-  getName: () => string = () => this.name.trim();
-  getDescription: () => string = () => Clock.time2string(this.time);
 
   public static init = [
     new Clock('No limit', []),

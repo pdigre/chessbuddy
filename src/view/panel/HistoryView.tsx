@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react';
-import { chessRulesService as rules } from '../../services/chessrules.service';
+import { chessRulesService as rules } from '../../services/index.service';
 import { observer } from 'mobx-react';
 import { HistoryService } from '../../services/history.service';
 import { GridWidget as GridWidget } from './GridWidget';

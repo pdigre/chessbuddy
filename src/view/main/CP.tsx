@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { AnalyzerService } from '../../services/analyzer.service';
 import { Rendering } from '../../services/control/rendering';
 import { Config } from '../../model/config';
-import { mp4service } from '../../services/mp4.service';
+import { mp4service } from '../../services/index.service';
 
 let prevcp = 0;
 

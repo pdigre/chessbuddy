@@ -77,5 +77,3 @@ export class BotService {
       : undefined;
   }
 }
-
-export const botService = new BotService();

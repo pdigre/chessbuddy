@@ -1,13 +1,11 @@
 import type { Move, ShortMove, Square } from 'chess.js';
 import { Chess, SQUARES, QUEEN } from 'chess.js';
+import { FEN } from '../model/fen';
 
 export type Fen = string;
 export type { Square, Move, ShortMove };
 
 export class ChessRulesService {
-  static NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-  static CLEAR_GAME = '8/8/8/8/8/8/8/8 w KQkq - 0 1';
-
   isEndMove: (san: string) => boolean = (san: string) =>
     san == '1-0' || san == '0-1' || san == '1/2-1/2' || san?.endsWith('#');
 
@@ -29,7 +27,7 @@ export class ChessRulesService {
   };
 
   replay = (moves: string[], to?: number): Fen => {
-    const game = Chess(ChessRulesService.NEW_GAME);
+    const game = Chess(FEN.NEW_GAME);
     const n = to != undefined ? to : moves.length;
     for (let i = 0; i <= n; i++) {
       game.move(moves[i]);
@@ -47,55 +45,16 @@ export class ChessRulesService {
     return undefined;
   };
 
-  getBrd = (fen: string) => {
-    const n = fen.indexOf(' ');
-    let brd = '';
-    for (let i = 0; i < n; i++) {
-      const c = fen.charAt(i);
-      if (c == '/') continue;
-      brd += c > '0' && c < '9' ? '        '.substring(0, Number.parseInt(c)) : c;
-    }
-    return brd;
-  };
-
   leftBrd = (brd: string) => {
     let turn = '';
     for (let i = 0; i < 64; i++) turn += brd.charAt(this.leftwards(i));
     return turn;
   };
 
-  brd2fen = (brd: string) => {
-    let fen = '';
-    let spaces = 0;
-    for (let i = 0; i < 64; i++) {
-      const c = brd.charAt(i);
-      if (i % 8 == 0 && i) {
-        if (spaces) {
-          fen += spaces;
-          spaces = 0;
-        }
-        fen += '/';
-      }
-      if (c == ' ') {
-        spaces++;
-      } else {
-        if (spaces) {
-          fen += spaces;
-          spaces = 0;
-        }
-        fen += c;
-      }
-    }
-    if (spaces) {
-      fen += spaces;
-    }
-    return fen;
-  };
-
   leftFen: (fen: string) => string = fen => {
-    const brd = this.getBrd(fen);
+    const brd = FEN.fen2brd(fen);
     const brd2 = this.leftBrd(brd);
-    return this.brd2fen(brd2) + fen.substring(fen.indexOf(' '));
+    return FEN.brd2fen(brd2) + fen.substring(fen.indexOf(' '));
   };
 
   leftwards: (i: number) => number = i => {
@@ -114,4 +73,3 @@ export class ChessRulesService {
 
   rightSquare: (c: Square) => Square = (c: Square) => SQUARES[this.rightwards(SQUARES.indexOf(c))];
 }
-export const chessRulesService = new ChessRulesService();

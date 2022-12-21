@@ -1,16 +1,8 @@
 import { ListItem } from './config';
-
-export class UciEngineDef {
-  constructor(public name: string, public path: string) {}
-}
-
-export const UciEngineDefs: UciEngineDef[] = [
-  new UciEngineDef('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
-  new UciEngineDef('Lozza', 'bots/lozza-1.18/lozza.js'),
-];
+import { Engine, Engines } from './engine';
 
 export class Bot implements ListItem {
-  uciEngineDef: UciEngineDef = UciEngineDefs[0];
+  uciEngineDef: Engine = Engines[0];
 
   constructor(
     public name: string,
@@ -19,9 +11,6 @@ export class Bot implements ListItem {
     public time: number,
     public depth: number
   ) {}
-
-  getUciEngineDef = () => UciEngineDefs.find(x => x.name == this.engine);
-
   getName: () => string = () => this.name;
   getDescription: () => string = () =>
     `${this.uciEngineDef.name},${this.skill},${this.time ?? ''},${this.depth ?? ''}`;

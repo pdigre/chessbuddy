@@ -3,8 +3,7 @@ import { observer } from 'mobx-react';
 import { ConfigButton } from './ConfigWidgets';
 import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { AddClockDialog } from './AddClockDialog';
-import { Config, EditMode } from '../../model/config';
-import { runInAction } from 'mobx';
+import { Config, ConfigMode } from '../../model/config';
 
 export const ConfigClock = observer(({ config }: { config: Config }) => {
   const items = config.clocks;
@@ -12,27 +11,12 @@ export const ConfigClock = observer(({ config }: { config: Config }) => {
 
   const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
     if (event.target instanceof HTMLTableCellElement) {
-      const id = (event.target.parentNode as HTMLTableRowElement).id;
-      const num = Number.parseInt(id);
-      runInAction(() => {
-        config.cursor = num == config.cursor ? -1 : num;
-      });
+      config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
     }
   };
-  const doDelete = () => {
-    items.splice(config.cursor, 1);
-    runInAction(() => {
-      config.cursor = -1;
-    });
-  };
-  const doEdit = () =>
-    runInAction(() => {
-      config.dialog = EditMode.EditBot;
-    });
-  const doAdd = () =>
-    runInAction(() => {
-      config.dialog = EditMode.AddBot;
-    });
+  const doAdd = () => config.openDialog(ConfigMode.AddClock);
+  const doEdit = () => config.openDialog(ConfigMode.EditClock);
+  const doDelete = () => config.deleteItem(items);
 
   return (
     <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">

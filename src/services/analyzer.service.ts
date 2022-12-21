@@ -1,7 +1,7 @@
 import type { Fen } from './chessrules.service';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
-import { UciEngineDefs } from '../model/bot';
+import { Engines } from '../model/engine';
 
 type AnalyzerReturn = { moves: string[]; cp: number | undefined };
 type AnalyzerCallback = (ret: AnalyzerReturn) => void;
@@ -17,7 +17,7 @@ class AnalyzerBot {
   }
 
   helpWorker = (): LoadHelper => () => {
-    const worker = new Worker(UciEngineDefs[0].path);
+    const worker = new Worker(Engines[0].path);
     let resolver: AnalyzerCallback | null = null;
     let cp: number | undefined = 0;
     let moves: string[] = [];
@@ -90,9 +90,12 @@ export class AnalyzerService {
       const squares: Set<Square> = new Set();
       moves.forEach(x => squares.add(x as Square));
       this.help = [...squares];
-      if (cp) this.cp = isWhiteTurn ? cp : -cp;
+      if (cp) {
+        runInAction(() => {
+          this.cp = isWhiteTurn ? cp : -cp;
+        });
+      }
     });
   };
 }
 
-export const analyzerService = new AnalyzerService();

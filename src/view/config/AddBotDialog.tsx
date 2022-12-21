@@ -6,18 +6,19 @@ import {
   DialogTitle,
 } from '@mui/material';
 import React from 'react';
-import { Bot, UciEngineDefs } from '../../model/bot';
+import { Bot } from '../../model/bot';
 import { ConfigButton, ConfigSelect, ConfigText } from './ConfigWidgets';
 import { observer } from 'mobx-react';
-import { messageService } from '../../services/message.service';
+import { messageService } from '../../services/index.service';
 import { MdAdd, MdSave } from 'react-icons/md';
-import { Config, EditMode } from '../../model/config';
+import { Config, ConfigMode } from '../../model/config';
+import { Engines } from '../../model/engine';
 
 export const AddBotDialog = observer(({ config }: { config: Config }) => {
-  const handleClick = () => (config.dialog = EditMode.None);
-  const isEdit = config.dialog === EditMode.EditBot;
+  const handleClick = () => (config.dialog = ConfigMode.None);
+  const isEdit = config.dialog === ConfigMode.EditBot;
   const items = config.bots;
-  const item = isEdit ? (items[config.cursor] as Bot) : new Bot('', UciEngineDefs[0].name, 0, 0, 0);
+  const item = isEdit ? (items[config.cursor] as Bot) : new Bot('', Engines[0].name, 0, 0, 0);
 
   const save = () => {
     if (!item.name.length) {
@@ -52,10 +53,9 @@ export const AddBotDialog = observer(({ config }: { config: Config }) => {
     } else {
       items.push(item);
     }
-    config.dialog = EditMode.None;
-    config.cursor = -1;
+    config.closeDialog();
   };
-  const engineNames = Array.from(UciEngineDefs.map(x => x.name));
+  const engineNames = Array.from(Engines.map(x => x.name));
 
   const toInt: (num: string) => number = (num: string) => {
     const parsed = Number.parseInt(num);
@@ -71,7 +71,7 @@ export const AddBotDialog = observer(({ config }: { config: Config }) => {
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={config.dialog === EditMode.AddBot || config.dialog === EditMode.EditBot}>
+      open={config.dialog === ConfigMode.AddBot || config.dialog === ConfigMode.EditBot}>
       <DialogTitle id="message">{isEdit ? 'Edit' : 'Add'} Bot Player</DialogTitle>
       <DialogContent>
         <DialogContentText>

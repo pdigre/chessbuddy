@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigText } from './ConfigWidgets';
-import { messageService } from '../../services/message.service';
+import { messageService } from '../../services/index.service';
 import {
   Dialog,
   DialogActions,
@@ -11,11 +11,11 @@ import {
 } from '@mui/material';
 import { MdAdd, MdSave } from 'react-icons/md';
 import { Clock } from '../../model/clock';
-import { Config, EditMode } from '../../model/config';
+import { Config, ConfigMode } from '../../model/config';
 
 export const AddClockDialog = observer(({ config }: { config: Config }) => {
-  const handleClick = () => (config.dialog = EditMode.None);
-  const isEdit = config.dialog === EditMode.EditClock;
+  const handleClick = () => (config.dialog = ConfigMode.None);
+  const isEdit = config.dialog === ConfigMode.EditClock;
   const items = config.clocks;
   const item = isEdit ? (items[config.cursor] as Clock) : new Clock('', []);
 
@@ -29,8 +29,7 @@ export const AddClockDialog = observer(({ config }: { config: Config }) => {
     } else {
       items.push(item);
     }
-    config.dialog = EditMode.None;
-    config.cursor = -1;
+    config.closeDialog();
   };
 
   return (
@@ -38,7 +37,7 @@ export const AddClockDialog = observer(({ config }: { config: Config }) => {
       aria-labelledby="message"
       onClose={handleClick}
       className="text-center text-lg"
-      open={config.dialog === EditMode.AddClock || config.dialog === EditMode.EditClock}>
+      open={config.dialog === ConfigMode.AddClock || config.dialog === ConfigMode.EditClock}>
       <DialogTitle id="message">Add Clock</DialogTitle>
       <DialogContent>
         <DialogContentText>

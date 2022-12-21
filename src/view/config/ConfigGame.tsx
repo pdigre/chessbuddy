@@ -1,12 +1,11 @@
 import React from 'react';
 import { ConfigButton, ConfigSelect } from './ConfigWidgets';
 import { MdExitToApp, MdPlayCircle, MdClear, MdEdit } from 'react-icons/md';
-import { gameState, playService } from '../../services/play.service';
 import { observer } from 'mobx-react';
-import { messageService } from '../../services/message.service';
 import { FaRegHandshake, FaChessKing } from 'react-icons/fa';
 import { Config } from '../../model/config';
 import { runInAction } from 'mobx';
+import { gameState, messageService, playService } from '../../services/index.service';
 
 export const ConfigGame = observer(({ config }: { config: Config }) => {
   const players = [...config.humans, ...config.bots];
@@ -40,6 +39,7 @@ export const ConfigGame = observer(({ config }: { config: Config }) => {
 
   const playAction = () => {
     config.store();
+    config.closeConfig();
     runInAction(() => {
       config.showConfig = false;
       playService.playAction();
@@ -48,10 +48,7 @@ export const ConfigGame = observer(({ config }: { config: Config }) => {
 
   const editAction = () => {
     config.store();
-    runInAction(() => {
-      gameState.editMode = true;
-      config.showConfig = false;
-    });
+    gameState.editStart();
   };
 
   return (
