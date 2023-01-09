@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 export class Theme {
-  darkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  darkTheme = false;
 
   constructor() {
     makeAutoObservable(this);

@@ -1,6 +1,6 @@
 {
   "name": "chesbuddy",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -14,7 +14,7 @@
     "mobx": "^6.7.0",
     "mobx-react": "^7.6.0",
     "react": "^18.2.0",
-    "react-chessboard": "^1.3.0",
+    "react-chessboard": "^2.0.7",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-scripts": "^5.0.1",

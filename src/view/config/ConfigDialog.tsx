@@ -7,7 +7,6 @@ import { ConfigBot } from './ConfigBot';
 import { connectService } from '../../services/index.service';
 import { observer } from 'mobx-react';
 import { Config } from '../../model/config';
-import { theme } from '../../services/control/theme';
 import { FaChess, FaClock, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';
@@ -95,7 +94,7 @@ export const ConfigDialog = observer(({ config }: { config: Config }) => {
         <ConfigGame config={config} />
       </TabPanel>
       <TabPanel index={1}>
-        <ConfigDisplay config={config} theme={theme} />
+        <ConfigDisplay config={config} />
       </TabPanel>
       <TabPanel index={2}>
         <ConfigHuman config={config} server={connectService} />

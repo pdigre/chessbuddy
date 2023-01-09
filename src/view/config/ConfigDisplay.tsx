@@ -2,16 +2,20 @@ import React from 'react';
 import { Config } from '../../model/config';
 import { observer } from 'mobx-react';
 import { ConfigButton, ConfigCheckbox } from './ConfigWidgets';
-import { Theme } from '../../services/control/theme';
 import { MdRotateRight } from 'react-icons/md';
 import { runInAction } from 'mobx';
 
-export const ConfigDisplay = observer(({ config, theme }: { config: Config; theme: Theme }) => {
+export const ConfigDisplay = observer(({ config }: { config: Config }) => {
   return (
     <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
       <ConfigCheckbox
-        checked={theme.darkTheme}
-        onChange={() => runInAction(() => (theme.darkTheme = !theme.darkTheme))}
+        checked={config.darkTheme}
+        onChange={() =>
+          runInAction(() => {
+            config.darkTheme = !config.darkTheme;
+            config.applyTheme();
+          })
+        }
         label="Use dark theme"
       />
       <ConfigCheckbox

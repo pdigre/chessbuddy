@@ -15,4 +15,3 @@ export class Storage {
     return data ? (JSON.parse(data) as T) : init;
   };
 }
-
