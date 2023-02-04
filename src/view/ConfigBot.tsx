@@ -8,7 +8,7 @@ import {
   ConfigText,
 } from './ConfigWidgets';
 import { observer } from 'mobx-react';
-import { ConfigService, ListType } from '../model/config';
+import { ConfigService, ListType } from '../service/config.service';
 import { Bot } from '../model/bot';
 import { Engines } from '../model/engine';
 

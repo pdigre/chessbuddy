@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react';
-import { ConfigService, ConfigProp, ListItem } from '../model/config';
+import { ConfigService, ConfigProp, ListItem } from '../service/config.service';
 import { observer } from 'mobx-react';
 import { ConfigButton } from './ConfigWidgets';
 import { MdBluetoothConnected } from 'react-icons/md';

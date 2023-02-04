@@ -12,7 +12,7 @@ import {
   ConfigText,
 } from './ConfigWidgets';
 import { MdDownload, MdOnlinePrediction, MdUpload } from 'react-icons/md';
-import { ConfigService, ListType } from '../model/config';
+import { ConfigService, ListType } from '../service/config.service';
 
 export const ConfigHuman = observer(
   ({ config, connect }: { config: ConfigService; connect: ConnectService }) => {

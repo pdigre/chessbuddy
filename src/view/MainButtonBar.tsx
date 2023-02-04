@@ -21,17 +21,15 @@ export const MainButtonBar = observer(
     const isHistUndo = !dashboard.showHist && dashboard.markLog >= 0;
     const isPlayUndo = playService.isPlaying && dashboard.showUndo;
 
-    const PanelButton = (props: { children: ReactElement; onClick: () => void }) => {
-      return (
-        <Button
-          className="h-14 flex-grow bg-green-700"
-          sx={{ backgroundColor: 'darkgreen' }}
-          onClick={props.onClick}
-          variant="contained">
-          {props.children}
-        </Button>
-      );
-    };
+    const PanelButton = (props: { children: ReactElement; onClick: () => void }) => (
+      <Button
+        className="h-14 flex-grow bg-green-700"
+        sx={{ backgroundColor: 'darkgreen' }}
+        onClick={props.onClick}
+        variant="contained">
+        {props.children}
+      </Button>
+    );
 
     return (
       <ButtonGroup color="primary" aria-label="outlined primary button group" className="w-full">

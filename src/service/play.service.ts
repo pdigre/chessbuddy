@@ -3,6 +3,7 @@ import { San } from './openings.service';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Chess, Square, WHITE } from 'chess.js';
 import { Clock } from '../model/clock';
+import { toMMSS } from '../resources/library';
 import { BotRunner } from './bot.service';
 import {
   analyzerService,
@@ -159,24 +160,6 @@ export class PlayService {
         }
       });
     }
-  };
-
-  findCastlingMarkers = () => {
-    const sqs: Square[] = [];
-    const cc = this.fen.split(' ')[2];
-    if (cc.includes('Q')) {
-      sqs.push('a1');
-    }
-    if (cc.includes('K')) {
-      sqs.push('h1');
-    }
-    if (cc.includes('q')) {
-      sqs.push('a8');
-    }
-    if (cc.includes('k')) {
-      sqs.push('h8');
-    }
-    return sqs;
   };
 
   nextPlayer: () => BotRunner | Human | undefined = () => {
@@ -389,8 +372,10 @@ export class PlayService {
     }
   }
   markCastling(func: (x: Square) => void) {
-    this.findCastlingMarkers().forEach(x => func(x));
+    rulesService.getCastlingSquares(this.fen).forEach(x => func(x));
   }
+
+  // Log / History Panel
 
   playButtonHandler: VoidFunction = () => {
     const isHistUndo = !dashboardService.showHist && dashboardService.markLog >= 0;
@@ -416,5 +401,75 @@ export class PlayService {
       return;
     }
     this.setPlaying(!this.isPlaying);
+  };
+
+  enterLogCheck = () => {
+    if (historyService.markHist >= 0) {
+      if (this.isComplete || this.log.length == 0) {
+        messageService.display(
+          'Load game',
+          'Do you want to look at this game?',
+          YESNO_BUTTONS,
+          reply => {
+            if (reply == 'Yes') {
+              this.loadGame();
+            }
+            messageService.clear();
+          }
+        );
+      } else {
+        messageService.display('Load game', 'You have to end current game to load previous games', [
+          { label: 'Ok' },
+        ]);
+      }
+      historyService.setMarkHist(-1);
+    }
+  };
+
+  getLogRows = () => {
+    const rows: string[][] = [];
+    const log = this.log;
+    for (let i = 0; i < log.length / 2; i++) {
+      rows[i] = ['', ''];
+    }
+    log.forEach((t, i) => {
+      const l = Math.floor(i / 2),
+        c = i % 2;
+      rows[l][c] = t;
+    });
+    return rows;
+  };
+
+  // PlayerInfo
+
+  getTimerText = (elapsed: number) => {
+    const sound_click = new Audio('/mp3/click.mp3');
+    const sound_error = new Audio('/mp3/buzzer.mp3');
+    const startTime = Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
+    const current = Math.floor(elapsed) + startTime;
+    if (!this.allowed) {
+      return current;
+    }
+    const remains = this.allowed - current;
+    if (remains < 11) {
+      sound_click.play().then();
+    }
+    if (remains < 0) {
+      sound_error.play().then();
+      this.outOfTime();
+    }
+    return toMMSS(this.allowed - current);
+  };
+
+  getPlayerInfo = (isTop: boolean) => {
+    const isWhite = isTop == configService.rotation > 1;
+    const otherTime = isWhite ? this.wtime : this.btime;
+    return {
+      other: toMMSS(this.allowed ? this.allowed - otherTime : otherTime),
+      label: isWhite ? `White: ${configService.white}` : `Black: ${configService.black}`,
+      showTicker: isWhite == this.isWhiteTurn,
+      banner: isWhite != this.isWhiteTurn && this.isComplete ? ' ** Winner **' : '',
+      isTextRight: isTop && configService.rotation % 2 == 1,
+    };
   };
 }

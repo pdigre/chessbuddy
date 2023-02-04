@@ -2,7 +2,7 @@ import React from 'react';
 import { ConfigButton, ConfigSelect } from './ConfigWidgets';
 import { MdExitToApp, MdPlayCircle, MdClear, MdEdit } from 'react-icons/md';
 import { observer } from 'mobx-react';
-import { ConfigService } from '../model/config';
+import { ConfigService } from '../service/config.service';
 import { playService } from '../service/index.service';
 
 export const ConfigGame = observer(({ config }: { config: ConfigService }) => {

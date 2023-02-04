@@ -72,4 +72,22 @@ export class RulesService {
   leftSquare: (c: Square) => Square = (c: Square) => SQUARES[this.leftwards(SQUARES.indexOf(c))];
 
   rightSquare: (c: Square) => Square = (c: Square) => SQUARES[this.rightwards(SQUARES.indexOf(c))];
+
+  getCastlingSquares = (fen: string) => {
+    const sqs: Square[] = [];
+    const cc = fen.split(' ')[2];
+    if (cc.includes('Q')) {
+      sqs.push('a1');
+    }
+    if (cc.includes('K')) {
+      sqs.push('h1');
+    }
+    if (cc.includes('q')) {
+      sqs.push('a8');
+    }
+    if (cc.includes('k')) {
+      sqs.push('h8');
+    }
+    return sqs;
+  };
 }
