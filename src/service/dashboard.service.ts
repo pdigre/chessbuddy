@@ -30,10 +30,12 @@ export class DashboardService {
       this.undopos = pos;
     });
     window.setTimeout(() => {
-      if (this.showUndo) {
-        this.undopos = 0; // In the case you're already in a UNDO confirmation box.
-      }
-      this.showUndo = false;
+      runInAction(() => {
+        if (this.showUndo) {
+          this.undopos = 0; // In the case you're already in a UNDO confirmation box.
+        }
+        this.showUndo = false;
+      });
     }, 9000);
   };
 

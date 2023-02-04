@@ -50,6 +50,7 @@ type ConfigProps = {
   playMistake: boolean;
   playCorrect: boolean;
   playWinner: boolean;
+  darkTheme: boolean;
 };
 
 export class ConfigService {
@@ -65,6 +66,7 @@ export class ConfigService {
   playMistake!: boolean;
   playCorrect!: boolean;
   playWinner!: boolean;
+  darkTheme!: boolean;
   // Config to store
   humans!: Human[];
   bots!: Bot[];
@@ -90,6 +92,7 @@ export class ConfigService {
       playMistake: false,
       playCorrect: false,
       playWinner: false,
+      darkTheme: window.matchMedia('(prefers-color-scheme: dark)').matches,
     }) as ConfigProps;
     // Cannot use object assign directly on "this" due to MOBX
     this.humans = (restore.humans?.length ? restore.humans : Human.init).map(
@@ -111,6 +114,8 @@ export class ConfigService {
     this.playMistake = restore.playMistake;
     this.playCorrect = restore.playCorrect;
     this.playWinner = restore.playWinner;
+    this.darkTheme = restore.darkTheme;
+    this.applyTheme();
   }
 
   /*
