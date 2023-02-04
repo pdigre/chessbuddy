@@ -2,7 +2,7 @@ import type { Fen } from './rules.service';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
 import { Engines } from '../model/engine';
-import { mp4service } from './index.service';
+import { configService, mp4service, renderingService } from './index.service';
 
 type AnalyzerReturn = { moves: string[]; cp: number | undefined };
 type AnalyzerCallback = (ret: AnalyzerReturn) => void;
@@ -109,5 +109,22 @@ export class AnalyzerService {
     ) {
       mp4service.playMistake();
     }
+  };
+
+  getCpInfo = () => {
+    const cp = this.cp;
+    const blackTop = configService.rotation > 1;
+    const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);
+    const whiteLead = cp > 0;
+    const h = renderingService.height - 150;
+    const x = Math.min(h, cp2);
+    const s = (h - x) / 2 + 75;
+    const isW = whiteLead != blackTop;
+    return {
+      txt: `cp ${cp2} ${whiteLead ? 'white' : 'black'}`,
+      blackTop: blackTop,
+      h1: (isW ? 0 : x) + s + 'px',
+      h2: (isW ? x : 0) + s + 'px',
+    };
   };
 }

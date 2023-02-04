@@ -1,4 +1,4 @@
-import { ConfigService } from '../model/config';
+import { ConfigService } from './config.service';
 import { UtilService } from '../resources/library';
 import { AnalyzerService } from './analyzer.service';
 import { BluetoothService } from './bluetooth.service';

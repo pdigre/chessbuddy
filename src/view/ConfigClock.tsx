@@ -7,7 +7,7 @@ import {
   ConfigSaveButton,
   ConfigText,
 } from './ConfigWidgets';
-import { ConfigService, ListType } from '../model/config';
+import { ConfigService, ListType } from '../service/config.service';
 
 export const ConfigClock = observer(({ config }: { config: ConfigService }) => {
   config.setListType(ListType.Clock);

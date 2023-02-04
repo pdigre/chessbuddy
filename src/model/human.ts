@@ -1,4 +1,4 @@
-import { ConfigProp, ListItem } from './config';
+import { ConfigProp, ListItem } from '../service/config.service';
 
 export class Human implements ListItem {
   constructor(public name: string, public email: string) {}

@@ -15,8 +15,7 @@ import {
 } from '@mui/material';
 import { MdAdd, MdDelete, MdEdit, MdSave } from 'react-icons/md';
 import { observer } from 'mobx-react';
-
-import { ConfigService, ListMode } from '../model/config';
+import { ConfigService, ListMode } from '../service/config.service';
 import { configService, renderingService } from '../service/index.service';
 import { runInAction } from 'mobx';
 
@@ -25,33 +24,29 @@ export const ConfigSelect: React.FC<{
   choices: string[];
   selected: { name?: string | undefined; value: unknown } | undefined;
   setSelected: (name: string) => void;
-}> = ({ label, choices, selected, setSelected }) => {
-  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelected(event.target.value as string);
-  };
-  return (
-    <FormControl variant="filled">
-      <InputLabel variant="standard" htmlFor={label}>
-        {label}
-      </InputLabel>
-      <NativeSelect
-        className="min-w-[200px]"
-        value={selected?.value as string}
-        onChange={handleChange}
-        inputProps={{
-          name: label,
-          id: 'for',
-        }}>
-        <option aria-label="None" value="" />
-        {choices.map(name => (
-          <option key={name} value={name}>
-            {name}
-          </option>
-        ))}
-      </NativeSelect>
-    </FormControl>
-  );
-};
+}> = ({ label, choices, selected, setSelected }) => (
+  <FormControl variant="filled">
+    <InputLabel variant="standard" htmlFor={label}>
+      {label}
+    </InputLabel>
+    <NativeSelect
+      className="min-w-[200px]"
+      value={selected?.value as string}
+      onChange={event => setSelected(event.target.value as string)}
+      inputProps={{
+        name: label,
+        id: 'for',
+      }}>
+      <option aria-label="None" value="" />
+      {choices.map(name => (
+        <option key={name} value={name}>
+          {name}
+        </option>
+      ))}
+    </NativeSelect>
+  </FormControl>
+);
+
 export type ButtonType = {
   label: string;
   icon?: ReactNode;
@@ -78,15 +73,13 @@ export const ConfigButton: React.FC<{
   );
 };
 
-export const ConfigSaveButton: React.FC = () => {
-  return (
-    <ConfigButton
-      onClick={() => configService.saveItem(configService.getItem(), configService.getItems())}
-      label={configService.isEdit() ? 'Save ' : 'Add ' + configService.titleType()}
-      icon={configService.isEdit() ? <MdSave /> : <MdAdd />}
-    />
-  );
-};
+export const ConfigSaveButton: React.FC = () => (
+  <ConfigButton
+    onClick={() => configService.saveItem(configService.getItem(), configService.getItems())}
+    label={configService.isEdit() ? 'Save ' : 'Add ' + configService.titleType()}
+    icon={configService.isEdit() ? <MdSave /> : <MdAdd />}
+  />
+);
 
 export const ConfigText: React.FC<{
   label: string;
@@ -133,44 +126,39 @@ export const ConfigCheckbox: React.FC<{
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   label: string;
   checked: boolean;
-}> = ({ onChange, label, checked }) => {
-  return (
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={checked}
-          onChange={onChange}
-          inputProps={{ 'aria-label': 'primary checkbox' }}
-        />
-      }
-      label={label}
-    />
-  );
-};
+}> = ({ onChange, label, checked }) => (
+  <FormControlLabel
+    control={
+      <Checkbox
+        checked={checked}
+        onChange={onChange}
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />
+    }
+    label={label}
+  />
+);
 
-export const ConfigListTable = observer(({ config }: { config: ConfigService }) => {
-  const items = config.getItems();
-  return (
-    <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
-      <tbody
-        onClick={(event: MouseEvent<HTMLTableSectionElement>) => {
-          if (event.target instanceof HTMLTableCellElement) {
-            config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
-          }
-        }}>
-        {items.map((item, iLine) => (
-          <tr
-            key={iLine.toString()}
-            id={iLine.toString()}
-            className={iLine == config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}>
-            <td className="dark:text-white">{item.getName()}</td>
-            <td className="dark:text-white">{item.getDescription()}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-});
+export const ConfigListTable = observer(({ config }: { config: ConfigService }) => (
+  <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
+    <tbody
+      onClick={(event: MouseEvent<HTMLTableSectionElement>) => {
+        if (event.target instanceof HTMLTableCellElement) {
+          config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
+        }
+      }}>
+      {config.getItems().map((item, iLine) => (
+        <tr
+          key={iLine.toString()}
+          id={iLine.toString()}
+          className={iLine == config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}>
+          <td className="dark:text-white">{item.getName()}</td>
+          <td className="dark:text-white">{item.getDescription()}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+));
 
 export const ConfigListButtons = observer(
   ({ config, children }: { config: ConfigService; children?: React.ReactNode }) => {
@@ -201,21 +189,19 @@ export const ConfigListButtons = observer(
 );
 
 export const ConfigPopup = observer(
-  ({ config, children }: { config: ConfigService; children?: React.ReactNode }) => {
-    return (
-      <Dialog
-        aria-labelledby="message"
-        onClose={configService.closePopup}
-        className="text-center text-lg"
-        open={config.listMode !== ListMode.None}>
-        <DialogTitle id="message">
-          {configService.isEdit() ? 'Edit' : 'Add'} {configService.titleType()}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>{children}</DialogContentText>
-        </DialogContent>
-        <DialogActions></DialogActions>
-      </Dialog>
-    );
-  }
+  ({ config, children }: { config: ConfigService; children?: React.ReactNode }) => (
+    <Dialog
+      aria-labelledby="message"
+      onClose={configService.closePopup}
+      className="text-center text-lg"
+      open={config.listMode !== ListMode.None}>
+      <DialogTitle id="message">
+        {configService.isEdit() ? 'Edit' : 'Add'} {configService.titleType()}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>{children}</DialogContentText>
+      </DialogContent>
+      <DialogActions></DialogActions>
+    </Dialog>
+  )
 );

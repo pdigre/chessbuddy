@@ -1,4 +1,4 @@
-import { ConfigProp, ListItem } from './config';
+import { ConfigProp, ListItem } from '../service/config.service';
 import { Engine, Engines } from './engine';
 
 export class Bot implements ListItem {

@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Bot } from './bot';
-import { Human } from './human';
-import { Clock } from './clock';
+import { Bot } from '../model/bot';
+import { Human } from '../model/human';
+import { Clock } from '../model/clock';
 import { jsonIgnore } from 'json-ignore';
 import {
   playService,
@@ -9,7 +9,7 @@ import {
   messageService,
   renderingService,
   refreshService,
-} from '../service/index.service';
+} from './index.service';
 
 export interface ConfigProp<T> {
   get: () => T;
@@ -140,59 +140,50 @@ export class ConfigService {
   // ****************************
   // Actions
   // ****************************
-  openConfig() {
+  openConfig = () =>
     runInAction(() => {
       this.showConfig = true;
       playService.isPlaying = false;
     });
-  }
 
-  closeConfig() {
+  closeConfig = () => {
     runInAction(() => (this.showConfig = false));
     this.store();
     refreshService.startRefreshTimer();
-  }
+  };
 
-  switchTab(n: number) {
+  switchTab = (n: number) =>
     runInAction(() => {
       this.showTab = n;
       this.cursor = -1;
     });
-  }
 
-  setCursor(id: string) {
+  setCursor = (id: string) =>
     runInAction(() => {
       const num = Number.parseInt(id);
       this.cursor = num == this.cursor ? -1 : num;
     });
-  }
-  deleteItem() {
+
+  deleteItem = () =>
     runInAction(() => {
       const items = this.getItems();
       items.splice(this.cursor, 1);
       this.cursor = -1;
     });
-  }
 
-  closePopup = () => {
+  closePopup = () =>
     runInAction(() => {
       this.cursor = -1;
       this.listMode = ListMode.None;
     });
-  };
 
-  setListType(type: ListType) {
+  setListType = (type: ListType) =>
     runInAction(() => {
       this.listType = type;
       this.listMode = ListMode.None;
     });
-  }
 
-  setListMode(mode: ListMode) {
-    runInAction(() => {
-      this.listMode = mode;
-    });
-  }
+  setListMode = (mode: ListMode) => runInAction(() => (this.listMode = mode));
 
   saveItem(item: ListItem, items: ListItem[]) {
     if (item.validate()) {
@@ -202,9 +193,9 @@ export class ConfigService {
     }
     this.closePopup();
   }
-  isEdit() {
-    return this.listMode == ListMode.Edit;
-  }
+
+  isEdit = () => this.listMode == ListMode.Edit;
+
   titleType() {
     switch (this.listType) {
       case ListType.Human:
@@ -227,9 +218,7 @@ export class ConfigService {
     }
   }
 
-  getItem() {
-    return this.isEdit() ? this.getItems()[this.cursor] : this.createItem();
-  }
+  getItem = () => (this.isEdit() ? this.getItems()[this.cursor] : this.createItem());
 
   createItem(): ListItem {
     switch (this.listType) {
@@ -242,15 +231,9 @@ export class ConfigService {
     }
   }
 
-  setClock(value: string) {
-    runInAction(() => (this.clock = value));
-  }
-  setBlack(value: string) {
-    runInAction(() => (this.black = value));
-  }
-  setWhite(value: string) {
-    runInAction(() => (this.white = value));
-  }
+  setClock = (value: string) => runInAction(() => (this.clock = value));
+  setBlack = (value: string) => runInAction(() => (this.black = value));
+  setWhite = (value: string) => runInAction(() => (this.white = value));
 
   r90 = () => this.rotation % 2 == 1;
   r180 = () => this.rotation > 1;

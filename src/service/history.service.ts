@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { History, Games } from '../model/history';
-import { storageService, playService, historyService } from './index.service';
+import { storageService, playService, historyService, rulesService } from './index.service';
 
 /*
  * History of previous games, should store a maximum locally
@@ -91,4 +91,30 @@ export class HistoryService {
       this.markHist = n;
     });
   }
+
+  decodeGame = (row: string) => {
+    const cols = row.split(';');
+    let time = '?';
+    const date = new Date(Number.parseInt(cols[0], 36));
+    const t1 = date.getTime();
+    const t2 = Date.now();
+    try {
+      time =
+        t2 - t1 < 3600 * 24000 && t1 < t2
+          ? date.toTimeString().split(' ')[0]
+          : date.toISOString().split('T')[0];
+    } catch (error) {
+      console.log(error);
+    }
+    const moves = cols[cols.length - 1].split(' ');
+    return {
+      moves,
+      time,
+      win: rulesService.whoWon(moves)?.substring(0, 1) ?? '?',
+      c1: cols[1].split(' ')[0],
+      c2: cols[2].split(' ')[0],
+    };
+  };
+
+  getGames = () => this.history.filter(x => x.split(';').length > 5).map(x => this.decodeGame(x));
 }

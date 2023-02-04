@@ -6,7 +6,7 @@ import { ConfigDisplay } from './ConfigDisplay';
 import { ConfigBot } from './ConfigBot';
 import { connectService, renderingService } from '../service/index.service';
 import { observer } from 'mobx-react';
-import { ConfigService } from '../model/config';
+import { ConfigService } from '../service/config.service';
 import { FaChess, FaClock, FaConnectdevelop, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';

@@ -2,7 +2,7 @@ import React from 'react';
 import { AnalyzerService } from '../service/analyzer.service';
 import { DashboardService } from '../service/dashboard.service';
 import { Chessboard } from 'react-chessboard';
-import { ConfigService } from '../model/config';
+import { ConfigService } from '../service/config.service';
 import { RefreshService } from '../service/refresh.service';
 import { observer } from 'mobx-react';
 import { rulesService as rules, playService } from '../service/index.service';

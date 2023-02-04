@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderingService } from '../service/index.service';
+import { renderingService, timerService } from '../service/index.service';
 import {
   playService,
   analyzerService,
@@ -13,7 +13,6 @@ import {
 } from '../service/index.service';
 import { ConfigDialog } from './ConfigDialog';
 import { Board } from './Board';
-import { PlayerInfoBar } from './PlayerInfoBar';
 import { AnalyzerService } from '../service/analyzer.service';
 import { AboutDialog } from './AboutDialog';
 import packageInfo from '../../package.json';
@@ -26,8 +25,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { MdRefresh } from 'react-icons/md';
 import { MainButtonBar } from './MainButtonBar';
 import { MainView } from './MainView';
-import { ConfigService } from '../model/config';
+import { ConfigService } from '../service/config.service';
 import { PlayService } from '../service/play.service';
+import { TimerService } from '../service/timer.service';
 
 const lightTheme = createTheme({
   palette: {
@@ -79,10 +79,9 @@ const darkTheme = createTheme({
   },
 });
 
-export const CP = observer(
+const CP = observer(
   ({
     analyzer,
-    rendering,
     config,
   }: {
     analyzer: AnalyzerService;
@@ -92,17 +91,7 @@ export const CP = observer(
     if (!config.showCP) {
       return <div className="w-6 h-full flex flex-col flex-grow"></div>;
     }
-    const cp = analyzer.cp;
-    const blackTop = config.rotation > 1;
-    const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);
-    const whiteLead = cp > 0;
-    const txt = `cp ${cp2} ${whiteLead ? 'white' : 'black'}`;
-    const h = rendering.height - 150;
-    const x = Math.min(h, cp2);
-    const s = (h - x) / 2 + 75;
-    const isW = whiteLead != blackTop;
-    const h1 = (isW ? 0 : x) + s + 'px';
-    const h2 = (isW ? x : 0) + s + 'px';
+    const { txt, blackTop, h1, h2 } = analyzer.getCpInfo();
     const coloring = (black: boolean) => (black ? 'bg-black text-white' : 'bg-white text-black');
     return (
       <div className="w-6 h-full flex flex-col flex-grow [&>div]:[writing-mode:vertical-lr] [&>div]:text-center">
@@ -117,7 +106,22 @@ export const CP = observer(
   }
 );
 
-export const FenInfo = observer(({ play }: { play: PlayService }) => {
+const Ticker = observer(({ timer, play }: { timer: TimerService; play: PlayService }) => (
+  <span>{play.getTimerText(timer.elapsed)}</span>
+));
+
+const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlayService }) => {
+  const { other, label, showTicker, banner, isTextRight } = play.getPlayerInfo(isTop);
+  return (
+    <p className={'h-[31px] text-xl dark:text-white m-0 p-1' + (isTextRight ? ' text-right' : '')}>
+      {label} &lt;
+      {showTicker ? <Ticker timer={timerService} play={play} /> : other} &gt;
+      {banner}
+    </p>
+  );
+});
+
+const FenInfo = observer(({ play }: { play: PlayService }) => {
   return <p>{openingsService.sanTextLocate(play.log)}</p>;
 });
 
@@ -131,7 +135,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
         <div className="w-[1024px] h-[748px] bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row">
           <CP analyzer={analyzerService} rendering={rendering} config={configService} />
           <div className="flex flex-col flex-grow">
-            <PlayerInfoBar isTop={true} play={playService} config={configService} />
+            <PlayerInfoBar isTop={true} play={playService} />
             <Board
               analyzer={analyzerService}
               dashboard={dashboardService}
@@ -139,7 +143,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
               config={configService}
               refresh={refreshService}
             />
-            <PlayerInfoBar isTop={false} play={playService} config={configService} />
+            <PlayerInfoBar isTop={false} play={playService} />
           </div>
           <div className="flex flex-col w-full text-center">
             <h3 className="h-8 text-lg dark:text-white flex flex-row">

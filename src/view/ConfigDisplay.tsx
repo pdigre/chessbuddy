@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConfigService } from '../model/config';
+import { ConfigService } from '../service/config.service';
 import { observer } from 'mobx-react';
 import { ConfigBoolean, ConfigButton } from './ConfigWidgets';
 import { RenderingService } from '../service/rendering.service';
@@ -7,7 +7,7 @@ import { MdRotateRight } from 'react-icons/md';
 import { runInAction } from 'mobx';
 
 export const ConfigDisplay = observer(
-  ({ config, rendering }: { config: ConfigService; rendering: RenderingService }) => {
+  ({ config }: { config: ConfigService; rendering: RenderingService }) => {
     return (
       <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
         <ConfigBoolean config={config} id="darkTheme" label="Use dark theme" />
