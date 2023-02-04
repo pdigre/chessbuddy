@@ -3,24 +3,39 @@ import { Bot } from './bot';
 import { Human } from './human';
 import { Clock } from './clock';
 import { jsonIgnore } from 'json-ignore';
-import { refreshtimer } from '../services/control/refreshtimer';
-import { playService, storageService } from '../services/index.service';
-import { theme } from '../services/control/theme';
+import {
+  playService,
+  storageService,
+  messageService,
+  renderingService,
+  refreshService,
+} from '../service/index.service';
+
+export interface ConfigProp<T> {
+  get: () => T;
+  set: (key: T) => void;
+}
 
 export interface ListItem {
+  label: string;
+  properties: Map<string, ConfigProp<string>>;
   getName: () => string;
   getDescription: () => string;
+  validate: () => string;
 }
 
-export const enum ConfigMode {
+export const enum ListMode {
   None = 1,
-  EditHuman,
-  AddHuman,
-  EditBot,
-  AddBot,
-  EditClock,
-  AddClock,
+  Edit,
+  Add,
 }
+export const enum ListType {
+  None = 1,
+  Human,
+  Bot,
+  Clock,
+}
+
 type ConfigProps = {
   humans: Human[];
   bots: Bot[];
@@ -38,7 +53,7 @@ type ConfigProps = {
   darkTheme: boolean;
 };
 
-export class Config {
+export class ConfigService {
   static storage = 'config';
   white!: string;
   black!: string;
@@ -61,11 +76,12 @@ export class Config {
   @jsonIgnore() showConfig = false;
   @jsonIgnore() showTab = 0;
   @jsonIgnore() cursor = -1;
-  @jsonIgnore() dialog = ConfigMode.None;
+  @jsonIgnore() listType = ListType.None;
+  @jsonIgnore() listMode = ListMode.None;
 
   constructor() {
     makeAutoObservable(this);
-    const restore = storageService.restoreObject(Config.storage, {
+    const restore = storageService.restoreObject(ConfigService.storage, {
       white: '',
       black: '',
       clock: '',
@@ -102,7 +118,29 @@ export class Config {
     this.applyTheme();
   }
 
-  store: VoidFunction = () => storageService.storeObject(Config.storage, this);
+  /*
+  rotation!: number;
+  showHints!: boolean;
+  showCP!: boolean;
+  showFacts!: boolean;
+  playMistake!: boolean;
+  playCorrect!: boolean;
+  playWinner!: boolean;
+*/
+  boolprops: Map<string, ConfigProp<boolean>> = new Map([
+    [
+      'darkTheme',
+      { get: () => renderingService.darkTheme, set: value => (renderingService.darkTheme = value) },
+    ],
+    ['showHints', { get: () => this.showHints, set: value => (this.showHints = value) }],
+    ['showCP', { get: () => this.showCP, set: value => (this.showCP = value) }],
+    ['showFacts', { get: () => this.showFacts, set: value => (this.showFacts = value) }],
+    ['playMistake', { get: () => this.playMistake, set: value => (this.playMistake = value) }],
+    ['playCorrect', { get: () => this.playCorrect, set: value => (this.playCorrect = value) }],
+    ['playWinner', { get: () => this.playWinner, set: value => (this.playWinner = value) }],
+  ]);
+
+  store: VoidFunction = () => storageService.storeObject(ConfigService.storage, this);
 
   // ****************************
   // Actions
@@ -115,11 +153,9 @@ export class Config {
   }
 
   closeConfig() {
-    runInAction(() => {
-      this.showConfig = false;
-    });
+    runInAction(() => (this.showConfig = false));
     this.store();
-    refreshtimer.startRefreshTimer();
+    refreshService.startRefreshTimer();
   }
 
   switchTab(n: number) {
@@ -135,30 +171,92 @@ export class Config {
       this.cursor = num == this.cursor ? -1 : num;
     });
   }
-  deleteItem<T>(items: T[]) {
+  deleteItem() {
     runInAction(() => {
+      const items = this.getItems();
       items.splice(this.cursor, 1);
       this.cursor = -1;
     });
   }
-  closeDialog() {
+
+  closePopup = () => {
     runInAction(() => {
       this.cursor = -1;
-      this.dialog = ConfigMode.None;
+      this.listMode = ListMode.None;
     });
-  }
-  openDialog(mode: ConfigMode) {
+  };
+
+  setListType(type: ListType) {
     runInAction(() => {
-      this.dialog = mode;
+      this.listType = type;
+      this.listMode = ListMode.None;
     });
   }
 
-  applyTheme() {
+  setListMode(mode: ListMode) {
     runInAction(() => {
-      theme.darkTheme = this.darkTheme;
-      this.darkTheme
-        ? window.document.documentElement.classList.add('dark')
-        : window.document.documentElement.classList.remove('dark');
+      this.listMode = mode;
     });
   }
+
+  saveItem(item: ListItem, items: ListItem[]) {
+    if (item.validate()) {
+      messageService.display((this.isEdit() ? 'Save' : 'Add') + this.titleType(), item.validate());
+    } else {
+      this.isEdit() ? (items[this.cursor] = item) : items.push(item);
+    }
+    this.closePopup();
+  }
+  isEdit() {
+    return this.listMode == ListMode.Edit;
+  }
+  titleType() {
+    switch (this.listType) {
+      case ListType.Human:
+        return 'Human';
+      case ListType.Bot:
+        return 'Bot';
+      default:
+        return 'Clock';
+    }
+  }
+
+  getItems(): ListItem[] {
+    switch (this.listType) {
+      case ListType.Human:
+        return this.humans;
+      case ListType.Bot:
+        return this.bots;
+      default:
+        return this.clocks;
+    }
+  }
+
+  getItem() {
+    return this.isEdit() ? this.getItems()[this.cursor] : this.createItem();
+  }
+
+  createItem(): ListItem {
+    switch (this.listType) {
+      case ListType.Human:
+        return Human.create();
+      case ListType.Bot:
+        return Bot.create();
+      default:
+        return Clock.create();
+    }
+  }
+
+  setClock(value: string) {
+    runInAction(() => (this.clock = value));
+  }
+  setBlack(value: string) {
+    runInAction(() => (this.black = value));
+  }
+  setWhite(value: string) {
+    runInAction(() => (this.white = value));
+  }
+
+  r90 = () => this.rotation % 2 == 1;
+  r180 = () => this.rotation > 1;
 }

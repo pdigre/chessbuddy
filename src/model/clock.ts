@@ -1,4 +1,4 @@
-import { ListItem } from './config';
+import { ConfigProp, ListItem } from './config';
 
 export type TimeRule = {
   from: number;
@@ -8,8 +8,14 @@ export type TimeRule = {
 
 export class Clock implements ListItem {
   constructor(public name: string, public time: TimeRule[]) {}
+  label = 'Clock';
   getName: () => string = () => this.name.trim();
   getDescription: () => string = () => Clock.time2string(this.time);
+  properties: Map<string, ConfigProp<string>> = new Map([
+    ['name', { get: () => this.name, set: value => (this.name = value) }],
+    ['time', { get: this.getDescription, set: value => Clock.string2time(value) }],
+  ]);
+  validate: () => string = () => (this.name.length ? '' : 'Need to enter a name');
 
   getAllowed(moves: number): number {
     const total = this.time
@@ -49,4 +55,5 @@ export class Clock implements ListItem {
     new Clock('FIDE Blitz - 3/2', [{ from: 0, plus: 3, each: 2 }]),
     new Clock('Blitz - 5/0', [{ from: 0, plus: 5, each: 0 }]),
   ];
+  public static create: () => Clock = () => new Clock('', []);
 }
