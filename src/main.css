@@ -593,16 +593,24 @@ video {
   }
 }
 
+.visible {
+  visibility: visible;
+}
+
 .static {
   position: static;
 }
 
-.m-1 {
-  margin: 0.25rem;
+.relative {
+  position: relative;
 }
 
 .m-2 {
   margin: 0.5rem;
+}
+
+.m-1 {
+  margin: 0.25rem;
 }
 
 .m-0 {
@@ -698,6 +706,15 @@ video {
   --tw-border-spacing-x: 0.5rem;
   --tw-border-spacing-y: 0.5rem;
   border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+}
+
+.transform {
+  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.resize {
+  resize: both;
 }
 
 .flex-row {
@@ -838,14 +855,14 @@ body {
   background-color: rgb(30 41 59 / var(--tw-bg-opacity));
 }
 
-.dark .dark\:bg-green-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(21 128 61 / var(--tw-bg-opacity));
-}
-
 .dark .dark\:bg-green-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(20 83 45 / var(--tw-bg-opacity));
+}
+
+.dark .dark\:bg-green-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(21 128 61 / var(--tw-bg-opacity));
 }
 
 .dark .dark\:text-white {
@@ -856,16 +873,6 @@ body {
 .dark .dark\:text-red-200 {
   --tw-text-opacity: 1;
   color: rgb(254 202 202 / var(--tw-text-opacity));
-}
-
-.\[\&\>button\]\:mx-2>button {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
-.\[\&\>button\]\:mx-1>button {
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
 }
 
 .\[\&\>div\]\:mx-2>div {
@@ -884,6 +891,16 @@ body {
 .\[\&\>div\]\:\[writing-mode\:vertical-lr\]>div {
   -webkit-writing-mode: vertical-lr;
           writing-mode: vertical-lr;
+}
+
+.\[\&\>button\]\:mx-2>button {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.\[\&\>button\]\:mx-1>button {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 .\[\&td\]\:p-\[3px\]td {

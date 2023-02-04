@@ -1,4 +1,3 @@
-import { ChessRulesService } from '../services/chessrules.service';
 import { FEN } from './fen';
 
 export class Games {
