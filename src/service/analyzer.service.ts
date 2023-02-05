@@ -2,7 +2,7 @@ import type { Fen } from './rules.service';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
 import { Engines } from '../model/engine';
-import { configService, mp4service, renderingService } from './index.service';
+import { configService, mediaService, renderingService } from './index.service';
 
 type AnalyzerReturn = { moves: string[]; cp: number | undefined };
 type AnalyzerCallback = (ret: AnalyzerReturn) => void;
@@ -107,7 +107,7 @@ export class AnalyzerService {
       (isWhiteTurn && this.cp - this.prevcp > 100) ||
       (!isWhiteTurn && this.prevcp - this.cp > 100)
     ) {
-      mp4service.playMistake();
+      mediaService.playMistake();
     }
   };
 

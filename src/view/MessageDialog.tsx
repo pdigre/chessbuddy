@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Link,
 } from '@mui/material';
 import { observer } from 'mobx-react';
 import { MessageService } from '../service/message.service';
@@ -69,5 +70,26 @@ export const WINNER_HTML = (
   <div className="text-3xl">
     Who won?
     <img src="/png/win.png" />
+  </div>
+);
+
+export const ABOUT = (
+  <div>
+    This chess program is open source and available at github.
+    <ul>
+      <li>
+        <Link href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noopener">
+          Github pdigre/chessbuddy
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
+          target="_blank"
+          rel="noopener">
+          User Guide / instructions
+        </Link>
+      </li>
+    </ul>
   </div>
 );

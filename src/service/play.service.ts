@@ -13,7 +13,7 @@ import {
   dashboardService,
   historyService,
   messageService,
-  mp4service,
+  mediaService,
   openingsService,
   storageService,
   refreshService,
@@ -71,7 +71,7 @@ export class PlayService {
     this.isComplete = rulesService.isEndMove(san) || this.chess.game_over();
     if (this.isComplete) {
       if (this.isPlaying) {
-        mp4service.playWinner();
+        mediaService.playWinner();
       }
       this.isPlaying = false;
     }
@@ -282,9 +282,6 @@ export class PlayService {
   };
 
   // Board actions
-  sound_click = new Audio('/mp3/click.mp3');
-  sound_move = new Audio('/mp3/move1.mp3');
-  sound_error = new Audio('/mp3/buzzer.mp3');
 
   onDragStart = (piece: string, from: Square) => {
     const r90 = configService.rotation % 2 == 1;
@@ -312,18 +309,14 @@ export class PlayService {
       analyzerService.help[0] == to &&
       analyzerService.help[1] == from
     ) {
-      mp4service.playCorrect();
+      mediaService.playCorrect();
     }
     dashboardService.startUndoTimer(this.log.length);
     const state = this.log.length;
     const m1 = r90 ? rulesService.leftSquare(from) : from;
     const m2 = r90 ? rulesService.leftSquare(to) : to;
     this.move(m1, m2, true);
-    if (state != this.log.length) {
-      this.sound_move.play().then();
-    } else {
-      this.sound_error.play().then();
-    }
+    state != this.log.length ? mediaService.soundMove() : mediaService.soundError();
     return true;
   };
 
@@ -443,8 +436,6 @@ export class PlayService {
   // PlayerInfo
 
   getTimerText = (elapsed: number) => {
-    const sound_click = new Audio('/mp3/click.mp3');
-    const sound_error = new Audio('/mp3/buzzer.mp3');
     const startTime = Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
     const current = Math.floor(elapsed) + startTime;
     if (!this.allowed) {
@@ -452,10 +443,10 @@ export class PlayService {
     }
     const remains = this.allowed - current;
     if (remains < 11) {
-      sound_click.play().then();
+      mediaService.soundClick();
     }
     if (remains < 0) {
-      sound_error.play().then();
+      mediaService.soundError();
       this.outOfTime();
     }
     return toMMSS(this.allowed - current);

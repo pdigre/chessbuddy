@@ -4,7 +4,7 @@ import {
   playService,
   analyzerService,
   messageService,
-  mp4service,
+  mediaService,
   dashboardService,
   historyService,
   configService,
@@ -14,10 +14,9 @@ import {
 import { ConfigDialog } from './ConfigDialog';
 import { Board } from './Board';
 import { AnalyzerService } from '../service/analyzer.service';
-import { AboutDialog } from './AboutDialog';
 import packageInfo from '../../package.json';
 import { Mp4Dialog } from './Mp4Dialog';
-import { MessageDialog } from './MessageDialog';
+import { ABOUT, MessageDialog } from './MessageDialog';
 import { RenderingService } from '../service/rendering.service';
 import { observer } from 'mobx-react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -126,7 +125,7 @@ const FenInfo = observer(({ play }: { play: PlayService }) => {
 });
 
 export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService }) => {
-  const about = () => messageService.display('About', <AboutDialog />);
+  const about = () => messageService.display('About', ABOUT);
   const version = packageInfo.version;
   return (
     <ThemeProvider theme={rendering.darkTheme ? darkTheme : lightTheme}>
@@ -150,14 +149,14 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
               <span onClick={about} className="mx-5 text-xl">
                 ChessBuddy {version}
               </span>
-              <MdRefresh className="text-lg mx-5" onClick={mp4service.playAll} />
+              <MdRefresh className="text-lg mx-5" onClick={mediaService.playAll} />
             </h3>
             <MainButtonBar dashboard={dashboardService} history={historyService} />
             <FenInfo play={playService} />
             <MainView dashboard={dashboardService} />
           </div>
           <MessageDialog message={messageService} />
-          <Mp4Dialog mp4={mp4service} />
+          <Mp4Dialog mp4={mediaService} />
           <ConfigDialog config={configService} />
         </div>
       </div>
