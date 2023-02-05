@@ -8,15 +8,22 @@ type Mp4Type = {
   length?: number;
 };
 
-export class Mp4Service {
+export class MediaService {
   title?: string;
   msg?: Mp4Type;
   show = false;
   prev = 0;
+  sound_move = new Audio('/mp3/move1.mp3');
+  sound_click = new Audio('/mp3/click.mp3');
+  sound_error = new Audio('/mp3/buzzer.mp3');
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  soundMove = () => this.sound_move.play().then();
+  soundClick = () => this.sound_click.play().then();
+  soundError = () => this.sound_error.play().then();
 
   clear: () => void = () => {
     this.title = undefined;
@@ -45,6 +52,7 @@ export class Mp4Service {
     const emo = all_urls[this.prev];
     this.play(emo, 'Url:' + emo.src);
   };
+
   winner_urls: Mp4Type[] = [
     { src: '/mp4/win1.mp4', width: 640, height: 360, length: 22 },
     { src: '/mp4/win2.mp4', width: 360, height: 360, length: 30 },
