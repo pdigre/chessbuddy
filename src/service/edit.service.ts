@@ -28,7 +28,7 @@ export class EditService {
     makeAutoObservable(this);
   }
 
-  @jsonIgnore() editStart(fen: string) {
+  editStart(fen: string) {
     runInAction(() => {
       this.showEdit = true;
       this.editFen = fen;
@@ -36,7 +36,7 @@ export class EditService {
     });
   }
 
-  @jsonIgnore() editDone = () => {
+  readonly editDoneAction = () => {
     const fenArr = this.editFen.split(' ');
     fenArr[1] = this.bFirst ? BLACK : WHITE;
     fenArr[2] =
@@ -53,7 +53,7 @@ export class EditService {
     });
   };
 
-  @jsonIgnore() editPiece = (piece: string) => {
+  readonly editPiece = (piece: string) => {
     const fenArr = this.editFen.split(' ');
     const brd = FEN.fen2brd(this.editFen).split('');
     const p = SQUARES.indexOf(this.editSquare as Square);

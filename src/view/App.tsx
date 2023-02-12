@@ -1,5 +1,5 @@
 import React from 'react';
-import { editService, renderingService, timerService } from '../service/index.service';
+import { editService, renderingService, clockService } from '../service/index.service';
 import {
   playService,
   analyzerService,
@@ -26,7 +26,7 @@ import { MainButtonBar } from './MainButtonBar';
 import { MainView } from './MainView';
 import { ConfigService } from '../service/config.service';
 import { PlayService } from '../service/play.service';
-import { TimerService } from '../service/timer.service';
+import { ClockService } from '../service/clock.service';
 
 const lightTheme = createTheme({
   palette: {
@@ -105,8 +105,8 @@ const CP = observer(
   }
 );
 
-const Ticker = observer(({ timer, play }: { timer: TimerService; play: PlayService }) => (
-  <span>{play.getTimerText(timer.elapsed)}</span>
+const Ticker = observer(({ clock }: { clock: ClockService; play: PlayService }) => (
+  <span>{clock.getClockText()}</span>
 ));
 
 const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlayService }) => {
@@ -114,7 +114,7 @@ const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlaySer
   return (
     <p className={'h-[31px] text-xl dark:text-white m-0 p-1' + (isTextRight ? ' text-right' : '')}>
       {label} &lt;
-      {showTicker ? <Ticker timer={timerService} play={play} /> : other} &gt;
+      {showTicker ? <Ticker clock={clockService} play={play} /> : other} &gt;
       {banner}
     </p>
   );
@@ -149,7 +149,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
               <span onClick={about} className="mx-5 text-xl">
                 ChessBuddy {version}
               </span>
-              <MdRefresh className="text-lg mx-5" onClick={mediaService.playAll} />
+              <MdRefresh className="text-lg mx-5" onClick={mediaService.playAllAction} />
             </h3>
             <MainButtonBar
               edit={editService}

@@ -17,7 +17,7 @@ import {
   openingsService,
   storageService,
   refreshService,
-  timerService,
+  clockService,
   editService,
 } from './index.service';
 import { jsonIgnore } from 'json-ignore';
@@ -62,7 +62,9 @@ export class PlayService {
     this.calculate();
   }
 
-  store: VoidFunction = () => storageService.storeObject(PlayService.storage, this);
+  store() {
+    storageService.storeObject(PlayService.storage, this);
+  }
 
   private calculate() {
     const san = this.log[this.log.length - 1];
@@ -96,9 +98,9 @@ export class PlayService {
     return Array.from(new Set(sqs).values());
   }
 
-  isMoveable = (from: Square): boolean => this.chess.moves({ square: from }).length > 0;
+  readonly isMoveable = (from: Square): boolean => this.chess.moves({ square: from }).length > 0;
 
-  resetGameAction: VoidFunction = () => {
+  readonly resetGameAction: VoidFunction = () => {
     this.wtime = 0;
     this.btime = 0;
     this.log = [];
@@ -109,15 +111,15 @@ export class PlayService {
     this.run();
   };
 
-  initBots: VoidFunction = () => {
+  initBots() {
     const players = [...configService.humans, ...configService.bots];
     const w = players.find(p => p.getName() == configService.white);
     this.wplayer = botService.instantiate(w, this.wplayer);
     const b = players.find(p => p.getName() == configService.black);
     this.bplayer = botService.instantiate(b, this.bplayer);
-  };
+  }
 
-  addMove: (san: string) => void = san => {
+  addMove(san: string) {
     const prev = this.nextPlayer();
     if (prev instanceof Human) this.isPlaying = true;
     this.date = Date.now();
@@ -125,16 +127,16 @@ export class PlayService {
     analyzerService.reset();
     this.fen = rulesService.newFen(this.fen, san);
     if (this.isWhiteTurn) {
-      this.wtime += timerService.elapsed;
+      this.wtime += clockService.elapsed;
     } else {
-      this.btime += timerService.elapsed;
+      this.btime += clockService.elapsed;
     }
-    timerService.reset();
+    clockService.reset();
     this.run();
-  };
+  }
 
-  run: VoidFunction = () => {
-    timerService.reset();
+  run() {
+    clockService.reset();
     if (!this.wplayer) {
       this.initBots();
     }
@@ -147,9 +149,9 @@ export class PlayService {
     if (this.isPlaying) {
       this.runBot();
     }
-  };
+  }
 
-  runBot: VoidFunction = () => {
+  runBot() {
     const next = this.nextPlayer();
     if (next instanceof BotRunner) {
       next.processFen(this.fen, ({ from, to }) => {
@@ -159,12 +161,12 @@ export class PlayService {
         }
       });
     }
-  };
+  }
 
-  nextPlayer: () => BotRunner | Human | undefined = () =>
+  readonly nextPlayer: () => BotRunner | Human | undefined = () =>
     this.isWhiteTurn ? this.wplayer : this.bplayer;
 
-  playMove: (san: string) => void = san => {
+  playMove(san: string) {
     runInAction(() => {
       this.addMove(san);
       this.store();
@@ -172,10 +174,10 @@ export class PlayService {
         historyService.storeGame();
       }
     });
-    this.playAction();
-  };
+    this.playContinue();
+  }
 
-  recordScore: (ok: string) => void = yes => {
+  recordScore(yes: string) {
     if (yes.startsWith('White')) {
       this.playMove('1-0');
     } else if (yes.startsWith('Black')) {
@@ -184,19 +186,19 @@ export class PlayService {
       this.playMove('1/2-1/2');
     }
     messageService.clear();
-  };
+  }
 
-  outOfTime = () => {
+  outOfTime() {
     this.playMove(this.isWhiteTurn ? '1-0' : '0-1');
     this.isPlaying = false;
-  };
+  }
 
-  playAction = () => {
+  playContinue() {
     this.isPlaying = true;
     this.runBot();
-  };
+  }
 
-  whoWon = () => rulesService.whoWon(this.log);
+  readonly whoWon = () => rulesService.whoWon(this.log);
 
   // ****************************
   // Actions
@@ -246,21 +248,21 @@ export class PlayService {
   }
 
   // Game config actions
-  startGameAction: VoidFunction = () => {
+  readonly startGameAction: VoidFunction = () => {
     configService.store();
-    configService.closeConfig();
+    configService.closeConfigAction();
     runInAction(() => {
       configService.showConfig = false;
-      this.playAction();
+      this.playContinue();
     });
   };
 
-  editGameAction: VoidFunction = () => {
+  readonly editGameAction = () => {
     configService.store();
     editService.editStart(this.fen);
   };
 
-  endGameAction = () => {
+  readonly endGameAction = () => {
     const winner = this.whoWon();
     if (winner) {
       messageService.display(
@@ -281,7 +283,7 @@ export class PlayService {
 
   // Board actions
 
-  onDragStart = (piece: string, from: Square) => {
+  readonly onDragStartAction = (piece: string, from: Square) => {
     const r90 = configService.rotation % 2 == 1;
     if (editService.showEdit) return true;
     const player = this.nextPlayer();
@@ -296,7 +298,7 @@ export class PlayService {
     return false;
   };
 
-  onPieceDrop = (from: Square, to: Square) => {
+  readonly onPieceDropAction = (from: Square, to: Square) => {
     if (editService.showEdit) {
       editService.editMove(from, to);
       return true;
@@ -343,9 +345,7 @@ export class PlayService {
     }
   }
 
-  onSquareClick(square: Square) {
-    editService.onSquareClick(square);
-  }
+  readonly onSquareClickAction = (square: Square) => editService.onSquareClick(square);
 
   markEdit(func: VoidFunction) {
     if (editService.showEdit && editService.editSquare != '') func();
@@ -366,7 +366,7 @@ export class PlayService {
 
   // Log / History Panel
 
-  playButtonHandler: VoidFunction = () => {
+  readonly playButtonAction: VoidFunction = () => {
     const isHistUndo = !dashboardService.showHist && dashboardService.markLog >= 0;
     const isPlayUndo = this.isPlaying && dashboardService.showUndo;
     if (this.isComplete) this.resetGameAction();
@@ -393,25 +393,9 @@ export class PlayService {
   };
 
   // PlayerInfo
+  readonly getStartTime = () => Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
 
-  getTimerText = (elapsed: number) => {
-    const startTime = Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
-    const current = Math.floor(elapsed) + startTime;
-    if (!this.allowed) {
-      return current;
-    }
-    const remains = this.allowed - current;
-    if (remains < 11) {
-      mediaService.soundClick();
-    }
-    if (remains < 0) {
-      mediaService.soundError();
-      this.outOfTime();
-    }
-    return toMMSS(this.allowed - current);
-  };
-
-  getPlayerInfo = (isTop: boolean) => {
+  getPlayerInfo(isTop: boolean) {
     const isWhite = isTop == configService.rotation > 1;
     const otherTime = isWhite ? this.wtime : this.btime;
     return {
@@ -421,5 +405,5 @@ export class PlayService {
       banner: isWhite != this.isWhiteTurn && this.isComplete ? ' ** Winner **' : '',
       isTextRight: isTop && configService.rotation % 2 == 1,
     };
-  };
+  }
 }

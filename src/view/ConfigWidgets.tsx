@@ -76,7 +76,7 @@ export const ConfigButton: React.FC<{
 export const ConfigSaveButton: React.FC = () => (
   <ConfigButton
     onClick={() => configService.saveItem(configService.getItem(), configService.getItems())}
-    label={configService.isEdit() ? 'Save ' : 'Add ' + configService.titleType()}
+    label={configService.isEdit() ? 'Save ' : 'Add ' + configService.getTitleType()}
     icon={configService.isEdit() ? <MdSave /> : <MdAdd />}
   />
 );
@@ -130,23 +130,6 @@ export const ConfigBoolean = observer(
   }
 );
 
-export const ConfigCheckbox: React.FC<{
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  label: string;
-  checked: boolean;
-}> = ({ onChange, label, checked }) => (
-  <FormControlLabel
-    control={
-      <Checkbox
-        checked={checked}
-        onChange={onChange}
-        inputProps={{ 'aria-label': 'primary checkbox' }}
-      />
-    }
-    label={label}
-  />
-);
-
 export const ConfigListTable = observer(({ config }: { config: ConfigService }) => (
   <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
     <tbody
@@ -173,19 +156,15 @@ export const ConfigListButtons = observer(
     const hasSelect = config.cursor >= 0;
     return (
       <div className="[&>button]:mx-1">
+        <ConfigButton onClick={config.setListModeAddAction} label="Add" icon={<MdAdd />} />
         <ConfigButton
-          onClick={() => config.setListMode(ListMode.Add)}
-          label="Add"
-          icon={<MdAdd />}
-        />
-        <ConfigButton
-          onClick={() => config.setListMode(ListMode.Edit)}
+          onClick={config.setListModeEditAction}
           label="Edit"
           icon={<MdEdit />}
           disabled={!hasSelect}
         />
         <ConfigButton
-          onClick={() => config.deleteItem()}
+          onClick={config.deleteItemAction}
           label="Delete"
           icon={<MdDelete />}
           disabled={!hasSelect}
@@ -200,11 +179,11 @@ export const ConfigPopup = observer(
   ({ config, children }: { config: ConfigService; children?: React.ReactNode }) => (
     <Dialog
       aria-labelledby="message"
-      onClose={configService.closePopup}
+      onClose={configService.closePopupAction}
       className="text-center text-lg"
       open={config.listMode !== ListMode.None}>
       <DialogTitle id="message">
-        {configService.isEdit() ? 'Edit' : 'Add'} {configService.titleType()}
+        {configService.isEdit() ? 'Edit' : 'Add'} {configService.getTitleType()}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>{children}</DialogContentText>

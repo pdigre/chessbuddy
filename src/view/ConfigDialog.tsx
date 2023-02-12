@@ -34,7 +34,6 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
   // eslint-disable-next-line
   const handleChange = (event: ChangeEvent<{}>, newValue: number) =>
     config.switchTab(newValue as number);
-  const handleClose = () => config.closeConfig();
 
   const prevent = (event: MouseEvent<HTMLAnchorElement>) => event.preventDefault();
 
@@ -42,7 +41,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
     <Dialog
       aria-labelledby="simple-dialog-title"
       open={config.showConfig}
-      onClose={handleClose}
+      onClose={config.closeConfigAction}
       maxWidth="xl"
       className={'text-center text-xl'}>
       <Tabs

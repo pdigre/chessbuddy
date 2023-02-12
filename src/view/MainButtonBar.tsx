@@ -42,7 +42,7 @@ export const MainButtonBar = observer(
 
     return (
       <ButtonGroup color="primary" aria-label="outlined primary button group" className="w-full">
-        <PanelButton onClick={playService.playButtonHandler}>
+        <PanelButton onClick={playService.playButtonAction}>
           {isHistUndo || isPlayUndo ? (
             <MdUndo className="text-3xl" />
           ) : playService.isPlaying ? (
@@ -51,7 +51,7 @@ export const MainButtonBar = observer(
             <MdPause className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={() => dashboard.toggleHistory()}>
+        <PanelButton onClick={dashboard.toggleHistoryAction}>
           {isGotoHist ? (
             <MdInput className="text-3xl" />
           ) : edit.showEdit ? (
@@ -62,7 +62,7 @@ export const MainButtonBar = observer(
             <MdOutlineHistory className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={() => configService.openConfig()}>
+        <PanelButton onClick={configService.openConfigAction}>
           <MdSettings className="text-3xl" />
         </PanelButton>
       </ButtonGroup>

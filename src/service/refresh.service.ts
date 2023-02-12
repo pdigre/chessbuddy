@@ -11,8 +11,8 @@ export class RefreshService {
     this.showBlank = false;
   };
 
-  startRefreshTimer: VoidFunction = () => {
+  startRefreshTimer() {
     this.showBlank = true;
     window.setTimeout(this.refreshTimer, 100);
-  };
+  }
 }

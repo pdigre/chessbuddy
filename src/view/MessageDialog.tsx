@@ -10,7 +10,6 @@ import {
 import { observer } from 'mobx-react';
 import { MessageService } from '../service/message.service';
 import { ButtonType, ConfigButton } from './ConfigWidgets';
-import { runInAction } from 'mobx';
 import {
   FaChessQueen,
   FaChessRook,
@@ -21,33 +20,28 @@ import {
 } from 'react-icons/fa';
 import { MdCheck, MdCancel } from 'react-icons/md';
 
-export const MessageDialog = observer(({ message }: { message: MessageService }) => {
-  const handleClick = (event: MouseEvent) => {
-    runInAction(() => {
-      if (message.response) {
-        message.response((event.target as HTMLButtonElement).innerHTML);
-      }
-    });
-  };
-
-  return (
-    <Dialog
-      aria-labelledby="message"
-      open={message.title != undefined}
-      onClose={handleClick}
-      className="text-center text-lg">
-      <DialogTitle id="message">{message.title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{message.msg}</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        {message.buttons?.map(x => (
-          <ConfigButton key={x.label} onClick={handleClick} label={x.label} icon={x.icon} />
-        ))}
-      </DialogActions>
-    </Dialog>
-  );
-});
+export const MessageDialog = observer(({ message }: { message: MessageService }) => (
+  <Dialog
+    aria-labelledby="message"
+    open={message.title != undefined}
+    onClose={(e: MouseEvent) => message.onClose((e.target as HTMLButtonElement).innerHTML)}
+    className="text-center text-lg">
+    <DialogTitle id="message">{message.title}</DialogTitle>
+    <DialogContent>
+      <DialogContentText>{message.msg}</DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      {message.buttons?.map(x => (
+        <ConfigButton
+          key={x.label}
+          onClick={(e: MouseEvent) => message.onClose((e.target as HTMLButtonElement).innerHTML)}
+          label={x.label}
+          icon={x.icon}
+        />
+      ))}
+    </DialogActions>
+  </Dialog>
+));
 
 export const YESNO_BUTTONS: ButtonType[] = [
   { label: 'Yes', icon: <MdCheck /> },

@@ -1,3 +1,4 @@
+import { runInAction } from 'mobx';
 import { ConfigProp, ListItem } from '../service/config.service';
 
 export class Engine {
@@ -60,6 +61,10 @@ export class Bot implements ListItem {
   toTxt: (num: number) => string = (num: number) => {
     return isNaN(num) ? '0' : num.toString();
   };
+
+  setEngine(value: string) {
+    runInAction(() => (this.engine = value));
+  }
 
   public static init = [
     new Bot('Stockfish easy', 'Stockfish', 20, 1, 0),

@@ -26,7 +26,7 @@ export const ConfigBot = observer(({ config }: { config: ConfigService }) => {
             label="Chess Engine"
             choices={Array.from(Engines.map(x => x.name))}
             selected={{ name: 'ConfigSelector', value: item.engine }}
-            setSelected={value => (item.engine = value)}
+            setSelected={value => item.setEngine(value)}
           />
           <br />
           <ConfigText label="Skill level" id="skill" /> <br />

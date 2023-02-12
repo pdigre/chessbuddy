@@ -46,7 +46,7 @@ export const MainHistoryView = observer(({ history }: { history: HistoryService 
   });
 
   return (
-    <GridWidget onClick={historyClick} scroll={history.markHist == -1}>
+    <GridWidget onClickAction={historyClick} scroll={history.markHist == -1}>
       {tableRows}
     </GridWidget>
   );
@@ -56,7 +56,7 @@ export const MainLogView = observer(
   ({ play, history }: { play: PlayService; history: HistoryService }) => {
     history.enterLogCheck();
 
-    const logClick = (event: MouseEvent<HTMLTableElement>) => {
+    const logClickAction = (event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
       play.undoTo(id == dashboardService.markLog ? -1 : id);
@@ -83,7 +83,7 @@ export const MainLogView = observer(
     ));
 
     return (
-      <GridWidget onClick={logClick} scroll={dashboardService.markLog == -1}>
+      <GridWidget onClickAction={logClickAction} scroll={dashboardService.markLog == -1}>
         {viewLog}
       </GridWidget>
     );

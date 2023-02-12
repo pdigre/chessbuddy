@@ -29,8 +29,8 @@ export const Board = observer(
       backgroundColor: 'rgb(181, 136, 99)',
     };
 
-    const r90 = config.r90();
-    const r180 = config.r180();
+    const r90 = config.getR90();
+    const r180 = config.getR180();
 
     const showMarkers = () => {
       const markers = {};
@@ -80,9 +80,9 @@ export const Board = observer(
     return (
       <Chessboard
         position={r90 ? rules.leftFen(fen) : fen}
-        onPieceDragBegin={playService.onDragStart}
-        onPieceDrop={(from, to) => playService.onPieceDrop(from, to)}
-        onSquareClick={playService.onSquareClick}
+        onPieceDragBegin={playService.onDragStartAction}
+        onPieceDrop={(from, to) => playService.onPieceDropAction(from, to)}
+        onSquareClick={playService.onSquareClickAction}
         boardOrientation={!r180 ? 'white' : 'black'}
         boardWidth={rendering.boardWidth}
         customSquareStyles={showMarkers()}

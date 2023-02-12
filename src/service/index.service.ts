@@ -14,7 +14,7 @@ import { PlayService } from './play.service';
 import { StorageService } from './storage.service';
 import { RenderingService } from './rendering.service';
 import { RefreshService } from './refresh.service';
-import { TimerService } from './timer.service';
+import { ClockService } from './clock.service';
 import { EditService } from './edit.service';
 
 export const storageService = new StorageService();
@@ -34,4 +34,4 @@ export const analyzerService = new AnalyzerService();
 export const renderingService = new RenderingService();
 export const bluetoothService = new BluetoothService();
 export const refreshService = new RefreshService();
-export const timerService = new TimerService();
+export const clockService = new ClockService();

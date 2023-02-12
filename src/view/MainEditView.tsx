@@ -52,7 +52,7 @@ export const MainEditView = observer(({ edit }: { edit: EditService }) => {
         </tr>
       </table>
 
-      <ConfigButton onClick={edit.editDone} label="Done" icon={<MdCheck />} />
+      <ConfigButton onClick={edit.editDoneAction} label="Done" icon={<MdCheck />} />
     </div>
   );
 });

@@ -18,7 +18,7 @@ export class DashboardService {
   // ****************************
   // Actions
   // ****************************
-  startUndoTimer: (pos: number) => void = pos => {
+  startUndoTimer(pos: number) {
     runInAction(() => {
       this.showUndo = true;
       this.undopos = pos;
@@ -31,7 +31,7 @@ export class DashboardService {
         this.showUndo = false;
       });
     }, 9000);
-  };
+  }
 
   setMarkLog(n: number) {
     runInAction(() => {
@@ -39,9 +39,9 @@ export class DashboardService {
     });
   }
 
-  toggleHistory() {
+  toggleHistoryAction = () => {
     runInAction(() => {
       this.showHist = !this.showHist;
     });
-  }
+  };
 }
