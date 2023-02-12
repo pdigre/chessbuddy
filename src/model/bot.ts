@@ -1,5 +1,14 @@
+import { runInAction } from 'mobx';
 import { ConfigProp, ListItem } from '../service/config.service';
-import { Engine, Engines } from './engine';
+
+export class Engine {
+  constructor(public name: string, public path: string) {}
+}
+
+export const Engines: Engine[] = [
+  new Engine('Stockfish', 'bots/stockfish.js-10.0.2/stockfish.js'),
+  new Engine('Lozza', 'bots/lozza-1.18/lozza.js'),
+];
 
 export class Bot implements ListItem {
   uciEngineDef: Engine = Engines[0];
@@ -52,6 +61,10 @@ export class Bot implements ListItem {
   toTxt: (num: number) => string = (num: number) => {
     return isNaN(num) ? '0' : num.toString();
   };
+
+  setEngine(value: string) {
+    runInAction(() => (this.engine = value));
+  }
 
   public static init = [
     new Bot('Stockfish easy', 'Stockfish', 20, 1, 0),

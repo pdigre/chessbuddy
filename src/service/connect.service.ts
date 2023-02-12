@@ -1,16 +1,11 @@
 import { Human } from '../model/human';
 import {} from '../resources/library';
-import { makeAutoObservable } from 'mobx';
 import { historyService, messageService, utilService } from './index.service';
 
 export type RESP = { stored: number; games: string[] };
 
 export class ConnectService {
-  constructor() {
-    makeAutoObservable(this);
-  }
-
-  connectREST: (human: Human) => void = async human => {
+  readonly connectAction: (human: Human) => void = async human => {
     const games1 = historyService.getFilteredGames(human.name);
     const connect = { email: human.email, device: utilService, games: games1.join('\n') };
     const url = window.document.location.hostname == 'http://chess.digre.com';
@@ -23,11 +18,11 @@ export class ConnectService {
       },
     })
       .then(resp => resp.json())
-      .then(resp => this.importFromServer(resp as RESP))
+      .then(resp => this.importFromServerAction(resp as RESP))
       .catch(err => messageService.display('Connect Error', (err as Error).message));
   };
 
-  importFromServer: (resp: RESP) => void = resp => {
+  readonly importFromServerAction: (resp: RESP) => void = resp => {
     const i1 = historyService.history.length;
     historyService.importFromServer(resp.games);
     const i2 = historyService.history.length;

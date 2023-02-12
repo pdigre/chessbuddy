@@ -1,6 +1,6 @@
 {
   "name": "chessbuddy",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.10.5",

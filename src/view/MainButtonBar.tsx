@@ -14,9 +14,18 @@ import {
   MdEdit,
 } from 'react-icons/md';
 import { HistoryService } from '../service/history.service';
+import { EditService } from '../service/edit.service';
 
 export const MainButtonBar = observer(
-  ({ dashboard, history }: { dashboard: DashboardService; history: HistoryService }) => {
+  ({
+    dashboard,
+    edit,
+    history,
+  }: {
+    dashboard: DashboardService;
+    edit: EditService;
+    history: HistoryService;
+  }) => {
     const isGotoHist = dashboard.showHist && history.markHist >= 0;
     const isHistUndo = !dashboard.showHist && dashboard.markLog >= 0;
     const isPlayUndo = playService.isPlaying && dashboard.showUndo;
@@ -33,7 +42,7 @@ export const MainButtonBar = observer(
 
     return (
       <ButtonGroup color="primary" aria-label="outlined primary button group" className="w-full">
-        <PanelButton onClick={playService.playButtonHandler}>
+        <PanelButton onClick={playService.playButtonAction}>
           {isHistUndo || isPlayUndo ? (
             <MdUndo className="text-3xl" />
           ) : playService.isPlaying ? (
@@ -42,10 +51,10 @@ export const MainButtonBar = observer(
             <MdPause className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={() => dashboard.toggleHistory()}>
+        <PanelButton onClick={dashboard.toggleHistoryAction}>
           {isGotoHist ? (
             <MdInput className="text-3xl" />
-          ) : dashboard.showEdit ? (
+          ) : edit.showEdit ? (
             <MdEdit className="text-3xl" />
           ) : dashboard.showHist ? (
             <MdOutlineFolderOpen className="text-3xl" />
@@ -53,7 +62,7 @@ export const MainButtonBar = observer(
             <MdOutlineHistory className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={() => configService.openConfig()}>
+        <PanelButton onClick={configService.openConfigAction}>
           <MdSettings className="text-3xl" />
         </PanelButton>
       </ButtonGroup>

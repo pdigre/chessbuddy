@@ -9,8 +9,7 @@ import {
 } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { ConfigService, ListType } from '../service/config.service';
-import { Bot } from '../model/bot';
-import { Engines } from '../model/engine';
+import { Bot, Engines } from '../model/bot';
 
 export const ConfigBot = observer(({ config }: { config: ConfigService }) => {
   config.setListType(ListType.Bot);
@@ -27,7 +26,7 @@ export const ConfigBot = observer(({ config }: { config: ConfigService }) => {
             label="Chess Engine"
             choices={Array.from(Engines.map(x => x.name))}
             selected={{ name: 'ConfigSelector', value: item.engine }}
-            setSelected={value => (item.engine = value)}
+            setSelected={value => item.setEngine(value)}
           />
           <br />
           <ConfigText label="Skill level" id="skill" /> <br />

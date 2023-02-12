@@ -1,6 +1,13 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { History, Games } from '../model/history';
-import { storageService, playService, historyService, rulesService } from './index.service';
+import { YESNO_BUTTONS } from '../view/MessageDialog';
+import {
+  storageService,
+  playService,
+  historyService,
+  rulesService,
+  messageService,
+} from './index.service';
 
 /*
  * History of previous games, should store a maximum locally
@@ -18,20 +25,20 @@ export class HistoryService {
     storageService.storeObject('games', games);
   }
 
-  storeGame: VoidFunction = () => {
+  storeGame() {
     this.history.push(playService.toString());
     storageService.storeLines(HistoryService.storage, this.history);
-  };
+  }
 
-  importFromServer: (games: string[]) => void = games => {
+  importFromServer(games: string[]) {
     const h1 = historyService.history;
     h1.push(...games.filter(x => !h1.includes(x)));
     const h2 = h1.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
     historyService.history = h2;
     historyService.storeGame();
-  };
+  }
 
-  downloadPlayer: (name: string) => string = name => {
+  downloadPlayerAction: (name: string) => string = name => {
     const txt: string[] = [];
     this.history.forEach(line => {
       const cols = line.split(';');
@@ -44,14 +51,15 @@ export class HistoryService {
     return txt.join('\r\n');
   };
 
-  getFilteredGames: (name: string) => string[] = (name: string) =>
-    historyService.history.filter(x => {
+  getFilteredGames(name: string) {
+    return historyService.history.filter(x => {
       const s = x.split(';');
       return s[1] == name || s[2] == name;
     });
+  }
 
-  uploadHistory: (file: File) => void = file => {
-    new Promise(function (resolve, reject) {
+  uploadHistory(file: File) {
+    return new Promise(function (resolve, reject) {
       const reader = new FileReader();
       reader.onerror = reject;
       reader.onload = function () {
@@ -60,7 +68,13 @@ export class HistoryService {
       };
       reader.readAsBinaryString(file);
     });
-  };
+  }
+
+  uploadFilesHistory(files: FileList | null) {
+    if (files && files.length) {
+      historyService.uploadHistory(files[0]);
+    }
+  }
 
   private static upload: (text: string, history: string[]) => void = (text, history) => {
     const lines = text.replace(/\r/gi, '').split('\n');
@@ -92,7 +106,7 @@ export class HistoryService {
     });
   }
 
-  decodeGame = (row: string) => {
+  decodeGame(row: string) {
     const cols = row.split(';');
     let time = '?';
     const date = new Date(Number.parseInt(cols[0], 36));
@@ -114,7 +128,46 @@ export class HistoryService {
       c1: cols[1].split(' ')[0],
       c2: cols[2].split(' ')[0],
     };
-  };
+  }
 
-  getGames = () => this.history.filter(x => x.split(';').length > 5).map(x => this.decodeGame(x));
+  getGames() {
+    return this.history.filter(x => x.split(';').length > 5).map(x => this.decodeGame(x));
+  }
+
+  enterLogCheck() {
+    if (historyService.markHist >= 0) {
+      if (playService.isComplete || playService.log.length == 0) {
+        messageService.display(
+          'Load game',
+          'Do you want to look at this game?',
+          YESNO_BUTTONS,
+          reply => {
+            if (reply == 'Yes') {
+              playService.loadGame();
+            }
+            messageService.clear();
+          }
+        );
+      } else {
+        messageService.display('Load game', 'You have to end current game to load previous games', [
+          { label: 'Ok' },
+        ]);
+      }
+      historyService.setMarkHist(-1);
+    }
+  }
+
+  getLogRows() {
+    const rows: string[][] = [];
+    const log = playService.log;
+    for (let i = 0; i < log.length / 2; i++) {
+      rows[i] = ['', ''];
+    }
+    log.forEach((t, i) => {
+      const l = Math.floor(i / 2),
+        c = i % 2;
+      rows[l][c] = t;
+    });
+    return rows;
+  }
 }
