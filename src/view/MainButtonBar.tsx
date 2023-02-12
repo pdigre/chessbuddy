@@ -14,9 +14,18 @@ import {
   MdEdit,
 } from 'react-icons/md';
 import { HistoryService } from '../service/history.service';
+import { EditService } from '../service/edit.service';
 
 export const MainButtonBar = observer(
-  ({ dashboard, history }: { dashboard: DashboardService; history: HistoryService }) => {
+  ({
+    dashboard,
+    edit,
+    history,
+  }: {
+    dashboard: DashboardService;
+    edit: EditService;
+    history: HistoryService;
+  }) => {
     const isGotoHist = dashboard.showHist && history.markHist >= 0;
     const isHistUndo = !dashboard.showHist && dashboard.markLog >= 0;
     const isPlayUndo = playService.isPlaying && dashboard.showUndo;
@@ -45,7 +54,7 @@ export const MainButtonBar = observer(
         <PanelButton onClick={() => dashboard.toggleHistory()}>
           {isGotoHist ? (
             <MdInput className="text-3xl" />
-          ) : dashboard.showEdit ? (
+          ) : edit.showEdit ? (
             <MdEdit className="text-3xl" />
           ) : dashboard.showHist ? (
             <MdOutlineFolderOpen className="text-3xl" />

@@ -15,6 +15,7 @@ import { StorageService } from './storage.service';
 import { RenderingService } from './rendering.service';
 import { RefreshService } from './refresh.service';
 import { TimerService } from './timer.service';
+import { EditService } from './edit.service';
 
 export const storageService = new StorageService();
 export const utilService = new UtilService();
@@ -28,6 +29,7 @@ export const historyService = new HistoryService();
 export const dashboardService = new DashboardService();
 export const botService = new BotService();
 export const playService = new PlayService();
+export const editService = new EditService();
 export const analyzerService = new AnalyzerService();
 export const renderingService = new RenderingService();
 export const bluetoothService = new BluetoothService();

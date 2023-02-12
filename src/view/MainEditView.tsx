@@ -1,5 +1,4 @@
-import React, { ReactNode, useState } from 'react';
-import { DashboardService } from '../service/dashboard.service';
+import React, { ReactNode } from 'react';
 import {
   FaChessBishop,
   FaChessKing,
@@ -8,23 +7,14 @@ import {
   FaChessQueen,
   FaChessRook,
 } from 'react-icons/fa';
-import { ConfigButton, ConfigCheckbox } from './ConfigWidgets';
+import { ConfigBoolean, ConfigButton } from './ConfigWidgets';
 import { MdCheck, MdDelete } from 'react-icons/md';
 import { observer } from 'mobx-react';
+import { EditService } from '../service/edit.service';
 
-export const MainEditView = observer(({ dashboard }: { dashboard: DashboardService }) => {
-  const [wcck, setWcck] = useState(false);
-  const [wccq, setWccq] = useState(false);
-  const [bcck, setBcck] = useState(false);
-  const [bccq, setBccq] = useState(false);
-  const [bFirst, setBFirst] = useState(false);
-
-  const TD = (name: string, img: ReactNode) => (
-    <td onClick={() => dashboard.editPiece(name)}>{img}</td>
-  );
-
-  const editDone = () => dashboard.editDone(wcck, wccq, bcck, bccq, bFirst);
-
+export const MainEditView = observer(({ edit }: { edit: EditService }) => {
+  const TD = (name: string, img: ReactNode) => <td onClick={() => edit.editPiece(name)}>{img}</td>;
+  const props = edit.boolprops;
   return (
     <div>
       <table className="m-0 table-fixed w-full border-spacing-2">
@@ -39,35 +29,15 @@ export const MainEditView = observer(({ dashboard }: { dashboard: DashboardServi
           {TD('p', <FaChessPawn className="text-7xl text-black" />)}
         </tr>
         <tr>
-          <td onClick={() => dashboard.editPiece(' ')}>
+          <td onClick={() => edit.editPiece(' ')}>
             <MdDelete className="text-7xl text-red-500" />
           </td>
           <td colSpan={2}>
-            <ConfigCheckbox
-              checked={wcck}
-              onChange={() => setWcck(!wcck)}
-              label="White castle-king"
-            />
-            <ConfigCheckbox
-              checked={wccq}
-              onChange={() => setWccq(!wccq)}
-              label="White castle-queen"
-            />
-            <ConfigCheckbox
-              checked={bcck}
-              onChange={() => setBcck(!bcck)}
-              label="Black castle-king"
-            />
-            <ConfigCheckbox
-              checked={bccq}
-              onChange={() => setBccq(!bccq)}
-              label="Black castle-queen"
-            />
-            <ConfigCheckbox
-              checked={bFirst}
-              onChange={() => setBFirst(!bFirst)}
-              label="Black goes first"
-            />
+            <ConfigBoolean props={props} id="wcck" label="White castle-king" />
+            <ConfigBoolean props={props} id="wccq" label="White castle-queen" />
+            <ConfigBoolean props={props} id="bcck" label="Black castle-kin" />
+            <ConfigBoolean props={props} id="bccq" label="Black castle-quee" />
+            <ConfigBoolean props={props} id="bFirst" label="Black goes first" />
           </td>
         </tr>
         <tr>
@@ -82,7 +52,7 @@ export const MainEditView = observer(({ dashboard }: { dashboard: DashboardServi
         </tr>
       </table>
 
-      <ConfigButton onClick={editDone} label="Done" icon={<MdCheck />} />
+      <ConfigButton onClick={edit.editDone} label="Done" icon={<MdCheck />} />
     </div>
   );
 });

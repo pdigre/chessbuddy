@@ -1,6 +1,13 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { History, Games } from '../model/history';
-import { storageService, playService, historyService, rulesService } from './index.service';
+import { YESNO_BUTTONS } from '../view/MessageDialog';
+import {
+  storageService,
+  playService,
+  historyService,
+  rulesService,
+  messageService,
+} from './index.service';
 
 /*
  * History of previous games, should store a maximum locally
@@ -117,4 +124,41 @@ export class HistoryService {
   };
 
   getGames = () => this.history.filter(x => x.split(';').length > 5).map(x => this.decodeGame(x));
+
+  enterLogCheck = () => {
+    if (historyService.markHist >= 0) {
+      if (playService.isComplete || playService.log.length == 0) {
+        messageService.display(
+          'Load game',
+          'Do you want to look at this game?',
+          YESNO_BUTTONS,
+          reply => {
+            if (reply == 'Yes') {
+              playService.loadGame();
+            }
+            messageService.clear();
+          }
+        );
+      } else {
+        messageService.display('Load game', 'You have to end current game to load previous games', [
+          { label: 'Ok' },
+        ]);
+      }
+      historyService.setMarkHist(-1);
+    }
+  };
+
+  getLogRows = () => {
+    const rows: string[][] = [];
+    const log = playService.log;
+    for (let i = 0; i < log.length / 2; i++) {
+      rows[i] = ['', ''];
+    }
+    log.forEach((t, i) => {
+      const l = Math.floor(i / 2),
+        c = i % 2;
+      rows[l][c] = t;
+    });
+    return rows;
+  };
 }

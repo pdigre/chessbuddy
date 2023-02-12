@@ -122,7 +122,7 @@ export class ConfigService {
   playCorrect!: boolean;
   playWinner!: boolean;
 */
-  boolprops: Map<string, ConfigProp<boolean>> = new Map([
+  @jsonIgnore() boolprops: Map<string, ConfigProp<boolean>> = new Map([
     [
       'darkTheme',
       { get: () => renderingService.darkTheme, set: value => (renderingService.darkTheme = value) },

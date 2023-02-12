@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderingService, timerService } from '../service/index.service';
+import { editService, renderingService, timerService } from '../service/index.service';
 import {
   playService,
   analyzerService,
@@ -137,7 +137,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
             <PlayerInfoBar isTop={true} play={playService} />
             <Board
               analyzer={analyzerService}
-              dashboard={dashboardService}
+              edit={editService}
               rendering={rendering}
               config={configService}
               refresh={refreshService}
@@ -151,9 +151,13 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
               </span>
               <MdRefresh className="text-lg mx-5" onClick={mediaService.playAll} />
             </h3>
-            <MainButtonBar dashboard={dashboardService} history={historyService} />
+            <MainButtonBar
+              edit={editService}
+              dashboard={dashboardService}
+              history={historyService}
+            />
             <FenInfo play={playService} />
-            <MainView dashboard={dashboardService} />
+            <MainView dashboard={dashboardService} edit={editService} />
           </div>
           <MessageDialog message={messageService} />
           <Mp4Dialog mp4={mediaService} />

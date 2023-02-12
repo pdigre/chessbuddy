@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { MdAdd, MdDelete, MdEdit, MdSave } from 'react-icons/md';
 import { observer } from 'mobx-react';
-import { ConfigService, ListMode } from '../service/config.service';
+import { ConfigProp, ConfigService, ListMode } from '../service/config.service';
 import { configService, renderingService } from '../service/index.service';
 import { runInAction } from 'mobx';
 
@@ -99,8 +99,16 @@ export const ConfigText: React.FC<{
 };
 
 export const ConfigBoolean = observer(
-  ({ config, label, id }: { config: ConfigService; label: string; id: string }) => {
-    const prop = config.boolprops.get(id);
+  ({
+    props,
+    label,
+    id,
+  }: {
+    props: Map<string, ConfigProp<boolean>>;
+    label: string;
+    id: string;
+  }) => {
+    const prop = props.get(id);
     let checked = prop?.get();
     return (
       <FormControlLabel

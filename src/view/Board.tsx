@@ -1,6 +1,5 @@
 import React from 'react';
 import { AnalyzerService } from '../service/analyzer.service';
-import { DashboardService } from '../service/dashboard.service';
 import { Chessboard } from 'react-chessboard';
 import { ConfigService } from '../service/config.service';
 import { RefreshService } from '../service/refresh.service';
@@ -8,16 +7,17 @@ import { observer } from 'mobx-react';
 import { rulesService as rules, playService } from '../service/index.service';
 import { FEN } from '../model/fen';
 import { RenderingService } from '../service/rendering.service';
+import { EditService } from '../service/edit.service';
 
 export const Board = observer(
   ({
-    dashboard: gameState,
-    rendering: rendering,
+    edit,
+    rendering,
     config,
-    refresh: refreshTimer,
+    refresh,
   }: {
     analyzer: AnalyzerService;
-    dashboard: DashboardService;
+    edit: EditService;
     rendering: RenderingService;
     config: ConfigService;
     refresh: RefreshService;
@@ -36,7 +36,7 @@ export const Board = observer(
       const markers = {};
       playService.markEdit(() =>
         Object.assign(markers, {
-          [gameState.editSquare]: {
+          [edit.editSquare]: {
             background: 'radial-gradient(circle, #ff0000 36%, transparent 40%)',
             borderRadius: '50%',
           },
@@ -75,11 +75,7 @@ export const Board = observer(
       return markers;
     };
 
-    const fen = refreshTimer.showBlank
-      ? FEN.CLEAR_GAME
-      : gameState.showEdit
-      ? gameState.editFen
-      : playService.fen;
+    const fen = refresh.showBlank ? FEN.CLEAR_GAME : edit.showEdit ? edit.editFen : playService.fen;
 
     return (
       <Chessboard

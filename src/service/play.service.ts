@@ -18,6 +18,7 @@ import {
   storageService,
   refreshService,
   timerService,
+  editService,
 } from './index.service';
 import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
@@ -61,9 +62,7 @@ export class PlayService {
     this.calculate();
   }
 
-  store: VoidFunction = () => {
-    storageService.storeObject(PlayService.storage, this);
-  };
+  store: VoidFunction = () => storageService.storeObject(PlayService.storage, this);
 
   private calculate() {
     const san = this.log[this.log.length - 1];
@@ -162,9 +161,8 @@ export class PlayService {
     }
   };
 
-  nextPlayer: () => BotRunner | Human | undefined = () => {
-    return this.isWhiteTurn ? this.wplayer : this.bplayer;
-  };
+  nextPlayer: () => BotRunner | Human | undefined = () =>
+    this.isWhiteTurn ? this.wplayer : this.bplayer;
 
   playMove: (san: string) => void = san => {
     runInAction(() => {
@@ -259,7 +257,7 @@ export class PlayService {
 
   editGameAction: VoidFunction = () => {
     configService.store();
-    dashboardService.editStart();
+    editService.editStart(this.fen);
   };
 
   endGameAction = () => {
@@ -285,13 +283,13 @@ export class PlayService {
 
   onDragStart = (piece: string, from: Square) => {
     const r90 = configService.rotation % 2 == 1;
-    if (dashboardService.showEdit) return true;
+    if (editService.showEdit) return true;
     const player = this.nextPlayer();
     if (player instanceof Human && !this.isComplete) {
       const from2 = r90 ? rulesService.leftSquare(from) : from;
       const movable = this.isMoveable(from2);
       if (movable) {
-        this.sound_click.play().then();
+        mediaService.sound_click.play().then();
       }
       return movable;
     }
@@ -299,8 +297,8 @@ export class PlayService {
   };
 
   onPieceDrop = (from: Square, to: Square) => {
-    if (dashboardService.showEdit) {
-      dashboardService.editMove(from, to);
+    if (editService.showEdit) {
+      editService.editMove(from, to);
       return true;
     }
     const r90 = configService.rotation % 2 == 1;
@@ -346,13 +344,11 @@ export class PlayService {
   }
 
   onSquareClick(square: Square) {
-    if (dashboardService.showEdit) {
-      runInAction(() => (dashboardService.editSquare = square));
-    }
+    editService.onSquareClick(square);
   }
 
   markEdit(func: VoidFunction) {
-    if (dashboardService.showEdit && dashboardService.editSquare != '') func();
+    if (editService.showEdit && editService.editSquare != '') func();
   }
   markFacts(func: (x: Square) => void) {
     if (configService.showFacts) {
@@ -394,43 +390,6 @@ export class PlayService {
       return;
     }
     this.setPlaying(!this.isPlaying);
-  };
-
-  enterLogCheck = () => {
-    if (historyService.markHist >= 0) {
-      if (this.isComplete || this.log.length == 0) {
-        messageService.display(
-          'Load game',
-          'Do you want to look at this game?',
-          YESNO_BUTTONS,
-          reply => {
-            if (reply == 'Yes') {
-              this.loadGame();
-            }
-            messageService.clear();
-          }
-        );
-      } else {
-        messageService.display('Load game', 'You have to end current game to load previous games', [
-          { label: 'Ok' },
-        ]);
-      }
-      historyService.setMarkHist(-1);
-    }
-  };
-
-  getLogRows = () => {
-    const rows: string[][] = [];
-    const log = this.log;
-    for (let i = 0; i < log.length / 2; i++) {
-      rows[i] = ['', ''];
-    }
-    log.forEach((t, i) => {
-      const l = Math.floor(i / 2),
-        c = i % 2;
-      rows[l][c] = t;
-    });
-    return rows;
   };
 
   // PlayerInfo

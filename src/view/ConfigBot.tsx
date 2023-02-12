@@ -9,8 +9,7 @@ import {
 } from './ConfigWidgets';
 import { observer } from 'mobx-react';
 import { ConfigService, ListType } from '../service/config.service';
-import { Bot } from '../model/bot';
-import { Engines } from '../model/engine';
+import { Bot, Engines } from '../model/bot';
 
 export const ConfigBot = observer(({ config }: { config: ConfigService }) => {
   config.setListType(ListType.Bot);

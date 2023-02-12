@@ -1,8 +1,8 @@
 import type { Fen } from './rules.service';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
-import { Engines } from '../model/engine';
 import { configService, mediaService, renderingService } from './index.service';
+import { Engines } from '../model/bot';
 
 type AnalyzerReturn = { moves: string[]; cp: number | undefined };
 type AnalyzerCallback = (ret: AnalyzerReturn) => void;
