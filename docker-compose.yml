@@ -5,8 +5,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - "PORT=80"
     ports:
-      - "3000:80"
+      - "7800:7800"
+    expose:
+      - 7800
     restart: always
+    environment:
+      - SERVER_ADDRESS=0.0.0.0
+    networks:
+      - chessbuddy
+networks:
+  chessbuddy:
+
