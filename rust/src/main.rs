@@ -14,7 +14,7 @@ async fn main() {
         .with_defaults("index.html")
         .with_listing(true),
     );
-    tracing::info!("Listening on http://0.0.0.0:7800");
-    Server::new(TcpListener::bind("0.0.0.0:7800")).serve(router).await;
+    tracing::info!("Listening on http://0.0.0.0:80");
+    Server::new(TcpListener::bind("0.0.0.0:80")).serve(router).await;
 }
 
