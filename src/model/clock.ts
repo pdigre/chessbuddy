@@ -13,7 +13,7 @@ export class Clock implements ListItem {
   getDescription: () => string = () => Clock.time2string(this.time);
   properties: Map<string, ConfigProp<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
-    ['time', { get: this.getDescription, set: value => Clock.string2time(value) }],
+    ['time', { get: this.getDescription, set: value => (this.time = Clock.string2time(value)) }],
   ]);
   validate: () => string = () => (this.name.length ? '' : 'Need to enter a name');
 

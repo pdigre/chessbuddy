@@ -16,7 +16,7 @@ import { ConfigService, ListType } from '../service/config.service';
 
 export const ConfigHuman = observer(
   ({ config, connect }: { config: ConfigService; connect: ConnectService }) => {
-    config.setListType(ListType.Human);
+    config.setListType = ListType.Human;
     const items = config.humans;
     const hasSelect = config.cursor >= 0;
 

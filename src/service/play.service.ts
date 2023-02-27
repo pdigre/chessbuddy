@@ -1,6 +1,6 @@
 import { Human } from '../model/human';
 import { San } from './openings.service';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { Chess, Square, WHITE } from 'chess.js';
 import { Clock } from '../model/clock';
 import { toMMSS } from '../resources/library';
@@ -167,7 +167,7 @@ export class PlayService {
     this.isWhiteTurn ? this.wplayer : this.bplayer;
 
   playMove(san: string) {
-    runInAction(() => {
+    action(() => {
       this.addMove(san);
       this.store();
       if (this.isComplete) {
@@ -205,7 +205,7 @@ export class PlayService {
   // ****************************
 
   setPlaying(play: boolean) {
-    runInAction(() => {
+    action(() => {
       this.isPlaying = play;
       if (play) {
         this.runBot();
@@ -214,7 +214,7 @@ export class PlayService {
   }
 
   initGame(useLog: string[]) {
-    runInAction(() => {
+    action(() => {
       this.log = useLog;
       this.fen = rulesService.replay(this.log);
       this.clearAnalyzer();
@@ -222,7 +222,7 @@ export class PlayService {
   }
 
   undoTo(mark: number) {
-    runInAction(() => {
+    action(() => {
       this.setPlaying(false);
       dashboardService.setMarkLog(mark);
       const pos = mark >= 0 ? mark : this.log.length;
@@ -237,7 +237,7 @@ export class PlayService {
   }
 
   loadGame() {
-    runInAction(() => {
+    action(() => {
       const games = historyService.history;
       const moves = games[historyService.markHist].split(';')[5].split(' ');
       this.log = moves;
@@ -251,7 +251,7 @@ export class PlayService {
   readonly startGameAction: VoidFunction = () => {
     configService.store();
     configService.closeConfigAction();
-    runInAction(() => {
+    action(() => {
       configService.showConfig = false;
       this.playContinue();
     });

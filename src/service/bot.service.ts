@@ -69,7 +69,7 @@ export class BotService {
     return player instanceof Bot
       ? new BotRunner(
           player.name,
-          player.uciEngineDef.path,
+          player.getUciEngineDef.path,
           player.skill,
           player.depth,
           player.time

@@ -12,26 +12,16 @@ export const ConfigGame = observer(({ config }: { config: ConfigService }) => {
   return (
     <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
       <div>
-        <ConfigSelect
-          label="White"
-          choices={playerNames}
-          selected={{ name: config.white, value: config.white }}
-          setSelected={config.setWhiteAction}
-        />
+        <ConfigSelect label="White" id="white" choices={playerNames} props={config.properties} />
         &nbsp;
-        <ConfigSelect
-          label="Black"
-          choices={playerNames}
-          selected={{ name: config.black, value: config.black }}
-          setSelected={config.setBlackAction}
-        />
+        <ConfigSelect label="Black" choices={playerNames} id="black" props={config.properties} />
       </div>
       <div>&nbsp;</div>
       <ConfigSelect
         label="Timer setting"
+        id="clock"
         choices={config.clocks.map(x => x.name)}
-        selected={{ name: config.clock, value: config.clock }}
-        setSelected={config.setClockAction}
+        props={config.properties}
       />
       <div>&nbsp;</div>
       <div className="[&>button]:mx-2">

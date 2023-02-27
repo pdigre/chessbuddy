@@ -87,7 +87,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
           label={<div className="text-xl">Clocks</div>}
           icon={<FaClock className="text-3xl" />}
           iconPosition="start"
-          id="nav-tab-3"
+          id="nav-tab-4"
         />
         <Tab
           component="a"
@@ -95,7 +95,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
           label={<div className="text-xl">Bluetooth</div>}
           icon={<FaConnectdevelop className="text-3xl" />}
           iconPosition="start"
-          id="nav-tab-4"
+          id="nav-tab-5"
         />
       </Tabs>
       <TabPanel index={0}>
