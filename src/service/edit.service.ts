@@ -1,6 +1,6 @@
 import { BLACK, Square, SQUARES, WHITE } from 'chess.js';
 import { jsonIgnore } from 'json-ignore';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { FEN } from '../model/fen';
 import { ConfigProp } from './config.service';
 import { configService, playService } from './index.service';
@@ -29,7 +29,7 @@ export class EditService {
   }
 
   editStart(fen: string) {
-    runInAction(() => {
+    action(() => {
       this.showEdit = true;
       this.editFen = fen;
       configService.showConfig = false;
@@ -45,7 +45,7 @@ export class EditService {
       (this.bcck ? 'k' : '') +
       (this.bccq ? 'q' : '');
     const fen = fenArr.join(' ');
-    runInAction(() => {
+    action(() => {
       this.editFen = fen;
       this.showEdit = false;
       playService.fen = fen;
@@ -60,7 +60,7 @@ export class EditService {
     brd[p] = piece;
     fenArr[0] = FEN.brd2fen(brd.join(''));
     const fen = fenArr.join(' ');
-    runInAction(() => {
+    action(() => {
       this.editFen = fen;
     });
   };
@@ -75,14 +75,14 @@ export class EditService {
     brd[p2] = swap;
     fenArr[0] = FEN.brd2fen(brd.join(''));
     const fen = fenArr.join(' ');
-    runInAction(() => {
+    action(() => {
       this.editFen = fen;
     });
   }
 
   onSquareClick(square: Square) {
     if (this.showEdit) {
-      runInAction(() => (this.editSquare = square));
+      action(() => (this.editSquare = square));
     }
   }
 }

@@ -3,13 +3,15 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:mobx/recommended"
   ],
   "plugins": [
     "react",
     "@typescript-eslint",
     "prettier",
-    "import"
+    "import",
+    "mobx"
   ],
   "env": {
     "browser": true
@@ -21,7 +23,8 @@
         "endOfLine": "auto"
       }
     ],
-    "import/no-unresolved": "error"
+    "import/no-unresolved": "error",
+    "mobx/missing-observer": "off" 
   },
   "settings": {
     "react": {

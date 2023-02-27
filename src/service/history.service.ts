@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { History, Games } from '../model/history';
 import { YESNO_BUTTONS } from '../view/MessageDialog';
 import {
@@ -101,7 +101,7 @@ export class HistoryService {
   // ****************************
 
   setMarkHist(n: number) {
-    runInAction(() => {
+    action(() => {
       this.markHist = n;
     });
   }

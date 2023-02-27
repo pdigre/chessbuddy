@@ -84,7 +84,6 @@ const CP = observer(
     config,
   }: {
     analyzer: AnalyzerService;
-    rendering: RenderingService;
     config: ConfigService;
   }) => {
     if (!config.showCP) {
@@ -105,8 +104,8 @@ const CP = observer(
   }
 );
 
-const Ticker = observer(({ clock }: { clock: ClockService; play: PlayService }) => (
-  <span>{clock.getClockText()}</span>
+const Ticker = observer(({ clock }: { clock: ClockService }) => (
+  <span>{clock.clockText}</span>
 ));
 
 const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlayService }) => {
@@ -114,7 +113,7 @@ const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlaySer
   return (
     <p className={'h-[31px] text-xl dark:text-white m-0 p-1' + (isTextRight ? ' text-right' : '')}>
       {label} &lt;
-      {showTicker ? <Ticker clock={clockService} play={play} /> : other} &gt;
+      {showTicker ? <Ticker clock={clockService} /> : other} &gt;
       {banner}
     </p>
   );
@@ -132,7 +131,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
       <CssBaseline />
       <div className={rendering.darkTheme ? 'dark' : 'light'}>
         <div className="w-[1024px] h-[748px] bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row">
-          <CP analyzer={analyzerService} rendering={rendering} config={configService} />
+          <CP analyzer={analyzerService} config={configService} />
           <div className="flex flex-col flex-grow">
             <PlayerInfoBar isTop={true} play={playService} />
             <Board

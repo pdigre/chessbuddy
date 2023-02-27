@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
@@ -76,6 +76,7 @@ export class ConfigService {
   @jsonIgnore() cursor = -1;
   @jsonIgnore() listType = ListType.None;
   @jsonIgnore() listMode = ListMode.None;
+  private newItem: ListItem = Human.create();
 
   constructor() {
     makeAutoObservable(this);
@@ -135,80 +136,83 @@ export class ConfigService {
     ['playWinner', { get: () => this.playWinner, set: value => (this.playWinner = value) }],
   ]);
 
+  properties: Map<string, ConfigProp<string>> = new Map([
+    ['clock', { get: () => this.clock, set: value => (this.clock = value) }],
+    ['white', { get: () => this.white, set: value => (this.white = value) }],
+    ['black', { get: () => this.black, set: value => (this.black = value) }],
+  ]);
+
   store: VoidFunction = () => storageService.storeObject(ConfigService.storage, this);
 
   // ****************************
   // Actions
   // ****************************
-  readonly openConfigAction = () =>
-    runInAction(() => {
-      this.showConfig = true;
-      playService.isPlaying = false;
-    });
+  openConfigAction = action(() => {
+    this.showConfig = true;
+    playService.isPlaying = false;
+  });
 
-  readonly closeConfigAction = () => {
-    runInAction(() => (this.showConfig = false));
+  closeConfigAction = () => {
+    action(() => (this.showConfig = false));
     this.store();
     refreshService.startRefreshTimer();
   };
 
   switchTab(n: number) {
-    runInAction(() => {
+    action(() => {
       this.showTab = n;
       this.cursor = -1;
     });
   }
 
   setCursor(id: string) {
-    runInAction(() => {
+    action(() => {
       const num = Number.parseInt(id);
       this.cursor = num == this.cursor ? -1 : num;
     });
   }
 
-  readonly deleteItemAction = () =>
-    runInAction(() => {
-      const items = this.getItems();
-      items.splice(this.cursor, 1);
-      this.cursor = -1;
-    });
+  readonly deleteItemAction = action(() => {
+    const items = this.getItems;
+    items.splice(this.cursor, 1);
+    this.cursor = -1;
+  });
 
-  readonly closePopupAction = () =>
-    runInAction(() => {
-      this.cursor = -1;
-      this.listMode = ListMode.None;
-    });
+  readonly closePopupAction = action(() => {
+    this.cursor = -1;
+    this.listMode = ListMode.None;
+  });
 
-  setListType(type: ListType) {
-    runInAction(() => {
+  set setListType(type: ListType) {
+    action(() => {
       this.listType = type;
       this.listMode = ListMode.None;
+      this.newItem = this.createItem;
     });
   }
 
-  setListMode(mode: ListMode) {
-    runInAction(() => (this.listMode = mode));
+  set setListMode(mode: ListMode) {
+    action(() => (this.listMode = mode));
   }
-  readonly setListModeEditAction = () => this.setListMode(ListMode.Edit);
-  readonly setListModeAddAction = () => this.setListMode(ListMode.Add);
 
   saveItem(item: ListItem, items: ListItem[]) {
     if (item.validate()) {
-      messageService.display(
-        (this.isEdit() ? 'Save' : 'Add') + this.getTitleType(),
-        item.validate()
-      );
+      messageService.display((this.isEdit ? 'Save' : 'Add') + this.getTitleType, item.validate());
     } else {
-      this.isEdit() ? (items[this.cursor] = item) : items.push(item);
+      this.isEdit ? (items[this.cursor] = item) : items.push(item);
     }
     this.closePopupAction();
   }
 
-  isEdit() {
+  get isEdit() {
     return this.listMode == ListMode.Edit;
   }
 
-  getTitleType() {
+  get isAdd() {
+    return this.listMode == ListMode.Add;
+  }
+
+  get getTitleType() {
     switch (this.listType) {
       case ListType.Human:
         return 'Human';
@@ -219,7 +223,7 @@ export class ConfigService {
     }
   }
 
-  getItems(): ListItem[] {
+  get getItems(): ListItem[] {
     switch (this.listType) {
       case ListType.Human:
         return this.humans;
@@ -230,11 +234,11 @@ export class ConfigService {
     }
   }
 
-  getItem() {
-    return this.isEdit() ? this.getItems()[this.cursor] : this.createItem();
+  get getItem() {
+    return this.isEdit ? this.getItems[this.cursor] : this.newItem;
   }
 
-  createItem(): ListItem {
+  get createItem(): ListItem {
     switch (this.listType) {
       case ListType.Human:
         return Human.create();
@@ -245,16 +249,12 @@ export class ConfigService {
     }
   }
 
-  readonly setClockAction = (value: string) => runInAction(() => (this.clock = value));
-  readonly setBlackAction = (value: string) => runInAction(() => (this.black = value));
-  readonly setWhiteAction = (value: string) => runInAction(() => (this.white = value));
-
-  getR90() {
+  get getR90() {
     return this.rotation % 2 == 1;
   }
-  getR180() {
+  get getR180() {
     return this.rotation > 1;
   }
 
-  readonly rotateAction = () => runInAction(() => (this.rotation = (this.rotation + 1) % 4));
+  rotateAction = action(() => (this.rotation = (this.rotation + 1) % 4));
 }

@@ -1,4 +1,3 @@
-import { runInAction } from 'mobx';
 import { ConfigProp, ListItem } from '../service/config.service';
 
 export class Engine {
@@ -11,8 +10,6 @@ export const Engines: Engine[] = [
 ];
 
 export class Bot implements ListItem {
-  uciEngineDef: Engine = Engines[0];
-
   constructor(
     public name: string,
     public engine: string,
@@ -36,7 +33,7 @@ export class Bot implements ListItem {
   ]);
   getName: () => string = () => this.name;
   getDescription: () => string = () =>
-    `${this.uciEngineDef.name},${this.skill},${this.time ?? ''},${this.depth ?? ''}`;
+    `${this.engine},${this.skill},${this.time ?? ''},${this.depth ?? ''}`;
   validate: () => string = () => {
     if (!this.name.length) return 'Need to enter a name';
     if (!this.engine) return 'Need to select a chess engine';
@@ -63,7 +60,11 @@ export class Bot implements ListItem {
   };
 
   setEngine(value: string) {
-    runInAction(() => (this.engine = value));
+    this.engine = value;
+  }
+
+  get getUciEngineDef() {
+    return Engines.find(engine => engine.name == this.engine) ?? Engines[0];
   }
 
   public static init = [
@@ -74,5 +75,5 @@ export class Bot implements ListItem {
     new Bot('Lozza med', 'Lozza', 1, 0, 10),
     new Bot('Lozza hard', 'Lozza', 20, 0, 1),
   ];
-  public static create: () => Bot = () => new Bot('', Engines[0].name, 0, 0, 0);
+  public static create: () => Bot = () => new Bot('', 'Stockfish', 0, 0, 0);
 }

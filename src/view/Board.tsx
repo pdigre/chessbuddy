@@ -29,8 +29,8 @@ export const Board = observer(
       backgroundColor: 'rgb(181, 136, 99)',
     };
 
-    const r90 = config.getR90();
-    const r180 = config.getR180();
+    const r90 = config.getR90;
+    const r180 = config.getR180;
 
     const showMarkers = () => {
       const markers = {};

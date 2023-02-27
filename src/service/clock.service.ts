@@ -20,7 +20,7 @@ export class ClockService {
     this.elapsed = 0;
   }
 
-  getClockText() {
+  get clockText() {
     const current = Math.floor(this.elapsed) + playService.getStartTime();
     const allowed = playService.allowed;
     if (!allowed) {

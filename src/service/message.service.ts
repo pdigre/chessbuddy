@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { ReactNode } from 'react';
 import { ButtonType } from '../view/ConfigWidgets';
 
@@ -30,6 +30,6 @@ export class MessageService {
   };
 
   onClose(html: string) {
-    runInAction(() => (this.response ? this.response(html) : null));
+    action(() => (this.response ? this.response(html) : null));
   }
 }
