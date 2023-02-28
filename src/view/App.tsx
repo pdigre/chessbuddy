@@ -79,13 +79,7 @@ const darkTheme = createTheme({
 });
 
 const CP = observer(
-  ({
-    analyzer,
-    config,
-  }: {
-    analyzer: AnalyzerService;
-    config: ConfigService;
-  }) => {
+  ({ analyzer, config }: { analyzer: AnalyzerService; config: ConfigService }) => {
     if (!config.showCP) {
       return <div className="w-6 h-full flex flex-col flex-grow"></div>;
     }
@@ -104,9 +98,7 @@ const CP = observer(
   }
 );
 
-const Ticker = observer(({ clock }: { clock: ClockService }) => (
-  <span>{clock.clockText}</span>
-));
+const Ticker = observer(({ clock }: { clock: ClockService }) => <span>{clock.clockText}</span>);
 
 const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlayService }) => {
   const { other, label, showTicker, banner, isTextRight } = play.getPlayerInfo(isTop);
