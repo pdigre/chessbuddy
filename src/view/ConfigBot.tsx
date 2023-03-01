@@ -10,6 +10,7 @@ import {
 import { observer } from 'mobx-react';
 import { ConfigService, ListType } from '../service/config.service';
 import { Engines } from '../model/bot';
+import { runInAction } from 'mobx';
 
 export const ConfigBot = observer(({ config }: { config: ConfigService }) => {
   config.setListType = ListType.Bot;

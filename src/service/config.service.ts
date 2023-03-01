@@ -147,52 +147,46 @@ export class ConfigService {
   // ****************************
   // Actions
   // ****************************
-  openConfigAction = action(() => {
+  openConfigAction = () => {
     this.showConfig = true;
     playService.isPlaying = false;
-  });
+  };
 
   closeConfigAction = () => {
-    action(() => (this.showConfig = false));
+    this.showConfig = false;
     this.store();
     refreshService.startRefreshTimer();
   };
 
   switchTab(n: number) {
-    action(() => {
-      this.showTab = n;
-      this.cursor = -1;
-    });
+    this.showTab = n;
+    this.cursor = -1;
   }
 
   setCursor(id: string) {
-    action(() => {
-      const num = Number.parseInt(id);
-      this.cursor = num == this.cursor ? -1 : num;
-    });
+    const num = Number.parseInt(id);
+    this.cursor = num == this.cursor ? -1 : num;
   }
 
-  readonly deleteItemAction = action(() => {
+  readonly deleteItemAction = () => {
     const items = this.getItems;
     items.splice(this.cursor, 1);
     this.cursor = -1;
-  });
+  };
 
-  readonly closePopupAction = action(() => {
+  readonly closePopupAction = () => {
     this.cursor = -1;
     this.listMode = ListMode.None;
-  });
+  };
 
   set setListType(type: ListType) {
-    action(() => {
-      this.listType = type;
-      this.listMode = ListMode.None;
-      this.newItem = this.createItem;
-    });
+    this.listType = type;
+    this.listMode = ListMode.None;
+    this.newItem = this.createItem;
   }
 
   set setListMode(mode: ListMode) {
-    action(() => (this.listMode = mode));
+    this.listMode = mode;
   }
 
   saveItem(item: ListItem, items: ListItem[]) {
@@ -256,5 +250,5 @@ export class ConfigService {
     return this.rotation > 1;
   }
 
-  rotateAction = action(() => (this.rotation = (this.rotation + 1) % 4));
+  rotateAction = () => (this.rotation = (this.rotation + 1) % 4);
 }

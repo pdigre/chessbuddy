@@ -13,6 +13,7 @@ import {
 } from './ConfigWidgets';
 import { MdDownload, MdOnlinePrediction, MdUpload } from 'react-icons/md';
 import { ConfigService, ListType } from '../service/config.service';
+import { action } from 'mobx';
 
 export const ConfigHuman = observer(
   ({ config, connect }: { config: ConfigService; connect: ConnectService }) => {
@@ -66,13 +67,13 @@ export const ConfigHuman = observer(
             disabled={!hasSelect}
           />
           <ConfigButton
-            onClick={uploadPlayerAction}
+            onClick={action(uploadPlayerAction)}
             label="Upload"
             icon={<MdUpload />}
             disabled={!hasSelect}
           />
           <ConfigButton
-            onClick={connectPlayerAction}
+            onClick={action(connectPlayerAction)}
             label="Update"
             icon={<MdOnlinePrediction />}
             disabled={!hasEmail}

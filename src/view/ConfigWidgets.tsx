@@ -85,7 +85,7 @@ export const ConfigButton: React.FC<{
 
 export const ConfigSaveButton: React.FC = () => (
   <ConfigButton
-    onClick={() => configService.saveItem(configService.getItem, configService.getItems)}
+    onClick={action(() => configService.saveItem(configService.getItem, configService.getItems))}
     label={configService.isEdit ? 'Save ' : 'Add ' + configService.getTitleType}
     icon={configService.isEdit ? <MdSave /> : <MdAdd />}
   />
@@ -141,11 +141,11 @@ export const ConfigBoolean = observer(
 export const ConfigListTable = observer(({ config }: { config: ConfigService }) => (
   <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
     <tbody
-      onClick={(event: MouseEvent<HTMLTableSectionElement>) => {
+      onClick={action((event: MouseEvent<HTMLTableSectionElement>) => {
         if (event.target instanceof HTMLTableCellElement) {
           config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
         }
-      }}>
+      })}>
       {config.getItems.map((item, iLine) => (
         <tr
           key={iLine.toString()}
@@ -176,7 +176,7 @@ export const ConfigListButtons = observer(
           disabled={!hasSelect}
         />
         <ConfigButton
-          onClick={config.deleteItemAction}
+          onClick={action(config.deleteItemAction)}
           label="Delete"
           icon={<MdDelete />}
           disabled={!hasSelect}
@@ -194,7 +194,7 @@ export const ConfigPopup = observer(
     ) : (
       <Dialog
         aria-labelledby="message"
-        onClose={configService.closePopupAction}
+        onClose={action(configService.closePopupAction)}
         className="text-center text-lg"
         open={true}>
         <DialogTitle id="message">

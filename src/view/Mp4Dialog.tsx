@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { observer } from 'mobx-react';
 import { MediaService } from '../service/media.service';
+import { action } from 'mobx';
 
 export const Mp4Dialog = observer(({ mp4 }: { mp4: MediaService }) => {
   const width = Math.min(mp4.msg?.width ?? 480, 500);
@@ -9,7 +10,7 @@ export const Mp4Dialog = observer(({ mp4 }: { mp4: MediaService }) => {
     <Dialog
       aria-labelledby="mp4"
       open={mp4.title != undefined}
-      onClose={mp4.clear}
+      onClose={action(mp4.clear)}
       className="text-center text-lg">
       <DialogTitle id="mp4">{mp4.title}</DialogTitle>
       <DialogContent>

@@ -29,11 +29,9 @@ export class EditService {
   }
 
   editStart(fen: string) {
-    action(() => {
-      this.showEdit = true;
-      this.editFen = fen;
-      configService.showConfig = false;
-    });
+    this.showEdit = true;
+    this.editFen = fen;
+    configService.showConfig = false;
   }
 
   readonly editDoneAction = () => {
@@ -45,12 +43,10 @@ export class EditService {
       (this.bcck ? 'k' : '') +
       (this.bccq ? 'q' : '');
     const fen = fenArr.join(' ');
-    action(() => {
-      this.editFen = fen;
-      this.showEdit = false;
-      playService.fen = fen;
-      configService.showConfig = true;
-    });
+    this.editFen = fen;
+    this.showEdit = false;
+    playService.fen = fen;
+    configService.showConfig = true;
   };
 
   readonly editPiece = (piece: string) => {
@@ -60,9 +56,7 @@ export class EditService {
     brd[p] = piece;
     fenArr[0] = FEN.brd2fen(brd.join(''));
     const fen = fenArr.join(' ');
-    action(() => {
-      this.editFen = fen;
-    });
+    this.editFen = fen;
   };
 
   editMove(from: Square, to: Square) {
@@ -75,14 +69,12 @@ export class EditService {
     brd[p2] = swap;
     fenArr[0] = FEN.brd2fen(brd.join(''));
     const fen = fenArr.join(' ');
-    action(() => {
-      this.editFen = fen;
-    });
+    this.editFen = fen;
   }
 
   onSquareClick(square: Square) {
     if (this.showEdit) {
-      action(() => (this.editSquare = square));
+      this.editSquare = square;
     }
   }
 }

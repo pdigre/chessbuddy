@@ -27,6 +27,7 @@ import { MainView } from './MainView';
 import { ConfigService } from '../service/config.service';
 import { PlayService } from '../service/play.service';
 import { ClockService } from '../service/clock.service';
+import { action } from 'mobx';
 
 const lightTheme = createTheme({
   palette: {
@@ -137,10 +138,10 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
           </div>
           <div className="flex flex-col w-full text-center">
             <h3 className="h-8 text-lg dark:text-white flex flex-row">
-              <span onClick={about} className="mx-5 text-xl">
+              <span onClick={action(about)} className="mx-5 text-xl">
                 ChessBuddy {version}
               </span>
-              <MdRefresh className="text-lg mx-5" onClick={mediaService.playAllAction} />
+              <MdRefresh className="text-lg mx-5" onClick={action(mediaService.playAllAction)} />
             </h3>
             <MainButtonBar
               edit={editService}

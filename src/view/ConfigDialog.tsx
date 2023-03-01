@@ -11,6 +11,7 @@ import { FaChess, FaClock, FaConnectdevelop, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
 import { ConfigClock } from './ConfigClock';
 import { ConfigBluetooth } from './ConfigBluetooth';
+import { action } from 'mobx';
 
 export const ConfigDialog = observer(({ config }: { config: ConfigService }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {
@@ -41,7 +42,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
     <Dialog
       aria-labelledby="simple-dialog-title"
       open={config.showConfig}
-      onClose={config.closeConfigAction}
+      onClose={action(config.closeConfigAction)}
       maxWidth="xl"
       className={'text-center text-xl'}>
       <Tabs
