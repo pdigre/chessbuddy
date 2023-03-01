@@ -4,6 +4,7 @@ import { MdExitToApp, MdPlayCircle, MdClear, MdEdit } from 'react-icons/md';
 import { observer } from 'mobx-react';
 import { ConfigService } from '../service/config.service';
 import { playService } from '../service/index.service';
+import { action } from 'mobx';
 
 export const ConfigGame = observer(({ config }: { config: ConfigService }) => {
   const players = [...config.humans, ...config.bots];
@@ -25,15 +26,23 @@ export const ConfigGame = observer(({ config }: { config: ConfigService }) => {
       />
       <div>&nbsp;</div>
       <div className="[&>button]:mx-2">
-        <ConfigButton onClick={playService.startGameAction} label="Play" icon={<MdPlayCircle />} />
         <ConfigButton
-          onClick={playService.endGameAction}
+          onClick={action(playService.startGameAction)}
+          label="Play"
+          icon={<MdPlayCircle />}
+        />
+        <ConfigButton
+          onClick={action(playService.endGameAction)}
           label="End game"
           icon={<MdExitToApp />}
           disabled={playService.isComplete}
         />
-        <ConfigButton onClick={playService.resetGameAction} label="Reset" icon={<MdClear />} />
-        <ConfigButton onClick={playService.editGameAction} label="Edit" icon={<MdEdit />} />
+        <ConfigButton
+          onClick={action(playService.resetGameAction)}
+          label="Reset"
+          icon={<MdClear />}
+        />
+        <ConfigButton onClick={action(playService.editGameAction)} label="Edit" icon={<MdEdit />} />
       </div>
     </div>
   );

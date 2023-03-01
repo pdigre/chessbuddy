@@ -15,6 +15,7 @@ import {
 } from 'react-icons/md';
 import { HistoryService } from '../service/history.service';
 import { EditService } from '../service/edit.service';
+import { action } from 'mobx';
 
 export const MainButtonBar = observer(
   ({
@@ -34,7 +35,7 @@ export const MainButtonBar = observer(
       <Button
         className="h-14 flex-grow bg-green-700"
         sx={{ backgroundColor: 'darkgreen' }}
-        onClick={props.onClick}
+        onClick={action(props.onClick)}
         variant="contained">
         {props.children}
       </Button>
@@ -42,7 +43,7 @@ export const MainButtonBar = observer(
 
     return (
       <ButtonGroup color="primary" aria-label="outlined primary button group" className="w-full">
-        <PanelButton onClick={playService.playButtonAction}>
+        <PanelButton onClick={action(playService.playButtonAction)}>
           {isHistUndo || isPlayUndo ? (
             <MdUndo className="text-3xl" />
           ) : playService.isPlaying ? (
@@ -51,7 +52,7 @@ export const MainButtonBar = observer(
             <MdPause className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={dashboard.toggleHistoryAction}>
+        <PanelButton onClick={action(dashboard.toggleHistoryAction)}>
           {isGotoHist ? (
             <MdInput className="text-3xl" />
           ) : edit.showEdit ? (
@@ -62,7 +63,7 @@ export const MainButtonBar = observer(
             <MdOutlineHistory className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={configService.openConfigAction}>
+        <PanelButton onClick={action(configService.openConfigAction)}>
           <MdSettings className="text-3xl" />
         </PanelButton>
       </ButtonGroup>

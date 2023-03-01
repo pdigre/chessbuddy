@@ -30,6 +30,6 @@ export class MessageService {
   };
 
   onClose(html: string) {
-    action(() => (this.response ? this.response(html) : null));
+    this.response ? this.response(html) : null;
   }
 }

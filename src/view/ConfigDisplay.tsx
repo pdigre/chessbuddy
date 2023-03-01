@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { ConfigBoolean, ConfigButton } from './ConfigWidgets';
 import { RenderingService } from '../service/rendering.service';
 import { MdRotateRight } from 'react-icons/md';
+import { action } from 'mobx';
 
 export const ConfigDisplay = observer(
   ({ config }: { config: ConfigService; rendering: RenderingService }) => {
@@ -18,7 +19,7 @@ export const ConfigDisplay = observer(
         <ConfigBoolean props={props} id="playMistake" label="Play giphy for big mistake" />
         <ConfigBoolean props={props} id="playWinner" label="Play giphy when game ends" />
         <ConfigButton
-          onClick={config.rotateAction}
+          onClick={action(config.rotateAction)}
           label="Rotate chessboard"
           icon={<MdRotateRight />}
         />

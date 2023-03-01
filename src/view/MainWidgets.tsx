@@ -1,3 +1,4 @@
+import { action } from 'mobx';
 import React, { MouseEvent, ReactNode, TouchEvent, useRef } from 'react';
 
 export const GridWidget = (props: {
@@ -29,9 +30,9 @@ export const GridWidget = (props: {
     <div className="m-0 p-0 w-full overflow-auto" ref={scrollRef}>
       <table
         className="m-0 table-fixed w-full"
-        onTouchStart={onTouchStartAction}
-        onTouchMove={onTouchMoveAction}
-        onClick={onClickAction}>
+        onTouchStart={action(onTouchStartAction)}
+        onTouchMove={action(onTouchMoveAction)}
+        onClick={action(onClickAction)}>
         <tbody>
           {children}
           <tr ref={endRef} />

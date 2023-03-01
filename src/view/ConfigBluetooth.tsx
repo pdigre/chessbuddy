@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { ConfigButton } from './ConfigWidgets';
 import { MdBluetoothConnected } from 'react-icons/md';
 import { bluetoothService } from '../service/bluetooth.service';
+import { action } from 'mobx';
 
 class BT implements ListItem {
   constructor(public name: string, public description: string) {}
@@ -53,7 +54,6 @@ async function doBT() {
 export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) => {
   const items: BT[] = [];
   bluetoothService.btDevices.map(device => new BT(device.id, device.name ?? 'UNKNOWN'));
-  const hasSelect = config.cursor >= 0;
 
   const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
     if (event.target instanceof HTMLTableCellElement) {
@@ -61,10 +61,11 @@ export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) 
     }
   };
 
+  const doBtAction = () => doBT();
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">
       <table className="w-full text-left text-lg dark:bg-slate-800 border-2 border-separate p-2">
-        <tbody onClick={doSelect}>
+        <tbody onClick={action(doSelect)}>
           {items.map((item, iLine) => (
             <tr
               key={iLine.toString()}
@@ -76,13 +77,7 @@ export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) 
           ))}
         </tbody>
       </table>
-      <ConfigButton
-        onClick={() => {
-          doBT();
-        }}
-        label="Delete"
-        icon={<MdBluetoothConnected />}
-      />
+      <ConfigButton onClick={action(doBtAction)} label="Delete" icon={<MdBluetoothConnected />} />
     </div>
   );
 });

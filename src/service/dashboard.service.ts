@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 /**
  * Start and pause of game, starts the bots if in turn
@@ -19,12 +19,10 @@ export class DashboardService {
   // Actions
   // ****************************
   startUndoTimer(pos: number) {
-    action(() => {
-      this.showUndo = true;
-      this.undopos = pos;
-    });
+    this.showUndo = true;
+    this.undopos = pos;
     window.setTimeout(() => {
-      action(() => {
+      runInAction(() => {
         if (this.showUndo) {
           this.undopos = 0; // In the case you're already in a UNDO confirmation box.
         }
@@ -34,14 +32,10 @@ export class DashboardService {
   }
 
   setMarkLog(n: number) {
-    action(() => {
-      this.markLog = n;
-    });
+    this.markLog = n;
   }
 
   toggleHistoryAction = () => {
-    action(() => {
-      this.showHist = !this.showHist;
-    });
+    this.showHist = !this.showHist;
   };
 }

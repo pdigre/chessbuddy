@@ -1,5 +1,5 @@
 import type { Fen } from './rules.service';
-import { action, makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
 import { configService, mediaService, renderingService } from './index.service';
 import { Engines } from '../model/bot';
@@ -93,7 +93,7 @@ export class AnalyzerService {
       moves.forEach(x => squares.add(x as Square));
       this.help = [...squares];
       if (cp) {
-        action(() => {
+        runInAction(() => {
           this.prevcp = this.cp;
           this.cp = isWhiteTurn ? cp : -cp;
         });

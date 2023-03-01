@@ -101,9 +101,7 @@ export class HistoryService {
   // ****************************
 
   setMarkHist(n: number) {
-    action(() => {
-      this.markHist = n;
-    });
+    this.markHist = n;
   }
 
   decodeGame(row: string) {

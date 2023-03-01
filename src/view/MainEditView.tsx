@@ -11,9 +11,12 @@ import { ConfigBoolean, ConfigButton } from './ConfigWidgets';
 import { MdCheck, MdDelete } from 'react-icons/md';
 import { observer } from 'mobx-react';
 import { EditService } from '../service/edit.service';
+import { action } from 'mobx';
 
 export const MainEditView = observer(({ edit }: { edit: EditService }) => {
-  const TD = (name: string, img: ReactNode) => <td onClick={() => edit.editPiece(name)}>{img}</td>;
+  const TD = (name: string, img: ReactNode) => (
+    <td onClick={action(() => edit.editPiece(name))}>{img}</td>
+  );
   const props = edit.boolprops;
   return (
     <div>
@@ -29,7 +32,7 @@ export const MainEditView = observer(({ edit }: { edit: EditService }) => {
           {TD('p', <FaChessPawn className="text-7xl text-black" />)}
         </tr>
         <tr>
-          <td onClick={() => edit.editPiece(' ')}>
+          <td onClick={action(() => edit.editPiece(' '))}>
             <MdDelete className="text-7xl text-red-500" />
           </td>
           <td colSpan={2}>
@@ -52,7 +55,7 @@ export const MainEditView = observer(({ edit }: { edit: EditService }) => {
         </tr>
       </table>
 
-      <ConfigButton onClick={edit.editDoneAction} label="Done" icon={<MdCheck />} />
+      <ConfigButton onClick={action(edit.editDoneAction)} label="Done" icon={<MdCheck />} />
     </div>
   );
 });

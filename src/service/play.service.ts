@@ -167,13 +167,11 @@ export class PlayService {
     this.isWhiteTurn ? this.wplayer : this.bplayer;
 
   playMove(san: string) {
-    action(() => {
-      this.addMove(san);
-      this.store();
-      if (this.isComplete) {
-        historyService.storeGame();
-      }
-    });
+    this.addMove(san);
+    this.store();
+    if (this.isComplete) {
+      historyService.storeGame();
+    }
     this.playContinue();
   }
 
@@ -205,30 +203,24 @@ export class PlayService {
   // ****************************
 
   setPlaying(play: boolean) {
-    action(() => {
-      this.isPlaying = play;
-      if (play) {
-        this.runBot();
-      }
-    });
+    this.isPlaying = play;
+    if (play) {
+      this.runBot();
+    }
   }
 
   initGame(useLog: string[]) {
-    action(() => {
-      this.log = useLog;
-      this.fen = rulesService.replay(this.log);
-      this.clearAnalyzer();
-    });
+    this.log = useLog;
+    this.fen = rulesService.replay(this.log);
+    this.clearAnalyzer();
   }
 
   undoTo(mark: number) {
-    action(() => {
-      this.setPlaying(false);
-      dashboardService.setMarkLog(mark);
-      const pos = mark >= 0 ? mark : this.log.length;
-      this.fen = rulesService.replay(this.log, pos);
-      this.clearAnalyzer();
-    });
+    this.setPlaying(false);
+    dashboardService.setMarkLog(mark);
+    const pos = mark >= 0 ? mark : this.log.length;
+    this.fen = rulesService.replay(this.log, pos);
+    this.clearAnalyzer();
   }
   private clearAnalyzer() {
     refreshService.startRefreshTimer();
@@ -237,24 +229,20 @@ export class PlayService {
   }
 
   loadGame() {
-    action(() => {
-      const games = historyService.history;
-      const moves = games[historyService.markHist].split(';')[5].split(' ');
-      this.log = moves;
-      const mark = moves.length - 1;
-      dashboardService.setMarkLog(mark);
-      this.fen = rulesService.replay(moves, mark);
-    });
+    const games = historyService.history;
+    const moves = games[historyService.markHist].split(';')[5].split(' ');
+    this.log = moves;
+    const mark = moves.length - 1;
+    dashboardService.setMarkLog(mark);
+    this.fen = rulesService.replay(moves, mark);
   }
 
   // Game config actions
-  readonly startGameAction: VoidFunction = () => {
+  startGameAction: VoidFunction = () => {
     configService.store();
     configService.closeConfigAction();
-    action(() => {
-      configService.showConfig = false;
-      this.playContinue();
-    });
+    configService.showConfig = false;
+    this.playContinue();
   };
 
   readonly editGameAction = () => {

@@ -19,12 +19,13 @@ import {
   FaRegHandshake,
 } from 'react-icons/fa';
 import { MdCheck, MdCancel } from 'react-icons/md';
+import { action } from 'mobx';
 
 export const MessageDialog = observer(({ message }: { message: MessageService }) => (
   <Dialog
     aria-labelledby="message"
     open={message.title != undefined}
-    onClose={(e: MouseEvent) => message.onClose((e.target as HTMLButtonElement).innerHTML)}
+    onClose={action((e: MouseEvent) => message.onClose((e.target as HTMLButtonElement).innerHTML))}
     className="text-center text-lg">
     <DialogTitle id="message">{message.title}</DialogTitle>
     <DialogContent>
@@ -34,7 +35,9 @@ export const MessageDialog = observer(({ message }: { message: MessageService })
       {message.buttons?.map(x => (
         <ConfigButton
           key={x.label}
-          onClick={(e: MouseEvent) => message.onClose((e.target as HTMLButtonElement).innerHTML)}
+          onClick={action((e: MouseEvent) =>
+            message.onClose((e.target as HTMLButtonElement).innerHTML)
+          )}
           label={x.label}
           icon={x.icon}
         />
