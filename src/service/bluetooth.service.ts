@@ -15,7 +15,7 @@ export class BluetoothService {
         })
         .catch(error => messageService.display('Bluetooth error:', String(error)));
     } catch (error) {
-      messageService.display('Bluetooth error:', String(error));
+      console.log('Bluetooth error:' + String(error));
     }
   }
 }
