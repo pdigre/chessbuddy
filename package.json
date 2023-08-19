@@ -5,6 +5,7 @@
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
     "json-ignore": "^0.4.0",
+    "material-components-web": "^14.0.0",
     "mobx": "^6.9.0",
     "mobx-react": "^7.6.0",
     "react": "^18.2.0",
@@ -13,12 +14,11 @@
     "react-icons": "^4.9.0"
   },
   "scripts": {
-    "start": "npm run watch:css && vite",
-    "build": "npm run watch:css && vite build",
+    "start": "bun watch:css && bunx --bun vite",
+    "build": "bun watch:css && bunx --bun vite build",
     "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
     "lint": "eslint ./src/**/*.{ts,tsx}",
-    "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix",
-    "dev": "vite"
+    "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -57,7 +57,7 @@
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-mobx": "^0.0.9",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.32.2",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",

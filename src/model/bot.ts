@@ -1,7 +1,10 @@
 import { ConfigProp, ListItem } from '../service/config.service';
 
 export class Engine {
-  constructor(public name: string, public path: string) {}
+  constructor(
+    public name: string,
+    public path: string
+  ) {}
 }
 
 export const Engines: Engine[] = [

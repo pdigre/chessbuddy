@@ -1,7 +1,10 @@
 import { ConfigProp, ListItem } from '../service/config.service';
 
 export class Human implements ListItem {
-  constructor(public name: string, public email: string) {}
+  constructor(
+    public name: string,
+    public email: string
+  ) {}
   label = 'Human';
   properties: Map<string, ConfigProp<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
