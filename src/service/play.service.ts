@@ -35,7 +35,7 @@ export class PlayService {
   fen = FEN.NEW_GAME;
 
   // runtime does not need persisting
-  private chess = Chess(this.fen);
+  private chess = new Chess(this.fen);
   @jsonIgnore() isWhiteTurn = true;
   @jsonIgnore() isComplete = false;
   @jsonIgnore() private bplayer?: BotRunner;
@@ -68,8 +68,8 @@ export class PlayService {
 
   private calculate() {
     const san = this.log[this.log.length - 1];
-    this.chess = Chess(this.fen);
-    this.isComplete = rulesService.isEndMove(san) || this.chess.game_over();
+    this.chess = new Chess(this.fen);
+    this.isComplete = rulesService.isEndMove(san) || this.chess.isGameOver();
     if (this.isComplete) {
       if (this.isPlaying) {
         mediaService.playWinner();
@@ -93,7 +93,7 @@ export class PlayService {
 
   private getPGNS(sans: San[]): Square[] {
     const sqs = sans
-      .map(san => Chess(this.fen).move(san.san))
+      .map(san => new Chess(this.fen).move(san.san))
       .flatMap(move => (move ? [move.from, move.to] : []));
     return Array.from(new Set(sqs).values());
   }

@@ -91,14 +91,14 @@ export class AnalyzerService {
     this.helperBot.run(fen, ({ moves, cp }) => {
       const squares: Set<Square> = new Set();
       moves.forEach(x => squares.add(x as Square));
-      this.help = [...squares];
-      if (cp) {
-        runInAction(() => {
+      runInAction(() => {
+        this.help = [...squares];
+        if (cp) {
           this.prevcp = this.cp;
           this.cp = isWhiteTurn ? cp : -cp;
-        });
+        }
         this.checkMistake(isWhiteTurn);
-      }
+      });
     });
   };
 
