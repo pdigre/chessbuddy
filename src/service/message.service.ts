@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { ReactNode } from 'react';
 import { ButtonType } from '../view/ConfigWidgets';
 

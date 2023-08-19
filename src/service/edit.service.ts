@@ -1,6 +1,6 @@
 import { BLACK, Square, SQUARES, WHITE } from 'chess.js';
 import { jsonIgnore } from 'json-ignore';
-import { action, makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { FEN } from '../model/fen';
 import { ConfigProp } from './config.service';
 import { configService, playService } from './index.service';

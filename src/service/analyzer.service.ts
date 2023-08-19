@@ -1,5 +1,5 @@
 import type { Fen } from './rules.service';
-import { action, makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
 import { configService, mediaService, renderingService } from './index.service';
 import { Engines } from '../model/bot';
