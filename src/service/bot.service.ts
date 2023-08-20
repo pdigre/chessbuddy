@@ -12,7 +12,13 @@ export class BotRunner {
   worker?: Worker;
   isRunning = false;
 
-  constructor(public name: string, path: string, skill: number, time: number, depth: number) {
+  constructor(
+    public name: string,
+    path: string,
+    skill: number,
+    time: number,
+    depth: number
+  ) {
     this.workerClass = this.createWorker(path, skill, time, depth);
   }
 

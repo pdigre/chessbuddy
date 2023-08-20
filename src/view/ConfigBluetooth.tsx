@@ -7,7 +7,10 @@ import { bluetoothService } from '../service/bluetooth.service';
 import { action } from 'mobx';
 
 class BT implements ListItem {
-  constructor(public name: string, public description: string) {}
+  constructor(
+    public name: string,
+    public description: string
+  ) {}
   label = 'BT';
   properties: Map<string, ConfigProp<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],

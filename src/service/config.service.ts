@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';

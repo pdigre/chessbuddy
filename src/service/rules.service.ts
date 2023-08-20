@@ -1,9 +1,9 @@
-import type { Move, ShortMove, Square } from 'chess.js';
+import type { Move, Square } from 'chess.js';
 import { Chess, SQUARES, QUEEN } from 'chess.js';
 import { FEN } from '../model/fen';
 
 export type Fen = string;
-export type { Square, Move, ShortMove };
+export type { Square, Move };
 
 export class RulesService {
   isEndMove: (san: string) => boolean = (san: string) =>
@@ -15,19 +15,19 @@ export class RulesService {
     to: Square,
     promotion?: 'b' | 'n' | 'r' | 'q'
   ): [Fen, Move] | null => {
-    const game = Chess(fen);
+    const game = new Chess(fen);
     const action = game.move({ from, to, promotion: promotion ?? QUEEN });
     return action ? [game.fen(), action] : null;
   };
 
   newFen: (fen: string, san: string) => string = (fen, san) => {
-    const game = Chess(fen);
+    const game = new Chess(fen);
     game.move(san);
     return game.fen();
   };
 
   replay = (moves: string[], to?: number): Fen => {
-    const game = Chess(FEN.NEW_GAME);
+    const game = new Chess(FEN.NEW_GAME);
     const n = to != undefined ? to : moves.length;
     for (let i = 0; i <= n; i++) {
       game.move(moves[i]);

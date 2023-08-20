@@ -7,7 +7,10 @@ export type TimeRule = {
 };
 
 export class Clock implements ListItem {
-  constructor(public name: string, public time: TimeRule[]) {}
+  constructor(
+    public name: string,
+    public time: TimeRule[]
+  ) {}
   label = 'Clock';
   getName: () => string = () => this.name.trim();
   getDescription: () => string = () => Clock.time2string(this.time);

@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { History, Games } from '../model/history';
 import { YESNO_BUTTONS } from '../view/MessageDialog';
 import {
