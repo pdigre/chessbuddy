@@ -4,9 +4,10 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY package-lock.json ./
 COPY tsconfig.json ./
-RUN npm install
+RUN curl -fsSL https://bun.sh/install | bash
+RUN bun install
 COPY . ./
-RUN npm run build
+RUN bun run build
 
 # Run Stage - Node
 #FROM node:19.1.0
