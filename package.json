@@ -1,6 +1,6 @@
 {
   "name": "chessbuddy",
-  "version": "0.19.3",
+  "version": "0.20.0",
   "homepage": ".",
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
