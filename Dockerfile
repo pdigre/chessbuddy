@@ -1,22 +1,12 @@
 # Builder Frontend
-FROM node:latest AS fe-builder
+FROM oven/bun:latest AS fe-builder
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY package-lock.json ./
 COPY tsconfig.json ./
-RUN curl -fsSL https://bun.sh/install | bash
 RUN bun install
 COPY . ./
 RUN bun run build
-
-# Run Stage - Node
-#FROM node:19.1.0
-#WORKDIR /usr/src/app
-#COPY --from=fe-builder /usr/src/app/build ./build
-#COPY server ./
-#WORKDIR /usr/src/app/server
-#RUN npm install
-#CMD npm start
 
 # Builder backend
 FROM rust:alpine AS be-builder
