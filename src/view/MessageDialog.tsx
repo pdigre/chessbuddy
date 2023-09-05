@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, ReactNode } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -46,11 +46,12 @@ export const MessageDialog = observer(({ message }: { message: MessageService })
   </Dialog>
 ));
 
-export const YESNO_BUTTONS: ButtonType[] = [
+export const OK_BUTTON: () => ButtonType[] = () => [{ label: 'Ok' }];
+export const YESNO_BUTTONS: () => ButtonType[] = () => [
   { label: 'Yes', icon: <MdCheck /> },
   { label: 'No', icon: <MdCancel /> },
 ];
-export const PROMOTE_BUTTONS: ButtonType[] = [
+export const PROMOTE_BUTTONS: () => ButtonType[] = () => [
   { label: 'Queen', icon: <FaChessQueen /> },
   { label: 'Rook', icon: <FaChessRook /> },
   { label: 'Knight', icon: <FaChessKnight /> },
@@ -63,14 +64,14 @@ export const WINNER_BUTTONS: (black: string, white: string) => ButtonType[] = (b
   { label: black, icon: <FaChessKing className="text-black" /> },
 ];
 
-export const WINNER_HTML = (
+export const WINNER_HTML: ReactNode = (
   <div className="text-3xl">
     Who won?
     <img src="/png/win.png" />
   </div>
 );
 
-export const ABOUT = (
+export const ABOUT: ReactNode = (
   <div>
     This chess program is open source and available at github.
     <ul>

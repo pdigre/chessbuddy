@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { History, Games } from '../model/history';
-import { YESNO_BUTTONS } from '../view/MessageDialog';
+import { OK_BUTTON, YESNO_BUTTONS } from '../view/MessageDialog';
 import {
   storageService,
   playService,
@@ -138,7 +138,7 @@ export class HistoryService {
         messageService.display(
           'Load game',
           'Do you want to look at this game?',
-          YESNO_BUTTONS,
+          YESNO_BUTTONS(),
           reply => {
             if (reply == 'Yes') {
               playService.loadGame();
@@ -147,9 +147,11 @@ export class HistoryService {
           }
         );
       } else {
-        messageService.display('Load game', 'You have to end current game to load previous games', [
-          { label: 'Ok' },
-        ]);
+        messageService.display(
+          'Load game',
+          'You have to end current game to load previous games',
+          OK_BUTTON()
+        );
       }
       historyService.setMarkHist(-1);
     }

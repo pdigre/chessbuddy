@@ -92,10 +92,17 @@ export class PlayService {
   }
 
   private getPGNS(sans: San[]): Square[] {
-    const sqs = sans
-      .map(san => new Chess(this.fen).move(san.san))
-      .flatMap(move => (move ? [move.from, move.to] : []));
-    return Array.from(new Set(sqs).values());
+    try {
+      const sqs = sans
+        .filter(san => san.san)
+        .map(san => {
+          return new Chess(this.fen).move(san.san);
+        })
+        .flatMap(move => (move ? [move.from, move.to] : []));
+      return Array.from(new Set(sqs).values());
+    } catch (error) {
+      return [];
+    }
   }
 
   readonly isMoveable = (from: Square): boolean => this.chess.moves({ square: from }).length > 0;
@@ -260,12 +267,7 @@ export class PlayService {
     } else {
       const white = configService.white.split(' ')[0];
       const black = configService.black.split(' ')[0];
-      messageService.display(
-        'End game',
-        WINNER_HTML,
-        WINNER_BUTTONS(black, white),
-        this.recordScore
-      );
+      messageService.display('End game', 'Who won', WINNER_BUTTONS(black, white), this.recordScore);
     }
   };
 

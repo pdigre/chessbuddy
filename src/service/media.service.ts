@@ -32,7 +32,7 @@ export class MediaService {
   }
 
   clear() {
-    this.title = undefined;
+    this.title = '';
   }
   display(title: string, msg: Mp4Type) {
     this.title = title;

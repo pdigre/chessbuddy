@@ -117,7 +117,8 @@ const FenInfo = observer(({ play }: { play: PlayService }) => {
 });
 
 export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService }) => {
-  const about = () => messageService.display('About', ABOUT);
+  const about = () =>
+    messageService.display('About', 'This chess program is open source and available at github.');
   const version = packageInfo.version;
   return (
     <ThemeProvider theme={rendering.darkTheme ? darkTheme : lightTheme}>

@@ -6,8 +6,10 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY tsconfig.json ./
 RUN npm install
+#RUN bun install
 COPY . ./
 RUN npm run build
+#RUN bun run build2
 
 # Builder backend
 FROM rust:alpine AS be-builder
