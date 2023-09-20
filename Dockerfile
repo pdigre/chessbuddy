@@ -1,35 +1,26 @@
 # Builder Frontend
-FROM node:latest AS fe-builder
-#FROM oven/bun:latest AS fe-builder
+FROM oven/bun:latest AS fe-builder
 WORKDIR /usr/src/app
-COPY package.json ./
-COPY package-lock.json ./
-COPY tsconfig.json ./
-RUN npm install
-#RUN bun install
+COPY *.json ./
+# COPY bun.lockb ./
+COPY index.html ./
 COPY . ./
-RUN npm run build
-#RUN bun run build2
+RUN bun install
+RUN bun -v
+RUN bun run build
 
-# Builder backend
-FROM rust:alpine AS be-builder
-RUN apk update
-RUN apk add clang musl-dev
-WORKDIR /usr/src/
-WORKDIR /usr/src/rust
-COPY rust/src src
-COPY rust/Cargo.toml rust/Cargo.lock ./
-RUN cargo add tracing
-RUN cargo add tracing-subscriber
-RUN cargo build --release
-RUN strip target/release/chessbuddy
+FROM cgr.dev/chainguard/zig AS be-builder
+RUN zig version
+WORKDIR /usr/src
+COPY zap ./
+WORKDIR /usr/src/zap
+RUN zig build chessbuddy
 
 # Bundle Stage
 FROM scratch
-# FROM alpine:latest
 WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/build ./build
-COPY --from=be-builder /usr/src/rust/target/release/chessbuddy ./
+COPY --from=be-builder /usr/src/zig-out/bin/chessbuddy ./
 USER 1000
 # CMD ["tail", "-f", "/dev/null"]
 CMD ["/bin/chessbuddy"]
