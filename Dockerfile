@@ -1,15 +1,12 @@
 # Builder Frontend
-#FROM node:latest AS fe-builder
 FROM oven/bun:latest AS fe-builder
 WORKDIR /usr/src/app
-COPY package.json ./
-COPY package-lock.json ./
-COPY tsconfig.json ./
-#RUN npm install
+COPY *.json ./
+# COPY bun.lockb ./
+COPY index.html ./
+COPY . ./
 RUN bun install
 RUN bun -v
-COPY . ./
-#RUN npm run build2
 RUN bun run build
 
 FROM cgr.dev/chainguard/zig AS be-builder

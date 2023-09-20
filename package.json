@@ -14,10 +14,8 @@
     "react-icons": "^4.11.0"
   },
   "scripts": {
-    "start": "bun watch:css && bunx --bun vite",
-    "build": "bun watch:css && bunx --bun vite build",
-    "build2": "npm run watch:css && vite build",
-    "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
+    "start": "bunx --bun vite",
+    "build": "bunx --bun vite build",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
   },
@@ -50,8 +48,7 @@
     "@types/web-bluetooth": "^0.0.17",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
-    "@vitejs/plugin-react": "^4.0.4",
-    "autoprefixer": "^10.4.15",
+    "@vitejs/plugin-react": "^3.1.0",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-react-app": "^7.0.1",
@@ -60,10 +57,8 @@
     "eslint-plugin-mobx": "^0.0.9",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.33.2",
-    "postcss": "^8.4.29",
-    "tailwindcss": "^3.3.3",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite": "4.4.9",
+    "vite-tsconfig-paths": "4.2.1"
   }
 }
