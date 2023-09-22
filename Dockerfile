@@ -22,9 +22,9 @@ RUN echo "$( ls -al )"
 FROM alpine
 # FROM scratch
 WORKDIR /bin
-COPY --from=fe-builder /usr/src/app/build /bin/
-COPY --from=be-builder /usr/src/zig-out/bin/chessbuddy /bin/
-# RUN echo "$( ls -al )"
+COPY --from=fe-builder /usr/src/app/build ./
+COPY --from=be-builder /usr/src/zig-out/bin/chessbuddy ./
+RUN echo "$( ls -al )"
 USER 1000
 # CMD ["bin/sh", "ls", "-al"]
-ENTRYPOINT [ "/bin/chessbuddy" ]
+ENTRYPOINT [ "./chessbuddy" ]
