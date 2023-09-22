@@ -21,6 +21,6 @@ FROM alpine
 WORKDIR /bin
 COPY --from=fe-builder /usr/src/app/build ./build/
 COPY --from=be-builder /usr/src/zig-out/bin/chessbuddy ./
-RUN echo "$( ls -al )"
+RUN echo "$( ls -al build)"
 USER 1000
 ENTRYPOINT [ "./chessbuddy" ]
