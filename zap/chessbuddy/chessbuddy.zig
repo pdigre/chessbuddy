@@ -7,6 +7,7 @@ fn on_request(r: zap.SimpleRequest) void {
 }
 
 pub fn main() !void {
+    std.debug.print("Starting chessbuddy\n", .{});
     var listener = zap.SimpleHttpListener.init(.{
         .port = 80,
         .on_request = on_request,

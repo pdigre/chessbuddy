@@ -14,7 +14,7 @@ WORKDIR /usr/src
 COPY zap ./
 WORKDIR /usr/src/zap
 RUN zig build chessbuddy
-RUN strip /usr/src/zig-out/bin/chessbuddy
+# RUN strip /usr/src/zig-out/bin/chessbuddy
 
 
 # Bundle Stage
@@ -23,6 +23,7 @@ FROM alpine
 WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/build ./build
 COPY --from=be-builder /usr/src/zig-out/bin/chessbuddy ./
+RUN echo "$( ls -al)"
 RUN echo "$( ls -al build)"
 USER 1000
 CMD ["/bin/chessbuddy"]
