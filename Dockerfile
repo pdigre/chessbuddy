@@ -8,28 +8,25 @@ RUN bun install
 RUN bun -v
 RUN bun run build
 
-FROM cgr.dev/chainguard/zig AS be-builder
-RUN zig version
-WORKDIR /usr/src
-# COPY chessbuddy ./
-COPY zap /usr/src/zap
-WORKDIR /usr/src/zap
-RUN echo "$( ls -al /usr/src/chessbuddy )"
-RUN zig build chessbuddy
-RUN echo "$( ls -al zig-out/bin)"
-# RUN strip /usr/src/zig-out/bin/chessbuddy
-# CMD ["tail", "-f", "/dev/null"]
-# ENTRYPOINT [ "/usr/src/chessbuddy" ]
-
+# Builder backend
+FROM rust:alpine AS be-builder
+RUN apk update
+RUN apk add clang musl-dev
+WORKDIR /usr/src/
+WORKDIR /usr/src/rust
+COPY rust/src src
+COPY rust/Cargo.toml rust/Cargo.lock ./
+RUN cargo add tracing
+RUN cargo add tracing-subscriber
+RUN cargo build --release
+RUN strip target/release/chessbuddy
 
 # Bundle Stage
-FROM alpine
-# FROM scratch
-WORKDIR /usr/bin/
+FROM scratch
+# FROM alpine:latest
+WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/build ./build
-COPY --from=be-builder /usr/src/zap/zig-out/bin/chessbuddy /usr/bin/chessbuddy
-RUN echo "$( ls -al chessbuddy)"
-RUN echo "$( ls -al build)"
-# USER 1000
-#CMD ["tail", "-f", "/dev/null"]
-ENTRYPOINT ["/usr/bin/chessbuddy"]
+COPY --from=be-builder /usr/src/rust/target/release/chessbuddy ./
+USER 1000
+# CMD ["tail", "-f", "/dev/null"]
+CMD ["/bin/chessbuddy"]
