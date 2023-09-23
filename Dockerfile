@@ -20,10 +20,10 @@ RUN zig build chessbuddy
 # Bundle Stage
 FROM alpine
 # FROM scratch
-WORKDIR /bin/
+WORKDIR /usr/bin/
 COPY --from=fe-builder /usr/src/app/build ./build
 COPY --from=be-builder /usr/src/zig-out/bin/chessbuddy ./
-RUN echo "$( ls -al)"
+RUN echo "$( ls -al chessbuddy)"
 RUN echo "$( ls -al build)"
 USER 1000
-CMD ["/bin/chessbuddy"]
+CMD ["./chessbuddy"]
