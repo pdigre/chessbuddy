@@ -1,3 +1,8 @@
+# Usage
+# ================
+# docker build . --progress=plain --no-cache
+# docker compose up 
+
 # Builder Frontend
 FROM oven/bun:latest AS fe-builder
 WORKDIR /usr/src/app

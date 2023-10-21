@@ -13,5 +13,6 @@
   // other settings
   "editor.quickSuggestions": {
     "strings": true
-  }
+  },
+  "zig.initialSetupDone": true
 }

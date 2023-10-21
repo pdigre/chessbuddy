@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import React from 'react';
 import { editService, renderingService, clockService } from '../service/index.service';
 import {
@@ -16,7 +17,7 @@ import { Board } from './Board';
 import { AnalyzerService } from '../service/analyzer.service';
 import packageInfo from '../../package.json';
 import { Mp4Dialog } from './Mp4Dialog';
-import { ABOUT, MessageDialog } from './MessageDialog';
+import { MessageDialog } from './MessageDialog';
 import { RenderingService } from '../service/rendering.service';
 import { observer } from 'mobx-react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -28,6 +29,15 @@ import { ConfigService } from '../service/config.service';
 import { PlayService } from '../service/play.service';
 import { ClockService } from '../service/clock.service';
 import { action } from 'mobx';
+import '@material/web/button/outlined-button.js';
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
+  }
+}
 
 const lightTheme = createTheme({
   palette: {
@@ -155,6 +165,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
           <MessageDialog message={messageService} />
           <Mp4Dialog mp4={mediaService} />
           <ConfigDialog config={configService} />
+          <md-outlined-button>Hei</md-outlined-button>
         </div>
       </div>
     </ThemeProvider>
