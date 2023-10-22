@@ -21,29 +21,43 @@ import {
 import { MdCheck, MdCancel } from 'react-icons/md';
 import { action } from 'mobx';
 
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            "md-dialog": {
+                open: any,
+                type: string,
+            };
+            "md-text-button": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+        }
+    }
+}
+
 export const MessageDialog = observer(({ message }: { message: MessageService }) => (
-  <Dialog
+  <md-dialog
+      open=""
+      type="alert"
     aria-labelledby="message"
-    open={message.title != undefined}
-    onClose={action((e: MouseEvent) => message.onClose((e.target as HTMLButtonElement).innerHTML))}
+//    open={message.title != undefined}
+//    onClose={action((e: MouseEvent) => message.onClose((e.target as HTMLButtonElement).innerHTML))}
     className="text-center text-lg">
-    <DialogTitle id="message">{message.title}</DialogTitle>
-    <DialogContent>
-      <DialogContentText>{message.msg}</DialogContentText>
-    </DialogContent>
-    <DialogActions>
+    <div slot="headline">{message.title}</div>
+    <form slot="content" id="form-id" method="dialog">
+      {message.msg}
+    </form>
+    <div slot="actions">
       {message.buttons?.map(x => (
-        <ConfigButton
-          key={x.label}
-          onClick={action((e: MouseEvent) =>
-            message.onClose((e.target as HTMLButtonElement).innerHTML)
-          )}
-          label={x.label}
-          icon={x.icon}
-        />
+          <md-text-button
+//              key={x.label}
+//              form="form-id"
+//              onClick={action((e: MouseEvent) =>
+//                  message.onClose((e.target as HTMLButtonElement).innerHTML)
+//              )}
+//              icon={x.icon}
+          >{x.label}</md-text-button>
       ))}
-    </DialogActions>
-  </Dialog>
+    </div>
+  </md-dialog>
 ));
 
 export const OK_BUTTON: () => ButtonType[] = () => [{ label: 'Ok' }];

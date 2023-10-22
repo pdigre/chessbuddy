@@ -34,6 +34,7 @@ import '@material/web/button/outlined-button.js';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
+      "md-dialog": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
       [elemName: string]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
     }
   }
@@ -165,7 +166,6 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
           <MessageDialog message={messageService} />
           <Mp4Dialog mp4={mediaService} />
           <ConfigDialog config={configService} />
-          <md-outlined-button>Hei</md-outlined-button>
         </div>
       </div>
     </ThemeProvider>
