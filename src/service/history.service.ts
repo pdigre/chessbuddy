@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import { History, Games } from '../model/history';
-import { OK_BUTTON, YESNO_BUTTONS } from '../view/MessageDialog';
 import {
   storageService,
   playService,
@@ -8,6 +7,11 @@ import {
   rulesService,
   messageService,
 } from './index.service';
+
+const PROMOTE_BUTTONS = ""; 
+const WINNER_BUTTONS = ""; 
+const WINNER_HTML = "";
+const YESNO_BUTTONS = "";
 
 /*
  * History of previous games, should store a maximum locally

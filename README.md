@@ -1,5 +1,21 @@
 # ChessBuddy
 
+New attempt to learn WC
+- trying Web components with MobX
+https://www.npmjs.com/package/@adobe/lit-mobx
+- Using Material Design MD-3 for web components
+https://m3.material.io/develop/web
+https://github.com/material-components/material-web/tree/main/docs/components
+- Chessboard 
+https://github.com/justinfagnani/chessboard-element
+file:///Users/perdigre/git/chessboard-element/docs/index.html
+file:///Users/perdigre/git/chessboard-element/docs/examples/index.html
+- Example pages WC 
+https://github.com/klyngen/webcomponents-examples
+
+
+
+
 [Development here](doc/dev.md)
 
 _React-based Chess (with multiple Bots) in TypeScript_.

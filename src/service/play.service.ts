@@ -22,8 +22,13 @@ import {
 } from './index.service';
 import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
-import { PROMOTE_BUTTONS, WINNER_BUTTONS, WINNER_HTML, YESNO_BUTTONS } from '../view/MessageDialog';
 
+//import { PROMOTE_BUTTONS, WINNER_BUTTONS, WINNER_HTML, YESNO_BUTTONS } from '../view/MessageDialog';
+
+const PROMOTE_BUTTONS = ""; 
+const WINNER_BUTTONS = ""; 
+const WINNER_HTML = "";
+const YESNO_BUTTONS = "";
 /*
  * Everything about the current game (can be restored when returning to browser later)
  */
