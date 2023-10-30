@@ -150,6 +150,7 @@ export class ConfigService {
   openConfigAction = () => {
     this.showConfig = true;
     playService.isPlaying = false;
+    console.log("openConfigAction")
   };
 
   closeConfigAction = () => {

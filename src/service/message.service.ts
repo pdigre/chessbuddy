@@ -1,10 +1,9 @@
 import { makeAutoObservable } from 'mobx';
-import { ReactNode } from 'react';
-import { ButtonType } from '../view/ConfigWidgets';
+import { ButtonType } from '../components/message-dialog'
 
 export class MessageService {
   title?: string;
-  msg?: ReactNode;
+  msg?: string;
   buttons?: ButtonType[];
   response?: (button: string) => void;
   show = false;
@@ -19,7 +18,7 @@ export class MessageService {
 
   readonly display: (
     title: string,
-    msg: ReactNode,
+    msg: string,
     buttons?: ButtonType[],
     response?: (button: string) => void
   ) => void = (title, msg, buttons?, response?) => {

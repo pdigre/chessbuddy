@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {customElement} from 'lit/decorators.js';
 import { Board } from './board.js';
-import { MainButtonBar } from './mainbuttonbar.ts';
+import { MainButtonBar } from './main-button-bar.ts';
 import {
   editService, 
   renderingService, 
@@ -17,7 +17,11 @@ import {
   openingsService,
 } from '../service/index.service.ts';
 import packageInfo from '../../package.json';
-import { MainView } from './mainview.ts';
+import { MainView } from './main-view.ts';
+import { MessageDialog } from './message-dialog.ts';
+import { action } from 'mobx';
+import { MdTextButton } from '@material/web/button/text-button';
+import { ConfigDialog } from './config-dialog.ts';
 
 @customElement('cb-app')
 export class App extends LitElement {
@@ -25,6 +29,14 @@ export class App extends LitElement {
     new Board();
     new MainButtonBar();
     new MainView();
+    new MessageDialog();
+    new MdTextButton();
+    new ConfigDialog();
+
+    const about = () => {
+      console.log('about')
+      messageService.display('About', 'This chess program is open source and available at github.');
+    };
     return html`
     <style> 
     .main {
@@ -92,9 +104,9 @@ export class App extends LitElement {
       </div>
       <div class="panel">
         <h3 class="panel2">
-          <span onClick={action(about)}  class="panel3">
+          <md-text-button @click=${action(about)} class="panel3">
             ChessBuddy ${packageInfo.version}
-          </span>
+          </md-text-button>
           <div class="MdRefresh panel4" onClick={action(mediaService.playAllAction)} ></div>
         </h3>
         <cb-mainbuttonbar
@@ -105,9 +117,9 @@ export class App extends LitElement {
         <div class="FenInfo" play={playService} ></div>
         <cb-mainview .dashboard=${dashboardService} .edit=${editService} ></cb-mainview>
       </div>
-      <div class="MessageDialog" message={messageService} ></div>
-      <div class="Mp4Dialog" mp4={mediaService} ></div>
-      <div class="ConfigDialog" config={configService} ></div>
+      <cb-message-dialog .message=${messageService} ></cb-message-dialog>
+      <div class="Mp4Dialog" mp4=${mediaService} ></div>
+      <cb-config-dialog .config=${configService} ></cb-config-dialog>
     `;
   }
 }

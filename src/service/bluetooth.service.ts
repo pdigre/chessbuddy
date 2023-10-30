@@ -1,6 +1,7 @@
 import { messageService } from './index.service';
 
 export class BluetoothService {
+  /*
   btDevices: BluetoothDevice[] = [];
 
   constructor() {
@@ -18,6 +19,7 @@ export class BluetoothService {
       console.log('Bluetooth error:' + String(error));
     }
   }
+  */
 }
 
 export const bluetoothService = new BluetoothService();

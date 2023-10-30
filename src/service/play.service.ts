@@ -22,13 +22,8 @@ import {
 } from './index.service';
 import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
+import { PROMOTE_BUTTONS, WINNER_BUTTONS, YESNO_BUTTONS } from '../components/message-dialog';
 
-//import { PROMOTE_BUTTONS, WINNER_BUTTONS, WINNER_HTML, YESNO_BUTTONS } from '../view/MessageDialog';
-
-const PROMOTE_BUTTONS = ""; 
-const WINNER_BUTTONS = ""; 
-const WINNER_HTML = "";
-const YESNO_BUTTONS = "";
 /*
  * Everything about the current game (can be restored when returning to browser later)
  */
@@ -323,7 +318,7 @@ export class PlayService {
     if (this.isPlaying || isHuman) {
       const action = move[1];
       if (action.promotion && isHuman) {
-        messageService.display('Promotion', 'Choose promotion piece', PROMOTE_BUTTONS, reply => {
+        messageService.display('Promotion', 'Choose promotion piece', PROMOTE_BUTTONS(), reply => {
           let promo: 'b' | 'q' | 'n' | 'r' = 'q';
           if (reply == 'Rook') promo = 'r';
           if (reply == 'Knight') promo = 'n';
@@ -371,7 +366,7 @@ export class PlayService {
         isPlayUndo
           ? 'Do you want to undo last move?'
           : 'Do you want to revert the game to the marked position?',
-        YESNO_BUTTONS,
+        YESNO_BUTTONS(),
         yes => {
           messageService.clear();
           if (yes == 'Yes') {

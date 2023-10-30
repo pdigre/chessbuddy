@@ -8578,6 +8578,7 @@ class ConfigService {
   openConfigAction = () => {
     this.showConfig = true;
     playService.isPlaying = false;
+    console.log("openConfigAction");
   };
   closeConfigAction = () => {
     this.showConfig = false;
@@ -8822,20 +8823,6 @@ class AnalyzerService {
 
 // src/service/bluetooth.service.ts
 class BluetoothService {
-  btDevices = [];
-  constructor() {
-    try {
-      const bt = navigator?.bluetooth;
-      const devs = bt?.getDevices();
-      devs?.then((devices) => {
-        devices.forEach((device) => {
-          this.btDevices.push(device);
-        });
-      }).catch((error) => messageService.display("Bluetooth error:", String(error)));
-    } catch (error) {
-      console.log("Bluetooth error:" + String(error));
-    }
-  }
 }
 var bluetoothService = new BluetoothService;
 
@@ -11162,9 +11149,805 @@ class History {
   ];
 }
 
-// src/service/history.service.ts
-var YESNO_BUTTONS = "";
+// node_modules/@adobe/lit-mobx/lib/mixin-custom.js
+function MobxReactionUpdateCustom(constructor, ReactionConstructor) {
+  var _a2, _b;
+  return _b = class MobxReactingElement extends constructor {
+    constructor() {
+      super(...arguments);
+      this[_a2] = () => {
+        this.requestUpdate();
+      };
+    }
+    connectedCallback() {
+      super.connectedCallback();
+      const name = this.constructor.name || this.nodeName;
+      this[reaction] = new ReactionConstructor(`${name}.update()`, this[cachedRequestUpdate]);
+      if (this.hasUpdated)
+        this.requestUpdate();
+    }
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      if (this[reaction]) {
+        this[reaction].dispose();
+        this[reaction] = undefined;
+      }
+    }
+    update(changedProperties) {
+      if (this[reaction]) {
+        this[reaction].track(super.update.bind(this, changedProperties));
+      } else {
+        super.update(changedProperties);
+      }
+    }
+  }, _a2 = cachedRequestUpdate, _b;
+}
+var reaction = Symbol("LitMobxRenderReaction");
+var cachedRequestUpdate = Symbol("LitMobxRequestUpdate");
 
+// node_modules/@adobe/lit-mobx/lib/mixin.js
+function MobxReactionUpdate(constructor) {
+  return MobxReactionUpdateCustom(constructor, Reaction);
+}
+
+// node_modules/@adobe/lit-mobx/lit-mobx.js
+class MobxLitElement extends MobxReactionUpdate(s4) {
+}
+
+// node_modules/@material/web/internal/aria/delegate.js
+function requestUpdateOnAriaChange(ctor) {
+  for (const ariaProperty of ARIA_PROPERTIES) {
+    ctor.createProperty(ariaProperty, {
+      attribute: ariaPropertyToAttribute(ariaProperty),
+      reflect: true
+    });
+  }
+  ctor.addInitializer((element) => {
+    const controller = {
+      hostConnected() {
+        element.setAttribute("role", "presentation");
+      }
+    };
+    element.addController(controller);
+  });
+}
+
+// node_modules/@material/web/internal/controller/events.js
+function redispatchEvent(element, event) {
+  if (event.bubbles && (!element.shadowRoot || event.composed)) {
+    event.stopPropagation();
+  }
+  const copy = Reflect.construct(event.constructor, [event.type, event]);
+  const dispatched = element.dispatchEvent(copy);
+  if (!dispatched) {
+    event.preventDefault();
+  }
+  return dispatched;
+}
+function dispatchActivationClick(element) {
+  const event = new MouseEvent("click", { bubbles: true });
+  element.dispatchEvent(event);
+  return event;
+}
+function isActivationClick(event) {
+  if (event.currentTarget !== event.target) {
+    return false;
+  }
+  if (event.composedPath()[0] !== event.target) {
+    return false;
+  }
+  if (event.target.disabled) {
+    return false;
+  }
+  return !squelchEvent(event);
+}
+var squelchEvent = function(event) {
+  const squelched = isSquelchingEvents;
+  if (squelched) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+  squelchEventsForMicrotask();
+  return squelched;
+};
+async function squelchEventsForMicrotask() {
+  isSquelchingEvents = true;
+  await null;
+  isSquelchingEvents = false;
+}
+var isSquelchingEvents = false;
+
+// node_modules/@material/web/dialog/internal/animations.js
+var DIALOG_DEFAULT_OPEN_ANIMATION = {
+  dialog: [
+    [
+      [{ transform: "translateY(-50px)" }, { transform: "translateY(0)" }],
+      { duration: 500, easing: EASING.EMPHASIZED }
+    ]
+  ],
+  scrim: [
+    [
+      [{ opacity: 0 }, { opacity: 0.32 }],
+      { duration: 500, easing: "linear" }
+    ]
+  ],
+  container: [
+    [
+      [{ opacity: 0 }, { opacity: 1 }],
+      { duration: 50, easing: "linear", pseudoElement: "::before" }
+    ],
+    [
+      [{ height: "35%" }, { height: "100%" }],
+      { duration: 500, easing: EASING.EMPHASIZED, pseudoElement: "::before" }
+    ]
+  ],
+  headline: [
+    [
+      [{ opacity: 0 }, { opacity: 0, offset: 0.2 }, { opacity: 1 }],
+      { duration: 250, easing: "linear", fill: "forwards" }
+    ]
+  ],
+  content: [
+    [
+      [{ opacity: 0 }, { opacity: 0, offset: 0.2 }, { opacity: 1 }],
+      { duration: 250, easing: "linear", fill: "forwards" }
+    ]
+  ],
+  actions: [
+    [
+      [{ opacity: 0 }, { opacity: 0, offset: 0.5 }, { opacity: 1 }],
+      { duration: 300, easing: "linear", fill: "forwards" }
+    ]
+  ]
+};
+var DIALOG_DEFAULT_CLOSE_ANIMATION = {
+  dialog: [
+    [
+      [{ transform: "translateY(0)" }, { transform: "translateY(-50px)" }],
+      { duration: 150, easing: EASING.EMPHASIZED_ACCELERATE }
+    ]
+  ],
+  scrim: [
+    [
+      [{ opacity: 0.32 }, { opacity: 0 }],
+      { duration: 150, easing: "linear" }
+    ]
+  ],
+  container: [
+    [
+      [{ height: "100%" }, { height: "35%" }],
+      {
+        duration: 150,
+        easing: EASING.EMPHASIZED_ACCELERATE,
+        pseudoElement: "::before"
+      }
+    ],
+    [
+      [{ opacity: "1" }, { opacity: "0" }],
+      { delay: 100, duration: 50, easing: "linear", pseudoElement: "::before" }
+    ]
+  ],
+  headline: [
+    [
+      [{ opacity: 1 }, { opacity: 0 }],
+      { duration: 100, easing: "linear", fill: "forwards" }
+    ]
+  ],
+  content: [
+    [
+      [{ opacity: 1 }, { opacity: 0 }],
+      { duration: 100, easing: "linear", fill: "forwards" }
+    ]
+  ],
+  actions: [
+    [
+      [{ opacity: 1 }, { opacity: 0 }],
+      { duration: 100, easing: "linear", fill: "forwards" }
+    ]
+  ]
+};
+
+// node_modules/@material/web/dialog/internal/dialog.js
+class Dialog extends s4 {
+  get open() {
+    return this.isOpen;
+  }
+  set open(open) {
+    if (open === this.isOpen) {
+      return;
+    }
+    this.isOpen = open;
+    if (open) {
+      this.setAttribute("open", "");
+      this.show();
+    } else {
+      this.removeAttribute("open");
+      this.close();
+    }
+  }
+  constructor() {
+    super();
+    this.returnValue = "";
+    this.getOpenAnimation = () => DIALOG_DEFAULT_OPEN_ANIMATION;
+    this.getCloseAnimation = () => DIALOG_DEFAULT_CLOSE_ANIMATION;
+    this.isOpen = false;
+    this.isOpening = false;
+    this.isConnectedPromise = this.getIsConnectedPromise();
+    this.isAtScrollTop = false;
+    this.isAtScrollBottom = false;
+    this.nextClickIsFromContent = false;
+    this.hasHeadline = false;
+    this.hasActions = false;
+    this.hasIcon = false;
+    if (!o5) {
+      this.addEventListener("submit", this.handleSubmit);
+    }
+  }
+  async show() {
+    this.isOpening = true;
+    await this.isConnectedPromise;
+    await this.updateComplete;
+    const dialog = this.dialog;
+    if (dialog.open || !this.isOpening) {
+      this.isOpening = false;
+      return;
+    }
+    const preventOpen = !this.dispatchEvent(new Event("open", { cancelable: true }));
+    if (preventOpen) {
+      this.open = false;
+      return;
+    }
+    dialog.showModal();
+    this.open = true;
+    if (this.scroller) {
+      this.scroller.scrollTop = 0;
+    }
+    this.querySelector("[autofocus]")?.focus();
+    await this.animateDialog(this.getOpenAnimation());
+    this.dispatchEvent(new Event("opened"));
+    this.isOpening = false;
+  }
+  async close(returnValue = this.returnValue) {
+    this.isOpening = false;
+    if (!this.isConnected) {
+      this.open = false;
+      return;
+    }
+    await this.updateComplete;
+    const dialog = this.dialog;
+    if (!dialog.open || this.isOpening) {
+      this.open = false;
+      return;
+    }
+    const prevReturnValue = this.returnValue;
+    this.returnValue = returnValue;
+    const preventClose = !this.dispatchEvent(new Event("close", { cancelable: true }));
+    if (preventClose) {
+      this.returnValue = prevReturnValue;
+      return;
+    }
+    await this.animateDialog(this.getCloseAnimation());
+    dialog.close(returnValue);
+    this.open = false;
+    this.dispatchEvent(new Event("closed"));
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    this.isConnectedPromiseResolve();
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.isConnectedPromise = this.getIsConnectedPromise();
+  }
+  render() {
+    const scrollable = this.open && !(this.isAtScrollTop && this.isAtScrollBottom);
+    const classes = {
+      "has-headline": this.hasHeadline,
+      "has-actions": this.hasActions,
+      "has-icon": this.hasIcon,
+      scrollable,
+      "show-top-divider": scrollable && !this.isAtScrollTop,
+      "show-bottom-divider": scrollable && !this.isAtScrollBottom
+    };
+    const { ariaLabel } = this;
+    return x`
+      <div class="scrim"></div>
+      <dialog
+        class=${o9(classes)}
+        aria-label=${ariaLabel || A}
+        aria-labelledby=${this.hasHeadline ? "headline" : A}
+        role=${this.type === "alert" ? "alertdialog" : A}
+        @cancel=${this.handleCancel}
+        @click=${this.handleDialogClick}
+        .returnValue=${this.returnValue || A}
+      >
+        <div class="container"
+          @click=${this.handleContentClick}
+        >
+          <div class="headline">
+            <div class="icon" aria-hidden="true">
+              <slot name="icon" @slotchange=${this.handleIconChange}></slot>
+            </div>
+            <h2 id="headline" aria-hidden=${!this.hasHeadline || A}>
+              <slot name="headline"
+                  @slotchange=${this.handleHeadlineChange}></slot>
+            </h2>
+            <md-divider></md-divider>
+          </div>
+          <div class="scroller">
+            <div class="content">
+              <div class="top anchor"></div>
+              <slot name="content"></slot>
+              <div class="bottom anchor"></div>
+            </div>
+          </div>
+          <div class="actions">
+            <md-divider></md-divider>
+            <slot name="actions"
+              @slotchange=${this.handleActionsChange}></slot>
+          </div>
+        </div>
+      </dialog>
+    `;
+  }
+  firstUpdated() {
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        this.handleAnchorIntersection(entry);
+      }
+    }, { root: this.scroller });
+    this.intersectionObserver.observe(this.topAnchor);
+    this.intersectionObserver.observe(this.bottomAnchor);
+  }
+  handleDialogClick() {
+    if (this.nextClickIsFromContent) {
+      this.nextClickIsFromContent = false;
+      return;
+    }
+    const preventDefault = !this.dispatchEvent(new Event("cancel", { cancelable: true }));
+    if (preventDefault) {
+      return;
+    }
+    this.close();
+  }
+  handleContentClick() {
+    this.nextClickIsFromContent = true;
+  }
+  handleSubmit(event) {
+    const form = event.target;
+    const { submitter } = event;
+    if (form.method !== "dialog" || !submitter) {
+      return;
+    }
+    this.close(submitter.getAttribute("value") ?? this.returnValue);
+  }
+  handleCancel(event) {
+    if (event.target !== this.dialog) {
+      return;
+    }
+    const preventDefault = !redispatchEvent(this, event);
+    event.preventDefault();
+    if (preventDefault) {
+      return;
+    }
+    this.close();
+  }
+  async animateDialog(animation4) {
+    const { dialog, scrim, container, headline, content, actions } = this;
+    if (!dialog || !scrim || !container || !headline || !content || !actions) {
+      return;
+    }
+    const { container: containerAnimate, dialog: dialogAnimate, scrim: scrimAnimate, headline: headlineAnimate, content: contentAnimate, actions: actionsAnimate } = animation4;
+    const elementAndAnimation = [
+      [dialog, dialogAnimate ?? []],
+      [scrim, scrimAnimate ?? []],
+      [container, containerAnimate ?? []],
+      [headline, headlineAnimate ?? []],
+      [content, contentAnimate ?? []],
+      [actions, actionsAnimate ?? []]
+    ];
+    const animations2 = [];
+    for (const [element, animation5] of elementAndAnimation) {
+      for (const animateArgs of animation5) {
+        animations2.push(element.animate(...animateArgs));
+      }
+    }
+    await Promise.all(animations2.map((animation5) => animation5.finished));
+  }
+  handleHeadlineChange(event) {
+    const slot = event.target;
+    this.hasHeadline = slot.assignedElements().length > 0;
+  }
+  handleActionsChange(event) {
+    const slot = event.target;
+    this.hasActions = slot.assignedElements().length > 0;
+  }
+  handleIconChange(event) {
+    const slot = event.target;
+    this.hasIcon = slot.assignedElements().length > 0;
+  }
+  handleAnchorIntersection(entry) {
+    const { target, isIntersecting } = entry;
+    if (target === this.topAnchor) {
+      this.isAtScrollTop = isIntersecting;
+    }
+    if (target === this.bottomAnchor) {
+      this.isAtScrollBottom = isIntersecting;
+    }
+  }
+  getIsConnectedPromise() {
+    return new Promise((resolve) => {
+      this.isConnectedPromiseResolve = resolve;
+    });
+  }
+}
+(() => {
+  requestUpdateOnAriaChange(Dialog);
+})();
+Dialog.shadowRootOptions = {
+  ...s4.shadowRootOptions,
+  delegatesFocus: true
+};
+__decorate2([
+  n5({ type: Boolean })
+], Dialog.prototype, "open", null);
+__decorate2([
+  n5({ attribute: false })
+], Dialog.prototype, "returnValue", undefined);
+__decorate2([
+  n5()
+], Dialog.prototype, "type", undefined);
+__decorate2([
+  i4("dialog")
+], Dialog.prototype, "dialog", undefined);
+__decorate2([
+  i4(".scrim")
+], Dialog.prototype, "scrim", undefined);
+__decorate2([
+  i4(".container")
+], Dialog.prototype, "container", undefined);
+__decorate2([
+  i4(".headline")
+], Dialog.prototype, "headline", undefined);
+__decorate2([
+  i4(".content")
+], Dialog.prototype, "content", undefined);
+__decorate2([
+  i4(".actions")
+], Dialog.prototype, "actions", undefined);
+__decorate2([
+  t3()
+], Dialog.prototype, "isAtScrollTop", undefined);
+__decorate2([
+  t3()
+], Dialog.prototype, "isAtScrollBottom", undefined);
+__decorate2([
+  i4(".scroller")
+], Dialog.prototype, "scroller", undefined);
+__decorate2([
+  i4(".top.anchor")
+], Dialog.prototype, "topAnchor", undefined);
+__decorate2([
+  i4(".bottom.anchor")
+], Dialog.prototype, "bottomAnchor", undefined);
+__decorate2([
+  t3()
+], Dialog.prototype, "hasHeadline", undefined);
+__decorate2([
+  t3()
+], Dialog.prototype, "hasActions", undefined);
+__decorate2([
+  t3()
+], Dialog.prototype, "hasIcon", undefined);
+
+// node_modules/@material/web/dialog/internal/dialog-styles.css.js
+var styles9 = i`:host{--_container-color: var(--md-dialog-container-color, var(--md-sys-color-surface-container-high, #ece6f0));--_container-shape: var(--md-dialog-container-shape, 28px);--_headline-color: var(--md-dialog-headline-color, var(--md-sys-color-on-surface, #1d1b20));--_headline-font: var(--md-dialog-headline-font, var(--md-sys-typescale-headline-small-font, var(--md-ref-typeface-brand, Roboto)));--_headline-line-height: var(--md-dialog-headline-line-height, var(--md-sys-typescale-headline-small-line-height, 2rem));--_headline-size: var(--md-dialog-headline-size, var(--md-sys-typescale-headline-small-size, 1.5rem));--_headline-weight: var(--md-dialog-headline-weight, var(--md-sys-typescale-headline-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_supporting-text-color: var(--md-dialog-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-dialog-supporting-text-font, var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-line-height: var(--md-dialog-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height, 1.25rem));--_supporting-text-size: var(--md-dialog-supporting-text-size, var(--md-sys-typescale-body-medium-size, 0.875rem));--_supporting-text-weight: var(--md-dialog-supporting-text-weight, var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400)));--_icon-color: var(--md-dialog-icon-color, var(--md-sys-color-secondary, #625b71));--_icon-size: var(--md-dialog-icon-size, 24px);--_container-shape-start-start: var( --md-dialog-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-dialog-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-dialog-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-dialog-container-shape-end-start, var(--_container-shape) );border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-end-radius:var(--_container-shape-end-end);border-end-start-radius:var(--_container-shape-end-start);display:contents;margin:auto;max-height:min(560px,100% - 48px);max-width:min(560px,100% - 48px);min-height:140px;min-width:280px;position:fixed;height:fit-content;width:fit-content}dialog{background:rgba(0,0,0,0);border:none;border-radius:inherit;flex-direction:column;height:inherit;margin:inherit;max-height:inherit;max-width:inherit;min-height:inherit;min-width:inherit;outline:none;overflow:visible;padding:0;width:inherit}dialog[open]{display:flex}::backdrop{background:none}.scrim{background:var(--md-sys-color-scrim, #000);display:none;inset:0;opacity:32%;pointer-events:none;position:fixed;z-index:1}:host([open]) .scrim{display:flex}h2{all:unset;align-self:stretch}.headline{align-items:center;color:var(--_headline-color);display:flex;flex-direction:column;font-family:var(--_headline-font);font-size:var(--_headline-size);line-height:var(--_headline-line-height);font-weight:var(--_headline-weight);position:relative}slot[name=headline]::slotted(*){align-items:center;align-self:stretch;box-sizing:border-box;display:flex;gap:8px;padding:24px 24px 0}.icon{display:flex}slot[name=icon]::slotted(*){color:var(--_icon-color);fill:currentColor;font-size:var(--_icon-size);padding-top:24px;height:var(--_icon-size);width:var(--_icon-size)}.has-icon slot[name=headline]::slotted(*){justify-content:center;padding-top:16px}.scrollable slot[name=headline]::slotted(*){padding-bottom:16px}.scrollable.has-headline slot[name=content]::slotted(*){padding-top:8px}.container{border-radius:inherit;display:flex;flex-direction:column;flex-grow:1;overflow:hidden;position:relative;transform-origin:top}.container::before{background:var(--_container-color);border-radius:inherit;content:"";inset:0;position:absolute}.scroller{display:flex;flex:1;flex-direction:column;overflow:hidden;z-index:1}.scrollable .scroller{overflow-y:scroll}.content{color:var(--_supporting-text-color);font-family:var(--_supporting-text-font);font-size:var(--_supporting-text-size);line-height:var(--_supporting-text-line-height);font-weight:var(--_supporting-text-weight);height:min-content;position:relative}slot[name=content]::slotted(*){box-sizing:border-box;padding:24px}.anchor{position:absolute}.top.anchor{top:0}.bottom.anchor{bottom:0}.actions{position:relative}slot[name=actions]::slotted(*){box-sizing:border-box;display:flex;gap:8px;justify-content:flex-end;padding:16px 24px 24px}.has-actions slot[name=content]::slotted(*){padding-bottom:8px}md-divider{display:none;position:absolute}.has-headline.show-top-divider .headline md-divider,.has-actions.show-bottom-divider .actions md-divider{display:flex}.headline md-divider{bottom:0}.actions md-divider{top:0}@media(forced-colors: active){dialog{outline:2px solid WindowText}}/*# sourceMappingURL=dialog-styles.css.map */
+`;
+
+// node_modules/@material/web/dialog/dialog.js
+var MdDialog = class MdDialog2 extends Dialog {
+};
+MdDialog.styles = [styles9];
+MdDialog = __decorate2([
+  e4("md-dialog")
+], MdDialog);
+
+// node_modules/@material/web/button/internal/shared-styles.css.js
+var styles10 = i`:host{display:inline-flex;height:var(--_container-height);outline:none;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity)}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-height))/2) 0}md-focus-ring{--md-focus-ring-shape-start-start: var(--_container-shape-start-start);--md-focus-ring-shape-start-end: var(--_container-shape-start-end);--md-focus-ring-shape-end-end: var(--_container-shape-end-end);--md-focus-ring-shape-end-start: var(--_container-shape-end-start)}:host([disabled]){cursor:default;pointer-events:none}.button{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-inline-size:64px;border:none;outline:none;user-select:none;-webkit-appearance:none;vertical-align:middle;background:rgba(0,0,0,0);text-decoration:none;inline-size:100%;position:relative;z-index:0;height:100%;font:inherit;color:var(--_label-text-color);padding-inline-start:var(--_leading-space);padding-inline-end:var(--_trailing-space);gap:8px}.button::before{background-color:var(--_container-color);border-radius:inherit;content:"";inset:0;position:absolute}.button::-moz-focus-inner{padding:0;border:0}.button:hover{color:var(--_hover-label-text-color);cursor:pointer}.button:focus{color:var(--_focus-label-text-color)}.button:active{color:var(--_pressed-label-text-color);outline:none}.button:disabled .button__label{color:var(--_disabled-label-text-color);opacity:var(--_disabled-label-text-opacity)}.button:disabled::before{background-color:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}@media(forced-colors: active){.button::before{content:"";box-sizing:border-box;border:1px solid CanvasText;border-radius:inherit;inset:0;pointer-events:none;position:absolute}.button:disabled{--_disabled-icon-opacity: 1;--_disabled-container-opacity: 1;--_disabled-label-text-opacity: 1}}.button,.button__ripple{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.button::after,.button::before,md-elevation,.button__ripple{z-index:-1}.button--icon-leading{padding-inline-start:var(--_with-leading-icon-leading-space);padding-inline-end:var(--_with-leading-icon-trailing-space)}.button--icon-trailing{padding-inline-start:var(--_with-trailing-icon-leading-space);padding-inline-end:var(--_with-trailing-icon-trailing-space)}.link-button-wrapper{inline-size:100%}.button ::slotted([slot=icon]){display:inline-flex;position:relative;writing-mode:horizontal-tb;fill:currentColor;color:var(--_icon-color);font-size:var(--_icon-size);inline-size:var(--_icon-size);block-size:var(--_icon-size)}.button:hover ::slotted([slot=icon]){color:var(--_hover-icon-color)}.button:focus ::slotted([slot=icon]){color:var(--_focus-icon-color)}.button:active ::slotted([slot=icon]){color:var(--_pressed-icon-color)}.button:disabled ::slotted([slot=icon]){color:var(--_disabled-icon-color);opacity:var(--_disabled-icon-opacity)}.touch{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%)}:host([touch-target=none]) .touch{display:none}/*# sourceMappingURL=shared-styles.css.map */
+`;
+
+// node_modules/lit/node_modules/lit-html/static.js
+var e8 = Symbol.for("");
+var l6 = (t5) => {
+  if ((t5 == null ? undefined : t5.r) === e8)
+    return t5 == null ? undefined : t5._$litStatic$;
+};
+var i7 = (t5, ...r4) => ({ _$litStatic$: r4.reduce((r5, e9, l7) => r5 + ((t6) => {
+  if (t6._$litStatic$ !== undefined)
+    return t6._$litStatic$;
+  throw Error(`Value passed to 'literal' function must be a 'literal' result: ${t6}. Use 'unsafeStatic' to pass non-literal values, but\n            take care to ensure page security.`);
+})(e9) + t5[l7 + 1], t5[0]), r: e8 });
+var s5 = new Map;
+var a3 = (t5) => (r4, ...e9) => {
+  const o10 = e9.length;
+  let i8, a4;
+  const n8 = [], u3 = [];
+  let c3, $2 = 0, f2 = false;
+  for (;$2 < o10; ) {
+    for (c3 = r4[$2];$2 < o10 && (a4 = e9[$2], i8 = l6(a4)) !== undefined; )
+      c3 += i8 + r4[++$2], f2 = true;
+    $2 !== o10 && u3.push(a4), n8.push(c3), $2++;
+  }
+  if ($2 === o10 && n8.push(r4[o10]), f2) {
+    const t6 = n8.join("$$lit$$");
+    (r4 = s5.get(t6)) === undefined && (n8.raw = n8, s5.set(t6, r4 = n8)), e9 = u3;
+  }
+  return t5(r4, ...e9);
+};
+var n8 = a3(x);
+var u3 = a3(b);
+// node_modules/@material/web/internal/controller/element-internals.js
+var internals = Symbol("internals");
+
+// node_modules/@material/web/internal/controller/form-submitter.js
+function setupFormSubmitter(ctor) {
+  if (o5) {
+    return;
+  }
+  ctor.addInitializer((instance) => {
+    const submitter = instance;
+    submitter.addEventListener("click", async (event) => {
+      const { type, [internals]: elementInternals } = submitter;
+      const { form } = elementInternals;
+      if (!form || type === "button") {
+        return;
+      }
+      await new Promise((resolve) => {
+        resolve();
+      });
+      if (event.defaultPrevented) {
+        return;
+      }
+      if (type === "reset") {
+        form.reset();
+        return;
+      }
+      form.addEventListener("submit", (submitEvent) => {
+        Object.defineProperty(submitEvent, "submitter", {
+          configurable: true,
+          enumerable: true,
+          get: () => submitter
+        });
+      }, { capture: true, once: true });
+      elementInternals.setFormValue(submitter.value);
+      form.requestSubmit();
+    });
+  });
+}
+
+// node_modules/@material/web/button/internal/button.js
+var _a2;
+
+class Button extends s4 {
+  get name() {
+    return this.getAttribute("name") ?? "";
+  }
+  set name(name) {
+    this.setAttribute("name", name);
+  }
+  get form() {
+    return this[internals].form;
+  }
+  constructor() {
+    super();
+    this.disabled = false;
+    this.href = "";
+    this.target = "";
+    this.trailingIcon = false;
+    this.hasIcon = false;
+    this.type = "submit";
+    this.value = "";
+    this[_a2] = this.attachInternals();
+    this.handleActivationClick = (event) => {
+      if (!isActivationClick(event) || !this.buttonElement) {
+        return;
+      }
+      this.focus();
+      dispatchActivationClick(this.buttonElement);
+    };
+    if (!o5) {
+      this.addEventListener("click", this.handleActivationClick);
+    }
+  }
+  focus() {
+    this.buttonElement?.focus();
+  }
+  blur() {
+    this.buttonElement?.blur();
+  }
+  render() {
+    const isDisabled = this.disabled && !this.href;
+    const button = this.href ? i7`a` : i7`button`;
+    const { ariaLabel, ariaHasPopup, ariaExpanded } = this;
+    return n8`
+      <${button}
+        class="button ${o9(this.getRenderClasses())}"
+        ?disabled=${isDisabled}
+        aria-label="${ariaLabel || A}"
+        aria-haspopup="${ariaHasPopup || A}"
+        aria-expanded="${ariaExpanded || A}"
+        href=${this.href || A}
+        target=${this.target || A}
+      >${this.renderContent()}</${button}>`;
+  }
+  getRenderClasses() {
+    return {
+      "button--icon-leading": !this.trailingIcon && this.hasIcon,
+      "button--icon-trailing": this.trailingIcon && this.hasIcon
+    };
+  }
+  renderContent() {
+    const isDisabled = this.disabled && !this.href;
+    const icon = x`<slot name="icon" @slotchange="${this.handleSlotChange}"></slot>`;
+    return x`
+      ${this.renderElevation?.()}
+      ${this.renderOutline?.()}
+      <md-focus-ring part="focus-ring"></md-focus-ring>
+      <md-ripple class="button__ripple" ?disabled="${isDisabled}"></md-ripple>
+      <span class="touch"></span>
+      ${this.trailingIcon ? A : icon}
+      <span class="button__label"><slot></slot></span>
+      ${this.trailingIcon ? icon : A}
+    `;
+  }
+  handleSlotChange() {
+    this.hasIcon = this.assignedIcons.length > 0;
+  }
+}
+_a2 = internals;
+(() => {
+  requestUpdateOnAriaChange(Button);
+  setupFormSubmitter(Button);
+})();
+Button.formAssociated = true;
+Button.shadowRootOptions = { mode: "open", delegatesFocus: true };
+__decorate2([
+  n5({ type: Boolean, reflect: true })
+], Button.prototype, "disabled", undefined);
+__decorate2([
+  n5()
+], Button.prototype, "href", undefined);
+__decorate2([
+  n5()
+], Button.prototype, "target", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "trailing-icon" })
+], Button.prototype, "trailingIcon", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "has-icon" })
+], Button.prototype, "hasIcon", undefined);
+__decorate2([
+  n5()
+], Button.prototype, "type", undefined);
+__decorate2([
+  n5()
+], Button.prototype, "value", undefined);
+__decorate2([
+  i4(".button")
+], Button.prototype, "buttonElement", undefined);
+__decorate2([
+  l4({ slot: "icon", flatten: true })
+], Button.prototype, "assignedIcons", undefined);
+
+// node_modules/@material/web/button/internal/text-button.js
+class TextButton extends Button {
+}
+
+// node_modules/@material/web/button/internal/text-styles.css.js
+var styles11 = i`:host{--_container-height: var(--md-text-button-container-height, 40px);--_container-shape: var(--md-text-button-container-shape, 9999px);--_disabled-label-text-color: var(--md-text-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-text-button-disabled-label-text-opacity, 0.38);--_focus-label-text-color: var(--md-text-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-label-text-color: var(--md-text-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-color: var(--md-text-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-opacity: var(--md-text-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-text-button-label-text-color, var(--md-sys-color-primary, #6750a4));--_label-text-font: var(--md-text-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-text-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-text-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-text-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-label-text-color: var(--md-text-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-color: var(--md-text-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-text-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-text-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-text-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-text-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-icon-color: var(--md-text-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-color: var(--md-text-button-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-text-button-icon-size, 18px);--_pressed-icon-color: var(--md-text-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_leading-space: var(--md-text-button-leading-space, 12px);--_trailing-space: var(--md-text-button-trailing-space, 12px);--_with-leading-icon-leading-space: var(--md-text-button-with-leading-icon-leading-space, 12px);--_with-leading-icon-trailing-space: var(--md-text-button-with-leading-icon-trailing-space, 16px);--_with-trailing-icon-leading-space: var(--md-text-button-with-trailing-icon-leading-space, 16px);--_with-trailing-icon-trailing-space: var(--md-text-button-with-trailing-icon-trailing-space, 12px);--_container-color: none;--_disabled-container-color: none;--_disabled-container-opacity: 0;--_container-shape-start-start: var( --md-text-button-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-text-button-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-text-button-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-text-button-container-shape-end-start, var(--_container-shape) )}/*# sourceMappingURL=text-styles.css.map */
+`;
+
+// node_modules/@material/web/button/text-button.js
+var MdTextButton = class MdTextButton2 extends TextButton {
+};
+MdTextButton.styles = [styles10, styles11];
+MdTextButton = __decorate2([
+  e4("md-text-button")
+], MdTextButton);
+
+// src/components/message-dialog.ts
+class MessageDialog extends MobxLitElement {
+  constructor() {
+    super(...arguments);
+  }
+  render() {
+    if (!this.message.title) {
+      return "";
+    }
+    const buttons = this.message.buttons?.map((x2) => {
+      var txt = x2.label;
+      if (x2.icon) {
+        txt += `<span class="material-symbols-outlined">${x2.icon}</span>`;
+      }
+      return x`
+          <md-text-button
+              form="form-id"
+              @click=${action((e9) => this.message.onClose(e9.target.innerHTML))}
+          >${txt}</md-text-button>`;
+    }).join();
+    new MdDialog;
+    new MdTextButton;
+    return x`
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+      <style>
+        @font-face {
+          font-family: "Material Design Icons";
+          src: url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined") format("woff");
+        }
+      </style>
+      <md-dialog
+      type="alert"
+      aria-labelledby="message"
+      open
+      @close=${action((e9) => this.message.onClose(e9.target.innerHTML))}
+      className="text-center text-lg">
+    <div slot="headline">${this.message.title}</div>
+    <form slot="content" id="form-id" method="dialog">
+      ${this.message.msg}
+    </form>
+    <div slot="actions">${buttons}</div>
+  </md-dialog>
+`;
+  }
+}
+__decorateClass([
+  n5({ attribute: false })
+], MessageDialog.prototype, "message", 2);
+MessageDialog = __decorateClass([
+  e4("cb-message-dialog")
+], MessageDialog);
+var OK_BUTTON = () => [{ label: "Ok" }];
+var YESNO_BUTTONS = () => [
+  { label: "Yes", icon: "check" },
+  { label: "No", icon: "cancel" }
+];
+var PROMOTE_BUTTONS = () => [
+  { label: "Queen", icon: "FaChessQueen" },
+  { label: "Rook", icon: "FaChessRook" },
+  { label: "Knight", icon: "FaChessKnight" },
+  { label: "Bishop", icon: "FaChessBishop" }
+];
+var WINNER_BUTTONS = (black, white) => [
+  { label: white, icon: "FaChessKing" },
+  { label: "Draw", icon: "FaRegHandshake" },
+  { label: black, icon: "FaChessKing" }
+];
+var WINNER_HTML = x`
+  <div className="text-3xl">
+    Who won?
+    <img src="/png/win.png" />
+  </div>`;
+var ABOUT = x`
+  <div>
+    This chess program is open source and available at github.
+    <ul>
+      <li>
+        <a href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noopener">
+          Github pdigre/chessbuddy
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
+          target="_blank"
+          rel="noopener">
+          User Guide / instructions
+        </a>
+      </li>
+    </ul>
+  </div>`;
+
+// src/service/history.service.ts
 class HistoryService {
   history;
   markHist = -1;
@@ -11201,8 +11984,8 @@ class HistoryService {
   };
   getFilteredGames(name) {
     return historyService.history.filter((x2) => {
-      const s5 = x2.split(";");
-      return s5[1] == name || s5[2] == name;
+      const s6 = x2.split(";");
+      return s6[1] == name || s6[2] == name;
     });
   }
   uploadHistory(file2) {
@@ -11239,8 +12022,8 @@ class HistoryService {
     return h22;
   }
   static storage = "log";
-  setMarkHist(n8) {
-    this.markHist = n8;
+  setMarkHist(n9) {
+    this.markHist = n9;
   }
   decodeGame(row) {
     const cols = row.split(";");
@@ -11283,12 +12066,12 @@ class HistoryService {
   getLogRows() {
     const rows = [];
     const log = playService.log;
-    for (let i7 = 0;i7 < log.length / 2; i7++) {
-      rows[i7] = ["", ""];
+    for (let i8 = 0;i8 < log.length / 2; i8++) {
+      rows[i8] = ["", ""];
     }
-    log.forEach((t5, i7) => {
-      const l6 = Math.floor(i7 / 2), c3 = i7 % 2;
-      rows[l6][c3] = t5;
+    log.forEach((t5, i8) => {
+      const l7 = Math.floor(i8 / 2), c3 = i8 % 2;
+      rows[l7][c3] = t5;
     });
     return rows;
   }
@@ -13819,7 +14602,7 @@ class OpeningsService {
     let ch = this.tree;
     let san;
     moves2.forEach((move) => {
-      san = ch.find((s5) => s5.san == move);
+      san = ch.find((s6) => s6.san == move);
       if (san) {
         ch = san.children;
       } else {
@@ -13834,7 +14617,7 @@ class OpeningsService {
     let ch = this.tree;
     let san;
     for (const move of moves2) {
-      san = ch.find((s5) => s5.san == move);
+      san = ch.find((s6) => s6.san == move);
       if (san) {
         ch = san.children;
       } else {
@@ -13854,10 +14637,6 @@ class OpeningsService {
 }
 
 // src/service/play.service.ts
-var PROMOTE_BUTTONS = "";
-var WINNER_BUTTONS = "";
-var YESNO_BUTTONS2 = "";
-
 class PlayService {
   static storage = "play";
   wtime = 0;
@@ -14099,7 +14878,7 @@ class PlayService {
     if (this.isPlaying || isHuman) {
       const action2 = move[1];
       if (action2.promotion && isHuman) {
-        messageService.display("Promotion", "Choose promotion piece", PROMOTE_BUTTONS, (reply) => {
+        messageService.display("Promotion", "Choose promotion piece", PROMOTE_BUTTONS(), (reply) => {
           let promo = "q";
           if (reply == "Rook")
             promo = "r";
@@ -14130,7 +14909,7 @@ class PlayService {
   }
   markHints(func) {
     if (configService.showFacts) {
-      analyzerService.help.forEach((x2, i7) => func(x2, i7));
+      analyzerService.help.forEach((x2, i8) => func(x2, i8));
     }
   }
   markCastling(func) {
@@ -14142,7 +14921,7 @@ class PlayService {
     if (this.isComplete)
       this.resetGameAction();
     if (isHistUndo || isPlayUndo) {
-      messageService.display("Undo", isPlayUndo ? "Do you want to undo last move?" : "Do you want to revert the game to the marked position?", YESNO_BUTTONS2, (yes) => {
+      messageService.display("Undo", isPlayUndo ? "Do you want to undo last move?" : "Do you want to revert the game to the marked position?", YESNO_BUTTONS(), (yes) => {
         messageService.clear();
         if (yes == "Yes") {
           this.initGame(this.log.slice(0, isPlayUndo ? dashboardService.undopos : dashboardService.markLog));
@@ -14363,52 +15142,7 @@ var bluetoothService2 = new BluetoothService;
 var refreshService = new RefreshService;
 var clockService = new ClockService;
 
-// node_modules/@adobe/lit-mobx/lib/mixin-custom.js
-function MobxReactionUpdateCustom(constructor, ReactionConstructor) {
-  var _a2, _b;
-  return _b = class MobxReactingElement extends constructor {
-    constructor() {
-      super(...arguments);
-      this[_a2] = () => {
-        this.requestUpdate();
-      };
-    }
-    connectedCallback() {
-      super.connectedCallback();
-      const name = this.constructor.name || this.nodeName;
-      this[reaction] = new ReactionConstructor(`${name}.update()`, this[cachedRequestUpdate]);
-      if (this.hasUpdated)
-        this.requestUpdate();
-    }
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      if (this[reaction]) {
-        this[reaction].dispose();
-        this[reaction] = undefined;
-      }
-    }
-    update(changedProperties) {
-      if (this[reaction]) {
-        this[reaction].track(super.update.bind(this, changedProperties));
-      } else {
-        super.update(changedProperties);
-      }
-    }
-  }, _a2 = cachedRequestUpdate, _b;
-}
-var reaction = Symbol("LitMobxRenderReaction");
-var cachedRequestUpdate = Symbol("LitMobxRequestUpdate");
-
-// node_modules/@adobe/lit-mobx/lib/mixin.js
-function MobxReactionUpdate(constructor) {
-  return MobxReactionUpdateCustom(constructor, Reaction);
-}
-
-// node_modules/@adobe/lit-mobx/lit-mobx.js
-class MobxLitElement extends MobxReactionUpdate(s4) {
-}
-
-// src/components/mainbuttonbar.ts
+// src/components/main-button-bar.ts
 class MainButtonBar extends MobxLitElement {
   constructor() {
     super(...arguments);
@@ -14470,11 +15204,12 @@ var package_default = {
     "json-ignore": "^0.4.0",
     "lit-element": "^4.0.0",
     mobx: "^6.10.2",
+    prettier: "^3.0.3",
     "react-icons": "^4.11.0"
   },
   scripts: {
     start: "bun run src/index.ts",
-    dev: "bunx --bun vite src/index.ts",
+    dev: "bunx --bun vite",
     dev2: "bun --hot src/index.ts",
     prod: "bun build ./src/index.ts --outfile=./public/bundle.js --watch"
   },
@@ -14488,7 +15223,7 @@ var package_default = {
   }
 };
 
-// src/components/mainview.ts
+// src/components/main-view.ts
 class MainView extends MobxLitElement {
   constructor() {
     super(...arguments);
@@ -14548,6 +15283,97 @@ MainLogView = __decorateClass([
   e4("cb-mainlogview")
 ], MainLogView);
 
+// src/components/config-dialog.ts
+class ConfigDialog extends MobxLitElement {
+  constructor() {
+    super(...arguments);
+  }
+  config;
+  tabpanel() {
+    switch (this.config.showTab) {
+      case 0:
+        return x`<div  config={config} >ConfigGame</div>`;
+      case 1:
+        return x`<div  config={config} rendering={renderingService} >ConfigDisplay</div>`;
+      case 2:
+        return x`<div  config={config} connect={connectService}>ConfigHuman</div>`;
+      case 3:
+        return x`<div  config={config} >ConfigBot</div>`;
+      case 4:
+        return x`<div  config={config} >ConfigClock</div>`;
+      case 5:
+        return x`<div  config={config} >ConfigBluetooth</div>`;
+      default:
+        return "";
+    }
+  }
+  render() {
+    console.log("config " + this.config.showConfig);
+    if (!this.config.showConfig) {
+      return "";
+    }
+    new MdDialog;
+    new MdTabs;
+    new MdPrimaryTab;
+    const choose = (index) => (event) => {
+      event.preventDefault();
+      runInAction(() => this.config.switchTab(index));
+    };
+    const tab3 = (num, icon, title) => {
+      return num === this.config.showTab ? x`<md-primary-tab @click=${choose(num)} active>
+        <span class="material-symbols-outlined">${icon}</span>${title}</md-primary-tab>` : x`<md-primary-tab @click=${choose(num)} >
+        <span class="material-symbols-outlined">${icon}</span>${title}</md-primary-tab>`;
+    };
+    return x`
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+      <style>
+        @font-face {
+          font-family: "Material Design Icons";
+          src: url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined") format("woff");
+        }
+        span {
+          font-size: 1.875rem;
+          line-height: 2.25rem;
+        }
+        md-dialog {
+          width: 1000px;
+          height: 500px;
+        }
+        md-tabs {
+          width: 100%;
+          font-size: 1.25rem;
+          line-height: 1.75rem;
+          text-align: center;
+        }
+        md-primary-tab div {
+          font-size: 1.25rem;
+          line-height: 1.75rem;
+        }
+      </style>
+    <md-dialog
+      aria-labelledby="simple-dialog-title"
+      open
+      @close=${action(this.config.closeConfigAction)}
+      maxWidth="xl">
+      <form slot="content" id="form-id" method="dialog">
+      <md-tabs>
+        ${tab3(0, "chess", "Game")}
+        ${tab3(1, "monitor", "Display")}
+        ${tab3(2, "people", "Humans")}
+        ${tab3(3, "robot", "Bots")}
+        ${tab3(4, "av_timer", "Clocks")}
+        ${tab3(5, "bluetooth", "Bluetooth")}
+      </md-tabs>
+      ${this.tabpanel()}
+      </form>
+    </md-dialog>
+    `;
+  }
+}
+ConfigDialog = __decorateClass([
+  e4("cb-config-dialog")
+], ConfigDialog);
+
 // src/components/app.ts
 class App extends s4 {
   constructor() {
@@ -14557,6 +15383,13 @@ class App extends s4 {
     new Board;
     new MainButtonBar;
     new MainView;
+    new MessageDialog;
+    new MdTextButton;
+    new ConfigDialog;
+    const about = () => {
+      console.log("about");
+      messageService.display("About", "This chess program is open source and available at github.");
+    };
     return x`
     <style> 
     .main {
@@ -14624,9 +15457,9 @@ class App extends s4 {
       </div>
       <div class="panel">
         <h3 class="panel2">
-          <span onClick={action(about)}  class="panel3">
+          <md-text-button @click=${action(about)} class="panel3">
             ChessBuddy ${package_default.version}
-          </span>
+          </md-text-button>
           <div class="MdRefresh panel4" onClick={action(mediaService.playAllAction)} ></div>
         </h3>
         <cb-mainbuttonbar
@@ -14637,9 +15470,9 @@ class App extends s4 {
         <div class="FenInfo" play={playService} ></div>
         <cb-mainview .dashboard=${dashboardService} .edit=${editService} ></cb-mainview>
       </div>
-      <div class="MessageDialog" message={messageService} ></div>
-      <div class="Mp4Dialog" mp4={mediaService} ></div>
-      <div class="ConfigDialog" config={configService} ></div>
+      <cb-message-dialog .message=${messageService} ></cb-message-dialog>
+      <div class="Mp4Dialog" mp4=${mediaService} ></div>
+      <cb-config-dialog .config=${configService} ></cb-config-dialog>
     `;
   }
 }

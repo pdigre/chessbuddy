@@ -1,9 +1,8 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { LitElement, html } from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {customElement} from 'lit/decorators.js';
 import { DashboardService } from '../service/dashboard.service';
 import { EditService } from '../service/edit.service';
-import { observable } from 'mobx';
 import {
   playService,
   historyService,

@@ -7,11 +7,7 @@ import {
   rulesService,
   messageService,
 } from './index.service';
-
-const PROMOTE_BUTTONS = ""; 
-const WINNER_BUTTONS = ""; 
-const WINNER_HTML = "";
-const YESNO_BUTTONS = "";
+import { OK_BUTTON, YESNO_BUTTONS } from '../components/message-dialog';
 
 /*
  * History of previous games, should store a maximum locally
