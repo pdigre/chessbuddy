@@ -331,11 +331,11 @@ var init_Reflect = __esm(() => {
           var nextValue = IteratorValue(next);
           try {
             keys[k2] = nextValue;
-          } catch (e8) {
+          } catch (e9) {
             try {
               IteratorClose(iterator);
             } finally {
-              throw e8;
+              throw e9;
             }
           }
           k2++;
@@ -1422,29 +1422,36 @@ var i4 = function(i5, n6) {
     return t4;
   } });
 };
+// node_modules/lit/node_modules/@lit/reactive-element/decorators/query-all.js
+var e6 = function(e7) {
+  return o6({ descriptor: (r4) => ({ get() {
+    var r5, o7;
+    return (o7 = (r5 = this.renderRoot) === null || r5 === undefined ? undefined : r5.querySelectorAll(e7)) !== null && o7 !== undefined ? o7 : [];
+  }, enumerable: true, configurable: true }) });
+};
 // node_modules/lit/node_modules/@lit/reactive-element/decorators/query-assigned-elements.js
 var l4 = function(n6) {
   const { slot: l5, selector: t4 } = n6 != null ? n6 : {};
   return o6({ descriptor: (o7) => ({ get() {
     var o8;
-    const r4 = "slot" + (l5 ? `[name=${l5}]` : ":not([name])"), i5 = (o8 = this.renderRoot) === null || o8 === undefined ? undefined : o8.querySelector(r4), s5 = i5 != null ? e6(i5, n6) : [];
+    const r4 = "slot" + (l5 ? `[name=${l5}]` : ":not([name])"), i5 = (o8 = this.renderRoot) === null || o8 === undefined ? undefined : o8.querySelector(r4), s5 = i5 != null ? e7(i5, n6) : [];
     return t4 ? s5.filter((o9) => o9.matches(t4)) : s5;
   }, enumerable: true, configurable: true }) });
 };
 var n6;
-var e6 = ((n6 = window.HTMLSlotElement) === null || n6 === undefined ? undefined : n6.prototype.assignedElements) != null ? (o7, n7) => o7.assignedElements(n7) : (o7, n7) => o7.assignedNodes(n7).filter((o8) => o8.nodeType === Node.ELEMENT_NODE);
+var e7 = ((n6 = window.HTMLSlotElement) === null || n6 === undefined ? undefined : n6.prototype.assignedElements) != null ? (o7, n7) => o7.assignedElements(n7) : (o7, n7) => o7.assignedNodes(n7).filter((o8) => o8.nodeType === Node.ELEMENT_NODE);
 // node_modules/lit/node_modules/@lit/reactive-element/decorators/query-assigned-nodes.js
 var o7 = function(o8, n7, r4) {
   let l5, s5 = o8;
-  return typeof o8 == "object" ? (s5 = o8.slot, l5 = o8) : l5 = { flatten: n7 }, r4 ? l4({ slot: s5, flatten: n7, selector: r4 }) : o6({ descriptor: (e7) => ({ get() {
-    var e8, t4;
-    const o9 = "slot" + (s5 ? `[name=${s5}]` : ":not([name])"), n8 = (e8 = this.renderRoot) === null || e8 === undefined ? undefined : e8.querySelector(o9);
+  return typeof o8 == "object" ? (s5 = o8.slot, l5 = o8) : l5 = { flatten: n7 }, r4 ? l4({ slot: s5, flatten: n7, selector: r4 }) : o6({ descriptor: (e8) => ({ get() {
+    var e9, t4;
+    const o9 = "slot" + (s5 ? `[name=${s5}]` : ":not([name])"), n8 = (e9 = this.renderRoot) === null || e9 === undefined ? undefined : e9.querySelector(o9);
     return (t4 = n8 == null ? undefined : n8.assignedNodes(l5)) !== null && t4 !== undefined ? t4 : [];
   }, enumerable: true, configurable: true }) });
 };
 // node_modules/lit/node_modules/lit-html/directive.js
 var t4 = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 };
-var e7 = (t5) => (...e8) => ({ _$litDirective$: t5, values: e8 });
+var e8 = (t5) => (...e9) => ({ _$litDirective$: t5, values: e9 });
 
 class i5 {
   constructor(t5) {
@@ -1452,33 +1459,33 @@ class i5 {
   get _$AU() {
     return this._$AM._$AU;
   }
-  _$AT(t5, e8, i6) {
-    this._$Ct = t5, this._$AM = e8, this._$Ci = i6;
+  _$AT(t5, e9, i6) {
+    this._$Ct = t5, this._$AM = e9, this._$Ci = i6;
   }
-  _$AS(t5, e8) {
-    return this.update(t5, e8);
+  _$AS(t5, e9) {
+    return this.update(t5, e9);
   }
-  update(t5, e8) {
-    return this.render(...e8);
+  update(t5, e9) {
+    return this.render(...e9);
   }
 }
 // node_modules/lit/node_modules/lit-html/directives/style-map.js
 var i6 = "important";
 var n7 = " !" + i6;
-var o8 = e7(class extends i5 {
+var o8 = e8(class extends i5 {
   constructor(t5) {
-    var e8;
-    if (super(t5), t5.type !== t4.ATTRIBUTE || t5.name !== "style" || ((e8 = t5.strings) === null || e8 === undefined ? undefined : e8.length) > 2)
+    var e9;
+    if (super(t5), t5.type !== t4.ATTRIBUTE || t5.name !== "style" || ((e9 = t5.strings) === null || e9 === undefined ? undefined : e9.length) > 2)
       throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
   }
   render(t5) {
-    return Object.keys(t5).reduce((e8, r4) => {
+    return Object.keys(t5).reduce((e9, r4) => {
       const s5 = t5[r4];
-      return s5 == null ? e8 : e8 + `${r4 = r4.includes("-") ? r4 : r4.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g, "-$&").toLowerCase()}:${s5};`;
+      return s5 == null ? e9 : e9 + `${r4 = r4.includes("-") ? r4 : r4.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g, "-$&").toLowerCase()}:${s5};`;
     }, "");
   }
-  update(e8, [r4]) {
-    const { style: s5 } = e8.element;
+  update(e9, [r4]) {
+    const { style: s5 } = e9.element;
     if (this.ht === undefined) {
       this.ht = new Set;
       for (const t5 in r4)
@@ -1489,11 +1496,11 @@ var o8 = e7(class extends i5 {
       r4[t5] == null && (this.ht.delete(t5), t5.includes("-") ? s5.removeProperty(t5) : s5[t5] = "");
     });
     for (const t5 in r4) {
-      const e9 = r4[t5];
-      if (e9 != null) {
+      const e10 = r4[t5];
+      if (e10 != null) {
         this.ht.add(t5);
-        const r5 = typeof e9 == "string" && e9.endsWith(n7);
-        t5.includes("-") || r5 ? s5.setProperty(t5, r5 ? e9.slice(0, -11) : e9, r5 ? i6 : "") : s5[t5] = e9;
+        const r5 = typeof e10 == "string" && e10.endsWith(n7);
+        t5.includes("-") || r5 ? s5.setProperty(t5, r5 ? e10.slice(0, -11) : e10, r5 ? i6 : "") : s5[t5] = e10;
       }
     }
     return T;
@@ -2151,7 +2158,7 @@ class RenderPieceDirective extends i5 {
     return T;
   }
 }
-var renderPieceDirective = e7(RenderPieceDirective);
+var renderPieceDirective = e8(RenderPieceDirective);
 var ChessBoardElement = class ChessBoardElement2 extends s4 {
   constructor() {
     super(...arguments);
@@ -2181,21 +2188,21 @@ var ChessBoardElement = class ChessBoardElement2 extends s4 {
     this._highlightedSquares = new Set;
     this._animations = new Map;
     this._currentPosition = {};
-    this._mousemoveWindow = (e8) => {
+    this._mousemoveWindow = (e9) => {
       var _a;
       if (!(((_a = this._dragState) === null || _a === undefined ? undefined : _a.state) === "dragging")) {
         return;
       }
-      e8.preventDefault();
-      const pos = e8 instanceof MouseEvent ? e8 : e8.changedTouches[0];
+      e9.preventDefault();
+      const pos = e9 instanceof MouseEvent ? e9 : e9.changedTouches[0];
       this._updateDraggedPiece(pos.clientX, pos.clientY);
     };
-    this._mouseupWindow = (e8) => {
+    this._mouseupWindow = (e9) => {
       var _a;
       if (!(((_a = this._dragState) === null || _a === undefined ? undefined : _a.state) === "dragging")) {
         return;
       }
-      const pos = e8 instanceof MouseEvent ? e8 : e8.changedTouches[0];
+      const pos = e9 instanceof MouseEvent ? e9 : e9.changedTouches[0];
       const location = this._isXYOnSquare(pos.clientX, pos.clientY);
       this._stopDraggedPiece(location);
     };
@@ -2424,35 +2431,35 @@ var ChessBoardElement = class ChessBoardElement2 extends s4 {
     }
     return {};
   }
-  _mousedownSquare(e8) {
+  _mousedownSquare(e9) {
     if (!this.draggablePieces && !this.sparePieces) {
       return;
     }
-    const squareEl = e8.currentTarget;
+    const squareEl = e9.currentTarget;
     const square = squareEl.getAttribute("data-square");
     if (square === null || !this._currentPosition.hasOwnProperty(square)) {
       return;
     }
-    e8.preventDefault();
-    const pos = e8 instanceof MouseEvent ? e8 : e8.changedTouches[0];
+    e9.preventDefault();
+    const pos = e9 instanceof MouseEvent ? e9 : e9.changedTouches[0];
     this._beginDraggingPiece(square, this._currentPosition[square], pos.clientX, pos.clientY);
   }
-  _mousedownSparePiece(e8) {
+  _mousedownSparePiece(e9) {
     if (!this.sparePieces) {
       return;
     }
-    const sparePieceContainerEl = e8.currentTarget;
+    const sparePieceContainerEl = e9.currentTarget;
     const pieceEl = sparePieceContainerEl.querySelector("[part~=piece]");
     const piece = pieceEl.getAttribute("piece");
-    e8.preventDefault();
-    const pos = e8 instanceof MouseEvent ? e8 : e8.changedTouches[0];
+    e9.preventDefault();
+    const pos = e9 instanceof MouseEvent ? e9 : e9.changedTouches[0];
     this._beginDraggingPiece("spare", piece, pos.clientX, pos.clientY);
   }
-  _mouseenterSquare(e8) {
+  _mouseenterSquare(e9) {
     if (this._dragState !== undefined) {
       return;
     }
-    const square = e8.currentTarget.getAttribute("data-square");
+    const square = e9.currentTarget.getAttribute("data-square");
     if (!validSquare(square)) {
       return;
     }
@@ -2467,11 +2474,11 @@ var ChessBoardElement = class ChessBoardElement2 extends s4 {
       }
     }));
   }
-  _mouseleaveSquare(e8) {
+  _mouseleaveSquare(e9) {
     if (this._dragState !== undefined) {
       return;
     }
-    const square = e8.currentTarget.getAttribute("data-square");
+    const square = e9.currentTarget.getAttribute("data-square");
     if (!validSquare(square)) {
       return;
     }
@@ -2576,7 +2583,7 @@ var ChessBoardElement = class ChessBoardElement2 extends s4 {
   }
   _isXYOnSquare(x2, y2) {
     const elements = this.shadowRoot.elementsFromPoint(x2, y2);
-    const squareEl = elements.find((e8) => e8.classList.contains("square"));
+    const squareEl = elements.find((e9) => e9.classList.contains("square"));
     const square = squareEl === undefined ? "offboard" : squareEl.getAttribute("data-square");
     return square;
   }
@@ -3329,7 +3336,7 @@ MdFocusRing = __decorate2([
 ], MdFocusRing);
 
 // node_modules/lit/node_modules/lit-html/directives/class-map.js
-var o9 = e7(class extends i5 {
+var o9 = e8(class extends i5 {
   constructor(t5) {
     var i7;
     if (super(t5), t5.type !== t4.ATTRIBUTE || t5.name !== "class" || ((i7 = t5.strings) === null || i7 === undefined ? undefined : i7.length) > 2)
@@ -3346,18 +3353,31 @@ var o9 = e7(class extends i5 {
         s5[t5] && !((r4 = this.nt) === null || r4 === undefined ? undefined : r4.has(t5)) && this.it.add(t5);
       return this.render(s5);
     }
-    const e8 = i7.element.classList;
+    const e9 = i7.element.classList;
     this.it.forEach((t5) => {
-      (t5 in s5) || (e8.remove(t5), this.it.delete(t5));
+      (t5 in s5) || (e9.remove(t5), this.it.delete(t5));
     });
     for (const t5 in s5) {
       const i8 = !!s5[t5];
-      i8 === this.it.has(t5) || ((o10 = this.nt) === null || o10 === undefined ? undefined : o10.has(t5)) || (i8 ? (e8.add(t5), this.it.add(t5)) : (e8.remove(t5), this.it.delete(t5)));
+      i8 === this.it.has(t5) || ((o10 = this.nt) === null || o10 === undefined ? undefined : o10.has(t5)) || (i8 ? (e9.add(t5), this.it.add(t5)) : (e9.remove(t5), this.it.delete(t5)));
     }
     return T;
   }
 });
 // node_modules/@material/web/internal/motion/animation.js
+function createAnimationSignal() {
+  let animationAbortController = null;
+  return {
+    start() {
+      animationAbortController?.abort();
+      animationAbortController = new AbortController;
+      return animationAbortController.signal;
+    },
+    finish() {
+      animationAbortController = null;
+    }
+  };
+}
 var EASING = {
   STANDARD: "cubic-bezier(0.2, 0, 0, 1)",
   STANDARD_ACCELERATE: "cubic-bezier(.3,0,1,1)",
@@ -4063,10 +4083,10 @@ var die = function(error) {
     args[_key - 1] = arguments[_key];
   }
   if (true) {
-    var e8 = typeof error === "string" ? error : errors[error];
-    if (typeof e8 === "function")
-      e8 = e8.apply(null, args);
-    throw new Error("[MobX] " + e8);
+    var e9 = typeof error === "string" ? error : errors[error];
+    if (typeof e9 === "function")
+      e9 = e9.apply(null, args);
+    throw new Error("[MobX] " + e9);
   }
   throw new Error(typeof error === "number" ? "[MobX] minified error nr: " + error + (args.length ? " " + args.map(String).join(",") : "") + ". Find the full error at: https://github.com/mobxjs/mobx/blob/main/packages/mobx/src/errors.ts" : "[MobX] " + error);
 };
@@ -4807,8 +4827,8 @@ var allowStateChangesStart = function(allowStateChanges) {
 var allowStateChangesEnd = function(prev) {
   globalState.allowStateChanges = prev;
 };
-var isCaughtException = function(e8) {
-  return e8 instanceof CaughtException;
+var isCaughtException = function(e9) {
+  return e9 instanceof CaughtException;
 };
 var shouldCompute = function(derivation) {
   switch (derivation.dependenciesState_) {
@@ -4829,7 +4849,7 @@ var shouldCompute = function(derivation) {
           } else {
             try {
               obj.get();
-            } catch (e8) {
+            } catch (e9) {
               untrackedEnd(prevUntracked);
               allowStateReadsEnd(prevAllowStateReads);
               return true;
@@ -4877,8 +4897,8 @@ var trackDerivedFunction = function(derivation, f2, context) {
   } else {
     try {
       result = f2.call(context);
-    } catch (e8) {
-      result = new CaughtException(e8);
+    } catch (e9) {
+      result = new CaughtException(e9);
     }
   }
   globalState.inBatch--;
@@ -6364,8 +6384,8 @@ var ComputedValue = function() {
       } else {
         try {
           res = this.derivation.call(this.scope_);
-        } catch (e8) {
-          res = new CaughtException(e8);
+        } catch (e9) {
+          res = new CaughtException(e9);
         }
       }
     }
@@ -6553,8 +6573,8 @@ var Reaction = function() {
               type: "scheduled-reaction"
             });
           }
-        } catch (e8) {
-          this.reportExceptionInDerivation_(e8);
+        } catch (e9) {
+          this.reportExceptionInDerivation_(e9);
         }
       }
       globalState.trackingContext = prev;
@@ -6719,8 +6739,8 @@ var flow = Object.assign(function flow2(arg1, arg2) {
         var ret;
         try {
           ret = action(name + " - runid: " + runId + " - yield " + stepId++, gen.next).call(gen, res2);
-        } catch (e8) {
-          return reject(e8);
+        } catch (e9) {
+          return reject(e9);
         }
         next(ret);
       }
@@ -6729,8 +6749,8 @@ var flow = Object.assign(function flow2(arg1, arg2) {
         var ret;
         try {
           ret = action(name + " - runid: " + runId + " - yield " + stepId++, gen["throw"]).call(gen, err);
-        } catch (e8) {
-          return reject(e8);
+        } catch (e9) {
+          return reject(e9);
         }
         next(ret);
       }
@@ -6757,8 +6777,8 @@ var flow = Object.assign(function flow2(arg1, arg2) {
         yieldedPromise.then(noop, noop);
         cancelPromise(yieldedPromise);
         rejector(new FlowCancellationError);
-      } catch (e8) {
-        rejector(e8);
+      } catch (e9) {
+        rejector(e9);
       }
     });
     return promise;
@@ -8727,8 +8747,8 @@ class AnalyzerBot {
     let resolver = null;
     let cp = 0;
     let moves = [];
-    worker.addEventListener("message", (e8) => {
-      const s5 = e8.data.split(" ");
+    worker.addEventListener("message", (e9) => {
+      const s5 = e9.data.split(" ");
       if (s5[0] == "info") {
         const i1 = s5.indexOf("cp");
         if (i1 >= 0) {
@@ -8843,8 +8863,8 @@ class BotRunner {
     const worker = new Worker(path);
     this.worker = worker;
     let uciCallback = null;
-    worker.addEventListener("message", (e8) => {
-      const move = e8.data.match(/^bestmove\s([a-h][1-8])([a-h][1-8])/);
+    worker.addEventListener("message", (e9) => {
+      const move = e9.data.match(/^bestmove\s([a-h][1-8])([a-h][1-8])/);
       if (move && uciCallback) {
         uciCallback({ from: move[1], to: move[2] });
         uciCallback = null;
@@ -11657,32 +11677,32 @@ var styles10 = i`:host{display:inline-flex;height:var(--_container-height);outli
 `;
 
 // node_modules/lit/node_modules/lit-html/static.js
-var e8 = Symbol.for("");
+var e9 = Symbol.for("");
 var l6 = (t5) => {
-  if ((t5 == null ? undefined : t5.r) === e8)
+  if ((t5 == null ? undefined : t5.r) === e9)
     return t5 == null ? undefined : t5._$litStatic$;
 };
-var i7 = (t5, ...r4) => ({ _$litStatic$: r4.reduce((r5, e9, l7) => r5 + ((t6) => {
+var i7 = (t5, ...r4) => ({ _$litStatic$: r4.reduce((r5, e10, l7) => r5 + ((t6) => {
   if (t6._$litStatic$ !== undefined)
     return t6._$litStatic$;
   throw Error(`Value passed to 'literal' function must be a 'literal' result: ${t6}. Use 'unsafeStatic' to pass non-literal values, but\n            take care to ensure page security.`);
-})(e9) + t5[l7 + 1], t5[0]), r: e8 });
+})(e10) + t5[l7 + 1], t5[0]), r: e9 });
 var s5 = new Map;
-var a3 = (t5) => (r4, ...e9) => {
-  const o10 = e9.length;
+var a3 = (t5) => (r4, ...e10) => {
+  const o10 = e10.length;
   let i8, a4;
   const n8 = [], u3 = [];
   let c3, $2 = 0, f2 = false;
   for (;$2 < o10; ) {
-    for (c3 = r4[$2];$2 < o10 && (a4 = e9[$2], i8 = l6(a4)) !== undefined; )
+    for (c3 = r4[$2];$2 < o10 && (a4 = e10[$2], i8 = l6(a4)) !== undefined; )
       c3 += i8 + r4[++$2], f2 = true;
     $2 !== o10 && u3.push(a4), n8.push(c3), $2++;
   }
   if ($2 === o10 && n8.push(r4[o10]), f2) {
     const t6 = n8.join("$$lit$$");
-    (r4 = s5.get(t6)) === undefined && (n8.raw = n8, s5.set(t6, r4 = n8)), e9 = u3;
+    (r4 = s5.get(t6)) === undefined && (n8.raw = n8, s5.set(t6, r4 = n8)), e10 = u3;
   }
-  return t5(r4, ...e9);
+  return t5(r4, ...e10);
 };
 var n8 = a3(x);
 var u3 = a3(b);
@@ -11872,7 +11892,7 @@ class MessageDialog extends MobxLitElement {
       return x`
           <md-text-button
               form="form-id"
-              @click=${action((e9) => this.message.onClose(e9.target.innerHTML))}
+              @click=${action((e10) => this.message.onClose(e10.target.innerHTML))}
           >${txt}</md-text-button>`;
     }).join();
     new MdDialog;
@@ -11889,7 +11909,7 @@ class MessageDialog extends MobxLitElement {
       type="alert"
       aria-labelledby="message"
       open
-      @close=${action((e9) => this.message.onClose(e9.target.innerHTML))}
+      @close=${action((e10) => this.message.onClose(e10.target.innerHTML))}
       className="text-center text-lg">
     <div slot="headline">${this.message.title}</div>
     <form slot="content" id="form-id" method="dialog">
@@ -15283,6 +15303,2450 @@ MainLogView = __decorateClass([
   e4("cb-mainlogview")
 ], MainLogView);
 
+// node_modules/@material/web/button/internal/outlined-button.js
+class OutlinedButton extends Button {
+  renderOutline() {
+    return x`<span class="button__outline"></span>`;
+  }
+}
+
+// node_modules/@material/web/button/internal/outlined-styles.css.js
+var styles12 = i`:host{--_container-height: var(--md-outlined-button-container-height, 40px);--_container-shape: var(--md-outlined-button-container-shape, 9999px);--_disabled-label-text-color: var(--md-outlined-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-button-disabled-label-text-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-button-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-button-disabled-outline-opacity, 0.12);--_focus-label-text-color: var(--md-outlined-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-label-text-color: var(--md-outlined-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-color: var(--md-outlined-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-opacity: var(--md-outlined-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-outlined-button-label-text-color, var(--md-sys-color-primary, #6750a4));--_label-text-font: var(--md-outlined-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-outlined-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-outlined-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_outline-color: var(--md-outlined-button-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-outlined-button-outline-width, 1px);--_pressed-label-text-color: var(--md-outlined-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_pressed-outline-color: var(--md-outlined-button-pressed-outline-color, var(--md-sys-color-outline, #79747e));--_pressed-state-layer-color: var(--md-outlined-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-outlined-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-outlined-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-outlined-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-outlined-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-icon-color: var(--md-outlined-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-color: var(--md-outlined-button-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-outlined-button-icon-size, 18px);--_pressed-icon-color: var(--md-outlined-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_leading-space: var(--md-outlined-button-leading-space, 24px);--_trailing-space: var(--md-outlined-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-outlined-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-outlined-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-outlined-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-outlined-button-with-trailing-icon-trailing-space, 16px);--_container-color: none;--_disabled-container-color: none;--_disabled-container-opacity: 0;--_container-shape-start-start: var( --md-outlined-button-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-outlined-button-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-outlined-button-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-outlined-button-container-shape-end-start, var(--_container-shape) )}.button__outline{inset:0;border-style:solid;position:absolute;box-sizing:border-box;border-color:var(--_outline-color);border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.button:active .button__outline{border-color:var(--_pressed-outline-color)}.button:disabled .button__outline{border-color:var(--_disabled-outline-color);opacity:var(--_disabled-outline-opacity)}@media(forced-colors: active){.button:disabled .button__outline{opacity:1}}.button__outline,.button__ripple{border-width:var(--_outline-width)}.button__ripple{inline-size:calc(100% - 2*var(--_outline-width));block-size:calc(100% - 2*var(--_outline-width));border-style:solid;border-color:rgba(0,0,0,0)}/*# sourceMappingURL=outlined-styles.css.map */
+`;
+
+// node_modules/@material/web/button/outlined-button.js
+var MdOutlinedButton = class MdOutlinedButton2 extends OutlinedButton {
+};
+MdOutlinedButton.styles = [styles10, styles12];
+MdOutlinedButton = __decorate2([
+  e4("md-outlined-button")
+], MdOutlinedButton);
+
+// node_modules/@material/web/select/internal/outlined-forced-colors-styles.css.js
+var styles13 = i`@media(forced-colors: active){:host{--md-outlined-select-text-field-disabled-input-text-color: GrayText;--md-outlined-select-text-field-disabled-input-text-opacity: 1;--md-outlined-select-text-field-disabled-label-text-color: GrayText;--md-outlined-select-text-field-disabled-label-text-opacity: 1;--md-outlined-select-text-field-disabled-leading-icon-color: GrayText;--md-outlined-select-text-field-disabled-leading-icon-opacity: 1;--md-outlined-select-text-field-disabled-outline-color: GrayText;--md-outlined-select-text-field-disabled-outline-opacity: 1;--md-outlined-select-text-field-disabled-supporting-text-color: GrayText;--md-outlined-select-text-field-disabled-supporting-text-opacity: 1;--md-outlined-select-text-field-disabled-trailing-icon-color: GrayText;--md-outlined-select-text-field-disabled-trailing-icon-opacity: 1}}/*# sourceMappingURL=outlined-forced-colors-styles.css.map */
+`;
+
+// node_modules/@material/web/field/internal/field.js
+class Field extends s4 {
+  constructor() {
+    super(...arguments);
+    this.disabled = false;
+    this.error = false;
+    this.focused = false;
+    this.label = "";
+    this.populated = false;
+    this.required = false;
+    this.resizable = false;
+    this.supportingText = "";
+    this.errorText = "";
+    this.count = -1;
+    this.max = -1;
+    this.hasStart = false;
+    this.hasEnd = false;
+    this.isAnimating = false;
+    this.refreshErrorAlert = false;
+    this.disableTransitions = false;
+  }
+  get counterText() {
+    if (this.count < 0 || this.max < 0) {
+      return "";
+    }
+    return `${this.count} / ${this.max}`;
+  }
+  get supportingOrErrorText() {
+    return this.error && this.errorText ? this.errorText : this.supportingText;
+  }
+  reannounceError() {
+    this.refreshErrorAlert = true;
+  }
+  update(props) {
+    const isDisabledChanging = props.has("disabled") && props.get("disabled") !== undefined;
+    if (isDisabledChanging) {
+      this.disableTransitions = true;
+    }
+    if (this.disabled && this.focused) {
+      props.set("focused", true);
+      this.focused = false;
+    }
+    this.animateLabelIfNeeded({
+      wasFocused: props.get("focused"),
+      wasPopulated: props.get("populated")
+    });
+    super.update(props);
+  }
+  render() {
+    const floatingLabel = this.renderLabel(true);
+    const restingLabel = this.renderLabel(false);
+    const outline = this.renderOutline?.(floatingLabel);
+    const classes = {
+      disabled: this.disabled,
+      "disable-transitions": this.disableTransitions,
+      error: this.error && !this.disabled,
+      focused: this.focused,
+      "with-start": this.hasStart,
+      "with-end": this.hasEnd,
+      populated: this.populated,
+      resizable: this.resizable,
+      required: this.required,
+      "no-label": !this.label
+    };
+    return x`
+      <div class="field ${o9(classes)}">
+        <div class="container-overflow">
+          ${this.renderBackground?.()}
+          ${this.renderIndicator?.()}
+          ${outline}
+          <div class="container">
+            <div class="start">
+              <slot name="start"></slot>
+            </div>
+            <div class="middle">
+              <div class="label-wrapper">
+                ${restingLabel}
+                ${outline ? A : floatingLabel}
+              </div>
+              <div class="content">
+                <slot></slot>
+              </div>
+            </div>
+            <div class="end">
+              <slot name="end"></slot>
+            </div>
+          </div>
+        </div>
+        ${this.renderSupportingText()}
+      </div>
+    `;
+  }
+  updated(changed) {
+    if (changed.has("supportingText") || changed.has("errorText") || changed.has("count") || changed.has("max")) {
+      this.updateSlottedAriaDescribedBy();
+    }
+    if (this.refreshErrorAlert) {
+      requestAnimationFrame(() => {
+        this.refreshErrorAlert = false;
+      });
+    }
+    if (this.disableTransitions) {
+      requestAnimationFrame(() => {
+        this.disableTransitions = false;
+      });
+    }
+  }
+  renderSupportingText() {
+    const { supportingOrErrorText, counterText } = this;
+    if (!supportingOrErrorText && !counterText) {
+      return A;
+    }
+    const start = x`<span>${supportingOrErrorText}</span>`;
+    const end = counterText ? x`<span class="counter">${counterText}</span>` : A;
+    const shouldErrorAnnounce = this.error && this.errorText && !this.refreshErrorAlert;
+    const role = shouldErrorAnnounce ? "alert" : A;
+    return x`
+      <div class="supporting-text" role=${role}>${start}${end}</div>
+      <slot name="aria-describedby" @slotchange=${this.updateSlottedAriaDescribedBy}></slot>
+    `;
+  }
+  updateSlottedAriaDescribedBy() {
+    for (const element of this.slottedAriaDescribedBy) {
+      D(x`${this.supportingOrErrorText} ${this.counterText}`, element);
+      element.setAttribute("hidden", "");
+    }
+  }
+  renderLabel(isFloating) {
+    if (!this.label) {
+      return A;
+    }
+    let visible;
+    if (isFloating) {
+      visible = this.focused || this.populated || this.isAnimating;
+    } else {
+      visible = !this.focused && !this.populated && !this.isAnimating;
+    }
+    const classes = {
+      hidden: !visible,
+      floating: isFloating,
+      resting: !isFloating
+    };
+    const labelText = `${this.label}${this.required ? "*" : ""}`;
+    return x`
+      <span class="label ${o9(classes)}"
+        aria-hidden=${!visible}
+      >${labelText}</span>
+    `;
+  }
+  animateLabelIfNeeded({ wasFocused, wasPopulated }) {
+    if (!this.label) {
+      return;
+    }
+    wasFocused ?? (wasFocused = this.focused);
+    wasPopulated ?? (wasPopulated = this.populated);
+    const wasFloating = wasFocused || wasPopulated;
+    const shouldBeFloating = this.focused || this.populated;
+    if (wasFloating === shouldBeFloating) {
+      return;
+    }
+    this.isAnimating = true;
+    this.labelAnimation?.cancel();
+    this.labelAnimation = this.floatingLabelEl?.animate(this.getLabelKeyframes(), { duration: 150, easing: EASING.STANDARD });
+    this.labelAnimation?.addEventListener("finish", () => {
+      this.isAnimating = false;
+    });
+  }
+  getLabelKeyframes() {
+    const { floatingLabelEl, restingLabelEl } = this;
+    if (!floatingLabelEl || !restingLabelEl) {
+      return [];
+    }
+    const { x: floatingX, y: floatingY, height: floatingHeight } = floatingLabelEl.getBoundingClientRect();
+    const { x: restingX, y: restingY, height: restingHeight } = restingLabelEl.getBoundingClientRect();
+    const floatingScrollWidth = floatingLabelEl.scrollWidth;
+    const restingScrollWidth = restingLabelEl.scrollWidth;
+    const scale = restingScrollWidth / floatingScrollWidth;
+    const xDelta = restingX - floatingX;
+    const yDelta = restingY - floatingY + Math.round((restingHeight - floatingHeight * scale) / 2);
+    const restTransform = `translateX(${xDelta}px) translateY(${yDelta}px) scale(${scale})`;
+    const floatTransform = `translateX(0) translateY(0) scale(1)`;
+    const restingClientWidth = restingLabelEl.clientWidth;
+    const isRestingClipped = restingScrollWidth > restingClientWidth;
+    const width = isRestingClipped ? `${restingClientWidth / scale}px` : "";
+    if (this.focused || this.populated) {
+      return [
+        { transform: restTransform, width },
+        { transform: floatTransform, width }
+      ];
+    }
+    return [
+      { transform: floatTransform, width },
+      { transform: restTransform, width }
+    ];
+  }
+  getSurfacePositionClientRect() {
+    return this.containerEl.getBoundingClientRect();
+  }
+}
+__decorate2([
+  n5({ type: Boolean })
+], Field.prototype, "disabled", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], Field.prototype, "error", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], Field.prototype, "focused", undefined);
+__decorate2([
+  n5()
+], Field.prototype, "label", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], Field.prototype, "populated", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], Field.prototype, "required", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], Field.prototype, "resizable", undefined);
+__decorate2([
+  n5({ attribute: "supporting-text" })
+], Field.prototype, "supportingText", undefined);
+__decorate2([
+  n5({ attribute: "error-text" })
+], Field.prototype, "errorText", undefined);
+__decorate2([
+  n5({ type: Number })
+], Field.prototype, "count", undefined);
+__decorate2([
+  n5({ type: Number })
+], Field.prototype, "max", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "has-start" })
+], Field.prototype, "hasStart", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "has-end" })
+], Field.prototype, "hasEnd", undefined);
+__decorate2([
+  l4({ slot: "aria-describedby" })
+], Field.prototype, "slottedAriaDescribedBy", undefined);
+__decorate2([
+  t3()
+], Field.prototype, "isAnimating", undefined);
+__decorate2([
+  t3()
+], Field.prototype, "refreshErrorAlert", undefined);
+__decorate2([
+  t3()
+], Field.prototype, "disableTransitions", undefined);
+__decorate2([
+  i4(".label.floating")
+], Field.prototype, "floatingLabelEl", undefined);
+__decorate2([
+  i4(".label.resting")
+], Field.prototype, "restingLabelEl", undefined);
+__decorate2([
+  i4(".container")
+], Field.prototype, "containerEl", undefined);
+
+// node_modules/@material/web/field/internal/outlined-field.js
+class OutlinedField extends Field {
+  renderOutline(floatingLabel) {
+    return x`
+      <div class="outline">
+        <div class="outline-start"></div>
+        <div class="outline-notch">
+          <div class="outline-panel-inactive"></div>
+          <div class="outline-panel-active"></div>
+          <div class="outline-label">${floatingLabel}</div>
+        </div>
+        <div class="outline-end"></div>
+      </div>
+    `;
+  }
+}
+
+// node_modules/@material/web/field/internal/outlined-styles.css.js
+var styles14 = i`:host{--_bottom-space: var(--md-outlined-field-bottom-space, 16px);--_container-shape: var(--md-outlined-field-container-shape, 4px);--_content-color: var(--md-outlined-field-content-color, var(--md-sys-color-on-surface, #1d1b20));--_content-font: var(--md-outlined-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_content-line-height: var(--md-outlined-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_content-size: var(--md-outlined-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));--_content-weight: var(--md-outlined-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_disabled-content-color: var(--md-outlined-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-content-opacity: var(--md-outlined-field-disabled-content-opacity, 0.38);--_disabled-label-text-color: var(--md-outlined-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-field-disabled-label-text-opacity, 0.38);--_disabled-leading-content-color: var(--md-outlined-field-disabled-leading-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-content-opacity: var(--md-outlined-field-disabled-leading-content-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-field-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-field-disabled-outline-opacity, 0.12);--_disabled-outline-width: var(--md-outlined-field-disabled-outline-width, 1px);--_disabled-supporting-text-color: var(--md-outlined-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-outlined-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-content-color: var(--md-outlined-field-disabled-trailing-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-content-opacity: var(--md-outlined-field-disabled-trailing-content-opacity, 0.38);--_error-content-color: var(--md-outlined-field-error-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-content-color: var(--md-outlined-field-error-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-label-text-color: var(--md-outlined-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-content-color: var(--md-outlined-field-error-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-outline-color: var(--md-outlined-field-error-focus-outline-color, var(--md-sys-color-error, #b3261e));--_error-focus-supporting-text-color: var(--md-outlined-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-content-color: var(--md-outlined-field-error-focus-trailing-content-color, var(--md-sys-color-error, #b3261e));--_error-hover-content-color: var(--md-outlined-field-error-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-outlined-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-content-color: var(--md-outlined-field-error-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-outline-color: var(--md-outlined-field-error-hover-outline-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-supporting-text-color: var(--md-outlined-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-content-color: var(--md-outlined-field-error-hover-trailing-content-color, var(--md-sys-color-on-error-container, #410e0b));--_error-label-text-color: var(--md-outlined-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-content-color: var(--md-outlined-field-error-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-outline-color: var(--md-outlined-field-error-outline-color, var(--md-sys-color-error, #b3261e));--_error-supporting-text-color: var(--md-outlined-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-content-color: var(--md-outlined-field-error-trailing-content-color, var(--md-sys-color-error, #b3261e));--_focus-content-color: var(--md-outlined-field-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-outlined-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-content-color: var(--md-outlined-field-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-outline-color: var(--md-outlined-field-focus-outline-color, var(--md-sys-color-primary, #6750a4));--_focus-outline-width: var(--md-outlined-field-focus-outline-width, 3px);--_focus-supporting-text-color: var(--md-outlined-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-content-color: var(--md-outlined-field-focus-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-content-color: var(--md-outlined-field-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-outlined-field-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-leading-content-color: var(--md-outlined-field-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-outline-color: var(--md-outlined-field-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-outline-width: var(--md-outlined-field-hover-outline-width, 1px);--_hover-supporting-text-color: var(--md-outlined-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-content-color: var(--md-outlined-field-hover-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-color: var(--md-outlined-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-outlined-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-padding-bottom: var(--md-outlined-field-label-text-padding-bottom, 8px);--_label-text-populated-line-height: var(--md-outlined-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-outlined-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-outlined-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-outlined-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-content-color: var(--md-outlined-field-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-space: var(--md-outlined-field-leading-space, 16px);--_outline-color: var(--md-outlined-field-outline-color, var(--md-sys-color-outline, #79747e));--_outline-label-padding: var(--md-outlined-field-outline-label-padding, 4px);--_outline-width: var(--md-outlined-field-outline-width, 1px);--_supporting-text-color: var(--md-outlined-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-outlined-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-leading-space: var(--md-outlined-field-supporting-text-leading-space, 16px);--_supporting-text-line-height: var(--md-outlined-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-outlined-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-top-space: var(--md-outlined-field-supporting-text-top-space, 4px);--_supporting-text-trailing-space: var(--md-outlined-field-supporting-text-trailing-space, 16px);--_supporting-text-weight: var(--md-outlined-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_top-space: var(--md-outlined-field-top-space, 16px);--_trailing-content-color: var(--md-outlined-field-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-space: var(--md-outlined-field-trailing-space, 16px);--_container-shape-start-start: var( --md-outlined-field-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-outlined-field-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-outlined-field-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-outlined-field-container-shape-end-start, var(--_container-shape) )}.outline{border-color:var(--_outline-color);border-radius:inherit;color:var(--_outline-color);display:flex;pointer-events:none;height:100%;position:absolute;width:100%}.outline-start::before,.outline-start::after,.outline-panel-inactive::before,.outline-panel-inactive::after,.outline-panel-active::before,.outline-panel-active::after,.outline-end::before,.outline-end::after{border:inherit;content:"";inset:0;position:absolute}.outline-start,.outline-end{border:inherit;border-radius:inherit;box-sizing:border-box;position:relative}.outline-start::before,.outline-start::after,.outline-end::before,.outline-end::after{border-bottom-style:solid;border-top-style:solid}.outline-start::after,.outline-end::after{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .outline-start::after,.focused .outline-end::after{opacity:1}.outline-start::before,.outline-start::after{border-inline-start-style:solid;border-inline-end-style:none;border-start-start-radius:inherit;border-start-end-radius:0;border-end-start-radius:inherit;border-end-end-radius:0;margin-inline-end:var(--_outline-label-padding)}.outline-end{flex-grow:1;margin-inline-start:calc(-1*var(--_outline-label-padding))}.outline-end::before,.outline-end::after{border-inline-start-style:none;border-inline-end-style:solid;border-start-start-radius:0;border-start-end-radius:inherit;border-end-start-radius:0;border-end-end-radius:inherit}.outline-notch{align-items:flex-start;border:inherit;display:flex;margin-inline-start:calc(-1*var(--_outline-label-padding));margin-inline-end:var(--_outline-label-padding);max-width:calc(100% - var(--_leading-space) - var(--_trailing-space));padding:0 var(--_outline-label-padding);position:relative}.no-label .outline-notch{display:none}.outline-panel-inactive,.outline-panel-active{border:inherit;border-bottom-style:solid;inset:0;position:absolute}.outline-panel-inactive::before,.outline-panel-inactive::after,.outline-panel-active::before,.outline-panel-active::after{border-top-style:solid;border-bottom:none;bottom:auto;transform:scaleX(1);transition:transform 150ms cubic-bezier(0.2, 0, 0, 1)}.outline-panel-inactive::before,.outline-panel-active::before{right:50%;transform-origin:top left}.outline-panel-inactive::after,.outline-panel-active::after{left:50%;transform-origin:top right}.populated .outline-panel-inactive::before,.populated .outline-panel-inactive::after,.populated .outline-panel-active::before,.populated .outline-panel-active::after,.focused .outline-panel-inactive::before,.focused .outline-panel-inactive::after,.focused .outline-panel-active::before,.focused .outline-panel-active::after{transform:scaleX(0)}.outline-panel-active{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .outline-panel-active{opacity:1}.outline-label{display:flex;max-width:100%;transform:translateY(calc(-100% + var(--_label-text-padding-bottom)))}.outline-start,.field:not(.with-start) .content ::slotted(*){padding-inline-start:max(var(--_leading-space),max(var(--_container-shape-start-start),var(--_container-shape-end-start)) + var(--_outline-label-padding))}.field:not(.with-start) .label-wrapper{margin-inline-start:max(var(--_leading-space),max(var(--_container-shape-start-start),var(--_container-shape-end-start)) + var(--_outline-label-padding))}.field:not(.with-end) .content ::slotted(*){padding-inline-end:max(var(--_trailing-space),max(var(--_container-shape-start-end),var(--_container-shape-end-end)))}.field:not(.with-end) .label-wrapper{margin-inline-end:max(var(--_trailing-space),max(var(--_container-shape-start-end),var(--_container-shape-end-end)))}.outline-start::before,.outline-end::before,.outline-panel-inactive,.outline-panel-inactive::before,.outline-panel-inactive::after{border-width:var(--_outline-width)}:hover .outline{border-color:var(--_hover-outline-color);color:var(--_hover-outline-color)}:hover .outline-start::before,:hover .outline-end::before,:hover .outline-panel-inactive,:hover .outline-panel-inactive::before,:hover .outline-panel-inactive::after{border-width:var(--_hover-outline-width)}.focused .outline{border-color:var(--_focus-outline-color);color:var(--_focus-outline-color)}.outline-start::after,.outline-end::after,.outline-panel-active,.outline-panel-active::before,.outline-panel-active::after{border-width:var(--_focus-outline-width)}.disabled .outline{border-color:var(--_disabled-outline-color);color:var(--_disabled-outline-color)}.disabled .outline-start,.disabled .outline-end,.disabled .outline-panel-inactive{opacity:var(--_disabled-outline-opacity)}.disabled .outline-start::before,.disabled .outline-end::before,.disabled .outline-panel-inactive,.disabled .outline-panel-inactive::before,.disabled .outline-panel-inactive::after{border-width:var(--_disabled-outline-width)}.error .outline{border-color:var(--_error-outline-color);color:var(--_error-outline-color)}.error:hover .outline{border-color:var(--_error-hover-outline-color);color:var(--_error-hover-outline-color)}.error.focused .outline{border-color:var(--_error-focus-outline-color);color:var(--_error-focus-outline-color)}.resizable .container{bottom:var(--_focus-outline-width);inset-inline-end:var(--_focus-outline-width);clip-path:inset(var(--_focus-outline-width) 0 0 var(--_focus-outline-width))}.resizable .container>*{top:var(--_focus-outline-width);inset-inline-start:var(--_focus-outline-width)}:host-context([dir=rtl]) .resizable .container,:host([dir=rtl]) .resizable .container{clip-path:inset(var(--_focus-outline-width) var(--_focus-outline-width) 0 0)}.resizable .container:dir(rtl){clip-path:inset(var(--_focus-outline-width) var(--_focus-outline-width) 0 0)}/*# sourceMappingURL=outlined-styles.css.map */
+`;
+
+// node_modules/@material/web/field/internal/shared-styles.css.js
+var styles15 = i`:host{display:inline-flex;resize:both}.field{display:flex;flex:1;flex-direction:column;writing-mode:horizontal-tb;max-width:100%}.container-overflow{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-end-radius:var(--_container-shape-end-end);border-end-start-radius:var(--_container-shape-end-start);display:flex;height:100%;position:relative}.container{align-items:center;border-radius:inherit;display:flex;flex:1;max-height:100%;min-height:100%;min-width:min-content;position:relative}.field,.container-overflow{resize:inherit}.resizable:not(.disabled) .container{resize:inherit;overflow:hidden}.disabled{pointer-events:none}.start,.middle,.end{display:flex;box-sizing:border-box;height:100%;position:relative}.start{color:var(--_leading-content-color)}.end{color:var(--_trailing-content-color)}.start,.end{align-items:center;justify-content:center}.with-start .start,.with-end .end{min-width:48px}.with-start .start{margin-inline-end:4px}.with-end .end{margin-inline-start:4px}.middle{align-items:stretch;align-self:baseline;flex:1}.content{color:var(--_content-color);display:flex;flex:1;opacity:0;transition:opacity 83ms cubic-bezier(0.2, 0, 0, 1)}.no-label .content,.focused .content,.populated .content{opacity:1;transition-delay:67ms}:is(.disabled,.disable-transitions) .content{transition:none}.content ::slotted(*){all:unset;color:currentColor;font-family:var(--_content-font);font-size:var(--_content-size);line-height:var(--_content-line-height);font-weight:var(--_content-weight);width:100%;white-space:pre-wrap}.content ::slotted(:not(textarea)){padding-top:var(--_top-space);padding-bottom:var(--_bottom-space)}.content ::slotted(textarea){margin-top:var(--_top-space);margin-bottom:var(--_bottom-space)}:hover .content{color:var(--_hover-content-color)}:hover .start{color:var(--_hover-leading-content-color)}:hover .end{color:var(--_hover-trailing-content-color)}.focused .content{color:var(--_focus-content-color)}.focused .start{color:var(--_focus-leading-content-color)}.focused .end{color:var(--_focus-trailing-content-color)}.disabled .content{color:var(--_disabled-content-color)}.disabled.no-label .content,.disabled.focused .content,.disabled.populated .content{opacity:var(--_disabled-content-opacity)}.disabled .start{color:var(--_disabled-leading-content-color);opacity:var(--_disabled-leading-content-opacity)}.disabled .end{color:var(--_disabled-trailing-content-color);opacity:var(--_disabled-trailing-content-opacity)}.error .content{color:var(--_error-content-color)}.error .start{color:var(--_error-leading-content-color)}.error .end{color:var(--_error-trailing-content-color)}.error:hover .content{color:var(--_error-hover-content-color)}.error:hover .start{color:var(--_error-hover-leading-content-color)}.error:hover .end{color:var(--_error-hover-trailing-content-color)}.error.focused .content{color:var(--_error-focus-content-color)}.error.focused .start{color:var(--_error-focus-leading-content-color)}.error.focused .end{color:var(--_error-focus-trailing-content-color)}.label{box-sizing:border-box;color:var(--_label-text-color);overflow:hidden;max-width:100%;text-overflow:ellipsis;white-space:nowrap;z-index:1;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);width:min-content}.label-wrapper{inset:0;pointer-events:none;position:absolute}.label.resting{position:absolute;top:var(--_top-space)}.label.floating{font-size:var(--_label-text-populated-size);line-height:var(--_label-text-populated-line-height);transform-origin:top left}.label.hidden{opacity:0}.no-label .label{display:none}.label-wrapper{inset:0;position:absolute;text-align:initial}:hover .label{color:var(--_hover-label-text-color)}.focused .label{color:var(--_focus-label-text-color)}.disabled .label{color:var(--_disabled-label-text-color)}.disabled .label:not(.hidden){opacity:var(--_disabled-label-text-opacity)}.error .label{color:var(--_error-label-text-color)}.error:hover .label{color:var(--_error-hover-label-text-color)}.error.focused .label{color:var(--_error-focus-label-text-color)}.supporting-text{color:var(--_supporting-text-color);display:flex;font-family:var(--_supporting-text-font);font-size:var(--_supporting-text-size);line-height:var(--_supporting-text-line-height);font-weight:var(--_supporting-text-weight);gap:16px;justify-content:space-between;padding-inline-start:var(--_supporting-text-leading-space);padding-inline-end:var(--_supporting-text-trailing-space);padding-top:var(--_supporting-text-top-space)}.supporting-text :nth-child(2){flex-shrink:0}:hover .supporting-text{color:var(--_hover-supporting-text-color)}.focus .supporting-text{color:var(--_focus-supporting-text-color)}.disabled .supporting-text{color:var(--_disabled-supporting-text-color);opacity:var(--_disabled-supporting-text-opacity)}.error .supporting-text{color:var(--_error-supporting-text-color)}.error:hover .supporting-text{color:var(--_error-hover-supporting-text-color)}.error.focus .supporting-text{color:var(--_error-focus-supporting-text-color)}/*# sourceMappingURL=shared-styles.css.map */
+`;
+
+// node_modules/@material/web/field/outlined-field.js
+var MdOutlinedField = class MdOutlinedField2 extends OutlinedField {
+};
+MdOutlinedField.styles = [styles15, styles14];
+MdOutlinedField = __decorate2([
+  e4("md-outlined-field")
+], MdOutlinedField);
+
+// node_modules/@material/web/menu/internal/forced-colors-styles.css.js
+var styles16 = i`@media(forced-colors: active){.menu{border-style:solid;border-color:CanvasText;border-width:1px}}/*# sourceMappingURL=forced-colors-styles.css.map */
+`;
+
+// node_modules/@material/web/list/internal/list-navigation-helpers.js
+function activateFirstItem(items, isActivatable = isItemNotDisabled) {
+  const firstItem = getFirstActivatableItem(items, isActivatable);
+  if (firstItem) {
+    firstItem.tabIndex = 0;
+    firstItem.focus();
+  }
+  return firstItem;
+}
+function activateLastItem(items, isActivatable = isItemNotDisabled) {
+  const lastItem = getLastActivatableItem(items, isActivatable);
+  if (lastItem) {
+    lastItem.tabIndex = 0;
+    lastItem.focus();
+  }
+  return lastItem;
+}
+function getActiveItem(items, isActivatable = isItemNotDisabled) {
+  for (let i8 = 0;i8 < items.length; i8++) {
+    const item = items[i8];
+    if (item.tabIndex === 0 && isActivatable(item)) {
+      return {
+        item,
+        index: i8
+      };
+    }
+  }
+  return null;
+}
+function getFirstActivatableItem(items, isActivatable = isItemNotDisabled) {
+  for (const item of items) {
+    if (isActivatable(item)) {
+      return item;
+    }
+  }
+  return null;
+}
+function getLastActivatableItem(items, isActivatable = isItemNotDisabled) {
+  for (let i8 = items.length - 1;i8 >= 0; i8--) {
+    const item = items[i8];
+    if (isActivatable(item)) {
+      return item;
+    }
+  }
+  return null;
+}
+function getNextItem(items, index, isActivatable = isItemNotDisabled) {
+  for (let i8 = 1;i8 < items.length; i8++) {
+    const nextIndex = (i8 + index) % items.length;
+    const item = items[nextIndex];
+    if (isActivatable(item)) {
+      return item;
+    }
+  }
+  return items[index] ? items[index] : null;
+}
+function getPrevItem(items, index, isActivatable = isItemNotDisabled) {
+  for (let i8 = 1;i8 < items.length; i8++) {
+    const prevIndex = (index - i8 + items.length) % items.length;
+    const item = items[prevIndex];
+    if (isActivatable(item)) {
+      return item;
+    }
+  }
+  return items[index] ? items[index] : null;
+}
+function activateNextItem(items, activeItemRecord, isActivatable = isItemNotDisabled) {
+  if (activeItemRecord) {
+    const next = getNextItem(items, activeItemRecord.index, isActivatable);
+    if (next) {
+      next.tabIndex = 0;
+      next.focus();
+    }
+    return next;
+  } else {
+    return activateFirstItem(items, isActivatable);
+  }
+}
+function activatePreviousItem(items, activeItemRecord, isActivatable = isItemNotDisabled) {
+  if (activeItemRecord) {
+    const prev = getPrevItem(items, activeItemRecord.index, isActivatable);
+    if (prev) {
+      prev.tabIndex = 0;
+      prev.focus();
+    }
+    return prev;
+  } else {
+    return activateLastItem(items, isActivatable);
+  }
+}
+var isItemNotDisabled = function(item) {
+  return !item.disabled;
+};
+
+// node_modules/@material/web/list/internal/list-controller.js
+var NavigableKeys = {
+  ArrowDown: "ArrowDown",
+  ArrowLeft: "ArrowLeft",
+  ArrowUp: "ArrowUp",
+  ArrowRight: "ArrowRight",
+  Home: "Home",
+  End: "End"
+};
+
+class ListController {
+  constructor(config2) {
+    this.handleKeydown = (event) => {
+      const key = event.key;
+      if (event.defaultPrevented || !this.isNavigableKey(key)) {
+        return;
+      }
+      const items = this.items;
+      if (!items.length) {
+        return;
+      }
+      const activeItemRecord = getActiveItem(items, this.isActivatable);
+      if (activeItemRecord) {
+        activeItemRecord.item.tabIndex = -1;
+      }
+      event.preventDefault();
+      const isRtl2 = this.isRtl();
+      const inlinePrevious = isRtl2 ? NavigableKeys.ArrowRight : NavigableKeys.ArrowLeft;
+      const inlineNext = isRtl2 ? NavigableKeys.ArrowLeft : NavigableKeys.ArrowRight;
+      switch (key) {
+        case NavigableKeys.ArrowDown:
+        case inlineNext:
+          activateNextItem(items, activeItemRecord, this.isActivatable);
+          break;
+        case NavigableKeys.ArrowUp:
+        case inlinePrevious:
+          activatePreviousItem(items, activeItemRecord, this.isActivatable);
+          break;
+        case NavigableKeys.Home:
+          activateFirstItem(items, this.isActivatable);
+          break;
+        case NavigableKeys.End:
+          activateLastItem(items, this.isActivatable);
+          break;
+        default:
+          break;
+      }
+    };
+    this.onDeactivateItems = () => {
+      const items = this.items;
+      for (const item of items) {
+        this.deactivateItem(item);
+      }
+    };
+    this.onRequestActivation = (event) => {
+      this.onDeactivateItems();
+      const target = event.target;
+      this.activateItem(target);
+      target.focus();
+    };
+    this.onSlotchange = () => {
+      const items = this.items;
+      let encounteredActivated = false;
+      for (const item of items) {
+        const isActivated = !item.disabled && item.tabIndex > -1;
+        if (isActivated && !encounteredActivated) {
+          encounteredActivated = true;
+          item.tabIndex = 0;
+          continue;
+        }
+        item.tabIndex = -1;
+      }
+      if (encounteredActivated) {
+        return;
+      }
+      const firstActivatableItem = getFirstActivatableItem(items, this.isActivatable);
+      if (!firstActivatableItem) {
+        return;
+      }
+      firstActivatableItem.tabIndex = 0;
+    };
+    const { isItem, getPossibleItems, isRtl, deactivateItem, activateItem, isNavigableKey, isActivatable } = config2;
+    this.isItem = isItem;
+    this.getPossibleItems = getPossibleItems;
+    this.isRtl = isRtl;
+    this.deactivateItem = deactivateItem;
+    this.activateItem = activateItem;
+    this.isNavigableKey = isNavigableKey;
+    this.isActivatable = isActivatable;
+  }
+  get items() {
+    const maybeItems = this.getPossibleItems();
+    const items = [];
+    for (const itemOrParent of maybeItems) {
+      const isItem = this.isItem(itemOrParent);
+      if (isItem) {
+        items.push(itemOrParent);
+        continue;
+      }
+      const subItem = itemOrParent.item;
+      if (subItem && this.isItem(subItem)) {
+        items.push(subItem);
+      }
+    }
+    return items;
+  }
+  activateNextItem() {
+    const items = this.items;
+    const activeItemRecord = getActiveItem(items, this.isActivatable);
+    if (activeItemRecord) {
+      activeItemRecord.item.tabIndex = -1;
+    }
+    return activateNextItem(items, activeItemRecord, this.isActivatable);
+  }
+  activatePreviousItem() {
+    const items = this.items;
+    const activeItemRecord = getActiveItem(items, this.isActivatable);
+    if (activeItemRecord) {
+      activeItemRecord.item.tabIndex = -1;
+    }
+    return activatePreviousItem(items, activeItemRecord, this.isActivatable);
+  }
+}
+
+// node_modules/@material/web/menu/internal/controllers/shared.js
+function createCloseMenuEvent(initiator, reason) {
+  return new CustomEvent("close-menu", {
+    bubbles: true,
+    composed: true,
+    detail: { initiator, reason, itemPath: [initiator] }
+  });
+}
+function isClosableKey(code) {
+  return Object.values(KeydownCloseKey).some((value) => value === code);
+}
+function isSelectableKey(code) {
+  return Object.values(SelectionKey).some((value) => value === code);
+}
+function isElementInSubtree(target, container) {
+  const focusEv = new Event("md-contains", { bubbles: true, composed: true });
+  let composedPath = [];
+  const listener = (ev) => {
+    composedPath = ev.composedPath();
+  };
+  container.addEventListener("md-contains", listener);
+  target.dispatchEvent(focusEv);
+  container.removeEventListener("md-contains", listener);
+  const isContained = composedPath.length > 0;
+  return isContained;
+}
+var createDefaultCloseMenuEvent = createCloseMenuEvent;
+var SelectionKey = {
+  SPACE: "Space",
+  ENTER: "Enter"
+};
+var CloseReason = {
+  CLICK_SELECTION: "click-selection",
+  KEYDOWN: "keydown"
+};
+var KeydownCloseKey = {
+  ESCAPE: "Escape",
+  SPACE: SelectionKey.SPACE,
+  ENTER: SelectionKey.ENTER
+};
+var FocusState = {
+  NONE: "none",
+  LIST_ROOT: "list-root",
+  FIRST_ITEM: "first-item",
+  LAST_ITEM: "last-item"
+};
+
+// node_modules/@material/web/menu/internal/controllers/surfacePositionController.js
+var Corner = {
+  END_START: "end-start",
+  END_END: "end-end",
+  START_START: "start-start",
+  START_END: "start-end"
+};
+
+class SurfacePositionController {
+  constructor(host, getProperties) {
+    this.host = host;
+    this.getProperties = getProperties;
+    this.surfaceStylesInternal = {
+      display: "none"
+    };
+    this.lastValues = { isOpen: false };
+    this.host.addController(this);
+  }
+  get surfaceStyles() {
+    return this.surfaceStylesInternal;
+  }
+  async position() {
+    const { surfaceEl, anchorEl, anchorCorner: anchorCornerRaw, surfaceCorner: surfaceCornerRaw, positioning, xOffset, yOffset, repositionStrategy } = this.getProperties();
+    const anchorCorner = anchorCornerRaw.toLowerCase().trim();
+    const surfaceCorner = surfaceCornerRaw.toLowerCase().trim();
+    if (!surfaceEl || !anchorEl) {
+      return;
+    }
+    this.surfaceStylesInternal = {
+      display: "block",
+      opacity: "0"
+    };
+    this.host.requestUpdate();
+    await this.host.updateComplete;
+    const surfaceRect = surfaceEl.getSurfacePositionClientRect ? surfaceEl.getSurfacePositionClientRect() : surfaceEl.getBoundingClientRect();
+    const anchorRect = anchorEl.getSurfacePositionClientRect ? anchorEl.getSurfacePositionClientRect() : anchorEl.getBoundingClientRect();
+    const [surfaceBlock, surfaceInline] = surfaceCorner.split("-");
+    const [anchorBlock, anchorInline] = anchorCorner.split("-");
+    const isLTR = getComputedStyle(surfaceEl).direction === "ltr";
+    let { blockInset, blockOutOfBoundsCorrection, surfaceBlockProperty } = this.calculateBlock({
+      surfaceRect,
+      anchorRect,
+      anchorBlock,
+      surfaceBlock,
+      yOffset,
+      positioning
+    });
+    if (blockOutOfBoundsCorrection) {
+      const flippedSurfaceBlock = surfaceBlock === "start" ? "end" : "start";
+      const flippedAnchorBlock = anchorBlock === "start" ? "end" : "start";
+      const flippedBlock = this.calculateBlock({
+        surfaceRect,
+        anchorRect,
+        anchorBlock: flippedAnchorBlock,
+        surfaceBlock: flippedSurfaceBlock,
+        yOffset,
+        positioning
+      });
+      if (blockOutOfBoundsCorrection > flippedBlock.blockOutOfBoundsCorrection) {
+        blockInset = flippedBlock.blockInset;
+        blockOutOfBoundsCorrection = flippedBlock.blockOutOfBoundsCorrection;
+        surfaceBlockProperty = flippedBlock.surfaceBlockProperty;
+      }
+    }
+    let { inlineInset, inlineOutOfBoundsCorrection, surfaceInlineProperty } = this.calculateInline({
+      surfaceRect,
+      anchorRect,
+      anchorInline,
+      surfaceInline,
+      xOffset,
+      positioning,
+      isLTR
+    });
+    if (inlineOutOfBoundsCorrection) {
+      const flippedSurfaceInline = surfaceInline === "start" ? "end" : "start";
+      const flippedAnchorInline = anchorInline === "start" ? "end" : "start";
+      const flippedInline = this.calculateInline({
+        surfaceRect,
+        anchorRect,
+        anchorInline: flippedAnchorInline,
+        surfaceInline: flippedSurfaceInline,
+        xOffset,
+        positioning,
+        isLTR
+      });
+      if (Math.abs(inlineOutOfBoundsCorrection) > Math.abs(flippedInline.inlineOutOfBoundsCorrection)) {
+        inlineInset = flippedInline.inlineInset;
+        inlineOutOfBoundsCorrection = flippedInline.inlineOutOfBoundsCorrection;
+        surfaceInlineProperty = flippedInline.surfaceInlineProperty;
+      }
+    }
+    if (repositionStrategy === "move") {
+      blockInset = blockInset - blockOutOfBoundsCorrection;
+      inlineInset = inlineInset - inlineOutOfBoundsCorrection;
+    }
+    this.surfaceStylesInternal = {
+      display: "block",
+      opacity: "1",
+      [surfaceBlockProperty]: `${blockInset}px`,
+      [surfaceInlineProperty]: `${inlineInset}px`
+    };
+    if (repositionStrategy === "resize") {
+      if (blockOutOfBoundsCorrection) {
+        this.surfaceStylesInternal["height"] = `${surfaceRect.height - blockOutOfBoundsCorrection}px`;
+      }
+      if (inlineOutOfBoundsCorrection) {
+        this.surfaceStylesInternal["width"] = `${surfaceRect.width - inlineOutOfBoundsCorrection}px`;
+      }
+    }
+    this.host.requestUpdate();
+  }
+  calculateBlock(config2) {
+    const { surfaceRect, anchorRect, anchorBlock, surfaceBlock, yOffset, positioning } = config2;
+    const relativeToWindow = positioning === "fixed" ? 1 : 0;
+    const isSurfaceBlockStart = surfaceBlock === "start" ? 1 : 0;
+    const isSurfaceBlockEnd = surfaceBlock === "end" ? 1 : 0;
+    const isOneBlockEnd = anchorBlock !== surfaceBlock ? 1 : 0;
+    const blockAnchorOffset = isOneBlockEnd * anchorRect.height + yOffset;
+    const blockTopLayerOffset = isSurfaceBlockStart * anchorRect.top + isSurfaceBlockEnd * (window.innerHeight - anchorRect.bottom);
+    const blockOutOfBoundsCorrection = Math.abs(Math.min(0, window.innerHeight - blockTopLayerOffset - blockAnchorOffset - surfaceRect.height));
+    const blockInset = relativeToWindow * blockTopLayerOffset + blockAnchorOffset;
+    const surfaceBlockProperty = surfaceBlock === "start" ? "inset-block-start" : "inset-block-end";
+    return { blockInset, blockOutOfBoundsCorrection, surfaceBlockProperty };
+  }
+  calculateInline(config2) {
+    const { isLTR: isLTRBool, surfaceInline, anchorInline, anchorRect, surfaceRect, xOffset, positioning } = config2;
+    const relativeToWindow = positioning === "fixed" ? 1 : 0;
+    const isLTR = isLTRBool ? 1 : 0;
+    const isRTL = isLTRBool ? 0 : 1;
+    const isSurfaceInlineStart = surfaceInline === "start" ? 1 : 0;
+    const isSurfaceInlineEnd = surfaceInline === "end" ? 1 : 0;
+    const isOneInlineEnd = anchorInline !== surfaceInline ? 1 : 0;
+    const inlineAnchorOffset = isOneInlineEnd * anchorRect.width + xOffset;
+    const inlineTopLayerOffsetLTR = isSurfaceInlineStart * anchorRect.left + isSurfaceInlineEnd * (window.innerWidth - anchorRect.right);
+    const inlineTopLayerOffsetRTL = isSurfaceInlineStart * (window.innerWidth - anchorRect.right) + isSurfaceInlineEnd * anchorRect.left;
+    const inlineTopLayerOffset = isLTR * inlineTopLayerOffsetLTR + isRTL * inlineTopLayerOffsetRTL;
+    const inlineOutOfBoundsCorrection = Math.abs(Math.min(0, window.innerWidth - inlineTopLayerOffset - inlineAnchorOffset - surfaceRect.width));
+    const inlineInset = relativeToWindow * inlineTopLayerOffset + inlineAnchorOffset;
+    const surfaceInlineProperty = surfaceInline === "start" ? "inset-inline-start" : "inset-inline-end";
+    return {
+      inlineInset,
+      inlineOutOfBoundsCorrection,
+      surfaceInlineProperty
+    };
+  }
+  hostUpdate() {
+    this.onUpdate();
+  }
+  hostUpdated() {
+    this.onUpdate();
+  }
+  async onUpdate() {
+    const props = this.getProperties();
+    let hasChanged = false;
+    for (const [key, value] of Object.entries(props)) {
+      hasChanged = hasChanged || value !== this.lastValues[key];
+      if (hasChanged)
+        break;
+    }
+    const openChanged = this.lastValues.isOpen !== props.isOpen;
+    const hasAnchor = !!props.anchorEl;
+    const hasSurface = !!props.surfaceEl;
+    if (hasChanged && hasAnchor && hasSurface) {
+      this.lastValues.isOpen = props.isOpen;
+      if (props.isOpen) {
+        this.lastValues = props;
+        await this.position();
+        props.onOpen();
+      } else if (openChanged) {
+        await props.beforeClose();
+        this.close();
+        props.onClose();
+      }
+    }
+  }
+  close() {
+    this.surfaceStylesInternal = {
+      display: "none"
+    };
+    this.host.requestUpdate();
+  }
+}
+
+// node_modules/@material/web/menu/internal/controllers/typeaheadController.js
+var TYPEAHEAD_RECORD = {
+  INDEX: 0,
+  ITEM: 1,
+  TEXT: 2
+};
+
+class TypeaheadController {
+  constructor(getProperties) {
+    this.getProperties = getProperties;
+    this.typeaheadRecords = [];
+    this.typaheadBuffer = "";
+    this.cancelTypeaheadTimeout = 0;
+    this.isTypingAhead = false;
+    this.lastActiveRecord = null;
+    this.onKeydown = (event) => {
+      if (this.isTypingAhead) {
+        this.typeahead(event);
+      } else {
+        this.beginTypeahead(event);
+      }
+    };
+    this.endTypeahead = () => {
+      this.isTypingAhead = false;
+      this.typaheadBuffer = "";
+      this.typeaheadRecords = [];
+    };
+  }
+  get items() {
+    return this.getProperties().getItems();
+  }
+  get active() {
+    return this.getProperties().active;
+  }
+  beginTypeahead(event) {
+    if (!this.active) {
+      return;
+    }
+    if (event.code === "Space" || event.code === "Enter" || event.code.startsWith("Arrow") || event.code === "Escape") {
+      return;
+    }
+    this.isTypingAhead = true;
+    this.typeaheadRecords = this.items.map((el, index) => [index, el, el.typeaheadText.trim().toLowerCase()]);
+    this.lastActiveRecord = this.typeaheadRecords.find((record) => record[TYPEAHEAD_RECORD.ITEM].tabIndex === 0) ?? null;
+    if (this.lastActiveRecord) {
+      this.lastActiveRecord[TYPEAHEAD_RECORD.ITEM].tabIndex = -1;
+    }
+    this.typeahead(event);
+  }
+  typeahead(event) {
+    if (event.defaultPrevented)
+      return;
+    clearTimeout(this.cancelTypeaheadTimeout);
+    if (event.code === "Enter" || event.code.startsWith("Arrow") || event.code === "Escape") {
+      this.endTypeahead();
+      if (this.lastActiveRecord) {
+        this.lastActiveRecord[TYPEAHEAD_RECORD.ITEM].tabIndex = -1;
+      }
+      return;
+    }
+    if (event.code === "Space") {
+      event.preventDefault();
+    }
+    this.cancelTypeaheadTimeout = setTimeout(this.endTypeahead, this.getProperties().typeaheadBufferTime);
+    this.typaheadBuffer += event.key.toLowerCase();
+    const lastActiveIndex = this.lastActiveRecord ? this.lastActiveRecord[TYPEAHEAD_RECORD.INDEX] : -1;
+    const numRecords = this.typeaheadRecords.length;
+    const rebaseIndexOnActive = (record) => {
+      return (record[TYPEAHEAD_RECORD.INDEX] + numRecords - lastActiveIndex) % numRecords;
+    };
+    const matchingRecords = this.typeaheadRecords.filter((record) => !record[TYPEAHEAD_RECORD.ITEM].disabled && record[TYPEAHEAD_RECORD.TEXT].startsWith(this.typaheadBuffer)).sort((a4, b2) => rebaseIndexOnActive(a4) - rebaseIndexOnActive(b2));
+    if (matchingRecords.length === 0) {
+      clearTimeout(this.cancelTypeaheadTimeout);
+      if (this.lastActiveRecord) {
+        this.lastActiveRecord[TYPEAHEAD_RECORD.ITEM].tabIndex = -1;
+      }
+      this.endTypeahead();
+      return;
+    }
+    const isNewQuery = this.typaheadBuffer.length === 1;
+    let nextRecord;
+    if (this.lastActiveRecord === matchingRecords[0] && isNewQuery) {
+      nextRecord = matchingRecords[1] ?? matchingRecords[0];
+    } else {
+      nextRecord = matchingRecords[0];
+    }
+    if (this.lastActiveRecord) {
+      this.lastActiveRecord[TYPEAHEAD_RECORD.ITEM].tabIndex = -1;
+    }
+    this.lastActiveRecord = nextRecord;
+    nextRecord[TYPEAHEAD_RECORD.ITEM].tabIndex = 0;
+    nextRecord[TYPEAHEAD_RECORD.ITEM].focus();
+    return;
+  }
+}
+
+// node_modules/@material/web/menu/internal/menu.js
+var getFocusedElement = function(activeDoc = document) {
+  let activeEl = activeDoc.activeElement;
+  while (activeEl && activeEl?.shadowRoot?.activeElement) {
+    activeEl = activeEl.shadowRoot.activeElement;
+  }
+  return activeEl;
+};
+var DEFAULT_TYPEAHEAD_BUFFER_TIME = 200;
+var submenuNavKeys = new Set([
+  NavigableKeys.ArrowDown,
+  NavigableKeys.ArrowUp,
+  NavigableKeys.Home,
+  NavigableKeys.End
+]);
+var menuNavKeys = new Set([
+  NavigableKeys.ArrowLeft,
+  NavigableKeys.ArrowRight,
+  ...submenuNavKeys
+]);
+
+class Menu extends s4 {
+  get openDirection() {
+    const menuCornerBlock = this.menuCorner.split("_")[0];
+    return menuCornerBlock === "START" ? "DOWN" : "UP";
+  }
+  get anchorElement() {
+    if (this.anchor) {
+      return this.getRootNode().querySelector(`#${this.anchor}`);
+    }
+    return this.currentAnchorElement;
+  }
+  set anchorElement(element) {
+    this.currentAnchorElement = element;
+    this.requestUpdate("anchorElement");
+  }
+  constructor() {
+    super();
+    this.anchor = "";
+    this.positioning = "absolute";
+    this.quick = false;
+    this.hasOverflow = false;
+    this.open = false;
+    this.xOffset = 0;
+    this.yOffset = 0;
+    this.typeaheadDelay = DEFAULT_TYPEAHEAD_BUFFER_TIME;
+    this.anchorCorner = Corner.END_START;
+    this.menuCorner = Corner.START_START;
+    this.stayOpenOnOutsideClick = false;
+    this.stayOpenOnFocusout = false;
+    this.skipRestoreFocus = false;
+    this.defaultFocus = FocusState.FIRST_ITEM;
+    this.typeaheadActive = true;
+    this.isSubmenu = false;
+    this.pointerPath = [];
+    this.isPointerDown = false;
+    this.openCloseAnimationSignal = createAnimationSignal();
+    this.listController = new ListController({
+      isItem: (maybeItem) => {
+        return maybeItem.hasAttribute("md-menu-item");
+      },
+      getPossibleItems: () => this.slotItems,
+      isRtl: () => getComputedStyle(this).direction === "rtl",
+      deactivateItem: (item) => {
+        item.selected = false;
+        item.tabIndex = -1;
+      },
+      activateItem: (item) => {
+        item.selected = true;
+        item.tabIndex = 0;
+      },
+      isNavigableKey: (key) => {
+        if (!this.isSubmenu) {
+          return menuNavKeys.has(key);
+        }
+        const isRtl = getComputedStyle(this).direction === "rtl";
+        const arrowOpen = isRtl ? NavigableKeys.ArrowLeft : NavigableKeys.ArrowRight;
+        if (key === arrowOpen) {
+          return true;
+        }
+        return submenuNavKeys.has(key);
+      }
+    });
+    this.lastFocusedElement = null;
+    this.typeaheadController = new TypeaheadController(() => {
+      return {
+        getItems: () => this.items,
+        typeaheadBufferTime: this.typeaheadDelay,
+        active: this.typeaheadActive
+      };
+    });
+    this.currentAnchorElement = null;
+    this.internals = polyfillElementInternalsAria(this, this.attachInternals());
+    this.menuPositionController = new SurfacePositionController(this, () => {
+      return {
+        anchorCorner: this.anchorCorner,
+        surfaceCorner: this.menuCorner,
+        surfaceEl: this.surfaceEl,
+        anchorEl: this.anchorElement,
+        positioning: this.positioning,
+        isOpen: this.open,
+        xOffset: this.xOffset,
+        yOffset: this.yOffset,
+        onOpen: this.onOpened,
+        beforeClose: this.beforeClose,
+        onClose: this.onClosed,
+        repositionStrategy: this.hasOverflow ? "move" : "resize"
+      };
+    });
+    this.handleFocusout = async (event) => {
+      if (this.stayOpenOnFocusout || !this.open) {
+        return;
+      }
+      if (event.relatedTarget) {
+        if (isElementInSubtree(event.relatedTarget, this)) {
+          return;
+        }
+        const anchorEl = this.anchorElement;
+        const wasAnchorClickFocused = isElementInSubtree(event.relatedTarget, anchorEl) && this.isPointerDown;
+        if (wasAnchorClickFocused) {
+          return;
+        }
+      } else if (this.isPointerDown && this.pointerPath.includes(this)) {
+        return;
+      }
+      const oldRestoreFocus = this.skipRestoreFocus;
+      this.skipRestoreFocus = true;
+      this.close();
+      await this.updateComplete;
+      this.skipRestoreFocus = oldRestoreFocus;
+    };
+    this.onOpened = async () => {
+      this.lastFocusedElement = getFocusedElement();
+      const items = this.items;
+      const activeItemRecord = getActiveItem(items);
+      if (activeItemRecord && this.defaultFocus !== FocusState.NONE) {
+        activeItemRecord.item.tabIndex = -1;
+      }
+      let animationAborted = !this.quick;
+      if (this.quick) {
+        this.dispatchEvent(new Event("opening"));
+      } else {
+        animationAborted = !!await this.animateOpen();
+      }
+      switch (this.defaultFocus) {
+        case FocusState.FIRST_ITEM:
+          const first = getFirstActivatableItem(items);
+          if (first) {
+            first.tabIndex = 0;
+            first.focus();
+            await first.updateComplete;
+          }
+          break;
+        case FocusState.LAST_ITEM:
+          const last = getLastActivatableItem(items);
+          if (last) {
+            last.tabIndex = 0;
+            last.focus();
+            await last.updateComplete;
+          }
+          break;
+        case FocusState.LIST_ROOT:
+          this.focus();
+          break;
+        default:
+        case FocusState.NONE:
+          break;
+      }
+      if (!animationAborted) {
+        this.dispatchEvent(new Event("opened"));
+      }
+    };
+    this.beforeClose = async () => {
+      this.open = false;
+      if (!this.skipRestoreFocus) {
+        this.lastFocusedElement?.focus?.();
+      }
+      if (!this.quick) {
+        await this.animateClose();
+      }
+    };
+    this.onClosed = () => {
+      if (this.quick) {
+        this.dispatchEvent(new Event("closing"));
+        this.dispatchEvent(new Event("closed"));
+      }
+    };
+    this.onWindowPointerdown = (event) => {
+      this.isPointerDown = true;
+      this.pointerPath = event.composedPath();
+    };
+    this.onWindowPointerup = () => {
+      this.isPointerDown = false;
+    };
+    this.onWindowClick = (event) => {
+      if (!this.open) {
+        return;
+      }
+      const path = event.composedPath();
+      if (!this.stayOpenOnOutsideClick && !path.includes(this) && !path.includes(this.anchorElement)) {
+        this.open = false;
+      }
+    };
+    if (!o5) {
+      this.internals.role = "menu";
+      this.addEventListener("keydown", this.listController.handleKeydown);
+      this.addEventListener("keydown", this.captureKeydown, { capture: true });
+      this.addEventListener("focusout", this.handleFocusout);
+    }
+  }
+  get items() {
+    return this.listController.items;
+  }
+  willUpdate(changed) {
+    if (!changed.has("open")) {
+      return;
+    }
+    if (this.open) {
+      this.removeAttribute("aria-hidden");
+      return;
+    }
+    this.setAttribute("aria-hidden", "true");
+  }
+  render() {
+    return this.renderSurface();
+  }
+  renderSurface() {
+    return x`
+       <div
+          class="menu ${o9(this.getSurfaceClasses())}"
+          style=${o8(this.menuPositionController.surfaceStyles)}>
+        ${this.renderElevation()}
+        <div class="items">
+          <div class="item-padding">
+            ${this.renderMenuItems()}
+          </div>
+        </div>
+       </div>
+     `;
+  }
+  renderMenuItems() {
+    return x`<slot
+        @close-menu=${this.onCloseMenu}
+        @deactivate-items=${this.onDeactivateItems}
+        @request-activation=${this.onRequestActivation}
+        @deactivate-typeahead=${this.handleDeactivateTypeahead}
+        @activate-typeahead=${this.handleActivateTypeahead}
+        @stay-open-on-focusout=${this.handleStayOpenOnFocusout}
+        @close-on-focusout=${this.handleCloseOnFocusout}
+        @slotchange=${this.listController.onSlotchange}></slot>`;
+  }
+  renderElevation() {
+    return x`<md-elevation part="elevation"></md-elevation>`;
+  }
+  getSurfaceClasses() {
+    return {
+      open: this.open,
+      fixed: this.positioning === "fixed",
+      "has-overflow": this.hasOverflow
+    };
+  }
+  captureKeydown(event) {
+    if (event.target === this && !event.defaultPrevented && isClosableKey(event.code)) {
+      event.preventDefault();
+      this.close();
+    }
+    this.typeaheadController.onKeydown(event);
+  }
+  async animateOpen() {
+    const surfaceEl = this.surfaceEl;
+    const slotEl = this.slotEl;
+    if (!surfaceEl || !slotEl)
+      return true;
+    const openDirection = this.openDirection;
+    this.dispatchEvent(new Event("opening"));
+    surfaceEl.classList.toggle("animating", true);
+    const signal = this.openCloseAnimationSignal.start();
+    const height = surfaceEl.offsetHeight;
+    const openingUpwards = openDirection === "UP";
+    const children = this.items;
+    const FULL_DURATION = 500;
+    const SURFACE_OPACITY_DURATION = 50;
+    const ITEM_OPACITY_DURATION = 250;
+    const DELAY_BETWEEN_ITEMS = (FULL_DURATION - ITEM_OPACITY_DURATION) / children.length;
+    const surfaceHeightAnimation = surfaceEl.animate([{ height: "0px" }, { height: `${height}px` }], {
+      duration: FULL_DURATION,
+      easing: EASING.EMPHASIZED
+    });
+    const upPositionCorrectionAnimation = slotEl.animate([
+      { transform: openingUpwards ? `translateY(-${height}px)` : "" },
+      { transform: "" }
+    ], { duration: FULL_DURATION, easing: EASING.EMPHASIZED });
+    const surfaceOpacityAnimation = surfaceEl.animate([{ opacity: 0 }, { opacity: 1 }], SURFACE_OPACITY_DURATION);
+    const childrenAnimations = [];
+    for (let i8 = 0;i8 < children.length; i8++) {
+      const directionalIndex = openingUpwards ? children.length - 1 - i8 : i8;
+      const child = children[directionalIndex];
+      const animation6 = child.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: ITEM_OPACITY_DURATION,
+        delay: DELAY_BETWEEN_ITEMS * i8
+      });
+      child.classList.toggle("md-menu-hidden", true);
+      animation6.addEventListener("finish", () => {
+        child.classList.toggle("md-menu-hidden", false);
+      });
+      childrenAnimations.push([child, animation6]);
+    }
+    let resolveAnimation = (value) => {
+    };
+    const animationFinished = new Promise((resolve) => {
+      resolveAnimation = resolve;
+    });
+    signal.addEventListener("abort", () => {
+      surfaceHeightAnimation.cancel();
+      upPositionCorrectionAnimation.cancel();
+      surfaceOpacityAnimation.cancel();
+      childrenAnimations.forEach(([child, animation6]) => {
+        child.classList.toggle("md-menu-hidden", false);
+        animation6.cancel();
+      });
+      resolveAnimation(true);
+    });
+    surfaceHeightAnimation.addEventListener("finish", () => {
+      surfaceEl.classList.toggle("animating", false);
+      this.openCloseAnimationSignal.finish();
+      resolveAnimation(false);
+    });
+    return await animationFinished;
+  }
+  animateClose() {
+    let resolve;
+    let reject;
+    const animationEnded = new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+    const surfaceEl = this.surfaceEl;
+    const slotEl = this.slotEl;
+    if (!surfaceEl || !slotEl) {
+      reject();
+      return animationEnded;
+    }
+    const openDirection = this.openDirection;
+    const closingDownwards = openDirection === "UP";
+    this.dispatchEvent(new Event("closing"));
+    surfaceEl.classList.toggle("animating", true);
+    const signal = this.openCloseAnimationSignal.start();
+    const height = surfaceEl.offsetHeight;
+    const children = this.items;
+    const FULL_DURATION = 150;
+    const SURFACE_OPACITY_DURATION = 50;
+    const SURFACE_OPACITY_DELAY = FULL_DURATION - SURFACE_OPACITY_DURATION;
+    const ITEM_OPACITY_DURATION = 50;
+    const ITEM_OPACITY_INITIAL_DELAY = 50;
+    const END_HEIGHT_PERCENTAGE = 0.35;
+    const DELAY_BETWEEN_ITEMS = (FULL_DURATION - ITEM_OPACITY_INITIAL_DELAY - ITEM_OPACITY_DURATION) / children.length;
+    const surfaceHeightAnimation = surfaceEl.animate([
+      { height: `${height}px` },
+      { height: `${height * END_HEIGHT_PERCENTAGE}px` }
+    ], {
+      duration: FULL_DURATION,
+      easing: EASING.EMPHASIZED_ACCELERATE
+    });
+    const downPositionCorrectionAnimation = slotEl.animate([
+      { transform: "" },
+      {
+        transform: closingDownwards ? `translateY(-${height * (1 - END_HEIGHT_PERCENTAGE)}px)` : ""
+      }
+    ], { duration: FULL_DURATION, easing: EASING.EMPHASIZED_ACCELERATE });
+    const surfaceOpacityAnimation = surfaceEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: SURFACE_OPACITY_DURATION, delay: SURFACE_OPACITY_DELAY });
+    const childrenAnimations = [];
+    for (let i8 = 0;i8 < children.length; i8++) {
+      const directionalIndex = closingDownwards ? i8 : children.length - 1 - i8;
+      const child = children[directionalIndex];
+      const animation6 = child.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: ITEM_OPACITY_DURATION,
+        delay: ITEM_OPACITY_INITIAL_DELAY + DELAY_BETWEEN_ITEMS * i8
+      });
+      animation6.addEventListener("finish", () => {
+        child.classList.toggle("md-menu-hidden", true);
+      });
+      childrenAnimations.push([child, animation6]);
+    }
+    signal.addEventListener("abort", () => {
+      surfaceHeightAnimation.cancel();
+      downPositionCorrectionAnimation.cancel();
+      surfaceOpacityAnimation.cancel();
+      childrenAnimations.forEach(([child, animation6]) => {
+        animation6.cancel();
+        child.classList.toggle("md-menu-hidden", false);
+      });
+      reject();
+    });
+    surfaceHeightAnimation.addEventListener("finish", () => {
+      surfaceEl.classList.toggle("animating", false);
+      childrenAnimations.forEach(([child]) => {
+        child.classList.toggle("md-menu-hidden", false);
+      });
+      this.openCloseAnimationSignal.finish();
+      this.dispatchEvent(new Event("closed"));
+      resolve(true);
+    });
+    return animationEnded;
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    if (!o5) {
+      window.addEventListener("click", this.onWindowClick, { capture: true });
+      window.addEventListener("pointerdown", this.onWindowPointerdown);
+      window.addEventListener("pointerup", this.onWindowPointerup);
+    }
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (!o5) {
+      window.removeEventListener("click", this.onWindowClick, { capture: true });
+      window.removeEventListener("pointerdown", this.onWindowPointerdown);
+      window.removeEventListener("pointerup", this.onWindowPointerup);
+    }
+  }
+  onCloseMenu() {
+    this.close();
+  }
+  onDeactivateItems(event) {
+    event.stopPropagation();
+    this.listController.onDeactivateItems();
+  }
+  onRequestActivation(event) {
+    event.stopPropagation();
+    this.listController.onRequestActivation(event);
+  }
+  handleDeactivateTypeahead(event) {
+    event.stopPropagation();
+    this.typeaheadActive = false;
+  }
+  handleActivateTypeahead(event) {
+    event.stopPropagation();
+    this.typeaheadActive = true;
+  }
+  handleStayOpenOnFocusout(event) {
+    event.stopPropagation();
+    this.stayOpenOnFocusout = true;
+  }
+  handleCloseOnFocusout(event) {
+    event.stopPropagation();
+    this.stayOpenOnFocusout = false;
+  }
+  close() {
+    this.open = false;
+    const maybeSubmenu = this.slotItems;
+    maybeSubmenu.forEach((item) => {
+      item.close?.();
+    });
+  }
+  show() {
+    this.open = true;
+  }
+  activateNextItem() {
+    return this.listController.activateNextItem() ?? null;
+  }
+  activatePreviousItem() {
+    return this.listController.activatePreviousItem() ?? null;
+  }
+}
+(() => {
+  setupHostAria(Menu, { focusable: false });
+})();
+__decorate2([
+  i4(".menu")
+], Menu.prototype, "surfaceEl", undefined);
+__decorate2([
+  i4("slot")
+], Menu.prototype, "slotEl", undefined);
+__decorate2([
+  n5()
+], Menu.prototype, "anchor", undefined);
+__decorate2([
+  n5()
+], Menu.prototype, "positioning", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], Menu.prototype, "quick", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "has-overflow" })
+], Menu.prototype, "hasOverflow", undefined);
+__decorate2([
+  n5({ type: Boolean, reflect: true })
+], Menu.prototype, "open", undefined);
+__decorate2([
+  n5({ type: Number, attribute: "x-offset" })
+], Menu.prototype, "xOffset", undefined);
+__decorate2([
+  n5({ type: Number, attribute: "y-offset" })
+], Menu.prototype, "yOffset", undefined);
+__decorate2([
+  n5({ type: Number, attribute: "typeahead-delay" })
+], Menu.prototype, "typeaheadDelay", undefined);
+__decorate2([
+  n5({ attribute: "anchor-corner" })
+], Menu.prototype, "anchorCorner", undefined);
+__decorate2([
+  n5({ attribute: "menu-corner" })
+], Menu.prototype, "menuCorner", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "stay-open-on-outside-click" })
+], Menu.prototype, "stayOpenOnOutsideClick", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "stay-open-on-focusout" })
+], Menu.prototype, "stayOpenOnFocusout", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "skip-restore-focus" })
+], Menu.prototype, "skipRestoreFocus", undefined);
+__decorate2([
+  n5({ attribute: "default-focus" })
+], Menu.prototype, "defaultFocus", undefined);
+__decorate2([
+  l4({ flatten: true })
+], Menu.prototype, "slotItems", undefined);
+__decorate2([
+  t3()
+], Menu.prototype, "typeaheadActive", undefined);
+
+// node_modules/@material/web/menu/internal/menu-styles.css.js
+var styles17 = i`:host{--md-elevation-level: var(--md-menu-container-elevation, 2);--md-elevation-shadow-color: var(--md-menu-container-shadow-color, var(--md-sys-color-shadow, #000));min-width:112px;color:unset;display:contents}md-focus-ring{--md-focus-ring-shape: var(--md-menu-container-shape, 4px)}.menu{border-radius:var(--md-menu-container-shape, 4px);display:none;opacity:0;z-index:20;position:absolute;user-select:none;max-height:inherit;height:inherit;min-width:inherit;max-width:inherit}.fixed{position:fixed}.items{display:block;list-style-type:none;margin:0;outline:none;box-sizing:border-box;background-color:var(--md-menu-container-color, var(--md-sys-color-surface-container, #f3edf7));height:inherit;max-height:inherit;overflow:auto;min-width:inherit;max-width:inherit;border-radius:inherit}.item-padding{padding-block:8px}.has-overflow .items{overflow:visible}.animating .items{overflow:hidden}.has-overflow.animating .items{pointer-events:none}.animating ::slotted(.md-menu-hidden){opacity:0}slot{display:block;height:inherit;max-height:inherit}::slotted(:is(md-divider,[role=separator])){margin:8px 0}/*# sourceMappingURL=menu-styles.css.map */
+`;
+
+// node_modules/@material/web/menu/menu.js
+var MdMenu = class MdMenu2 extends Menu {
+};
+MdMenu.styles = [styles17, styles16];
+MdMenu = __decorate2([
+  e4("md-menu")
+], MdMenu);
+
+// node_modules/@material/web/select/internal/shared.js
+function getSelectedItems(items) {
+  const selectedItemRecords = [];
+  for (let i8 = 0;i8 < items.length; i8++) {
+    const item = items[i8];
+    if (item.selected) {
+      selectedItemRecords.push([item, i8]);
+    }
+  }
+  return selectedItemRecords;
+}
+
+// node_modules/@material/web/select/internal/select.js
+var _a3;
+var VALUE = Symbol("value");
+
+class Select extends s4 {
+  constructor() {
+    super(...arguments);
+    this.quick = false;
+    this.required = false;
+    this.disabled = false;
+    this.errorText = "";
+    this.label = "";
+    this.supportingText = "";
+    this.error = false;
+    this.menuPositioning = "absolute";
+    this.typeaheadDelay = DEFAULT_TYPEAHEAD_BUFFER_TIME;
+    this.hasLeadingIcon = false;
+    this.displayText = "";
+    this[_a3] = "";
+    this.lastUserSetValue = null;
+    this.lastUserSetSelectedIndex = null;
+    this.lastSelectedOption = null;
+    this.lastSelectedOptionRecords = [];
+    this.nativeError = false;
+    this.nativeErrorText = "";
+    this.focused = false;
+    this.open = false;
+    this.customValidationMessage = "";
+    this.internals = this.attachInternals();
+  }
+  get value() {
+    return this[VALUE];
+  }
+  set value(value) {
+    if (o5)
+      return;
+    this.lastUserSetValue = value;
+    this.select(value);
+  }
+  get options() {
+    return this.menu?.items ?? [];
+  }
+  get selectedIndex() {
+    const [_option, index] = (this.getSelectedOptions() ?? [])[0] ?? [];
+    return index ?? -1;
+  }
+  set selectedIndex(index) {
+    this.lastUserSetSelectedIndex = index;
+    this.selectIndex(index);
+  }
+  get selectedOptions() {
+    return (this.getSelectedOptions() ?? []).map(([option]) => option);
+  }
+  get name() {
+    return this.getAttribute("name") ?? "";
+  }
+  set name(name) {
+    this.setAttribute("name", name);
+  }
+  get form() {
+    return this.internals.form;
+  }
+  get labels() {
+    return this.internals.labels;
+  }
+  get validity() {
+    this.syncValidity();
+    return this.internals.validity;
+  }
+  get validationMessage() {
+    this.syncValidity();
+    return this.internals.validationMessage;
+  }
+  get willValidate() {
+    this.syncValidity();
+    return this.internals.willValidate;
+  }
+  get hasError() {
+    return this.error || this.nativeError;
+  }
+  select(value) {
+    const optionToSelect = this.options.find((option) => option.value === value);
+    if (optionToSelect) {
+      this.selectItem(optionToSelect);
+    }
+  }
+  selectIndex(index) {
+    const optionToSelect = this.options[index];
+    if (optionToSelect) {
+      this.selectItem(optionToSelect);
+    }
+  }
+  reset() {
+    for (const option of this.options) {
+      option.selected = option.hasAttribute("selected");
+    }
+    this.updateValueAndDisplayText();
+    this.nativeError = false;
+    this.nativeErrorText = "";
+  }
+  checkValidity() {
+    this.syncValidity();
+    return this.internals.checkValidity();
+  }
+  reportValidity() {
+    let invalidEvent;
+    this.addEventListener("invalid", (event) => {
+      invalidEvent = event;
+    }, { once: true });
+    const valid = this.checkValidity();
+    if (invalidEvent?.defaultPrevented) {
+      return valid;
+    }
+    const prevMessage = this.getErrorText();
+    this.nativeError = !valid;
+    this.nativeErrorText = this.validationMessage;
+    if (prevMessage === this.getErrorText()) {
+      this.field?.reannounceError();
+    }
+    return valid;
+  }
+  setCustomValidity(error) {
+    this.customValidationMessage = error;
+    this.syncValidity();
+  }
+  update(changed) {
+    if (!this.hasUpdated) {
+      this.initUserSelection();
+    }
+    super.update(changed);
+  }
+  render() {
+    return x`
+      <span
+          class="select ${o9(this.getRenderClasses())}"
+          @focusout=${this.handleFocusout}>
+        ${this.renderField()}
+        ${this.renderMenu()}
+      </span>
+    `;
+  }
+  updated(changed) {
+    if (changed.has("required")) {
+      this.syncValidity();
+    }
+  }
+  async firstUpdated(changed) {
+    await this.menu?.updateComplete;
+    if (!this.lastSelectedOptionRecords.length) {
+      this.initUserSelection();
+    }
+    if (!this.lastSelectedOptionRecords.length && !o5 && !this.options.length) {
+      setTimeout(() => {
+        this.updateValueAndDisplayText();
+      });
+    }
+    super.firstUpdated(changed);
+  }
+  getRenderClasses() {
+    return {
+      disabled: this.disabled,
+      error: this.error,
+      open: this.open
+    };
+  }
+  renderField() {
+    return n8`
+      <${this.fieldTag}
+          aria-haspopup="listbox"
+          role="combobox"
+          part="field"
+          id="field"
+          tabindex=${this.disabled ? "-1" : "0"}
+          aria-label=${this.ariaLabel || A}
+          aria-describedby="description"
+          aria-expanded=${this.open ? "true" : A}
+          aria-controls="listbox"
+          class="field"
+          label=${this.label}
+          .focused=${this.focused || this.open}
+          .populated=${!!this.displayText}
+          .disabled=${this.disabled}
+          .required=${this.required}
+          .error=${this.hasError}
+          ?has-start=${this.hasLeadingIcon}
+          has-end
+          supporting-text=${this.supportingText}
+          error-text=${this.getErrorText()}
+          @keydown=${this.handleKeydown}
+          @click=${this.handleClick}
+          @focus=${this.handleFocus}
+          @blur=${this.handleBlur}>
+         ${this.renderFieldContent()}
+         <div id="description" slot="aria-describedby"></div>
+      </${this.fieldTag}>`;
+  }
+  renderFieldContent() {
+    return [
+      this.renderLeadingIcon(),
+      this.renderLabel(),
+      this.renderTrailingIcon()
+    ];
+  }
+  renderLeadingIcon() {
+    return x`
+      <span class="icon leading" slot="start">
+         <slot name="leading-icon" @slotchange=${this.handleIconChange}></slot>
+      </span>
+     `;
+  }
+  renderTrailingIcon() {
+    return x`
+      <span class="icon trailing" slot="end">
+        <slot name="trailing-icon" @slotchange=${this.handleIconChange}>
+          <svg height="5" viewBox="7 10 10 5" focusable="false">
+            <polygon class="down" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+            <polygon class="up" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+          </svg>
+        </slot>
+      </span>
+     `;
+  }
+  renderLabel() {
+    return x`<div id="label">${this.displayText || x`&nbsp;`}</div>`;
+  }
+  renderMenu() {
+    const ariaLabel = this.label || this.ariaLabel;
+    return x`
+      <md-menu
+          id="listbox"
+          default-focus="none"
+          role="listbox"
+          tabindex="-1"
+          aria-label=${ariaLabel || A}
+          stay-open-on-focusout
+          part="menu"
+          exportparts="focus-ring: menu-focus-ring"
+          anchor="field"
+          .open=${this.open}
+          .quick=${this.quick}
+          .positioning=${this.menuPositioning}
+          .typeaheadDelay=${this.typeaheadDelay}
+          @opening=${this.handleOpening}
+          @opened=${this.redispatchEvent}
+          @closing=${this.redispatchEvent}
+          @closed=${this.handleClosed}
+          @close-menu=${this.handleCloseMenu}
+          @request-selection=${this.handleRequestSelection}
+          @request-deselection=${this.handleRequestDeselection}>
+        ${this.renderMenuContent()}
+      </md-menu>`;
+  }
+  renderMenuContent() {
+    return x`<slot></slot>`;
+  }
+  handleKeydown(event) {
+    if (this.open || this.disabled || !this.menu) {
+      return;
+    }
+    const typeaheadController3 = this.menu.typeaheadController;
+    const isOpenKey = event.code === "Space" || event.code === "ArrowDown" || event.code === "Enter";
+    if (!typeaheadController3.isTypingAhead && isOpenKey) {
+      event.preventDefault();
+      this.open = true;
+      return;
+    }
+    const isPrintableKey = event.key.length === 1;
+    if (isPrintableKey) {
+      typeaheadController3.onKeydown(event);
+      event.preventDefault();
+      const { lastActiveRecord } = typeaheadController3;
+      if (!lastActiveRecord) {
+        return;
+      }
+      this.labelEl?.setAttribute?.("aria-live", "polite");
+      const hasChanged = this.selectItem(lastActiveRecord[TYPEAHEAD_RECORD.ITEM]);
+      if (hasChanged) {
+        this.dispatchInteractionEvents();
+      }
+    }
+  }
+  handleClick() {
+    this.open = true;
+  }
+  handleFocus() {
+    this.focused = true;
+  }
+  handleBlur() {
+    this.focused = false;
+  }
+  handleFocusout(event) {
+    if (event.relatedTarget && isElementInSubtree(event.relatedTarget, this)) {
+      return;
+    }
+    this.open = false;
+  }
+  getSelectedOptions() {
+    if (!this.menu) {
+      this.lastSelectedOptionRecords = [];
+      return null;
+    }
+    const items = this.menu.items;
+    this.lastSelectedOptionRecords = getSelectedItems(items);
+    return this.lastSelectedOptionRecords;
+  }
+  async getUpdateComplete() {
+    await this.menu?.updateComplete;
+    return super.getUpdateComplete();
+  }
+  updateValueAndDisplayText() {
+    const selectedOptions = this.getSelectedOptions() ?? [];
+    let hasSelectedOptionChanged = false;
+    if (selectedOptions.length) {
+      const [firstSelectedOption] = selectedOptions[0];
+      hasSelectedOptionChanged = this.lastSelectedOption !== firstSelectedOption;
+      this.lastSelectedOption = firstSelectedOption;
+      this[VALUE] = firstSelectedOption.value;
+      this.displayText = firstSelectedOption.displayText;
+    } else {
+      hasSelectedOptionChanged = this.lastSelectedOption !== null;
+      this.lastSelectedOption = null;
+      this[VALUE] = "";
+      this.displayText = "";
+    }
+    this.internals.setFormValue(this.value);
+    this.syncValidity();
+    return hasSelectedOptionChanged;
+  }
+  async handleOpening(e10) {
+    this.labelEl?.removeAttribute?.("aria-live");
+    this.redispatchEvent(e10);
+    const items = this.menu.items;
+    const activeItem = getActiveItem(items)?.item;
+    let [selectedItem] = this.lastSelectedOptionRecords[0] ?? [null];
+    if (activeItem && activeItem !== selectedItem) {
+      activeItem.tabIndex = -1;
+    }
+    selectedItem = selectedItem ?? items[0];
+    if (selectedItem) {
+      selectedItem.tabIndex = 0;
+      selectedItem.focus();
+    }
+  }
+  redispatchEvent(e10) {
+    redispatchEvent(this, e10);
+  }
+  handleClosed(e10) {
+    this.open = false;
+    this.redispatchEvent(e10);
+  }
+  handleCloseMenu(event) {
+    const reason = event.detail.reason;
+    const item = event.detail.itemPath[0];
+    this.open = false;
+    let hasChanged = false;
+    if (reason.kind === "click-selection") {
+      hasChanged = this.selectItem(item);
+    } else if (reason.kind === "keydown" && isSelectableKey(reason.key)) {
+      hasChanged = this.selectItem(item);
+    } else {
+      item.tabIndex = -1;
+      item.blur();
+    }
+    if (hasChanged) {
+      this.dispatchInteractionEvents();
+    }
+  }
+  selectItem(item) {
+    this.lastSelectedOptionRecords.forEach(([option]) => {
+      if (item !== option) {
+        option.selected = false;
+      }
+    });
+    item.selected = true;
+    return this.updateValueAndDisplayText();
+  }
+  handleRequestSelection(event) {
+    const requestingOptionEl = event.target;
+    if (this.lastSelectedOptionRecords.some(([option]) => option === requestingOptionEl)) {
+      return;
+    }
+    this.selectItem(requestingOptionEl);
+  }
+  handleRequestDeselection(event) {
+    const requestingOptionEl = event.target;
+    if (!this.lastSelectedOptionRecords.some(([option]) => option === requestingOptionEl)) {
+      return;
+    }
+    this.updateValueAndDisplayText();
+  }
+  initUserSelection() {
+    if (this.lastUserSetValue && !this.lastSelectedOptionRecords.length) {
+      this.select(this.lastUserSetValue);
+    } else if (this.lastUserSetSelectedIndex !== null && !this.lastSelectedOptionRecords.length) {
+      this.selectIndex(this.lastUserSetSelectedIndex);
+    } else {
+      this.updateValueAndDisplayText();
+    }
+  }
+  handleIconChange() {
+    this.hasLeadingIcon = this.leadingIcons.length > 0;
+  }
+  dispatchInteractionEvents() {
+    this.dispatchEvent(new Event("input", { bubbles: true, composed: true }));
+    this.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+  getErrorText() {
+    return this.error ? this.errorText : this.nativeErrorText;
+  }
+  syncValidity() {
+    const valueMissing = this.required && !this.value;
+    const customError = !!this.customValidationMessage;
+    const validationMessage = this.customValidationMessage || valueMissing && this.getRequiredValidationMessage() || "";
+    this.internals.setValidity({ valueMissing, customError }, validationMessage);
+  }
+  getRequiredValidationMessage() {
+    const select = document.createElement("select");
+    select.required = true;
+    return select.validationMessage;
+  }
+  formResetCallback() {
+    this.reset();
+  }
+  formStateRestoreCallback(state2) {
+    this.value = state2;
+  }
+}
+_a3 = VALUE;
+(() => {
+  requestUpdateOnAriaChange(Select);
+})();
+Select.formAssociated = true;
+__decorate2([
+  n5({ type: Boolean })
+], Select.prototype, "quick", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], Select.prototype, "required", undefined);
+__decorate2([
+  n5({ type: Boolean, reflect: true })
+], Select.prototype, "disabled", undefined);
+__decorate2([
+  n5({ type: String, attribute: "error-text" })
+], Select.prototype, "errorText", undefined);
+__decorate2([
+  n5()
+], Select.prototype, "label", undefined);
+__decorate2([
+  n5({ type: String, attribute: "supporting-text" })
+], Select.prototype, "supportingText", undefined);
+__decorate2([
+  n5({ type: Boolean, reflect: true })
+], Select.prototype, "error", undefined);
+__decorate2([
+  n5({ attribute: "menu-positioning" })
+], Select.prototype, "menuPositioning", undefined);
+__decorate2([
+  n5({ type: Number, attribute: "typeahead-delay" })
+], Select.prototype, "typeaheadDelay", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "has-leading-icon" })
+], Select.prototype, "hasLeadingIcon", undefined);
+__decorate2([
+  n5({ attribute: "display-text" })
+], Select.prototype, "displayText", undefined);
+__decorate2([
+  n5()
+], Select.prototype, "value", null);
+__decorate2([
+  n5({ type: Number, attribute: "selected-index" })
+], Select.prototype, "selectedIndex", null);
+__decorate2([
+  t3()
+], Select.prototype, "nativeError", undefined);
+__decorate2([
+  t3()
+], Select.prototype, "nativeErrorText", undefined);
+__decorate2([
+  t3()
+], Select.prototype, "focused", undefined);
+__decorate2([
+  t3()
+], Select.prototype, "open", undefined);
+__decorate2([
+  i4(".field")
+], Select.prototype, "field", undefined);
+__decorate2([
+  i4("md-menu")
+], Select.prototype, "menu", undefined);
+__decorate2([
+  i4("#label")
+], Select.prototype, "labelEl", undefined);
+__decorate2([
+  l4({ slot: "leading-icon", flatten: true })
+], Select.prototype, "leadingIcons", undefined);
+
+// node_modules/@material/web/select/internal/outlined-select.js
+class OutlinedSelect extends Select {
+  constructor() {
+    super(...arguments);
+    this.fieldTag = i7`md-outlined-field`;
+  }
+}
+
+// node_modules/@material/web/select/internal/outlined-select-styles.css.js
+var styles18 = i`:host{--_text-field-container-shape: var(--md-outlined-select-text-field-container-shape, 4px);--_text-field-disabled-input-text-color: var(--md-outlined-select-text-field-disabled-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-disabled-input-text-opacity: var(--md-outlined-select-text-field-disabled-input-text-opacity, 0.38);--_text-field-disabled-label-text-color: var(--md-outlined-select-text-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-disabled-label-text-opacity: var(--md-outlined-select-text-field-disabled-label-text-opacity, 0.38);--_text-field-disabled-leading-icon-color: var(--md-outlined-select-text-field-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-disabled-leading-icon-opacity: var(--md-outlined-select-text-field-disabled-leading-icon-opacity, 0.38);--_text-field-disabled-outline-color: var(--md-outlined-select-text-field-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-disabled-outline-opacity: var(--md-outlined-select-text-field-disabled-outline-opacity, 0.12);--_text-field-disabled-outline-width: var(--md-outlined-select-text-field-disabled-outline-width, 1px);--_text-field-disabled-supporting-text-color: var(--md-outlined-select-text-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-disabled-supporting-text-opacity: var(--md-outlined-select-text-field-disabled-supporting-text-opacity, 0.38);--_text-field-disabled-trailing-icon-color: var(--md-outlined-select-text-field-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-disabled-trailing-icon-opacity: var(--md-outlined-select-text-field-disabled-trailing-icon-opacity, 0.38);--_text-field-error-focus-input-text-color: var(--md-outlined-select-text-field-error-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-error-focus-label-text-color: var(--md-outlined-select-text-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_text-field-error-focus-leading-icon-color: var(--md-outlined-select-text-field-error-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-error-focus-outline-color: var(--md-outlined-select-text-field-error-focus-outline-color, var(--md-sys-color-error, #b3261e));--_text-field-error-focus-supporting-text-color: var(--md-outlined-select-text-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_text-field-error-focus-trailing-icon-color: var(--md-outlined-select-text-field-error-focus-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_text-field-error-hover-input-text-color: var(--md-outlined-select-text-field-error-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-error-hover-label-text-color: var(--md-outlined-select-text-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_text-field-error-hover-leading-icon-color: var(--md-outlined-select-text-field-error-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-error-hover-outline-color: var(--md-outlined-select-text-field-error-hover-outline-color, var(--md-sys-color-on-error-container, #410e0b));--_text-field-error-hover-supporting-text-color: var(--md-outlined-select-text-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_text-field-error-hover-trailing-icon-color: var(--md-outlined-select-text-field-error-hover-trailing-icon-color, var(--md-sys-color-on-error-container, #410e0b));--_text-field-error-input-text-color: var(--md-outlined-select-text-field-error-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-error-label-text-color: var(--md-outlined-select-text-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_text-field-error-leading-icon-color: var(--md-outlined-select-text-field-error-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-error-outline-color: var(--md-outlined-select-text-field-error-outline-color, var(--md-sys-color-error, #b3261e));--_text-field-error-supporting-text-color: var(--md-outlined-select-text-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_text-field-error-trailing-icon-color: var(--md-outlined-select-text-field-error-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_text-field-focus-input-text-color: var(--md-outlined-select-text-field-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-focus-label-text-color: var(--md-outlined-select-text-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_text-field-focus-leading-icon-color: var(--md-outlined-select-text-field-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-focus-outline-color: var(--md-outlined-select-text-field-focus-outline-color, var(--md-sys-color-primary, #6750a4));--_text-field-focus-outline-width: var(--md-outlined-select-text-field-focus-outline-width, 3px);--_text-field-focus-supporting-text-color: var(--md-outlined-select-text-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-focus-trailing-icon-color: var(--md-outlined-select-text-field-focus-trailing-icon-color, var(--md-sys-color-primary, #6750a4));--_text-field-hover-input-text-color: var(--md-outlined-select-text-field-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-hover-label-text-color: var(--md-outlined-select-text-field-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-hover-leading-icon-color: var(--md-outlined-select-text-field-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-hover-outline-color: var(--md-outlined-select-text-field-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-hover-outline-width: var(--md-outlined-select-text-field-hover-outline-width, 1px);--_text-field-hover-supporting-text-color: var(--md-outlined-select-text-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-hover-trailing-icon-color: var(--md-outlined-select-text-field-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-input-text-color: var(--md-outlined-select-text-field-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_text-field-input-text-font: var(--md-outlined-select-text-field-input-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_text-field-input-text-line-height: var(--md-outlined-select-text-field-input-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_text-field-input-text-size: var(--md-outlined-select-text-field-input-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_text-field-input-text-weight: var(--md-outlined-select-text-field-input-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_text-field-label-text-color: var(--md-outlined-select-text-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-label-text-font: var(--md-outlined-select-text-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_text-field-label-text-line-height: var(--md-outlined-select-text-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_text-field-label-text-populated-line-height: var(--md-outlined-select-text-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_text-field-label-text-populated-size: var(--md-outlined-select-text-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_text-field-label-text-size: var(--md-outlined-select-text-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_text-field-label-text-weight: var(--md-outlined-select-text-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_text-field-leading-icon-color: var(--md-outlined-select-text-field-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-leading-icon-size: var(--md-outlined-select-text-field-leading-icon-size, 24px);--_text-field-outline-color: var(--md-outlined-select-text-field-outline-color, var(--md-sys-color-outline, #79747e));--_text-field-outline-width: var(--md-outlined-select-text-field-outline-width, 1px);--_text-field-supporting-text-color: var(--md-outlined-select-text-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-supporting-text-font: var(--md-outlined-select-text-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_text-field-supporting-text-line-height: var(--md-outlined-select-text-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_text-field-supporting-text-size: var(--md-outlined-select-text-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_text-field-supporting-text-weight: var(--md-outlined-select-text-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_text-field-trailing-icon-color: var(--md-outlined-select-text-field-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_text-field-trailing-icon-size: var(--md-outlined-select-text-field-trailing-icon-size, 24px);--_text-field-container-shape-start-start: var( --md-outlined-select-text-field-container-shape-start-start, var(--_text-field-container-shape) );--_text-field-container-shape-start-end: var( --md-outlined-select-text-field-container-shape-start-end, var(--_text-field-container-shape) );--_text-field-container-shape-end-end: var( --md-outlined-select-text-field-container-shape-end-end, var(--_text-field-container-shape) );--_text-field-container-shape-end-start: var( --md-outlined-select-text-field-container-shape-end-start, var(--_text-field-container-shape) );--md-outlined-field-container-shape-end-end: var(--_text-field-container-shape-end-end);--md-outlined-field-container-shape-end-start: var(--_text-field-container-shape-end-start);--md-outlined-field-container-shape-start-end: var(--_text-field-container-shape-start-end);--md-outlined-field-container-shape-start-start: var(--_text-field-container-shape-start-start);--md-outlined-field-content-color: var(--_text-field-input-text-color);--md-outlined-field-content-font: var(--_text-field-input-text-font);--md-outlined-field-content-line-height: var(--_text-field-input-text-line-height);--md-outlined-field-content-size: var(--_text-field-input-text-size);--md-outlined-field-content-weight: var(--_text-field-input-text-weight);--md-outlined-field-disabled-content-color: var(--_text-field-disabled-input-text-color);--md-outlined-field-disabled-content-opacity: var(--_text-field-disabled-input-text-opacity);--md-outlined-field-disabled-label-text-color: var(--_text-field-disabled-label-text-color);--md-outlined-field-disabled-label-text-opacity: var(--_text-field-disabled-label-text-opacity);--md-outlined-field-disabled-leading-content-color: var(--_text-field-disabled-leading-icon-color);--md-outlined-field-disabled-leading-content-opacity: var(--_text-field-disabled-leading-icon-opacity);--md-outlined-field-disabled-outline-color: var(--_text-field-disabled-outline-color);--md-outlined-field-disabled-outline-opacity: var(--_text-field-disabled-outline-opacity);--md-outlined-field-disabled-outline-width: var(--_text-field-disabled-outline-width);--md-outlined-field-disabled-supporting-text-color: var(--_text-field-disabled-supporting-text-color);--md-outlined-field-disabled-supporting-text-opacity: var(--_text-field-disabled-supporting-text-opacity);--md-outlined-field-disabled-trailing-content-color: var(--_text-field-disabled-trailing-icon-color);--md-outlined-field-disabled-trailing-content-opacity: var(--_text-field-disabled-trailing-icon-opacity);--md-outlined-field-error-content-color: var(--_text-field-error-input-text-color);--md-outlined-field-error-focus-content-color: var(--_text-field-error-focus-input-text-color);--md-outlined-field-error-focus-label-text-color: var(--_text-field-error-focus-label-text-color);--md-outlined-field-error-focus-leading-content-color: var(--_text-field-error-focus-leading-icon-color);--md-outlined-field-error-focus-outline-color: var(--_text-field-error-focus-outline-color);--md-outlined-field-error-focus-supporting-text-color: var(--_text-field-error-focus-supporting-text-color);--md-outlined-field-error-focus-trailing-content-color: var(--_text-field-error-focus-trailing-icon-color);--md-outlined-field-error-hover-content-color: var(--_text-field-error-hover-input-text-color);--md-outlined-field-error-hover-label-text-color: var(--_text-field-error-hover-label-text-color);--md-outlined-field-error-hover-leading-content-color: var(--_text-field-error-hover-leading-icon-color);--md-outlined-field-error-hover-outline-color: var(--_text-field-error-hover-outline-color);--md-outlined-field-error-hover-supporting-text-color: var(--_text-field-error-hover-supporting-text-color);--md-outlined-field-error-hover-trailing-content-color: var(--_text-field-error-hover-trailing-icon-color);--md-outlined-field-error-label-text-color: var(--_text-field-error-label-text-color);--md-outlined-field-error-leading-content-color: var(--_text-field-error-leading-icon-color);--md-outlined-field-error-outline-color: var(--_text-field-error-outline-color);--md-outlined-field-error-supporting-text-color: var(--_text-field-error-supporting-text-color);--md-outlined-field-error-trailing-content-color: var(--_text-field-error-trailing-icon-color);--md-outlined-field-focus-content-color: var(--_text-field-focus-input-text-color);--md-outlined-field-focus-label-text-color: var(--_text-field-focus-label-text-color);--md-outlined-field-focus-leading-content-color: var(--_text-field-focus-leading-icon-color);--md-outlined-field-focus-outline-color: var(--_text-field-focus-outline-color);--md-outlined-field-focus-outline-width: var(--_text-field-focus-outline-width);--md-outlined-field-focus-supporting-text-color: var(--_text-field-focus-supporting-text-color);--md-outlined-field-focus-trailing-content-color: var(--_text-field-focus-trailing-icon-color);--md-outlined-field-hover-content-color: var(--_text-field-hover-input-text-color);--md-outlined-field-hover-label-text-color: var(--_text-field-hover-label-text-color);--md-outlined-field-hover-leading-content-color: var(--_text-field-hover-leading-icon-color);--md-outlined-field-hover-outline-color: var(--_text-field-hover-outline-color);--md-outlined-field-hover-outline-width: var(--_text-field-hover-outline-width);--md-outlined-field-hover-supporting-text-color: var(--_text-field-hover-supporting-text-color);--md-outlined-field-hover-trailing-content-color: var(--_text-field-hover-trailing-icon-color);--md-outlined-field-label-text-color: var(--_text-field-label-text-color);--md-outlined-field-label-text-font: var(--_text-field-label-text-font);--md-outlined-field-label-text-line-height: var(--_text-field-label-text-line-height);--md-outlined-field-label-text-populated-line-height: var(--_text-field-label-text-populated-line-height);--md-outlined-field-label-text-populated-size: var(--_text-field-label-text-populated-size);--md-outlined-field-label-text-size: var(--_text-field-label-text-size);--md-outlined-field-label-text-weight: var(--_text-field-label-text-weight);--md-outlined-field-leading-content-color: var(--_text-field-leading-icon-color);--md-outlined-field-outline-color: var(--_text-field-outline-color);--md-outlined-field-outline-width: var(--_text-field-outline-width);--md-outlined-field-supporting-text-color: var(--_text-field-supporting-text-color);--md-outlined-field-supporting-text-font: var(--_text-field-supporting-text-font);--md-outlined-field-supporting-text-line-height: var(--_text-field-supporting-text-line-height);--md-outlined-field-supporting-text-size: var(--_text-field-supporting-text-size);--md-outlined-field-supporting-text-weight: var(--_text-field-supporting-text-weight);--md-outlined-field-trailing-content-color: var(--_text-field-trailing-icon-color)}[has-start] .icon.leading{font-size:var(--_text-field-leading-icon-size);height:var(--_text-field-leading-icon-size);width:var(--_text-field-leading-icon-size)}.icon.trailing{font-size:var(--_text-field-trailing-icon-size);height:var(--_text-field-trailing-icon-size);width:var(--_text-field-trailing-icon-size)}/*# sourceMappingURL=outlined-select-styles.css.map */
+`;
+
+// node_modules/@material/web/select/internal/shared-styles.css.js
+var styles19 = i`:host{color:unset;min-width:210px;display:flex}.field{cursor:default;outline:none}.select{position:relative;flex-direction:column}.icon.trailing svg,.icon ::slotted(*){fill:currentColor}.icon ::slotted(*){width:inherit;height:inherit;font-size:inherit}.icon slot{display:flex;height:100%;width:100%;align-items:center;justify-content:center}.icon.trailing :is(.up,.down){opacity:0;transition:opacity 75ms linear 75ms}.select:not(.open) .down,.select.open .up{opacity:1}.field,.select,md-menu{min-width:inherit;width:inherit;max-width:inherit;display:flex}.field,.select{width:100%}:host{display:inline-flex}:host([disabled]){pointer-events:none}/*# sourceMappingURL=shared-styles.css.map */
+`;
+
+// node_modules/@material/web/select/outlined-select.js
+var MdOutlinedSelect = class MdOutlinedSelect2 extends OutlinedSelect {
+};
+MdOutlinedSelect.styles = [styles19, styles18, styles13];
+MdOutlinedSelect = __decorate2([
+  e4("md-outlined-select")
+], MdOutlinedSelect);
+
+// node_modules/@material/web/menu/internal/menuitem/forced-colors-styles.css.js
+var styles20 = i`@media(forced-colors: active){:host([disabled]),:host([disabled]) slot{color:GrayText;opacity:1}.list-item{position:relative}.list-item.selected::before{content:"";position:absolute;inset:0;box-sizing:border-box;border-radius:inherit;pointer-events:none;border:3px double CanvasText}}/*# sourceMappingURL=forced-colors-styles.css.map */
+`;
+
+// node_modules/@material/web/menu/internal/menuitem/menu-item-styles.css.js
+var styles21 = i`:host{display:flex;--md-ripple-hover-color: var(--md-menu-item-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--md-ripple-hover-opacity: var(--md-menu-item-hover-state-layer-opacity, 0.08);--md-ripple-pressed-color: var(--md-menu-item-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--md-ripple-pressed-opacity: var(--md-menu-item-pressed-state-layer-opacity, 0.12)}:host([disabled]){opacity:var(--md-menu-item-disabled-opacity, 0.3);pointer-events:none}md-focus-ring{z-index:1;--md-focus-ring-shape: 8px}a,button,li{background:none;border:none;padding:0;margin:0;text-align:unset;text-decoration:none}.list-item{border-radius:inherit;display:flex;flex:1;outline:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}.list-item:not(.disabled){cursor:pointer}[slot=container]{pointer-events:none}md-ripple{border-radius:inherit}md-item{border-radius:inherit;flex:1;color:var(--md-menu-item-label-text-color, var(--md-sys-color-on-surface, #1d1b20));font-family:var(--md-menu-item-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-menu-item-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));line-height:var(--md-menu-item-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));font-weight:var(--md-menu-item-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));min-height:var(--md-menu-item-one-line-container-height, 56px);padding-top:var(--md-menu-item-top-space, 12px);padding-bottom:var(--md-menu-item-bottom-space, 12px);padding-inline-start:var(--md-menu-item-leading-space, 16px);padding-inline-end:var(--md-menu-item-trailing-space, 16px)}md-item[multiline]{min-height:var(--md-menu-item-two-line-container-height, 72px)}[slot=supporting-text]{color:var(--md-menu-item-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-menu-item-supporting-text-font, var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-menu-item-supporting-text-size, var(--md-sys-typescale-body-medium-size, 0.875rem));line-height:var(--md-menu-item-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height, 1.25rem));font-weight:var(--md-menu-item-supporting-text-weight, var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400)))}[slot=trailing-supporting-text]{color:var(--md-menu-item-trailing-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-menu-item-trailing-supporting-text-font, var(--md-sys-typescale-label-small-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-menu-item-trailing-supporting-text-size, var(--md-sys-typescale-label-small-size, 0.6875rem));line-height:var(--md-menu-item-trailing-supporting-text-line-height, var(--md-sys-typescale-label-small-line-height, 1rem));font-weight:var(--md-menu-item-trailing-supporting-text-weight, var(--md-sys-typescale-label-small-weight, var(--md-ref-typeface-weight-medium, 500)))}:is([slot=start],[slot=end])::slotted(*){fill:currentColor}[slot=start]{color:var(--md-menu-item-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f))}[slot=end]{color:var(--md-menu-item-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f))}.list-item.selected{background-color:var(--md-menu-item-selected-container-color, var(--md-sys-color-secondary-container, #e8def8))}.selected:not(.disabled) ::slotted(*){color:var(--md-menu-item-selected-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b))}/*# sourceMappingURL=menu-item-styles.css.map */
+`;
+
+// node_modules/@material/web/labs/item/internal/item.js
+var slotHasContent = function(slot) {
+  for (const node of slot.assignedNodes({ flatten: true })) {
+    const isElement = node.nodeType === Node.ELEMENT_NODE;
+    const isTextWithContent = node.nodeType === Node.TEXT_NODE && node.textContent?.match(/\S/);
+    if (isElement || isTextWithContent) {
+      return true;
+    }
+  }
+  return false;
+};
+
+class Item extends s4 {
+  constructor() {
+    super(...arguments);
+    this.multiline = false;
+  }
+  render() {
+    return x`
+      <slot name="container"></slot>
+      <slot class="non-text" name="start"></slot>
+      <div class="text">
+        <slot name="overline"
+            @slotchange=${this.handleTextSlotChange}></slot>
+        <slot class="default-slot"
+            @slotchange=${this.handleTextSlotChange}></slot>
+        <slot name="headline"
+            @slotchange=${this.handleTextSlotChange}></slot>
+        <slot name="supporting-text"
+            @slotchange=${this.handleTextSlotChange}></slot>
+      </div>
+      <slot class="non-text" name="trailing-supporting-text"></slot>
+      <slot class="non-text" name="end"></slot>
+    `;
+  }
+  handleTextSlotChange() {
+    let isMultiline = false;
+    let slotsWithContent = 0;
+    for (const slot of this.textSlots) {
+      if (slotHasContent(slot)) {
+        slotsWithContent += 1;
+      }
+      if (slotsWithContent > 1) {
+        isMultiline = true;
+        break;
+      }
+    }
+    this.multiline = isMultiline;
+  }
+}
+__decorate2([
+  n5({ type: Boolean, reflect: true })
+], Item.prototype, "multiline", undefined);
+__decorate2([
+  e6(".text slot")
+], Item.prototype, "textSlots", undefined);
+
+// node_modules/@material/web/labs/item/internal/item-styles.css.js
+var styles22 = i`:host{color:var(--md-sys-color-on-surface, #1d1b20);font-family:var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-body-large-size, 1rem);font-weight:var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400));line-height:var(--md-sys-typescale-body-large-line-height, 1.5rem);align-items:center;box-sizing:border-box;display:flex;gap:16px;min-height:56px;overflow:hidden;padding:12px 16px;position:relative;text-overflow:ellipsis}:host([multiline]){min-height:72px}[name=overline]{color:var(--md-sys-color-on-surface-variant, #49454f);font-family:var(--md-sys-typescale-label-small-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-label-small-size, 0.6875rem);font-weight:var(--md-sys-typescale-label-small-weight, var(--md-ref-typeface-weight-medium, 500));line-height:var(--md-sys-typescale-label-small-line-height, 1rem)}[name=supporting-text]{color:var(--md-sys-color-on-surface-variant, #49454f);font-family:var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-body-medium-size, 0.875rem);font-weight:var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400));line-height:var(--md-sys-typescale-body-medium-line-height, 1.25rem)}[name=trailing-supporting-text]{color:var(--md-sys-color-on-surface-variant, #49454f);font-family:var(--md-sys-typescale-label-small-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-label-small-size, 0.6875rem);font-weight:var(--md-sys-typescale-label-small-weight, var(--md-ref-typeface-weight-medium, 500));line-height:var(--md-sys-typescale-label-small-line-height, 1rem)}[name=container]::slotted(*){inset:0;position:absolute}.default-slot{display:inline}.default-slot,::slotted(*){overflow:hidden;text-overflow:ellipsis}.text{display:flex;flex:1;flex-direction:column;overflow:hidden}/*# sourceMappingURL=item-styles.css.map */
+`;
+
+// node_modules/@material/web/labs/item/item.js
+var MdItem = class MdItem2 extends Item {
+};
+MdItem.styles = [styles22];
+MdItem = __decorate2([
+  e4("md-item")
+], MdItem);
+
+// node_modules/@material/web/menu/internal/controllers/menuItemController.js
+class MenuItemController {
+  constructor(host, config2) {
+    this.host = host;
+    this.internalTypeaheadText = null;
+    this.onClick = () => {
+      if (this.host.keepOpen)
+        return;
+      this.host.dispatchEvent(createDefaultCloseMenuEvent(this.host, { kind: CloseReason.CLICK_SELECTION }));
+    };
+    this.onKeydown = (event) => {
+      if (this.host.keepOpen || event.defaultPrevented)
+        return;
+      const keyCode = event.code;
+      if (!event.defaultPrevented && isClosableKey(keyCode)) {
+        event.preventDefault();
+        this.host.dispatchEvent(createDefaultCloseMenuEvent(this.host, { kind: CloseReason.KEYDOWN, key: keyCode }));
+      }
+    };
+    const { getHeadlineElements } = config2;
+    this.getHeadlineElements = getHeadlineElements;
+    this.host.addController(this);
+  }
+  get typeaheadText() {
+    if (this.internalTypeaheadText !== null) {
+      return this.internalTypeaheadText;
+    }
+    const headlineElements = this.getHeadlineElements();
+    const textParts = [];
+    headlineElements.forEach((headlineElement) => {
+      if (headlineElement.textContent && headlineElement.textContent.trim()) {
+        textParts.push(headlineElement.textContent.trim());
+      }
+    });
+    return textParts.join(" ");
+  }
+  get tagName() {
+    const type = this.host.type;
+    switch (type) {
+      case "link":
+        return "a";
+      case "button":
+        return "button";
+      default:
+      case "menuitem":
+      case "option":
+        return "li";
+    }
+  }
+  get role() {
+    return this.host.type === "option" ? "option" : "menuitem";
+  }
+  hostConnected() {
+    this.host.toggleAttribute("md-menu-item", true);
+  }
+  hostUpdate() {
+    if (this.host.href) {
+      this.host.type = "link";
+    }
+  }
+  setTypeaheadText(text) {
+    this.internalTypeaheadText = text;
+  }
+}
+
+// node_modules/@material/web/select/internal/selectoption/selectOptionController.js
+function createRequestSelectionEvent() {
+  return new Event("request-selection", {
+    bubbles: true,
+    composed: true
+  });
+}
+function createRequestDeselectionEvent() {
+  return new Event("request-deselection", {
+    bubbles: true,
+    composed: true
+  });
+}
+
+class SelectOptionController {
+  get role() {
+    return this.menuItemController.role;
+  }
+  get typeaheadText() {
+    return this.menuItemController.typeaheadText;
+  }
+  setTypeaheadText(text) {
+    this.menuItemController.setTypeaheadText(text);
+  }
+  get displayText() {
+    if (this.internalDisplayText !== null) {
+      return this.internalDisplayText;
+    }
+    const headlineElements = this.getHeadlineElements();
+    const textParts = [];
+    headlineElements.forEach((headlineElement) => {
+      if (headlineElement.textContent && headlineElement.textContent.trim()) {
+        textParts.push(headlineElement.textContent.trim());
+      }
+    });
+    return textParts.join(" ");
+  }
+  setDisplayText(text) {
+    this.internalDisplayText = text;
+  }
+  constructor(host, config2) {
+    this.host = host;
+    this.internalDisplayText = null;
+    this.lastSelected = this.host.selected;
+    this.firstUpdate = true;
+    this.onClick = () => {
+      this.menuItemController.onClick();
+    };
+    this.onKeydown = (e10) => {
+      this.menuItemController.onKeydown(e10);
+    };
+    this.menuItemController = new MenuItemController(host, config2);
+    this.getHeadlineElements = config2.getHeadlineElements;
+    host.addController(this);
+  }
+  hostUpdate() {
+    if (this.lastSelected !== this.host.selected) {
+      this.host.ariaSelected = this.host.selected ? "true" : "false";
+    }
+  }
+  hostUpdated() {
+    if (this.lastSelected !== this.host.selected && !this.firstUpdate) {
+      if (this.host.selected) {
+        this.host.dispatchEvent(createRequestSelectionEvent());
+      } else {
+        this.host.dispatchEvent(createRequestDeselectionEvent());
+      }
+    }
+    this.lastSelected = this.host.selected;
+    this.firstUpdate = false;
+  }
+}
+
+// node_modules/@material/web/select/internal/selectoption/select-option.js
+class SelectOptionEl extends s4 {
+  constructor() {
+    super(...arguments);
+    this.disabled = false;
+    this.isMenuItem = true;
+    this.selected = false;
+    this.value = "";
+    this.type = "option";
+    this.selectOptionController = new SelectOptionController(this, {
+      getHeadlineElements: () => {
+        return this.headlineElements;
+      }
+    });
+  }
+  get typeaheadText() {
+    return this.selectOptionController.typeaheadText;
+  }
+  set typeaheadText(text) {
+    this.selectOptionController.setTypeaheadText(text);
+  }
+  get displayText() {
+    return this.selectOptionController.displayText;
+  }
+  set displayText(text) {
+    this.selectOptionController.setDisplayText(text);
+  }
+  render() {
+    return this.renderListItem(x`
+      <md-item>
+        <div slot="container">
+          ${this.renderRipple()}
+          ${this.renderFocusRing()}
+        </div>
+        <slot name="start" slot="start"></slot>
+        <slot name="end" slot="end"></slot>
+        ${this.renderBody()}
+      </md-item>
+    `);
+  }
+  renderListItem(content) {
+    return x`
+      <li
+        id="item"
+        tabindex=${this.disabled ? -1 : 0}
+        role=${this.selectOptionController.role}
+        aria-label=${this.ariaLabel || A}
+        aria-selected=${this.ariaSelected || A}
+        aria-checked=${this.ariaChecked || A}
+        aria-expanded=${this.ariaExpanded || A}
+        aria-haspopup=${this.ariaHasPopup || A}
+        class="list-item ${o9(this.getRenderClasses())}"
+        @click=${this.selectOptionController.onClick}
+        @keydown=${this.selectOptionController.onKeydown}
+      >${content}</li>
+    `;
+  }
+  renderRipple() {
+    return x`
+      <md-ripple
+          part="ripple"
+          for="item"
+          ?disabled=${this.disabled}></md-ripple>`;
+  }
+  renderFocusRing() {
+    return x`
+      <md-focus-ring
+          part="focus-ring"
+          for="item"
+          inward></md-focus-ring>`;
+  }
+  getRenderClasses() {
+    return {
+      disabled: this.disabled,
+      selected: this.selected
+    };
+  }
+  renderBody() {
+    return x`
+      <slot></slot>
+      <slot name="overline" slot="overline"></slot>
+      <slot name="headline" slot="headline"></slot>
+      <slot name="supporting-text" slot="supporting-text"></slot>
+      <slot name="trailing-supporting-text"
+          slot="trailing-supporting-text"></slot>
+    `;
+  }
+  focus() {
+    this.listItemRoot?.focus();
+  }
+}
+(() => {
+  requestUpdateOnAriaChange(SelectOptionEl);
+})();
+SelectOptionEl.shadowRootOptions = {
+  ...s4.shadowRootOptions,
+  delegatesFocus: true
+};
+__decorate2([
+  n5({ type: Boolean, reflect: true })
+], SelectOptionEl.prototype, "disabled", undefined);
+__decorate2([
+  n5({ type: Boolean, attribute: "md-menu-item", reflect: true })
+], SelectOptionEl.prototype, "isMenuItem", undefined);
+__decorate2([
+  n5({ type: Boolean })
+], SelectOptionEl.prototype, "selected", undefined);
+__decorate2([
+  n5()
+], SelectOptionEl.prototype, "value", undefined);
+__decorate2([
+  i4(".list-item")
+], SelectOptionEl.prototype, "listItemRoot", undefined);
+__decorate2([
+  l4({ slot: "headline" })
+], SelectOptionEl.prototype, "headlineElements", undefined);
+__decorate2([
+  n5({ attribute: "typeahead-text" })
+], SelectOptionEl.prototype, "typeaheadText", null);
+__decorate2([
+  n5({ attribute: "display-text" })
+], SelectOptionEl.prototype, "displayText", null);
+
+// node_modules/@material/web/select/select-option.js
+var MdSelectOption = class MdSelectOption2 extends SelectOptionEl {
+};
+MdSelectOption.styles = [styles21, styles20];
+MdSelectOption = __decorate2([
+  e4("md-select-option")
+], MdSelectOption);
+
+// src/components/config-game.ts
+class ConfigSelect extends MobxLitElement {
+  constructor() {
+    super(...arguments);
+  }
+  label;
+  id;
+  choices;
+  props;
+  render() {
+    new MdOutlinedSelect;
+    new MdSelectOption;
+    console.log("choices=" + this.choices);
+    const choices = this.choices.map((name) => x`
+      <md-select-option value="${name}">
+      <div slot="headline">${name}</div>
+      </md-select-option>
+    `).join("");
+    const prop = configService.getItem.properties.get(this.id);
+    return x`
+      <style>
+       md-outlined-select {
+          min-width: 200px;
+        }
+      </style>
+      <form variant="filled">
+        <label variant="standard" htmlFor="select">
+          ${this.label}
+        </label>
+        <md-outlined-select
+          value="${prop?.get()}"
+          change="{action(event => this.prop?.set(event.target.value))}">
+          <md-select-option aria-label="None" value="" />
+          ${choices}
+        </md-outlined-select>
+      </form>
+      `;
+  }
+}
+ConfigSelect = __decorateClass([
+  e4("cb-config-select")
+], ConfigSelect);
+
+class ConfigButton extends MobxLitElement {
+  constructor() {
+    super(...arguments);
+  }
+  onClick;
+  label;
+  icon;
+  disabled;
+  render() {
+    new MdOutlinedButton;
+    return x`
+      <style>
+        md-outlined-button {
+          flex-grow: 1;
+          height: 3.5rem;
+          font-size: 1.125rem;
+          line-height: 1.75rem;
+          margin: 0.5rem;
+          backgroundColor: ${renderingService.darkTheme ? "green" : "darkgreen"};
+        }
+        .icon {
+          font-size: 1.875rem;
+          line-height: 2.25rem;
+        }
+        .text {
+          font-size: 1.125rem;
+          line-height: 1.75rem;
+          margin-left: 0.5rem;
+        }
+
+      </style>
+    <md-outlined-button
+      @click=${this.onClick}
+      disabled=${this.disabled ?? false}>
+      <span class="icon">${this.icon}</span>
+      <span class="text">${this.label}</span>
+    </md-outlined-button>
+      `;
+  }
+}
+ConfigButton = __decorateClass([
+  e4("cb-config-button")
+], ConfigButton);
+
+class ConfigGame extends MobxLitElement {
+  constructor() {
+    super(...arguments);
+  }
+  config;
+  render() {
+    const players = [...this.config.humans, ...this.config.bots];
+    console.log(players);
+    const playerNames = Array.from(players.map((x2) => x2.getName()));
+    console.log(playerNames);
+    new ConfigSelect;
+    new ConfigButton;
+    return x`
+      <style>
+        .main {
+          display: flex;
+          flex-direction: column;
+          width: 800px;
+          height: 400px;
+          text-align: center;
+          div {
+            text-align: left;
+          }
+        }
+       .buttons {
+          margin-left: 0.5rem;
+          margin-right: 0.5rem;
+        }
+      </style>
+    <div class="main" Name="text-center [&>div]:text-left">
+      <div>
+        <cb-config-select 
+        .label="White" 
+        .id="white" 
+        .choices=${playerNames} 
+        .props=${this.config.properties} />
+        &nbsp;
+        <cb-config-select 
+        .label="Black" 
+        .choices=${playerNames} 
+        .id="black" 
+        .props=${this.config.properties} />
+      </div>
+      <div>&nbsp;</div>
+      <cb-config-select
+        .label="Timer setting"
+        .id="clock"
+        .choices=${this.config.clocks.map((x2) => x2.name)}
+        .props=${this.config.properties}
+      />
+      <div>&nbsp;</div>
+      <div class="buttons">
+        <cb-config-button
+          @click={action(playService.startGameAction)}
+          .label="Play"
+          .icon="MdPlayCircle"
+        />
+        <cb-config-button
+          @click={action(playService.endGameAction)}
+          .label="End game"
+          .icon="MdExitToApp"
+          .disabled={playService.isComplete}
+        />
+        <cb-config-button
+          @click={action(playService.resetGameAction)}
+          .label="Reset"
+          .icon="MdClear"
+        />
+        <cb-config-button 
+        @click={action(playService.editGameAction)} 
+        .label="Edit" 
+        .icon="MdEdit" />
+      </div>
+    </div>
+      `;
+  }
+}
+ConfigGame = __decorateClass([
+  e4("cb-config-game")
+], ConfigGame);
+
 // src/components/config-dialog.ts
 class ConfigDialog extends MobxLitElement {
   constructor() {
@@ -15290,9 +17754,11 @@ class ConfigDialog extends MobxLitElement {
   }
   config;
   tabpanel() {
+    console.log("hi");
+    new ConfigGame;
     switch (this.config.showTab) {
       case 0:
-        return x`<div  config={config} >ConfigGame</div>`;
+        return x`<cb-config-game .config=${this.config} >ConfigGame</cb-config-game>`;
       case 1:
         return x`<div  config={config} rendering={renderingService} >ConfigDisplay</div>`;
       case 2:

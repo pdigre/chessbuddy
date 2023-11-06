@@ -40,3 +40,6 @@ Demo: [https://chessbuddy.net/](https://chessbuddy.net/)<br>
 
 Credits to:
 [https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/](https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/)
+
+Notes:
+1. May need to uninstall esbuild and use npm install esbuild

@@ -6,6 +6,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { action, runInAction } from 'mobx';
 import { ConfigService } from '../service/config.service';
 import { MdDialog } from '@material/web/dialog/dialog';
+import { ConfigGame } from './config-game';
 
 
 @customElement('cb-config-dialog')
@@ -13,8 +14,10 @@ export class ConfigDialog extends MobxLitElement {
   config!: ConfigService;
 
   tabpanel(){
+    console.log("hi");
+    new ConfigGame();
     switch(this.config.showTab){
-      case 0: return html`<div  config={config} >ConfigGame</div>`;
+      case 0: return html`<cb-config-game .config=${this.config} >ConfigGame</cb-config-game>`;
       case 1: return html`<div  config={config} rendering={renderingService} >ConfigDisplay</div>`;
       case 2: return html`<div  config={config} connect={connectService}>ConfigHuman</div>`;
       case 3: return html`<div  config={config} >ConfigBot</div>`;
