@@ -24,3 +24,10 @@ Demo: [https://chessbuddy.net/](https://chessbuddy.net/)<br>
 
 Credits to:
 [https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/](https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/)
+
+Building Docker image on Macos
+> docker buildx build --platform linux/amd64 .
+Starting docker locally
+> docker compose up
+
+
