@@ -1,24 +1,20 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {MdOutlinedButton} from '@material/web/button/outlined-button';
 import {MdOutlinedSelect} from '@material/web/select/outlined-select';
 import {MdSelectOption} from '@material/web/select/select-option';
-import { configService, renderingService } from '../service/index.service';
-
-import { DashboardService } from '../service/dashboard.service';
-import { EditService } from '../service/edit.service';
-import {
-  playService,
-  historyService,
-} from '../service/index.service';
+import { configService, renderingService, playService } from '../service/index.service';
 import { ConfigProp, ConfigService } from '../service/config.service';
-import { action } from 'mobx/dist/api/action';
+import { action } from 'mobx';
+import { property } from 'lit-element/decorators.js';
 
 
 @customElement('cb-config-select')
 export class ConfigSelect extends MobxLitElement {
+  @property({ attribute: true })
   label!: string;
+  @property({ attribute: true })
   id!: string;
   choices!: string[];
   props?: Map<string, ConfigProp<string>>;
@@ -27,12 +23,12 @@ export class ConfigSelect extends MobxLitElement {
     new MdOutlinedSelect();
     new MdSelectOption();
     console.log("choices="+this.choices);
-    const choices = this.choices.map(name => html`
-      <md-select-option value="${name}">
-      <div slot="headline">${name}</div>
-      </md-select-option>
-    `).join('');
-    const prop = configService.getItem.properties.get(this.id);
+    const prop = (this.props ? this.props : configService.getItem.properties).get(this.id);
+    const value = prop?.get();
+    const choices = this.choices.map(name => 
+        html`<md-select-option .selected=${name === value} value=${name}>
+              <div slot="headline">${name}</div>
+             </md-select-option>`);
 
     return html`
       <style>
@@ -41,13 +37,16 @@ export class ConfigSelect extends MobxLitElement {
         }
       </style>
       <form variant="filled">
-        <label variant="standard" htmlFor="select">
+        <label htmlFor="select">
           ${this.label}
         </label>
         <md-outlined-select
-          value="${prop?.get()}"
-          change="{action(event => this.prop?.set(event.target.value))}">
-          <md-select-option aria-label="None" value="" />
+          @change=${action((event: MouseEvent) => {
+            console.log("hi:"+event.target?.selectedIndex)
+            prop?.set(event.target?.value);
+          })
+          }>
+          <md-select-option/>
           ${choices}
         </md-outlined-select>
       </form>
@@ -58,7 +57,9 @@ export class ConfigSelect extends MobxLitElement {
 @customElement('cb-config-button')
 export class ConfigButton extends MobxLitElement {
   onClick!: (event: MouseEvent) => void;
+  @property({ attribute: true })
   label!: string;
+  @property({ attribute: true })
   icon?: string;
   disabled?: boolean;
 
@@ -83,11 +84,10 @@ export class ConfigButton extends MobxLitElement {
           line-height: 1.75rem;
           margin-left: 0.5rem;
         }
-
       </style>
     <md-outlined-button
       @click=${this.onClick}
-      disabled=${this.disabled ?? false}>
+      .disabled=${this.disabled ?? false}>
       <span class="icon">${this.icon}</span>
       <span class="text">${this.label}</span>
     </md-outlined-button>
@@ -124,49 +124,52 @@ export class ConfigGame extends MobxLitElement {
           margin-right: 0.5rem;
         }
       </style>
-    <div class="main" Name="text-center [&>div]:text-left">
+    <div class="main">
       <div>
         <cb-config-select 
-        .label="White" 
-        .id="white" 
+        label="White" 
+        id="white" 
         .choices=${playerNames} 
-        .props=${this.config.properties} />
+        .props=${this.config.properties} 
+        ></cb-config-select>
         &nbsp;
         <cb-config-select 
-        .label="Black" 
+        label="Black" 
+        id="black" 
         .choices=${playerNames} 
-        .id="black" 
-        .props=${this.config.properties} />
+        .props=${this.config.properties} 
+        ></cb-config-select>
       </div>
       <div>&nbsp;</div>
       <cb-config-select
-        .label="Timer setting"
-        .id="clock"
+        label="Timer setting"
+        id="clock"
         .choices=${this.config.clocks.map(x => x.name)}
         .props=${this.config.properties}
-      />
+        ></cb-config-select>
       <div>&nbsp;</div>
       <div class="buttons">
         <cb-config-button
-          @click={action(playService.startGameAction)}
-          .label="Play"
-          .icon="MdPlayCircle"
-        />
+          @click=${action(playService.startGameAction)}
+          label="Play"
+          icon="MdPlayCircle"
+        ></cb-config-button>
         <cb-config-button
-          @click={action(playService.endGameAction)}
-          .label="End game"
-          .icon="MdExitToApp"
-          .disabled={playService.isComplete}
-        />
+          @click=${action(playService.endGameAction)}
+          label="End game"
+          icon="MdExitToApp"
+          .disabled=${playService.isComplete}
+          ></cb-config-button>
         <cb-config-button
-          @click={action(playService.resetGameAction)}
-          .label="Reset"
-          .icon="MdClear"
-        />
+          @click=${action(playService.resetGameAction)}
+          label="Reset"
+          icon="MdClear"
+          ></cb-config-button>
         <cb-config-button 
-        @click={action(playService.editGameAction)} 
-        .label="Edit" 
-        .icon="MdEdit" />
+          @click=${action(playService.editGameAction)} 
+          label="Edit" 
+          icon="MdEdit" 
+          ></cb-config-button>
       </div>
     </div>
       `;

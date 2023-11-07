@@ -15214,32 +15214,29 @@ MainButtonBar = __decorateClass([
 var package_default = {
   name: "chessbuddy",
   version: "0.22.0",
+  private: true,
   homepage: ".",
+  type: "module",
   dependencies: {
     "@adobe/lit-mobx": "^2.2.0",
     "@material/web": "^1.0.0",
-    "@types/audio-play": "^2.3.1",
     "chess.js": "^1.0.0-beta.6",
     "chessboard-element": "^1.2.0",
+    esbuild: "^0.19.5",
     "json-ignore": "^0.4.0",
     "lit-element": "^4.0.0",
     mobx: "^6.10.2",
-    prettier: "^3.0.3",
-    "react-icons": "^4.11.0"
+    prettier: "^3.0.3"
   },
   scripts: {
-    start: "bun run src/index.ts",
-    dev: "bunx --bun vite",
-    dev2: "bun --hot src/index.ts",
-    prod: "bun build ./src/index.ts --outfile=./public/bundle.js --watch"
+    dev: "vite",
+    prod: "bun build ./src/components/app.ts --outfile=./public/bundle.js --watch"
   },
   devDependencies: {
-    "@types/webaudioapi": "^0.0.27",
     "@types/web": "^0.0.118",
-    "bun-types": "latest"
-  },
-  peerDependencies: {
-    typescript: "^5.2.2"
+    "bun-types": "latest",
+    typescript: "^5.0.2",
+    vite: "^4.4.5"
   }
 };
 
@@ -17945,7 +17942,6 @@ class App extends s4 {
 App = __decorateClass([
   e4("cb-app")
 ], App);
-
-// src/index.ts
-new App;
-document.getElementById("root").innerHTML = "<cb-app></cb-app>";
+export {
+  App
+};
