@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { ButtonType } from '../components/message-dialog'
+import { ButtonType } from '../components/message-dialog';
 
 export class MessageService {
   title?: string;
@@ -26,9 +26,11 @@ export class MessageService {
     this.msg = msg;
     this.buttons = buttons;
     this.response = response ?? (() => this.clear());
+    this.show = true;
   };
 
   onClose(html: string) {
     this.response ? this.response(html) : null;
+    this.show = false;
   }
 }

@@ -17,6 +17,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "format": "bunx prettier src --write",
     "prod": "bun build ./src/components/app.ts --outfile=./public/bundle.js --watch"
   },
   "devDependencies": {

@@ -150,7 +150,7 @@ export class ConfigService {
   openConfigAction = () => {
     this.showConfig = true;
     playService.isPlaying = false;
-    console.log("openConfigAction")
+    console.log('openConfigAction');
   };
 
   closeConfigAction = () => {
@@ -244,12 +244,15 @@ export class ConfigService {
     }
   }
 
-  get getR90() {
+  getR90() {
     return this.rotation % 2 == 1;
   }
-  get getR180() {
+  getR180() {
     return this.rotation > 1;
   }
 
-  rotateAction = () => (this.rotation = (this.rotation + 1) % 4);
+  rotateAction = () => {
+    this.rotation = (this.rotation + 1) % 4;
+    console.log('rotation=' + this.rotation);
+  };
 }

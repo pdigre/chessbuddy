@@ -1,101 +1,105 @@
 import { html } from 'lit';
-import {customElement} from 'lit/decorators.js';
-import {MdTabs} from '@material/web/tabs/tabs.js';
-import {MdPrimaryTab} from '@material/web/tabs/primary-tab.js';
+import { customElement } from 'lit/decorators.js';
+import { MdTabs } from '@material/web/tabs/tabs.js';
+import { MdPrimaryTab } from '@material/web/tabs/primary-tab.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { action, runInAction } from 'mobx';
 import { ConfigService } from '../service/config.service';
 import { MdDialog } from '@material/web/dialog/dialog';
 import { ConfigGame } from './config-game';
-
+import { ConfigDisplay } from './config-display';
+import { connectService, renderingService } from '../service/index.service';
+import { STYLES } from './css';
+import { ConfigHuman } from './config-human';
+import { ConfigBot } from './config-bot';
+import { ConfigClock } from './config-clock';
+import { ConfigBluetooth } from './config-bluetooth';
 
 @customElement('cb-config-dialog')
 export class ConfigDialog extends MobxLitElement {
   config!: ConfigService;
 
-  tabpanel(){
-    console.log("hi");
-    new ConfigGame();
-    switch(this.config.showTab){
-      case 0: return html`<cb-config-game .config=${this.config} >ConfigGame</cb-config-game>`;
-      case 1: return html`<div  config={config} rendering={renderingService} >ConfigDisplay</div>`;
-      case 2: return html`<div  config={config} connect={connectService}>ConfigHuman</div>`;
-      case 3: return html`<div  config={config} >ConfigBot</div>`;
-      case 4: return html`<div  config={config} >ConfigClock</div>`;
-      case 5: return html`<div  config={config} >ConfigBluetooth</div>`;
-      default: return "";
+  tabpanel() {
+    console.log('hi');
+    switch (this.config.showTab) {
+      case 0:
+        new ConfigGame();
+        return html`<cb-config-game .config=${this.config}></cb-config-game>`;
+      case 1:
+        new ConfigDisplay();
+        return html`<cb-config-display
+          .config=${this.config}
+          .rendering=${renderingService}
+        ></cb-config-display>`;
+      case 2:
+        new ConfigHuman();
+        return html`<cb-config-human
+          .config=${this.config}
+          .connect=${connectService}
+        ></cb-config-human>`;
+      case 3:
+        new ConfigBot();
+        return html`<cb-config-bot .config=${this.config}></cb-config-bot>`;
+      case 4:
+        new ConfigClock();
+        return html`<cb-config-clock .config=${this.config}></cb-config-clock>`;
+      case 5:
+        new ConfigBluetooth();
+        return html`<cb-config-bluetooth .config=${this.config}></cb-config-bluetooth>`;
+      default:
+        return '';
     }
   }
 
   render() {
-    console.log("config "+this.config.showConfig)
-    if(!this.config.showConfig){
+    console.log('config ' + this.config.showConfig);
+    if (!this.config.showConfig) {
       return '';
     }
 
     new MdDialog();
     new MdTabs();
     new MdPrimaryTab();
-    
-    const choose = (index:number) => (event: MouseEvent) => {
+
+    const choose = (index: number) => (event: MouseEvent) => {
       event.preventDefault();
       runInAction(() => this.config.switchTab(index));
     };
 
-    const tab = (num:number, icon: string, title: string) => {
-      return num === this.config.showTab
-        ? html`<md-primary-tab @click=${choose(num)} active>
-        <span class="material-symbols-outlined">${icon}</span>${title}</md-primary-tab>`
-        : html`<md-primary-tab @click=${choose(num)} >
-        <span class="material-symbols-outlined">${icon}</span>${title}</md-primary-tab>`;
-    }
-
+    const tab = (num: number, icon: string, title: string) => {
+      return html`<md-primary-tab
+        class="text-3xl"
+        @click=${choose(num)}
+        .active=${num === this.config.showTab}
+      >
+        <span class="text-lg material-symbols-outlined">${icon}</span>${title}</md-primary-tab
+      >`;
+    };
 
     return html`
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+      ${STYLES}
       <style>
-        @font-face {
-          font-family: "Material Design Icons";
-          src: url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined") format("woff");
-        }
-        span {
-          font-size: 1.875rem;
-          line-height: 2.25rem;
-        }
-        md-dialog {
-          width: 1000px;
-          height: 500px;
-        }
-        md-tabs {
-          width: 100%;
-          font-size: 1.25rem;
-          line-height: 1.75rem;
-          text-align: center;
-        }
-        md-primary-tab div {
-          font-size: 1.25rem;
-          line-height: 1.75rem;
+        .main {
+          width: 1100px;
+          height: 600px;
         }
       </style>
-    <md-dialog
-      aria-labelledby="simple-dialog-title"
-      open
-      @close=${action(this.config.closeConfigAction)}
-      maxWidth="xl">
-      <form slot="content" id="form-id" method="dialog">
-      <md-tabs>
-        ${tab(0,"chess", "Game")}
-        ${tab(1,"monitor", "Display")}
-        ${tab(2,"people", "Humans")}
-        ${tab(3,"robot", "Bots")}
-        ${tab(4,"av_timer", "Clocks")}
-        ${tab(5,"bluetooth", "Bluetooth")}
-      </md-tabs>
-      ${this.tabpanel()}
-      </form>
-    </md-dialog>
+      <md-dialog
+        class="main"
+        aria-labelledby="simple-dialog-title"
+        open
+        @close=${action(this.config.closeConfigAction)}
+        maxWidth="xl"
+      >
+        <form slot="content" id="form-id" method="dialog">
+          <md-tabs class="text-lg text-center w-full">
+            ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')} ${tab(2, 'people', 'Humans')}
+            ${tab(3, 'robot', 'Bots')} ${tab(4, 'av_timer', 'Clocks')}
+            ${tab(5, 'bluetooth', 'Bluetooth')}
+          </md-tabs>
+          ${this.tabpanel()}
+        </form>
+      </md-dialog>
     `;
   }
 }
-
-

@@ -1,9 +1,9 @@
 import { messageService } from './index.service';
 
 export class BluetoothService {
-  /*
   btDevices: BluetoothDevice[] = [];
 
+  /*
   constructor() {
     try {
       const bt = navigator?.bluetooth;
