@@ -9,7 +9,8 @@ import { RenderingService } from '../service/rendering.service';
 import { FEN } from '../model/fen';
 import { AnalyzerService } from '../service/analyzer.service';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { autorun } from 'mobx';
+import { property } from 'lit-element/decorators.js';
+import { observable } from 'mobx';
 
 @customElement('cb-board')
 export class Board extends MobxLitElement {
@@ -17,15 +18,10 @@ export class Board extends MobxLitElement {
   edit!: EditService;
   rendering!: RenderingService;
 
+  @property({ attribute: false })
+    @observable
   config!: ConfigService;
   refresh!: RefreshService;
-
-  constructor() {
-    super();
-    autorun(() => {
-      console.log('fix board:', this.config.rotation);
-    });
-  }
 
   render() {
     const r90 = this.config.getR90();
@@ -95,12 +91,12 @@ export class Board extends MobxLitElement {
         }
       </style>
       <chess-board
-        draggablePieces="true"
+        draggable-pieces
         position=${startPos}
         orientation=${rotation}
         style="width: ${renderingService.boardWidth}px"
-        onPieceDragBegin=${playService.onDragStartAction}
-        onPieceDrop=${(from, to) => playService.onPieceDropAction(from, to)}
+        @drag-start=${playService.onDragStartAction}
+        @drop=${(from, to) => playService.onPieceDropAction(from, to)}
         onSquareClick=${playService.onSquareClickAction}
         customSquareStyles=${showMarkers()}
       ></chess-board>

@@ -6,50 +6,11 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { action, runInAction } from 'mobx';
 import { ConfigService } from '../service/config.service';
 import { MdDialog } from '@material/web/dialog/dialog';
-import { ConfigGame } from './config-game';
-import { ConfigDisplay } from './config-display';
-import { connectService, renderingService } from '../service/index.service';
 import { STYLES } from './css';
-import { ConfigHuman } from './config-human';
-import { ConfigBot } from './config-bot';
-import { ConfigClock } from './config-clock';
-import { ConfigBluetooth } from './config-bluetooth';
 
 @customElement('cb-config-dialog')
 export class ConfigDialog extends MobxLitElement {
   config!: ConfigService;
-
-  tabpanel() {
-    console.log('hi');
-    switch (this.config.showTab) {
-      case 0:
-        new ConfigGame();
-        return html`<cb-config-game .config=${this.config}></cb-config-game>`;
-      case 1:
-        new ConfigDisplay();
-        return html`<cb-config-display
-          .config=${this.config}
-          .rendering=${renderingService}
-        ></cb-config-display>`;
-      case 2:
-        new ConfigHuman();
-        return html`<cb-config-human
-          .config=${this.config}
-          .connect=${connectService}
-        ></cb-config-human>`;
-      case 3:
-        new ConfigBot();
-        return html`<cb-config-bot .config=${this.config}></cb-config-bot>`;
-      case 4:
-        new ConfigClock();
-        return html`<cb-config-clock .config=${this.config}></cb-config-clock>`;
-      case 5:
-        new ConfigBluetooth();
-        return html`<cb-config-bluetooth .config=${this.config}></cb-config-bluetooth>`;
-      default:
-        return '';
-    }
-  }
 
   render() {
     console.log('config ' + this.config.showConfig);
@@ -76,12 +37,19 @@ export class ConfigDialog extends MobxLitElement {
       >`;
     };
 
+    const i = this.config.showTab;
+    let j = 0;
+    const show = () => (i == j++ ? '' : 'hidden');
+
     return html`
       ${STYLES}
       <style>
         .main {
           width: 1100px;
           height: 600px;
+        }
+        .hidden {
+          display: none;
         }
       </style>
       <md-dialog
@@ -97,7 +65,12 @@ export class ConfigDialog extends MobxLitElement {
             ${tab(3, 'robot', 'Bots')} ${tab(4, 'av_timer', 'Clocks')}
             ${tab(5, 'bluetooth', 'Bluetooth')}
           </md-tabs>
-          ${this.tabpanel()}
+          <div class=${show()}><slot name="0"></slot></div>
+          <div class=${show()}><slot name="1"></slot></div>
+          <div class=${show()}><slot name="2"></slot></div>
+          <div class=${show()}><slot name="3"></slot></div>
+          <div class=${show()}><slot name="4"></slot></div>
+          <div class=${show()}><slot name="5"></slot></div>
         </form>
       </md-dialog>
     `;

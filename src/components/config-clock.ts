@@ -16,6 +16,7 @@ export class ConfigClock extends MobxLitElement {
   config!: ConfigService;
   render() {
     this.config.setListType = ListType.Clock;
+    const items = this.config.clocks;
 
     new ConfigListTable();
     new ConfigListButtons();
@@ -26,7 +27,11 @@ export class ConfigClock extends MobxLitElement {
     return html`
       ${STYLES}
       <div class="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
-        <cb-config-list-table .config=${this.config}></cb-config-list-table>
+        <cb-config-list-table
+          .onSelect=${(i: string) => this.config.setCursor(i)}
+          .cursor=${this.config.cursor}
+          .items=${items}
+        ></cb-config-list-table>
         <cb-config-list-buttons .config=${this.config}></cb-config-list-buttons>
         <cb-config-popup .config=${this.config}>
           <p>(from move)+(plus minutes)/(seconds each move) comma separated</p>

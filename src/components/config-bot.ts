@@ -7,6 +7,7 @@ import {
   ConfigListButtons,
   ConfigListTable,
   ConfigPopup,
+  ConfigSaveButton,
   ConfigSelect,
   ConfigText,
 } from './config-widgets';
@@ -20,6 +21,7 @@ export class ConfigBot extends MobxLitElement {
   connect!: ConnectService;
   render() {
     this.config.setListType = ListType.Bot;
+    const items = this.config.bots;
     const engines = Array.from(Engines.map(x => x.name));
     const props = this.config.boolprops;
 
@@ -29,11 +31,16 @@ export class ConfigBot extends MobxLitElement {
     new ConfigPopup();
     new ConfigSelect();
     new ConfigText();
+    new ConfigSaveButton();
 
     return html`
       ${STYLES}
       <div class="w-[800px] h-[400px] [&>div]:text-left">
-        <cb-config-list-table .config=${this.config}></cb-config-list-table>
+        <cb-config-list-table
+          .onSelect=${(i: string) => this.config.setCursor(i)}
+          .cursor=${this.config.cursor}
+          .items=${items}
+        ></cb-config-list-table>
         <cb-config-list-buttons .config=${this.config}> </cb-config-list-buttons>
         <cb-config-popup .config=${this.config}>
           <div class="[&>button]:mx-2 [&>div]:mx-2 mt-3">
@@ -49,7 +56,7 @@ export class ConfigBot extends MobxLitElement {
             <cb-config-text label="Time (sec)" id="time"></cb-config-text>
             <br />
             <cb-config-text label="Depth (..not time)" id="depth"></cb-config-text>
-            <div ConfigSaveButton />
+            <cb-config-save></cb-config-save>
           </div>
         </cb-config-popup>
       </div>

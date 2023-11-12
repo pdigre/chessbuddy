@@ -7,14 +7,15 @@ import { MdOutlinedSelect } from '@material/web/select/outlined-select';
 import { MdSelectOption } from '@material/web/select/select-option';
 import { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field';
 import { configService, renderingService } from '../service/index.service';
-import { ConfigProp, ConfigService, ListMode } from '../service/config.service';
+import { ConfigProp, ConfigService, ListItem, ListMode, ListType } from '../service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { STYLES } from './css';
 import { MdDialog } from '@material/web/dialog/dialog';
+import { LitElement } from 'lit-element';
 
 @customElement('cb-config-select')
-export class ConfigSelect extends MobxLitElement {
+export class ConfigSelect extends LitElement {
   @property({ attribute: true })
   label!: string;
   @property({ attribute: true })
@@ -57,25 +58,28 @@ export class ConfigSelect extends MobxLitElement {
 }
 
 @customElement('cb-config-list-table')
-export class ConfigListTable extends MobxLitElement {
-  config!: ConfigService;
+export class ConfigListTable extends LitElement {
+  items!: ListItem[];
+  onSelect!: (id: string) => void;
+  cursor!: number;
 
   render() {
+    //    this.config.setListType = this.type;
     return html`
       ${STYLES}
       <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
         <tbody
-          onClick=${action((event: MouseEvent) => {
+          @click=${action((event: MouseEvent) => {
             if (event.target instanceof HTMLTableCellElement) {
-              this.config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
+              this.onSelect((event.target.parentNode as HTMLTableRowElement).id);
             }
           })}
         >
-          ${this.config.getItems.map(
+          ${this.items.map(
             (item, iLine) => html`
               <tr
                 id=${iLine.toString()}
-                class="${iLine == this.config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}"
+                class="${iLine == this.cursor ? 'bg-green-300 dark:bg-green-700' : ''}"
               >
                 <td class="dark:text-white">${item.getName()}</td>
                 <td class="dark:text-white">${item.getDescription()}</td>

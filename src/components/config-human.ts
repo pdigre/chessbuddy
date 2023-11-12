@@ -58,7 +58,11 @@ export class ConfigHuman extends MobxLitElement {
 
     return html` ${STYLES}
       <div class="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
-        <cb-config-list-table .config=${this.config}></cb-config-list-table>
+        <cb-config-list-table
+          .onSelect=${(i: string) => this.config.setCursor(i)}
+          .cursor=${this.config.cursor}
+          .items=${items}
+        ></cb-config-list-table>
         <a className="hidden" download="games.txt"> download it </a>
         <input
           type="file"

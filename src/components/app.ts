@@ -15,6 +15,7 @@ import {
   configService,
   refreshService,
   openingsService,
+  connectService,
 } from '../service/index.service.ts';
 import packageInfo from '../../package.json';
 import { MainView } from './main-view.ts';
@@ -24,12 +25,20 @@ import { MdTextButton } from '@material/web/button/text-button';
 import { ConfigDialog } from './config-dialog.ts';
 import { STYLES } from './css.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { MediaService } from '../service/media.service.ts';
 import { Mp4Dialog } from './mp4dialog.ts';
 import { PlayService } from '../service/play.service.ts';
 import { AnalyzerService } from '../service/analyzer.service.ts';
 import { ConfigService } from '../service/config.service.ts';
 import { ClockService } from '../service/clock.service.ts';
+import { MainEditView } from './main-view-edit.ts';
+import { MainHistoryView } from './main-view-history.ts';
+import { MainLogView } from './main-view-log.ts';
+import { ConfigBluetooth } from './config-bluetooth.ts';
+import { ConfigBot } from './config-bot.ts';
+import { ConfigClock } from './config-clock.ts';
+import { ConfigDisplay } from './config-display.ts';
+import { ConfigGame } from './config-game.ts';
+import { ConfigHuman } from './config-human.ts';
 
 @customElement('cb-ticker')
 export class Ticker extends MobxLitElement {
@@ -123,6 +132,15 @@ export class App extends LitElement {
     new Mp4Dialog();
     new CP();
     new PlayerInfoBar();
+    new MainLogView();
+    new MainHistoryView();
+    new MainEditView();
+    new ConfigGame();
+    new ConfigDisplay();
+    new ConfigHuman();
+    new ConfigBot();
+    new ConfigClock();
+    new ConfigBluetooth();
 
     const about = () => {
       messageService.display('About', 'This chess program is open source and available at github.');
@@ -188,12 +206,23 @@ export class App extends LitElement {
             .history=${historyService}
           ></cb-mainbuttonbar>
           <cb-feninfo .play=${playService}></div>
-          <cb-mainview .dashboard=${dashboardService} .edit=${editService}></cb-mainview>
+          <cb-mainview .dashboard=${dashboardService} .edit=${editService}>
+            <cb-mainlogview slot="0" .play=${playService} .history=${historyService}> </cb-mainlogview>
+            <cb-mainhistoryview slot="1" .history=${historyService}> </cb-mainhistoryview>
+            <cb-maineditview slot="2" .edit=${editService}> </cb-maineditview>
+          </cb-mainview>
         </div>
         <cb-message-dialog .message=${messageService}></cb-message-dialog>
         <cb-dialog-mp4 .mp4=${mediaService}></cb-dialog-mp4>
       </div>
-      <cb-config-dialog class="config" .config=${configService}></cb-config-dialog>
+      <cb-config-dialog class="config" .config=${configService}>
+        <cb-config-game slot="0" .config=${configService}></cb-config-game>
+        <cb-config-display slot="1" .config=${configService} .rendering=${renderingService} ></cb-config-display>
+        <cb-config-human slot="2" .config=${configService} .connect=${connectService} ></cb-config-human>
+        <cb-config-bot slot="3" .config=${configService}></cb-config-bot>
+        <cb-config-clock slot="4" .config=${configService}></cb-config-clock>
+        <cb-config-bluetooth slot="5" .config=${configService}></cb-config-bluetooth>
+      </cb-config-dialog>
     `;
   }
 }

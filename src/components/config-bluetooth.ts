@@ -2,7 +2,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigProp, ConfigService, ListItem } from '../service/config.service';
-import { ConfigButton, ConfigListButtons, ConfigListTable } from './config-widgets';
+import { ConfigButton } from './config-widgets';
 import { STYLES } from './css';
 import { bluetoothService } from '../service/bluetooth.service';
 import { action } from 'mobx';
@@ -23,8 +23,6 @@ export class ConfigBluetooth extends MobxLitElement {
 
     const doBtAction = () => doBT();
 
-    new ConfigListTable();
-    new ConfigListButtons();
     new ConfigButton();
 
     return html`
