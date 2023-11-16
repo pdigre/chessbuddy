@@ -146,7 +146,8 @@ export class App extends LitElement {
       messageService.display('About', 'This chess program is open source and available at github.');
     };
     return html`
-      <style>
+    ${STYLES}
+    <style>
         .main {
           width: 1024px;
           height: 748px;
@@ -175,7 +176,6 @@ export class App extends LitElement {
           flex-direction: column;
         }
       </style>
-      ${STYLES}
       <div class="main flex m-0 p-0 flex-row">
         <cb-cp .analyzer=${analyzerService} .config=${configService}></cb-cp>
         <div class="down flex flex-col flex-grow">
@@ -195,17 +195,16 @@ export class App extends LitElement {
             <md-text-button @click=${action(about)} class="mx-5 text-xl">
               ChessBuddy ${packageInfo.version}
             </md-text-button>
-            <div
-              class="MdRefresh mx-5 text-lg"
-              onClick="{action(mediaService.playAllAction)}"
-            ></div>
+            <md-text-button @click=${action(mediaService.playAllAction)}>
+              <span class="material-symbols-outlined">refresh</span>
+            </md-text-button>
           </h3>
           <cb-mainbuttonbar
             .edit=${editService}
             .dashboard=${dashboardService}
             .history=${historyService}
           ></cb-mainbuttonbar>
-          <cb-feninfo .play=${playService}></div>
+          <cb-feninfo .play=${playService}></cb-feninfo>
           <cb-mainview .dashboard=${dashboardService} .edit=${editService}>
             <cb-mainlogview slot="0" .play=${playService} .history=${historyService}> </cb-mainlogview>
             <cb-mainhistoryview slot="1" .history=${historyService}> </cb-mainhistoryview>

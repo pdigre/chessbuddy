@@ -16,8 +16,12 @@ export class RulesService {
     promotion?: 'b' | 'n' | 'r' | 'q'
   ): [Fen, Move] | null => {
     const game = new Chess(fen);
-    const action = game.move({ from, to, promotion: promotion ?? QUEEN });
-    return action ? [game.fen(), action] : null;
+    try {
+      const action = game.move({ from, to, promotion: promotion ?? QUEEN });
+      return action ? [game.fen(), action] : null;
+    } catch (e) {
+      return null;
+    }
   };
 
   newFen: (fen: string, san: string) => string = (fen, san) => {

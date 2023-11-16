@@ -26,9 +26,9 @@ export class MainLogView extends MobxLitElement {
       <cb-grid .onClickAction=${logClickAction} .scroll=${dashboardService.markLog == -1}>
         ${this.history.getLogRows().map(
           (row, iRow) => html`
-            <tr key="{iRow}" class="[&td]:p-[2px] [&td]:text-left [&td]:text-lg dark:text-white">
+            <tr class="[&td]:p-[2px] [&td]:text-left [&td]:text-lg dark:text-white">
               <td class="w-5">
-                <span class="text-red-900 text-sm dark:text-red-200">{iRow}</span>
+                <span class="text-red-900 text-sm dark:text-red-200">${iRow}</span>
               </td>
               ${row.map((col, iCol) => {
                 const id = iRow * 2 + iCol;
@@ -36,10 +36,9 @@ export class MainLogView extends MobxLitElement {
                 return html`
                   <td
                     id=${id.toString()}
-                    key=${id.toString()}
                     class="w-30 p-[2px] text-center text-lg dark:text-white ${marker}"
                   >
-                    {col}
+                    ${col}
                   </td>
                 `;
               })}

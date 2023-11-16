@@ -274,6 +274,7 @@ export class PlayService {
   // Board actions
 
   readonly onDragStartAction = (piece: string, from: Square) => {
+    console.log('dragstart:' + from);
     const r90 = configService.rotation % 2 == 1;
     if (editService.showEdit) return true;
     const player = this.nextPlayer();
@@ -306,8 +307,9 @@ export class PlayService {
     const m1 = r90 ? rulesService.leftSquare(from) : from;
     const m2 = r90 ? rulesService.leftSquare(to) : to;
     this.move(m1, m2, true);
-    state != this.log.length ? mediaService.soundMove() : mediaService.soundError();
-    return true;
+    const isOk = state != this.log.length;
+    isOk ? mediaService.soundMove() : mediaService.soundError();
+    return isOk;
   };
 
   move(from: Square, to: Square, isHuman: boolean) {

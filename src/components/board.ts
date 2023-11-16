@@ -10,7 +10,14 @@ import { FEN } from '../model/fen';
 import { AnalyzerService } from '../service/analyzer.service';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { property } from 'lit-element/decorators.js';
-import { observable } from 'mobx';
+import { action, observable } from 'mobx';
+import { Square } from 'chess.js';
+
+export interface ChessBoardEvent {
+  source?: Square;
+  target?: Square;
+  setAction(a: string): void;
+}
 
 @customElement('cb-board')
 export class Board extends MobxLitElement {
@@ -19,7 +26,7 @@ export class Board extends MobxLitElement {
   rendering!: RenderingService;
 
   @property({ attribute: false })
-    @observable
+  @observable
   config!: ConfigService;
   refresh!: RefreshService;
 
@@ -81,6 +88,15 @@ export class Board extends MobxLitElement {
     const rotation = !r180 ? 'white' : 'black';
     console.log(rotation + ':' + startPos);
     const side = (isWhite: boolean) => (isWhite ? 'rgb(240, 217, 181)' : 'rgb(181, 136, 99)');
+    const dropHandler = (e: CustomEvent<ChessBoardEvent>) => {
+      const from = e.detail.source as Square;
+      const to = e.detail.target as Square;
+      const isOk = playService.onPieceDropAction(from, to);
+      if (!isOk) {
+        e.preventDefault();
+        e.detail.setAction('snapback');
+      }
+    };
     return html`
       <style>
         --light-color {
@@ -96,7 +112,7 @@ export class Board extends MobxLitElement {
         orientation=${rotation}
         style="width: ${renderingService.boardWidth}px"
         @drag-start=${playService.onDragStartAction}
-        @drop=${(from, to) => playService.onPieceDropAction(from, to)}
+        @drop=${action(dropHandler)}
         onSquareClick=${playService.onSquareClickAction}
         customSquareStyles=${showMarkers()}
       ></chess-board>
