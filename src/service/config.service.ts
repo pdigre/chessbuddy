@@ -169,11 +169,11 @@ export class ConfigService {
     this.cursor = num == this.cursor ? -1 : num;
   }
 
-  readonly deleteItemAction = () => {
+  deleteItem() {
     const items = this.getItems;
     items.splice(this.cursor, 1);
     this.cursor = -1;
-  };
+  }
 
   readonly closePopupAction = () => {
     this.cursor = -1;

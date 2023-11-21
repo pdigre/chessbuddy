@@ -22,15 +22,32 @@ export class ConfigDialog extends MobxLitElement {
     new MdTabs();
     new MdPrimaryTab();
 
-    const choose = (index: number) => (event: MouseEvent) => {
+    const choose = (event: MouseEvent) => {
       event.preventDefault();
-      runInAction(() => this.config.switchTab(index));
+      const target = event?.target;
+      if (target) {
+        const num = event?.target?.id;
+        runInAction(() => {
+          this.config.switchTab(+num);
+        });
+        const daddy = target.parentNode.parentNode;
+        daddy.childNodes.forEach(child => {
+          const slot = child.firstChild;
+          if (slot?.name == num) {
+            const assigned = slot.assignedElements();
+            assigned.forEach(tab => {
+              tab.requestUpdate();
+            });
+          }
+        });
+      }
     };
 
     const tab = (num: number, icon: string, title: string) => {
       return html`<md-primary-tab
         class="text-3xl"
-        @click=${choose(num)}
+        id=${num}
+        @click=${choose}
         .active=${num === this.config.showTab}
       >
         <span class="text-lg material-symbols-outlined">${icon}</span>${title}</md-primary-tab

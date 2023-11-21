@@ -11,7 +11,7 @@ import { AnalyzerService } from '../service/analyzer.service';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { property } from 'lit-element/decorators.js';
 import { action, observable } from 'mobx';
-import { Square } from 'chess.js';
+import { Piece, Square } from 'chess.js';
 
 export interface ChessBoardEvent {
   source?: Square;
@@ -29,6 +29,13 @@ export class Board extends MobxLitElement {
   @observable
   config!: ConfigService;
   refresh!: RefreshService;
+
+  xy2square(x: number, y: number) {
+    const w = renderingService.boardWidth;
+    const s = 'abcdefgh'.charAt((x * 8) / w) + '87654321'.charAt((y * 8) / w);
+    console.log('click ' + s);
+    return s as Square;
+  }
 
   render() {
     const r90 = this.config.getR90();
@@ -97,6 +104,17 @@ export class Board extends MobxLitElement {
         e.detail.setAction('snapback');
       }
     };
+
+    const clickHandler = (e: MouseEvent) => {
+      playService.onSquareClickAction(this.xy2square(e.offsetX, e.offsetY));
+    };
+
+    const dragStartHandler = (e: MouseEvent) => {
+      const s = this.xy2square(e.offsetX, e.offsetY);
+      console.log('click ' + s);
+      playService.onSquareClickAction(s as Square);
+    };
+
     return html`
       <style>
         --light-color {
@@ -111,9 +129,9 @@ export class Board extends MobxLitElement {
         position=${startPos}
         orientation=${rotation}
         style="width: ${renderingService.boardWidth}px"
-        @drag-start=${playService.onDragStartAction}
+        @drag-start=${action(dragStartHandler)}
         @drop=${action(dropHandler)}
-        onSquareClick=${playService.onSquareClickAction}
+        @click=${action(clickHandler)}
         customSquareStyles=${showMarkers()}
       ></chess-board>
     `;

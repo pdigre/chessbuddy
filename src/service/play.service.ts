@@ -273,14 +273,13 @@ export class PlayService {
 
   // Board actions
 
-  readonly onDragStartAction = (piece: string, from: Square) => {
-    console.log('dragstart:' + from);
-    const r90 = configService.rotation % 2 == 1;
+  readonly onDragStartAction = (bfrom: Square) => {
+    console.log('dragstart:' + bfrom);
     if (editService.showEdit) return true;
     const player = this.nextPlayer();
     if (player instanceof Human && !this.isComplete) {
-      const from2 = r90 ? rulesService.leftSquare(from) : from;
-      const movable = this.isMoveable(from2);
+      const from = this.board2Square(bfrom);
+      const movable = this.isMoveable(from);
       if (movable) {
         mediaService.sound_click.play().then();
       }
@@ -289,12 +288,13 @@ export class PlayService {
     return false;
   };
 
-  readonly onPieceDropAction = (from: Square, to: Square) => {
+  readonly onPieceDropAction = (bfrom: Square, bto: Square) => {
     if (editService.showEdit) {
-      editService.editMove(from, to);
+      editService.editMove(bfrom, bto);
       return true;
     }
-    const r90 = configService.rotation % 2 == 1;
+    const from = this.board2Square(bfrom);
+    const to = this.board2Square(bto);
     if (
       analyzerService.help.length > 1 &&
       analyzerService.help[0] == to &&
@@ -304,13 +304,16 @@ export class PlayService {
     }
     dashboardService.startUndoTimer(this.log.length);
     const state = this.log.length;
-    const m1 = r90 ? rulesService.leftSquare(from) : from;
-    const m2 = r90 ? rulesService.leftSquare(to) : to;
-    this.move(m1, m2, true);
+    this.move(from, to, true);
     const isOk = state != this.log.length;
     isOk ? mediaService.soundMove() : mediaService.soundError();
     return isOk;
   };
+
+  board2Square(sq: Square) {
+    const r90 = configService.rotation % 2 == 1;
+    return r90 ? rulesService.leftSquare(sq) : sq;
+  }
 
   move(from: Square, to: Square, isHuman: boolean) {
     const move = rulesService.move(this.fen, from, to);

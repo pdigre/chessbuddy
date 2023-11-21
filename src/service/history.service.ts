@@ -9,6 +9,13 @@ import {
 } from './index.service';
 import { OK_BUTTON, YESNO_BUTTONS } from '../components/message-dialog';
 
+export type GameEntry = {
+  moves: string[];
+  time: string;
+  win: string;
+  c1: string;
+  c2: string;
+};
 /*
  * History of previous games, should store a maximum locally
  */
@@ -104,7 +111,7 @@ export class HistoryService {
     this.markHist = n;
   }
 
-  decodeGame(row: string) {
+  decodeGame(row: string): GameEntry {
     const cols = row.split(';');
     let time = '?';
     const date = new Date(Number.parseInt(cols[0], 36));

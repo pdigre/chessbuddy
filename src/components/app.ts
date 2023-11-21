@@ -146,8 +146,8 @@ export class App extends LitElement {
       messageService.display('About', 'This chess program is open source and available at github.');
     };
     return html`
-    ${STYLES}
-    <style>
+      ${STYLES}
+      <style>
         .main {
           width: 1024px;
           height: 748px;
@@ -206,7 +206,8 @@ export class App extends LitElement {
           ></cb-mainbuttonbar>
           <cb-feninfo .play=${playService}></cb-feninfo>
           <cb-mainview .dashboard=${dashboardService} .edit=${editService}>
-            <cb-mainlogview slot="0" .play=${playService} .history=${historyService}> </cb-mainlogview>
+            <cb-mainlogview slot="0" .play=${playService} .history=${historyService}>
+            </cb-mainlogview>
             <cb-mainhistoryview slot="1" .history=${historyService}> </cb-mainhistoryview>
             <cb-maineditview slot="2" .edit=${editService}> </cb-maineditview>
           </cb-mainview>
@@ -216,8 +217,16 @@ export class App extends LitElement {
       </div>
       <cb-config-dialog class="config" .config=${configService}>
         <cb-config-game slot="0" .config=${configService}></cb-config-game>
-        <cb-config-display slot="1" .config=${configService} .rendering=${renderingService} ></cb-config-display>
-        <cb-config-human slot="2" .config=${configService} .connect=${connectService} ></cb-config-human>
+        <cb-config-display
+          slot="1"
+          .config=${configService}
+          .rendering=${renderingService}
+        ></cb-config-display>
+        <cb-config-human
+          slot="2"
+          .config=${configService}
+          .connect=${connectService}
+        ></cb-config-human>
         <cb-config-bot slot="3" .config=${configService}></cb-config-bot>
         <cb-config-clock slot="4" .config=${configService}></cb-config-clock>
         <cb-config-bluetooth slot="5" .config=${configService}></cb-config-bluetooth>

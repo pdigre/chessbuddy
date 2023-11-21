@@ -1,24 +1,33 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { html } from 'lit';
+import { PropertyValueMap, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ConfigService, ListType } from '../service/config.service';
+import { ConfigService, ListMode, ListType } from '../service/config.service';
 import {
   ConfigListButtons,
-  ConfigListTable,
   ConfigPopup,
   ConfigSaveButton,
   ConfigText,
+  TableList,
 } from './config-widgets';
 import { STYLES } from './css';
+import { action } from 'mobx';
 
 @customElement('cb-config-clock')
 export class ConfigClock extends MobxLitElement {
   config!: ConfigService;
+
+  addHandler = action(() => (this.config.setListMode = ListMode.Add));
+  editHandler = action(() => (this.config.setListMode = ListMode.Edit));
+  deleteHandler = action(() => this.config.deleteItem());
+  selectHandler = action((i: string) => {
+    this.config.setCursor(i);
+    this.requestUpdate();
+  });
   render() {
     this.config.setListType = ListType.Clock;
     const items = this.config.clocks;
-
-    new ConfigListTable();
+    const hasSelect = this.config.cursor >= 0;
+    new TableList();
     new ConfigListButtons();
     new ConfigPopup();
     new ConfigText();
@@ -26,13 +35,50 @@ export class ConfigClock extends MobxLitElement {
 
     return html`
       ${STYLES}
-      <div class="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
-        <cb-config-list-table
-          .onSelect=${(i: string) => this.config.setCursor(i)}
-          .cursor=${this.config.cursor}
+      <style>
+        .div {
+          width: 800px;
+          height: 400px;
+          cb-table-list, cb-config-button { // mx-1
+            margin-left: 0.25rem;
+            margin-right: 0.25rem;
+            background-color: greenyellow;
+          }
+        }
+        mx-2 { // mx-2
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+          }
+      </style>
+      <div class="div flex flex-col text-center [&>div]:text-left">
+        <cb-table-list
+          class="text-left"
+          .onSelect=${this.selectHandler}
+          .cursor=${+this.config.cursor}
           .items=${items}
-        ></cb-config-list-table>
-        <cb-config-list-buttons .config=${this.config}></cb-config-list-buttons>
+        ></cb-table-list>
+        <div>
+          <cb-config-button
+            style="mx-1"
+            .onClick=${this.addHandler}
+            label="Add"
+            icon="add"
+          ></cb-config-button>
+          <cb-config-button
+            style="mx-1"
+            .onClick=${this.editHandler}
+            label="Edit"
+            icon="edit"
+            .disabled=${!hasSelect}
+          ></cb-config-button>
+          <cb-config-button
+            style="mx-1"
+            .onClick=${this.deleteHandler}
+            label="Delete"
+            icon="delete"
+            .disabled=${!hasSelect}
+          ></cb-config-button>
+        </div>
         <cb-config-popup .config=${this.config}>
           <p>(from move)+(plus minutes)/(seconds each move) comma separated</p>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
@@ -44,4 +90,5 @@ export class ConfigClock extends MobxLitElement {
       </div>
     `;
   }
+  protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {}
 }

@@ -57,29 +57,43 @@ export class ConfigSelect extends LitElement {
   }
 }
 
-@customElement('cb-config-list-table')
-export class ConfigListTable extends LitElement {
+@customElement('cb-table-list')
+export class TableList extends LitElement {
+  @property({
+    hasChanged(newVal: ListItem[], oldVal: ListItem[]) {
+      return JSON.stringify(newVal) !== JSON.stringify(oldVal);
+    },
+  })
   items!: ListItem[];
   onSelect!: (id: string) => void;
+  @property({ type: Number })
   cursor!: number;
 
+  selectHandler = (event: Event) => {
+    if (event.target.nodeName === 'TD') {
+      this.onSelect(event.target.parentNode.id);
+    }
+  };
+
   render() {
-    //    this.config.setListType = this.type;
     return html`
       ${STYLES}
-      <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
-        <tbody
-          @click=${action((event: MouseEvent) => {
-            if (event.target instanceof HTMLTableCellElement) {
-              this.onSelect((event.target.parentNode as HTMLTableRowElement).id);
-            }
-          })}
-        >
+      <style>
+      .mark {
+          --tw-bg-opacity: 1;
+          background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+        }
+      </style>
+      <table
+        class="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2"
+        @click=${this.selectHandler}
+      >
+        <tbody>
           ${this.items.map(
             (item, iLine) => html`
               <tr
                 id=${iLine.toString()}
-                class="${iLine == this.cursor ? 'bg-green-300 dark:bg-green-700' : ''}"
+                class="${iLine == this.cursor ? 'mark' : ''}"
               >
                 <td class="dark:text-white">${item.getName()}</td>
                 <td class="dark:text-white">${item.getDescription()}</td>

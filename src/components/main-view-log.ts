@@ -3,16 +3,41 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { dashboardService } from '../service/index.service';
 import { HistoryService } from '../service/history.service';
-import { GridWidget } from './main-widgets';
 import { PlayService } from '../service/play.service';
 import { STYLES } from './css';
+import { action } from 'mobx';
 
 @customElement('cb-mainlogview')
 export class MainLogView extends MobxLitElement {
   play!: PlayService;
   history!: HistoryService;
+
+  fingerStart = 0;
+  scrollStart = 0;
+  scrollMove = 0;
+  onTouchStartAction = (event: TouchEvent) => {
+    this.fingerStart = event.touches[0].pageY;
+    this.scrollStart = this.scrollMove;
+    event.preventDefault();
+  };
+  onTouchMoveAction = (event: TouchEvent) => {
+    const fingerMove = this.fingerStart - event.touches[0].pageY;
+    this.scrollMove = this.scrollStart + fingerMove;
+    //      scrollRef.current?.scroll({ top: scrollMove });
+    event.preventDefault();
+  };
+
+  clickHandler = (e: MouseEvent) => {
+    if (e.target.nodeName == 'TD') {
+      const i = +e.target.id;
+      dashboardService.setMarkLog(i);
+      e.preventDefault();
+      this.requestUpdate();
+    }
+  };
+
+  // dashboardService.markLog == -1
   render() {
-    new GridWidget();
     this.history.enterLogCheck();
 
     const logClickAction = (event: MouseEvent) => {
@@ -20,32 +45,62 @@ export class MainLogView extends MobxLitElement {
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
       this.play.undoTo(id == dashboardService.markLog ? -1 : id);
     };
-
+    const rows = this.history.getLogRows();
+    const mark = dashboardService.markLog;
     return html`
       ${STYLES}
-      <cb-grid .onClickAction=${logClickAction} .scroll=${dashboardService.markLog == -1}>
-        ${this.history.getLogRows().map(
-          (row, iRow) => html`
-            <tr class="[&td]:p-[2px] [&td]:text-left [&td]:text-lg dark:text-white">
-              <td class="w-5">
-                <span class="text-red-900 text-sm dark:text-red-200">${iRow}</span>
-              </td>
-              ${row.map((col, iCol) => {
-                const id = iRow * 2 + iCol;
-                const marker = id == dashboardService.markLog ? ' bg-green-300' : '';
-                return html`
-                  <td
-                    id=${id.toString()}
-                    class="w-30 p-[2px] text-center text-lg dark:text-white ${marker}"
-                  >
-                    ${col}
-                  </td>
-                `;
-              })}
-            </tr>
-          `
-        )}
-      </cb-grid>
+      <style>
+        md-outlined-select {
+          min-width: 200px;
+        }
+        .mark {
+          --tw-bg-opacity: 1;
+          background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+        }
+        .td1 {
+          width: 1.25rem;
+          padding: 2px;
+          span {
+            --tw-text-opacity: 1;
+            color: rgb(127 29 29 / var(--tw-text-opacity));
+          }
+        }
+        .td {
+          width: 30px;
+          padding: 2px;
+        }
+      </style>
+      <div class="m-0 p-0 w-full overflow-auto" ref="{scrollRef}">
+        <table
+          class="m-0 table-fixed w-full"
+          @touch-start=${action(this.onTouchStartAction)}
+          @touch-move=${action(this.onTouchMoveAction)}
+          @click=${action(this.clickHandler)}
+        >
+          <tbody>
+            ${this.renderRows(rows, mark)}
+          </tbody>
+        </table>
+      </div>
     `;
+  }
+  renderRows(rows: string[][], mark: number) {
+    return rows.map(
+      (row, iRow) => html`
+        <tr>
+          <td class="td1 text-lg text-left">
+            <span class="text-sm">${iRow}</span>
+          </td>
+          ${row.map((col, iCol) => {
+            const id = iRow * 2 + iCol;
+            return html`
+              <td id=${id.toString()} class="td text-center text-lg ${id === mark ? 'mark' : ''}">
+                ${col}
+              </td>
+            `;
+          })}
+        </tr>
+      `
+    );
   }
 }
