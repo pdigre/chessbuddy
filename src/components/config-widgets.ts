@@ -7,7 +7,7 @@ import { MdOutlinedSelect } from '@material/web/select/outlined-select';
 import { MdSelectOption } from '@material/web/select/select-option';
 import { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field';
 import { configService, renderingService } from '../service/index.service';
-import { ConfigProp, ConfigService, ListItem, ListMode, ListType } from '../service/config.service';
+import { ConfigProp, ConfigService, ListItem, ListMode } from '../service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { STYLES } from './css';
@@ -79,7 +79,7 @@ export class TableList extends LitElement {
     return html`
       ${STYLES}
       <style>
-      .mark {
+        .mark {
           --tw-bg-opacity: 1;
           background-color: rgb(134 239 172 / var(--tw-bg-opacity));
         }
@@ -91,10 +91,7 @@ export class TableList extends LitElement {
         <tbody>
           ${this.items.map(
             (item, iLine) => html`
-              <tr
-                id=${iLine.toString()}
-                class="${iLine == this.cursor ? 'mark' : ''}"
-              >
+              <tr id=${iLine.toString()} class="${iLine == this.cursor ? 'mark' : ''}">
                 <td class="dark:text-white">${item.getName()}</td>
                 <td class="dark:text-white">${item.getDescription()}</td>
               </tr>

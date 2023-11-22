@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { PropertyValueMap, html } from 'lit';
+import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListMode, ListType } from '../service/config.service';
 import {
@@ -59,20 +59,20 @@ export class ConfigClock extends MobxLitElement {
         ></cb-table-list>
         <div>
           <cb-config-button
-            style="mx-1"
+            class="mx-1"
             .onClick=${this.addHandler}
             label="Add"
             icon="add"
           ></cb-config-button>
           <cb-config-button
-            style="mx-1"
+            class="mx-1"
             .onClick=${this.editHandler}
             label="Edit"
             icon="edit"
             .disabled=${!hasSelect}
           ></cb-config-button>
           <cb-config-button
-            style="mx-1"
+            class="mx-1"
             .onClick=${this.deleteHandler}
             label="Delete"
             icon="delete"
@@ -90,5 +90,4 @@ export class ConfigClock extends MobxLitElement {
       </div>
     `;
   }
-  protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {}
 }

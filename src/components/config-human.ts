@@ -99,20 +99,20 @@ export class ConfigHuman extends MobxLitElement {
           ></cb-table-list>
           <div>
             <cb-config-button
-              style="mx-1"
+              class="mx-1"
               .onClick=${addHandler}
               label="Add"
               icon="add"
             ></cb-config-button>
             <cb-config-button
-              style="mx-1"
+              class="mx-1"
               .onClick=${editHandler}
               label="Edit"
               icon="edit"
               .disabled=${!hasSelect}
             ></cb-config-button>
             <cb-config-button
-              style="mx-1"
+              class="mx-1"
               .onClick=${deleteHandler}
               label="Delete"
               icon="delete"
