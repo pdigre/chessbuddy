@@ -2,13 +2,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListMode, ListType } from '../service/config.service';
-import {
-  ConfigListButtons,
-  ConfigPopup,
-  ConfigSaveButton,
-  ConfigText,
-  TableList,
-} from './config-widgets';
+import { ConfigListButtons, ConfigPopup, ConfigText, TableList } from './config-widgets';
 import { STYLES } from './css';
 import { action } from 'mobx';
 
@@ -23,6 +17,8 @@ export class ConfigClock extends MobxLitElement {
     this.config.setCursor(i);
     this.requestUpdate();
   });
+  saveHandler = action(() => this.config.saveItem(this.config.getItem, this.config.getItems));
+
   render() {
     this.config.setListType = ListType.Clock;
     const items = this.config.clocks;
@@ -31,7 +27,6 @@ export class ConfigClock extends MobxLitElement {
     new ConfigListButtons();
     new ConfigPopup();
     new ConfigText();
-    new ConfigSaveButton();
 
     return html`
       ${STYLES}
@@ -84,7 +79,11 @@ export class ConfigClock extends MobxLitElement {
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
             <cb-config-text label="Clock name" id="name"></cb-config-text>
             <cb-config-text label="Timings" id="time"></cb-config-text>
-            <cb-config-save-button></cb-config-save-button>
+            <cb-config-button
+              .onClick=${this.saveHandler}
+              label=${this.config.isEdit ? 'Save ' : 'Add ' + this.config.getTitleType}
+              icon=${this.config.isEdit ? 'save' : 'add'}
+            ></cb-config-button>
           </div>
         </cb-config-popup>
       </div>

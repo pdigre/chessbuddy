@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { html } from 'lit';
+import { PropertyValueMap, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MdDialog } from '@material/web/dialog/dialog';
 import { MdTextButton } from '@material/web/button/text-button';
@@ -20,6 +20,7 @@ export class MessageDialog extends MobxLitElement {
     return html`
       ${STYLES}
       <md-dialog
+        id="message-dialog"
         type="alert"
         aria-labelledby="message"
         .open=${this.message.show}
@@ -44,6 +45,19 @@ export class MessageDialog extends MobxLitElement {
         </div>
       </md-dialog>
     `;
+  }
+  protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    const dialog = this.shadowRoot!.getElementById('message-dialog') as MdDialog;
+    const func = async () => {
+      await dialog.show();
+      return new Promise<string>(function (resolve) {
+        dialog.addEventListener('closed', function animationendListener() {
+          dialog.removeEventListener('closed', animationendListener);
+          resolve('ok');
+        });
+      });
+    };
+    this.message.initialize(func);
   }
 }
 

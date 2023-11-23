@@ -70,8 +70,8 @@ export class TableList extends LitElement {
   cursor!: number;
 
   selectHandler = (event: Event) => {
-    if (event.target.nodeName === 'TD') {
-      this.onSelect(event.target.parentNode.id);
+    if (event.target?.nodeName === 'TD') {
+      this.onSelect(event.target?.parentNode.id);
     }
   };
 
@@ -183,7 +183,7 @@ export class ConfigButton extends MobxLitElement {
         md-outlined-button {
           height: 3.5rem;
           margin: 0.5rem;
-          backgroundcolor: ${renderingService.darkTheme ? 'green' : 'darkgreen'};
+          background-color: ${renderingService.darkTheme ? 'green' : 'darkgreen'};
         }
       </style>
       <md-outlined-button
@@ -222,7 +222,7 @@ export class ConfigBoolean extends MobxLitElement {
       <label>
         <md-checkbox
           touch-target="wrapper"
-          .checked=${checked}
+          .checked=${!!checked}
           @change=${action(handler)}
         ></md-checkbox>
         ${this.label}
