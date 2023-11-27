@@ -3,15 +3,21 @@ import { PropertyValueMap, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MdDialog } from '@material/web/dialog/dialog';
 import { MdTextButton } from '@material/web/button/text-button';
-import { MessageService } from '../service/message.service';
+import { MessageService, messageType } from '../service/message.service';
 import { action } from 'mobx';
 import { STYLES } from './css';
 import { TemplateResult } from 'lit-element';
+import { SVG_DRAW, SVG_KING } from './svg';
+import { configService } from '../service/index.service';
 
 @customElement('cb-message-dialog')
 export class MessageDialog extends MobxLitElement {
   @property({ attribute: false })
   public message!: MessageService;
+  public title = '';
+  public msg = '';
+  public buttons: ButtonType[] = [];
+  public clicked = '';
 
   public render(): TemplateResult {
     new MdDialog();
@@ -24,36 +30,38 @@ export class MessageDialog extends MobxLitElement {
         type="alert"
         aria-labelledby="message"
         .open=${this.message.show}
-        @close=${action((e: MouseEvent) =>
-          this.message.onClose((e.target as HTMLButtonElement).innerHTML)
-        )}
         class="text-center text-lg"
       >
-        <div slot="headline">${this.message.title}</div>
-        <form slot="content" id="form-id" method="dialog">${this.message.msg}</form>
-        <div slot="actions">
-          ${this.message.buttons?.map(
-            x =>
-              html`<md-text-button
-                form="form-id"
-                @click=${action(e =>
-                  this.message.onClose((e.target as HTMLButtonElement).innerHTML)
-                )}
-                ><span class="material-symbols-outlined">${x.icon}</span>${x.label}</md-text-button
-              >`
-          )}
-        </div>
+        <div slot="headline">${this.title}</div>
+        <form slot="content" id="form-id" method="dialog">${getMsg(this.msg)}</form>
+        <div slot="actions">${this.buttons?.map(x => this.renderButton(x))}</div>
       </md-dialog>
     `;
   }
+  private renderButton(x: ButtonType) {
+    return html`<md-text-button
+      class="${x.name}"
+      form="form-id"
+      @click=${action(e => {
+        this.clicked = e.target.className;
+      })}
+      >${x.icon ? html`<span class="material-symbols-outlined">${x.icon ?? ''}</span>` : ''}
+      ${x.html ?? ''}${x.label}</md-text-button
+    >`;
+  }
   protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
     const dialog = this.shadowRoot!.getElementById('message-dialog') as MdDialog;
-    const func = async () => {
+    const func = async (msg: messageType) => {
+      this.title = msg.title;
+      this.msg = msg.msg;
+      this.buttons = getButtons(msg.name);
+      const THIS = this;
       await dialog.show();
+      dialog.requestUpdate();
       return new Promise<string>(function (resolve) {
-        dialog.addEventListener('closed', function animationendListener() {
-          dialog.removeEventListener('closed', animationendListener);
-          resolve('ok');
+        dialog.addEventListener('closed', function listener() {
+          dialog.removeEventListener('closed', listener);
+          resolve(THIS.clicked);
         });
       });
     };
@@ -61,51 +69,91 @@ export class MessageDialog extends MobxLitElement {
   }
 }
 
-export type ButtonType = {
+function getButtons(name: string): ButtonType[] {
+  switch (name) {
+    case 'about':
+    case 'load':
+      return [{ name: 'ok', label: 'Ok' }];
+    case 'undo':
+    case 'revert':
+      return [
+        { name: 'y', label: 'Yes', icon: 'check' },
+        { name: 'n', label: 'No', icon: 'cancel' },
+      ];
+    case 'promotion':
+      return [
+        { name: 'q', label: 'Queen', icon: 'FaChessQueen' },
+        { name: 'r', label: 'Rook', icon: 'FaChessRook' },
+        { name: 'n', label: 'Knight', icon: 'FaChessKnight' },
+        { name: 'b', label: 'Bishop', icon: 'FaChessBishop' },
+      ];
+    case 'end':
+      const white = configService.white.split(' ')[0];
+      const black = configService.black.split(' ')[0];
+      return [
+        {
+          name: 'w',
+          label: white,
+          html: SVG_KING,
+          custom: html`<style>
+            .w svg {
+              color: white;
+            }
+          </style>`,
+        },
+        { name: 'draw', label: 'Draw', html: SVG_DRAW },
+        {
+          name: 'b',
+          label: black,
+          html: SVG_KING,
+          custom: html`<style>
+            .b svg {
+              color: black;
+            }
+          </style>`,
+        },
+      ];
+    default:
+      return [];
+  }
+}
+
+type ButtonType = {
+  name: string;
   label: string;
   icon?: string;
-  onClick?: (event: MouseEvent) => void;
-  disabled?: boolean;
+  html?: TemplateResult;
+  custom?: TemplateResult;
 };
 
-export const OK_BUTTON: () => ButtonType[] = () => [{ label: 'Ok' }];
-export const YESNO_BUTTONS: () => ButtonType[] = () => [
-  { label: 'Yes', icon: 'check' },
-  { label: 'No', icon: 'cancel' },
-];
-export const PROMOTE_BUTTONS: () => ButtonType[] = () => [
-  { label: 'Queen', icon: 'FaChessQueen' },
-  { label: 'Rook', icon: 'FaChessRook' },
-  { label: 'Knight', icon: 'FaChessKnight' },
-  { label: 'Bishop', icon: 'FaChessBishop' },
-];
-
-export const WINNER_BUTTONS: (black: string, white: string) => ButtonType[] = (black, white) => [
-  { label: white, icon: 'FaChessKing' },
-  { label: 'Draw', icon: 'FaRegHandshake' },
-  { label: black, icon: 'FaChessKing' },
-];
-
-export const WINNER_HTML = html` <div className="text-3xl">
-  Who won?
-  <img src="/png/win.png" />
-</div>`;
-
-export const ABOUT = html` <div>
-  This chess program is open source and available at github.
-  <ul>
-    <li>
-      <a href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noopener">
-        Github pdigre/chessbuddy
-      </a>
-    </li>
-    <li>
-      <a href="https://github.com/pdigre/chessbuddy/wiki/User-guide" target="_blank" rel="noopener">
-        User Guide / instructions
-      </a>
-    </li>
-  </ul>
-</div>`;
-function observer(target: MessageDialog, propertyKey: 'message'): void {
-  throw new Error('Function not implemented.');
+function getMsg(name: string) {
+  switch (name) {
+    case 'about':
+      return html` <div>
+        This chess program is open source and available at github.
+        <ul>
+          <li>
+            <a href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noopener">
+              Github pdigre/chessbuddy
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
+              target="_blank"
+              rel="noopener"
+            >
+              User Guide / instructions
+            </a>
+          </li>
+        </ul>
+      </div>`;
+    case 'end':
+      return html` <div className="text-3xl">
+        Who won?
+        <img src="/png/win.png" />
+      </div>`;
+    default:
+      return html`${name}`;
+  }
 }

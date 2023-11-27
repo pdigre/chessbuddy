@@ -1,44 +1,75 @@
 import { makeAutoObservable } from 'mobx';
-import { ButtonType } from '../components/message-dialog';
 
-type ASYNC = () => Promise<string>;
+type ASYNC = (msg: messageType) => Promise<string>;
+
+export type messageType = {
+  name: string;
+  title: string;
+  msg: string;
+};
+
 export class MessageService {
-  title?: string;
-  msg?: string;
-  buttons?: ButtonType[];
-  response?: (button: string) => void;
-  show = false;
-  private waitResponse: ASYNC = async () => 'message dialiog not connected';
+  public resultHolder: ASYNC = async () => 'message dialiog not connected';
 
+  show = false;
   constructor() {
     makeAutoObservable(this);
   }
 
-  initialize(func: ASYNC) {
-    this.waitResponse = func;
+  initialize(resultHolder: ASYNC) {
+    this.resultHolder = resultHolder;
   }
 
-  clear() {
-    this.title = undefined;
+  async display(msg: messageType) {
+    return await this.resultHolder(msg);
   }
 
-  async display(
-    title: string,
-    msg: string,
-    buttons?: ButtonType[],
-    response?: (button: string) => void
-  ) {
-    this.title = title;
-    this.msg = msg;
-    this.buttons = buttons;
-    this.response = response ?? (() => this.clear());
+  async standard(name: string) {
     this.show = true;
-    const ret = await this.waitResponse();
-    return ret;
+    const msgType = messages.find(m => m.name == name);
+    const title = msgType?.title ?? '';
+    const msg = msgType?.msg ?? '';
+    return await this.resultHolder({ name, title, msg });
   }
 
-  onClose(html: string) {
-    this.response ? this.response(html) : null;
-    this.show = false;
+  async error(title: string, msg: string) {
+    await this.display({
+      name: 'error',
+      title,
+      msg,
+    });
   }
 }
+
+const messages = [
+  {
+    name: 'about',
+    title: 'About',
+    msg: 'about',
+  },
+  {
+    name: 'promotion',
+    title: 'Promotion',
+    msg: 'Choose promotion piece',
+  },
+  {
+    name: 'load',
+    title: 'Load game',
+    msg: 'You have to end current game to load previous games',
+  },
+  {
+    name: 'undo',
+    title: 'Undo',
+    msg: 'Do you want to undo last move?',
+  },
+  {
+    name: 'revert',
+    title: 'Revert',
+    msg: 'Do you want to revert the game to the marked position?',
+  },
+  {
+    name: 'end',
+    title: 'End game',
+    msg: 'Who won',
+  },
+];

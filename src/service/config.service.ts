@@ -192,7 +192,12 @@ export class ConfigService {
 
   saveItem(item: ListItem, items: ListItem[]) {
     if (item.validate()) {
-      messageService.display((this.isEdit ? 'Save' : 'Add') + this.getTitleType, item.validate());
+      const name = this.isEdit ? 'Save' : 'Add';
+      messageService.display({
+        name,
+        title: name + this.getTitleType,
+        msg: item.validate(),
+      });
     } else {
       this.isEdit ? (items[this.cursor] = item) : items.push(item);
     }

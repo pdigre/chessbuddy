@@ -22,7 +22,6 @@ import {
 } from './index.service';
 import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
-import { PROMOTE_BUTTONS, WINNER_BUTTONS, YESNO_BUTTONS } from '../components/message-dialog';
 
 /*
  * Everything about the current game (can be restored when returning to browser later)
@@ -182,15 +181,18 @@ export class PlayService {
     this.playContinue();
   }
 
-  recordScore(yes: string) {
-    if (yes.startsWith('White')) {
-      this.playMove('1-0');
-    } else if (yes.startsWith('Black')) {
-      this.playMove('0-1');
-    } else if (yes == 'Draw') {
-      this.playMove('1/2-1/2');
+  recordScore(whoWon: string) {
+    switch (whoWon) {
+      case 'w':
+        this.playMove('1-0');
+        break;
+      case 'b':
+        this.playMove('0-1');
+        break;
+      case 'draw':
+        this.playMove('1/2-1/2');
+        break;
     }
-    messageService.clear();
   }
 
   outOfTime() {
@@ -260,14 +262,13 @@ export class PlayService {
   readonly endGameAction = () => {
     const winner = this.whoWon();
     if (winner) {
-      messageService.display(
-        'Game has ended',
-        winner != 'Draw' ? winner + ' won this game' : 'The game was a draw'
-      );
+      messageService.display({
+        name: 'ended',
+        title: 'Game has ended',
+        msg: winner != 'Draw' ? winner + ' won this game' : 'The game was a draw',
+      });
     } else {
-      const white = configService.white.split(' ')[0];
-      const black = configService.black.split(' ')[0];
-      messageService.display('End game', 'Who won', WINNER_BUTTONS(black, white), this.recordScore);
+      messageService.standard('end').then(reply => this.recordScore(reply));
     }
   };
 
@@ -323,14 +324,9 @@ export class PlayService {
     if (this.isPlaying || isHuman) {
       const action = move[1];
       if (action.promotion && isHuman) {
-        messageService.display('Promotion', 'Choose promotion piece', PROMOTE_BUTTONS(), reply => {
-          let promo: 'b' | 'q' | 'n' | 'r' = 'q';
-          if (reply == 'Rook') promo = 'r';
-          if (reply == 'Knight') promo = 'n';
-          if (reply == 'Bishop') promo = 'b';
-          const move = rulesService.move(this.fen, from, to, promo);
+        messageService.standard('promotion').then(promo => {
+          const move = rulesService.move(this.fen, from, to, promo as 'b' | 'q' | 'n' | 'r');
           if (move != null) {
-            messageService.clear();
             this.playMove(move[1].san);
           }
         });
@@ -366,22 +362,14 @@ export class PlayService {
     const isPlayUndo = this.isPlaying && dashboardService.showUndo;
     if (this.isComplete) this.resetGameAction();
     if (isHistUndo || isPlayUndo) {
-      messageService.display(
-        'Undo',
-        isPlayUndo
-          ? 'Do you want to undo last move?'
-          : 'Do you want to revert the game to the marked position?',
-        YESNO_BUTTONS(),
-        yes => {
-          messageService.clear();
-          if (yes == 'Yes') {
-            this.initGame(
-              this.log.slice(0, isPlayUndo ? dashboardService.undopos : dashboardService.markLog)
-            );
-          }
-          dashboardService.setMarkLog(-1);
+      messageService.standard(isPlayUndo ? 'undo' : 'revert').then(reply => {
+        if (reply == 'Yes') {
+          this.initGame(
+            this.log.slice(0, isPlayUndo ? dashboardService.undopos : dashboardService.markLog)
+          );
         }
-      );
+        dashboardService.setMarkLog(-1);
+      });
       return;
     }
     this.setPlaying(!this.isPlaying);

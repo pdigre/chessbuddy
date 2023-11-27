@@ -7,7 +7,6 @@ import {
   rulesService,
   messageService,
 } from './index.service';
-import { OK_BUTTON, YESNO_BUTTONS } from '../components/message-dialog';
 
 export type GameEntry = {
   moves: string[];
@@ -142,23 +141,13 @@ export class HistoryService {
   enterLogCheck() {
     if (historyService.markHist >= 0) {
       if (playService.isComplete || playService.log.length == 0) {
-        messageService.display(
-          'Load game',
-          'Do you want to look at this game?',
-          YESNO_BUTTONS(),
-          reply => {
-            if (reply == 'Yes') {
-              playService.loadGame();
-            }
-            messageService.clear();
+        messageService.standard('load').then(reply => {
+          if (reply == 'Yes') {
+            playService.loadGame();
           }
-        );
+        });
       } else {
-        messageService.display(
-          'Load game',
-          'You have to end current game to load previous games',
-          OK_BUTTON()
-        );
+        messageService.standard('load');
       }
       historyService.setMarkHist(-1);
     }

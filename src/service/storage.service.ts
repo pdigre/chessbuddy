@@ -9,7 +9,7 @@ export class StorageService {
     try {
       return localStorage.getItem(name)?.replace(/\r/, '').split('\n') ?? init;
     } catch (error) {
-      messageService.display('Storage error ' + name, String(error));
+      messageService.error('Storage error ' + name, String(error));
       return init;
     }
   };
@@ -22,7 +22,7 @@ export class StorageService {
       const data = localStorage.getItem(name);
       return data ? (JSON.parse(data) as T) : init;
     } catch (error) {
-      messageService.display('Storage error ' + name, String(error));
+      messageService.error('Storage error ' + name, String(error));
       return init;
     }
   };

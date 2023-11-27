@@ -142,12 +142,15 @@ export class App extends LitElement {
     new ConfigClock();
     new ConfigBluetooth();
 
-    const about = () => {
-      messageService.display('About', 'This chess program is open source and available at github.');
-    };
     return html`
       ${STYLES}
       <style>
+        :root {
+          --md-outlined-button-container-shape: 0px;
+          --md-outlined-button-label-text-font: system-ui;
+          --md-sys-color-primary: #1d3f3f;
+          --md-sys-color-outline: #502121;
+        }
         .main {
           width: 1024px;
           height: 748px;
@@ -192,7 +195,10 @@ export class App extends LitElement {
         </div>
         <div class="flex flex-col w-full text-center">
           <h3 class="panel text-lg flex flex-row">
-            <md-text-button @click=${action(about)} class="mx-5 text-xl">
+            <md-text-button
+              @click=${action(() => messageService.standard('about'))}
+              class="mx-5 text-xl"
+            >
               ChessBuddy ${packageInfo.version}
             </md-text-button>
             <md-text-button @click=${action(mediaService.playAllAction)}>

@@ -12,7 +12,7 @@ import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { STYLES } from './css';
 import { MdDialog } from '@material/web/dialog/dialog';
-import { LitElement } from 'lit-element';
+import { LitElement, TemplateResult } from 'lit-element';
 
 @customElement('cb-config-select')
 export class ConfigSelect extends LitElement {
@@ -180,10 +180,15 @@ export class ConfigButton extends MobxLitElement {
     return html`
       ${STYLES}
       <style>
+        md-outlined-button:root {
+          --md-outlined-button-container-shape: 0px;
+          --md-outlined-button-label-text-font: system-ui;
+          --md-sys-color-primary: #3d1818;
+          --md-sys-color-outline: #245541;
+        }
         md-outlined-button {
           height: 3.5rem;
           margin: 0.5rem;
-          background-color: ${renderingService.darkTheme ? 'green' : 'darkgreen'};
         }
       </style>
       <md-outlined-button
