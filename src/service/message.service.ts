@@ -21,7 +21,9 @@ export class MessageService {
   }
 
   async display(msg: messageType) {
-    return await this.resultHolder(msg);
+    const reply = await this.resultHolder(msg);
+    this.show = false;
+    return reply;
   }
 
   async standard(name: string) {
@@ -29,7 +31,9 @@ export class MessageService {
     const msgType = messages.find(m => m.name == name);
     const title = msgType?.title ?? '';
     const msg = msgType?.msg ?? '';
-    return await this.resultHolder({ name, title, msg });
+    const reply = await this.resultHolder({ name, title, msg });
+    this.show = false;
+    return reply;
   }
 
   async error(title: string, msg: string) {

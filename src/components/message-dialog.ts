@@ -3,6 +3,9 @@ import { PropertyValueMap, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MdDialog } from '@material/web/dialog/dialog';
 import { MdTextButton } from '@material/web/button/text-button';
+import { MdOutlinedButton } from '@material/web/button/outlined-button';
+import { MdFilledButton } from '@material/web/button/filled-button';
+import { MdFilledTonalButton } from '@material/web/button/filled-tonal-button';
 import { MessageService, messageType } from '../service/message.service';
 import { action } from 'mobx';
 import { STYLES } from './css';
@@ -22,7 +25,11 @@ export class MessageDialog extends MobxLitElement {
   public render(): TemplateResult {
     new MdDialog();
     new MdTextButton();
+    new MdOutlinedButton();
+    new MdFilledButton();
+    new MdFilledTonalButton();
 
+    const onClick = action((e: MouseEvent) => (this.clicked = e.target.className));
     return html`
       ${STYLES}
       <md-dialog
@@ -34,20 +41,37 @@ export class MessageDialog extends MobxLitElement {
       >
         <div slot="headline">${this.title}</div>
         <form slot="content" id="form-id" method="dialog">${getMsg(this.msg)}</form>
-        <div slot="actions">${this.buttons?.map(x => this.renderButton(x))}</div>
+        <div slot="actions">${this.buttons?.map(x => this.renderButton(x, onClick))}</div>
       </md-dialog>
     `;
   }
-  private renderButton(x: ButtonType) {
-    return html`<md-text-button
-      class="${x.name}"
-      form="form-id"
-      @click=${action(e => {
-        this.clicked = e.target.className;
-      })}
-      >${x.icon ? html`<span class="material-symbols-outlined">${x.icon ?? ''}</span>` : ''}
-      ${x.html ?? ''}${x.label}</md-text-button
-    >`;
+  private renderButton(x: ButtonType, onClick: (e: MouseEvent) => void) {
+    switch (x.type ?? '') {
+      case 'text':
+        return html`${x.custom ?? ''}
+          <md-text-button class="${x.name}" form="form-id" @click=${onClick}
+            >${x.icon ? html`<span class="material-symbols-outlined">${x.icon ?? ''}</span>` : ''}
+            ${x.html ?? ''}${x.label}</md-text-button
+          >`;
+      case 'tonal':
+        return html`${x.custom ?? ''}
+          <md-filled-tonal-button class="${x.name}" form="form-id" @click=${onClick}
+            >${x.icon ? html`<span class="material-symbols-outlined">${x.icon ?? ''}</span>` : ''}
+            ${x.html ?? ''}${x.label}</md-filled-tonal-button
+          >`;
+      case 'outlined':
+        return html`${x.custom ?? ''}
+          <md-outlined-button class="${x.name}" form="form-id" @click=${onClick}
+            >${x.icon ? html`<span class="material-symbols-outlined">${x.icon ?? ''}</span>` : ''}
+            ${x.html ?? ''}${x.label}</md-outlined-button
+          >`;
+      default:
+        return html`${x.custom ?? ''}
+          <md-filled-button class="${x.name}" form="form-id" @click=${onClick}
+            >${x.icon ? html`<span class="material-symbols-outlined">${x.icon ?? ''}</span>` : ''}
+            ${x.html ?? ''}${x.label}</md-filled-button
+          >`;
+    }
   }
   protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
     const dialog = this.shadowRoot!.getElementById('message-dialog') as MdDialog;
@@ -78,7 +102,7 @@ function getButtons(name: string): ButtonType[] {
     case 'revert':
       return [
         { name: 'y', label: 'Yes', icon: 'check' },
-        { name: 'n', label: 'No', icon: 'cancel' },
+        { name: 'n', label: 'No', icon: 'cancel', type: 'tonal' },
       ];
     case 'promotion':
       return [
@@ -124,6 +148,7 @@ type ButtonType = {
   icon?: string;
   html?: TemplateResult;
   custom?: TemplateResult;
+  type?: string;
 };
 
 function getMsg(name: string) {
