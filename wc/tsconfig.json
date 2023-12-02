@@ -26,9 +26,7 @@
       "bun-types", "web"
     ]
   },
-  "include": [
-    "common"
-  ],
-  "exclude": [
-    "react", "zap"]
+  "include": ["src",
+    "../common", "package.json"],
+  "exclude": []
 }
