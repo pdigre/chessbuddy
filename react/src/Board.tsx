@@ -76,7 +76,7 @@ export const Board = observer(
 
     const fen = refresh.showBlank ? FEN.CLEAR_GAME : edit.showEdit ? edit.editFen : playService.fen;
 
-    return (
+      return (
       <Chessboard
         position={r90 ? rules.leftFen(fen) : fen}
         onPieceDragBegin={playService.onDragStartAction}

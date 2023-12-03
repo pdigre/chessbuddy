@@ -29,16 +29,6 @@ import { ConfigService } from '../../common/service/config.service';
 import { PlayService } from '../../common/service/play.service';
 import { ClockService } from '../../common/service/clock.service';
 import { action } from 'mobx';
-import '@material/web/button/outlined-button.js';
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "md-dialog": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      [elemName: string]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
-}
 
 const lightTheme = createTheme({
   palette: {

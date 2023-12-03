@@ -7,6 +7,7 @@
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
     "esbuild": "^0.19.8",
+    "json-ignore": "^0.4.0",
     "mobx": "^6.12.0",
     "prettier": "^3.0.3"
   },
@@ -14,6 +15,7 @@
     "format": "bunx prettier . --write"
   },
   "devDependencies": {
+    "@types/chess.js": "^0.13.5",
     "@types/web": "^0.0.119",
     "bun-types": "latest",
     "typescript": "^5.2.2",

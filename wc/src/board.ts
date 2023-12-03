@@ -15,7 +15,7 @@ import { AnalyzerService } from '../../common/service/analyzer.service';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { property } from 'lit-element/decorators.js';
 import { action, observable } from 'mobx';
-import { Square } from 'chess.js';
+import { Square } from '../../common/service/rules.service';
 
 export interface ChessBoardEvent {
   source?: Square;

@@ -8,9 +8,7 @@
     "@adobe/lit-mobx": "^2.2.0",
     "@material/web": "^1.0.1",
     "chessboard-element": "^1.2.0",
-    "chess.js": "^1.0.0-beta.6",
     "esbuild": "^0.19.8",
-    "json-ignore": "^0.4.0",
     "lit-element": "^4.0.0",
     "mobx": "^6.12.0",
     "prettier": "^3.0.3"
