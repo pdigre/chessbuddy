@@ -29,7 +29,7 @@ export class MessageDialog extends MobxLitElement {
     new MdFilledButton();
     new MdFilledTonalButton();
 
-    const onClick = action((e: MouseEvent) => (this.clicked = e.target.className));
+    const onClick = action((e: MouseEvent) => (this.clicked = e.target?.className));
     return html`
       ${STYLES}
       <md-dialog
@@ -75,20 +75,21 @@ export class MessageDialog extends MobxLitElement {
   }
   protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
     const dialog = this.shadowRoot!.getElementById('message-dialog') as MdDialog;
-    const func = async (msg: messageType) => {
+    const func = (msg: messageType) => {
       this.title = msg.title;
       this.msg = msg.msg;
       this.buttons = getButtons(msg.name);
       const THIS = this;
-      await dialog.show();
+      dialog.show();
       dialog.requestUpdate();
-      return new Promise<string>(function (resolve) {
-        dialog.addEventListener('closed', function listener() {
-          dialog.removeEventListener('closed', listener);
-          resolve(THIS.clicked);
-        });
+      dialog.addEventListener('closed', function listener() {
+        dialog.removeEventListener('closed', listener);
+        if (msg.callback) {
+          msg.callback(THIS.clicked);
+        }
       });
     };
+
     this.message.initialize(func);
   }
 }

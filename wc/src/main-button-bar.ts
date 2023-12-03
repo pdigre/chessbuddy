@@ -28,8 +28,8 @@ export class MainButtonBar extends MobxLitElement {
         ? 'input'
         : 'edit'
       : this.dashboard.showHist
-      ? 'folder_open'
-      : 'history';
+        ? 'folder_open'
+        : 'history';
 
     return html`
       ${STYLES}

@@ -15,7 +15,7 @@ import {
 import { ConfigDialog } from './ConfigDialog';
 import { Board } from './Board';
 import { AnalyzerService } from '../../common/service/analyzer.service';
-import packageInfo from '../../package.json';
+import packageInfo from '../package.json';
 import { Mp4Dialog } from './Mp4Dialog';
 import { MessageDialog } from './MessageDialog';
 import { RenderingService } from '../../common/service/rendering.service';

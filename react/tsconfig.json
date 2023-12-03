@@ -10,9 +10,7 @@
     ],
     "allowJs": true,
     "checkJs": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "outDir": "out",
     "sourceMap": true,
     "strict": true,
@@ -31,7 +29,7 @@
     ]
   },
   "include": [
-    "src", "../common", "index.js", "package.json"
+    "src", "../common/service/", "../common/model/", "index.js", "package.json"
   ],
   "exclude": ["node_modules", "build"]
 }

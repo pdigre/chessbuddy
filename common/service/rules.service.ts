@@ -94,4 +94,11 @@ export class RulesService {
     }
     return sqs;
   };
+
+  splitRotation(rot: number) {
+    return {
+      r90: rot % 2 == 1,
+      r180: rot > 1,
+    };
+  }
 }

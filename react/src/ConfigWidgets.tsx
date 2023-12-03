@@ -176,7 +176,7 @@ export const ConfigListButtons = observer(
           disabled={!hasSelect}
         />
         <ConfigButton
-          onClick={action(config.deleteItemAction)}
+          onClick={action(config.deleteItem)}
           label="Delete"
           icon={<MdDelete />}
           disabled={!hasSelect}

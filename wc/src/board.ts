@@ -1,7 +1,11 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ChessBoardElement } from 'chessboard-element';
-import { rulesService as rules, playService, renderingService } from '../../common/service/index.service';
+import {
+  rulesService as rules,
+  playService,
+  renderingService,
+} from '../../common/service/index.service';
 import { RefreshService } from '../../common/service/refresh.service';
 import { ConfigService } from '../../common/service/config.service';
 import { EditService } from '../../common/service/edit.service';
@@ -11,7 +15,7 @@ import { AnalyzerService } from '../../common/service/analyzer.service';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { property } from 'lit-element/decorators.js';
 import { action, observable } from 'mobx';
-import { Piece, Square } from 'chess.js';
+import { Square } from 'chess.js';
 
 export interface ChessBoardEvent {
   source?: Square;
@@ -38,8 +42,7 @@ export class Board extends MobxLitElement {
   }
 
   render() {
-    const r90 = this.config.getR90();
-    const r180 = this.config.getR180();
+    const { r90, r180 } = rules.splitRotation(this.config.rotation);
 
     const showMarkers = () => {
       const markers = {};
@@ -87,8 +90,8 @@ export class Board extends MobxLitElement {
     const fen = this.refresh.showBlank
       ? FEN.CLEAR_GAME
       : this.edit.showEdit
-      ? this.edit.editFen
-      : playService.fen;
+        ? this.edit.editFen
+        : playService.fen;
 
     new ChessBoardElement(); // Must instantiate otherwise do not render
     const startPos = r90 ? rules.leftFen(fen) : fen;

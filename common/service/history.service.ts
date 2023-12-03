@@ -65,7 +65,7 @@ export class HistoryService {
   }
 
   uploadHistory(file: File) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (_resolve, reject) {
       const reader = new FileReader();
       reader.onerror = reject;
       reader.onload = function () {
@@ -141,7 +141,7 @@ export class HistoryService {
   enterLogCheck() {
     if (historyService.markHist >= 0) {
       if (playService.isComplete || playService.log.length == 0) {
-        messageService.standard('load').then(reply => {
+        messageService.standard('load', reply => {
           if (reply == 'Yes') {
             playService.loadGame();
           }

@@ -6,13 +6,13 @@ import { MdOutlinedButton } from '@material/web/button/outlined-button';
 import { MdOutlinedSelect } from '@material/web/select/outlined-select';
 import { MdSelectOption } from '@material/web/select/select-option';
 import { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field';
-import { configService, renderingService } from '../../common/service/index.service';
+import { configService } from '../../common/service/index.service';
 import { ConfigProp, ConfigService, ListItem, ListMode } from '../../common/service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { STYLES } from './css';
 import { MdDialog } from '@material/web/dialog/dialog';
-import { LitElement, TemplateResult } from 'lit-element';
+import { LitElement } from 'lit-element';
 
 @customElement('cb-config-select')
 export class ConfigSelect extends LitElement {
@@ -124,7 +124,7 @@ export class ConfigListButtons extends MobxLitElement {
           .disabled=${!hasSelect}
         ></cb-config-button>
         <cb-config-button
-          .onClick=${action(this.config.deleteItemAction)}
+          .onClick=${action(this.config.deleteItem)}
           label="Delete"
           icon="delete"
           .disabled=${!hasSelect}

@@ -1,7 +1,9 @@
 {
-  "name": "chessbuddy",
+  "name": "chessbuddy_react",
   "version": "0.22.0",
+  "private": true,
   "homepage": ".",
+  "type": "module",
   "dependencies": {
     "@adobe/lit-mobx": "^2.2.0",
     "@material/web": "^1.0.0",
@@ -10,8 +12,8 @@
     "esbuild": "^0.19.8",
     "json-ignore": "^0.4.0",
     "material-components-web": "^14.0.0",
-    "mobx": "^6.10.2",
-    "mobx-react": "^9.0.1",
+    "mobx": "^6.12.0",
+    "mobx-react": "^9.1.0",
     "react": "^18.2.0",
     "react-chessboard": "^4.2.0",
     "react-dom": "^18.2.0",
@@ -20,7 +22,7 @@
   },
   "scripts": {
     "dev": "bun watch:css && bunx --bun vite",
-    "build2": "bun watch:css && bunx --bun vite build",
+    "prod": "bun watch:css && bunx --bun vite build",
     "build": "npm run watch:css && vite build",
     "watch:css": "tailwindcss -i tailwind.css -o main.css",
     "build:bun": "bunx --bun vite build",
@@ -69,7 +71,7 @@
     "postcss": "^8.4.30",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.2.2",
-    "vite": "4.4.9",
+    "vite": "4.5.0",
     "vite-tsconfig-paths": "4.2.1"
   }
 }

@@ -249,15 +249,9 @@ export class ConfigService {
     }
   }
 
-  getR90() {
-    return this.rotation % 2 == 1;
-  }
-  getR180() {
-    return this.rotation > 1;
-  }
-
   rotateAction = () => {
     this.rotation = (this.rotation + 1) % 4;
+    refreshService.startRefreshTimer();
     console.log('rotation=' + this.rotation);
   };
 }

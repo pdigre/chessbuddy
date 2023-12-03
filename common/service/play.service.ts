@@ -265,7 +265,7 @@ export class PlayService {
         msg: winner != 'Draw' ? winner + ' won this game' : 'The game was a draw',
       });
     } else {
-      messageService.standard('end').then(reply => this.recordScore(reply));
+      messageService.standard('end', reply => this.recordScore(reply));
     }
   };
 
@@ -321,7 +321,7 @@ export class PlayService {
     if (this.isPlaying || isHuman) {
       const action = move[1];
       if (action.promotion && isHuman) {
-        messageService.standard('promotion').then(promo => {
+        messageService.standard('promotion', promo => {
           const move = rulesService.move(this.fen, from, to, promo as 'b' | 'q' | 'n' | 'r');
           if (move != null) {
             this.playMove(move[1].san);
@@ -359,7 +359,7 @@ export class PlayService {
     const isPlayUndo = this.isPlaying && dashboardService.showUndo;
     if (this.isComplete) this.resetGameAction();
     if (isHistUndo || isPlayUndo) {
-      messageService.standard(isPlayUndo ? 'undo' : 'revert').then(reply => {
+      messageService.standard(isPlayUndo ? 'undo' : 'revert', reply => {
         if (reply == 'Yes') {
           this.initGame(
             this.log.slice(0, isPlayUndo ? dashboardService.undopos : dashboardService.markLog)

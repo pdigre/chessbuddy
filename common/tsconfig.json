@@ -22,13 +22,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "types": [
-      "bun-types", "web"
-    ]
+    "types": ["bun-types", "web"]
   },
-  "include": [
-    "common"
-  ],
-  "exclude": [
-    "react", "zap"]
+  "include": ["common"],
+  "exclude": ["react", "zap"]
 }

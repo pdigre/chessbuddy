@@ -1,43 +1,48 @@
 import { makeAutoObservable } from 'mobx';
 
-type ASYNC = (msg: messageType) => Promise<string>;
+type SET_CALLBACK = (msg: messageType) => void;
 
 export type messageType = {
   name: string;
   title: string;
   msg: string;
+  callback?: CALLBACK;
 };
 
+export type CALLBACK = (txt: string) => void;
+
 export class MessageService {
-  public resultHolder: ASYNC = async () => 'message dialiog not connected';
+  public resultHolder: SET_CALLBACK = (msg: messageType) => {
+    alert('undefined ' + msg);
+  };
 
   show = false;
+  title?: string;
+
   constructor() {
     makeAutoObservable(this);
   }
 
-  initialize(resultHolder: ASYNC) {
+  initialize(resultHolder: SET_CALLBACK) {
     this.resultHolder = resultHolder;
   }
 
-  async display(msg: messageType) {
-    const reply = await this.resultHolder(msg);
-    this.show = false;
-    return reply;
+  display(msg: messageType) {
+    this.show = true;
+    this.resultHolder(msg);
   }
 
-  async standard(name: string) {
+  standard(name: string, callback?: CALLBACK) {
     this.show = true;
     const msgType = messages.find(m => m.name == name);
     const title = msgType?.title ?? '';
     const msg = msgType?.msg ?? '';
-    const reply = await this.resultHolder({ name, title, msg });
-    this.show = false;
-    return reply;
+    this.title = title;
+    this.resultHolder({ name, title, msg, callback });
   }
 
-  async error(title: string, msg: string) {
-    await this.display({
+  error(title: string, msg: string) {
+    this.display({
       name: 'error',
       title,
       msg,
