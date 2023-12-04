@@ -16,10 +16,14 @@
   "scripts": {
     "dev": "bunx --bun vite",
     "format": "bunx prettier src --write",
+    "build": "bun vite build",
+    "serve": "bun serve.ts",
     "prod": "bun build src/app.ts --outfile=../public/wc.js --watch"
   },
   "devDependencies": {
     "@types/web": "^0.0.119",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
     "bun-types": "latest",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"

@@ -11,7 +11,8 @@ export const Mp4Dialog = observer(({ mp4 }: { mp4: MediaService }) => {
       aria-labelledby="mp4"
       open={mp4.title != undefined}
       onClose={action(mp4.clear)}
-      className="text-center text-lg">
+      className="text-center text-lg"
+    >
       <DialogTitle id="mp4">{mp4.title}</DialogTitle>
       <DialogContent>
         <video id="myVideo" autoPlay={true} width={width}>

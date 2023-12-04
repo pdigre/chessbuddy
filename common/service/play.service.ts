@@ -1,27 +1,27 @@
-import { Human } from '../model/human';
-import { San } from './openings.service';
-import { makeAutoObservable } from 'mobx';
-import { Chess, Square, WHITE } from 'chess.js';
-import { Clock } from '../model/clock';
-import { toMMSS } from '../resources/library';
-import { BotRunner } from './bot.service';
+import {Human} from '../model/human';
+import {San} from './openings.service';
+import {makeAutoObservable} from 'mobx';
+import {Chess, Piece, Square, WHITE} from 'chess.js';
+import {Clock} from '../model/clock';
+import {toMMSS} from '../resources/library';
+import {BotRunner} from './bot.service';
 import {
   analyzerService,
   botService,
-  configService,
-  rulesService,
-  dashboardService,
-  historyService,
-  messageService,
-  mediaService,
-  openingsService,
-  storageService,
-  refreshService,
   clockService,
+  configService,
+  dashboardService,
   editService,
+  historyService,
+  mediaService,
+  messageService,
+  openingsService,
+  refreshService,
+  rulesService,
+  storageService,
 } from './index.service';
-import { jsonIgnore } from 'json-ignore';
-import { FEN } from '../model/fen';
+import {jsonIgnore} from 'json-ignore';
+import {FEN} from '../model/fen';
 
 /*
  * Everything about the current game (can be restored when returning to browser later)
@@ -43,6 +43,8 @@ export class PlayService {
   @jsonIgnore() allowed = 0;
   @jsonIgnore() isPlaying = false;
   @jsonIgnore() pgns: Square[] = [];
+
+  private date = Date.now();
 
   constructor() {
     makeAutoObservable(this);
@@ -126,6 +128,7 @@ export class PlayService {
   addMove(san: string) {
     const prev = this.nextPlayer();
     if (prev instanceof Human) this.isPlaying = true;
+    this.date = Date.now();
     this.log.push(san);
     analyzerService.reset();
     this.fen = rulesService.newFen(this.fen, san);
@@ -271,12 +274,9 @@ export class PlayService {
 
   // Board actions
 
-  readonly onDragStartAction = (bfrom: Square) => {
-    console.log('dragstart:' + bfrom);
-    if (editService.showEdit) return true;
+  readonly pieceStart = (from: Square) : any => {
     const player = this.nextPlayer();
     if (player instanceof Human && !this.isComplete) {
-      const from = this.board2Square(bfrom);
       const movable = this.isMoveable(from);
       if (movable) {
         mediaService.sound_click.play().then();
@@ -286,17 +286,11 @@ export class PlayService {
     return false;
   };
 
-  readonly onPieceDropAction = (bfrom: Square, bto: Square) => {
-    if (editService.showEdit) {
-      editService.editMove(bfrom, bto);
-      return true;
-    }
-    const from = this.board2Square(bfrom);
-    const to = this.board2Square(bto);
+  pieceMove(from: Square, to: Square){
     if (
-      analyzerService.help.length > 1 &&
-      analyzerService.help[0] == to &&
-      analyzerService.help[1] == from
+        analyzerService.help.length > 1 &&
+        analyzerService.help[0] == to &&
+        analyzerService.help[1] == from
     ) {
       mediaService.playCorrect();
     }
@@ -307,11 +301,6 @@ export class PlayService {
     isOk ? mediaService.soundMove() : mediaService.soundError();
     return isOk;
   };
-
-  board2Square(sq: Square) {
-    const r90 = configService.rotation % 2 == 1;
-    return r90 ? rulesService.leftSquare(sq) : sq;
-  }
 
   move(from: Square, to: Square, isHuman: boolean) {
     const move = rulesService.move(this.fen, from, to);
@@ -332,8 +321,6 @@ export class PlayService {
       }
     }
   }
-
-  readonly onSquareClickAction = (square: Square) => editService.onSquareClick(square);
 
   markEdit(func: VoidFunction) {
     if (editService.showEdit && editService.editSquare != '') func();

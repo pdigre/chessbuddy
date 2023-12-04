@@ -4,10 +4,17 @@ import { Chessboard } from 'react-chessboard';
 import { ConfigService } from '../../common/service/config.service';
 import { RefreshService } from '../../common/service/refresh.service';
 import { observer } from 'mobx-react';
-import { rulesService as rules, playService } from '../../common/service/index.service';
+import {
+  configService,
+  editService,
+  playService,
+  rulesService,
+  rulesService as rules,
+} from '../../common/service/index.service';
 import { FEN } from '../../common/model/fen';
 import { RenderingService } from '../../common/service/rendering.service';
 import { EditService } from '../../common/service/edit.service';
+import { Square } from '../../common/service/rules.service';
 
 export const Board = observer(
   ({
@@ -22,14 +29,14 @@ export const Board = observer(
     config: ConfigService;
     refresh: RefreshService;
   }) => {
-    const whiteSquareStyle: React.CSSProperties = {
+    const whiteSquareStyle: Record<string, string> = {
       backgroundColor: 'rgb(240, 217, 181)',
     };
-    const blackStyle: React.CSSProperties = {
+    const blackStyle: Record<string, string> = {
       backgroundColor: 'rgb(181, 136, 99)',
     };
 
-    const {r90, r180} = rules.splitRotation(config.rotation);
+    const { r90, r180 } = rules.splitRotation(config.rotation);
 
     const showMarkers = () => {
       const markers = {};
@@ -75,13 +82,31 @@ export const Board = observer(
     };
 
     const fen = refresh.showBlank ? FEN.CLEAR_GAME : edit.showEdit ? edit.editFen : playService.fen;
-
+    const onPieceDropAction = (boardFrom: Square, boardTo: Square) => {
+      if (editService.showEdit) {
+        editService.editMove(boardFrom, boardTo);
+        return true;
+      }
+      return playService.pieceMove(
+        rulesService.board2Square(boardFrom, configService.rotation),
+        rulesService.board2Square(boardTo, configService.rotation)
+      );
+    };
+    const onDragStartAction = (piece: string, boardFrom: Square): any => {
       return (
+        editService.showEdit ||
+        playService.pieceStart(rulesService.board2Square(boardFrom, configService.rotation))
+      );
+    };
+
+    const onSquareClickAction = (square: Square) => editService.onSquareClick(square);
+
+    return (
       <Chessboard
         position={r90 ? rules.leftFen(fen) : fen}
-        onPieceDragBegin={playService.onDragStartAction}
-        onPieceDrop={(from, to) => playService.onPieceDropAction(from, to)}
-        onSquareClick={playService.onSquareClickAction}
+        onPieceDragBegin={onDragStartAction}
+        onPieceDrop={onPieceDropAction}
+        onSquareClick={onSquareClickAction}
         boardOrientation={!r180 ? 'white' : 'black'}
         boardWidth={rendering.boardWidth}
         customSquareStyles={showMarkers()}

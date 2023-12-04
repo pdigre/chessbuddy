@@ -73,7 +73,8 @@ export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) 
             <tr
               key={iLine.toString()}
               id={iLine.toString()}
-              className={iLine == config.cursor ? 'bg-green-300' : ''}>
+              className={iLine == config.cursor ? 'bg-green-300' : ''}
+            >
               <td className="dark:text-white">{item.getName()}</td>
               <td className="dark:text-white">{item.getDescription()}</td>
             </tr>

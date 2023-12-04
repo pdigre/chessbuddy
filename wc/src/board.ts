@@ -2,9 +2,12 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ChessBoardElement } from 'chessboard-element';
 import {
-  rulesService as rules,
+  configService,
+  editService,
   playService,
   renderingService,
+  rulesService,
+  rulesService as rules,
 } from '../../common/service/index.service';
 import { RefreshService } from '../../common/service/refresh.service';
 import { ConfigService } from '../../common/service/config.service';
@@ -14,7 +17,7 @@ import { FEN } from '../../common/model/fen';
 import { AnalyzerService } from '../../common/service/analyzer.service';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { property } from 'lit-element/decorators.js';
-import { action, observable } from 'mobx';
+import { observable } from 'mobx';
 import { Square } from '../../common/service/rules.service';
 
 export interface ChessBoardEvent {
@@ -98,24 +101,34 @@ export class Board extends MobxLitElement {
     const rotation = !r180 ? 'white' : 'black';
     console.log(rotation + ':' + startPos);
     const side = (isWhite: boolean) => (isWhite ? 'rgb(240, 217, 181)' : 'rgb(181, 136, 99)');
+
+    const onPieceDropAction = (boardFrom: Square, boardTo: Square) => {
+      if (editService.showEdit) {
+        editService.editMove(boardFrom, boardTo);
+        return true;
+      }
+      return playService.pieceMove(
+        rulesService.board2Square(boardFrom, configService.rotation),
+        rulesService.board2Square(boardTo, configService.rotation)
+      );
+    };
     const dropHandler = (e: CustomEvent<ChessBoardEvent>) => {
-      const from = e.detail.source as Square;
-      const to = e.detail.target as Square;
-      const isOk = playService.onPieceDropAction(from, to);
-      if (!isOk) {
+      if (!onPieceDropAction(e.detail.source as Square, e.detail.target as Square)) {
         e.preventDefault();
         e.detail.setAction('snapback');
       }
     };
 
     const clickHandler = (e: MouseEvent) => {
-      playService.onSquareClickAction(this.xy2square(e.offsetX, e.offsetY));
+      editService.onSquareClick(this.xy2square(e.offsetX, e.offsetY));
     };
 
-    const dragStartHandler = (e: MouseEvent) => {
-      const s = this.xy2square(e.offsetX, e.offsetY);
-      console.log('click ' + s);
-      playService.onSquareClickAction(s as Square);
+    const onDragStartAction = (e: MouseEvent) => {
+      const boardFrom = this.xy2square(e.offsetX, e.offsetY);
+      return (
+        editService.showEdit ||
+        playService.pieceStart(rulesService.board2Square(boardFrom, configService.rotation))
+      );
     };
 
     return html`
@@ -132,9 +145,9 @@ export class Board extends MobxLitElement {
         position=${startPos}
         orientation=${rotation}
         style="width: ${renderingService.boardWidth}px"
-        @drag-start=${action(dragStartHandler)}
-        @drop=${action(dropHandler)}
-        @click=${action(clickHandler)}
+        @drag-start=${onDragStartAction}
+        @drop=${dropHandler}
+        @click=${clickHandler}
         customSquareStyles=${showMarkers()}
       ></chess-board>
     `;

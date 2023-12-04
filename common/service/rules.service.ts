@@ -1,6 +1,7 @@
 import type { Move, Square } from 'chess.js';
 import { Chess, SQUARES, QUEEN } from 'chess.js';
 import { FEN } from '../model/fen';
+import {rulesService} from "./index.service";
 
 export type Fen = string;
 export type { Square, Move };
@@ -101,4 +102,10 @@ export class RulesService {
       r180: rot > 1,
     };
   }
+
+  board2Square(sq: Square, rotation: number) {
+    const r90 = rotation % 2 == 1;
+    return r90 ? this.leftSquare(sq) : sq;
+  }
+
 }

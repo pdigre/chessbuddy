@@ -44,7 +44,8 @@ export const ConfigSelect = observer(
           inputProps={{
             name: label,
             id: 'for',
-          }}>
+          }}
+        >
           <option aria-label="None" value="" />
           {choices.map(name => (
             <option key={name} value={name}>
@@ -76,7 +77,8 @@ export const ConfigButton: React.FC<{
       sx={{ backgroundColor: renderingService.darkTheme ? 'green' : 'darkgreen' }}
       onClick={onClick}
       variant="contained"
-      disabled={disabled ?? false}>
+      disabled={disabled ?? false}
+    >
       <span className="text-3xl">{icon}</span>
       <span className="text-lg ml-2">{label}</span>
     </Button>
@@ -145,12 +147,14 @@ export const ConfigListTable = observer(({ config }: { config: ConfigService }) 
         if (event.target instanceof HTMLTableCellElement) {
           config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
         }
-      })}>
+      })}
+    >
       {config.getItems.map((item, iLine) => (
         <tr
           key={iLine.toString()}
           id={iLine.toString()}
-          className={iLine == config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}>
+          className={iLine == config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}
+        >
           <td className="dark:text-white">{item.getName()}</td>
           <td className="dark:text-white">{item.getDescription()}</td>
         </tr>
@@ -196,7 +200,8 @@ export const ConfigPopup = observer(
         aria-labelledby="message"
         onClose={action(configService.closePopupAction)}
         className="text-center text-lg"
-        open={true}>
+        open={true}
+      >
         <DialogTitle id="message">
           {configService.isEdit ? 'Edit' : 'Add'} {configService.getTitleType}
         </DialogTitle>

@@ -36,7 +36,8 @@ export const MainButtonBar = observer(
         className="h-14 flex-grow bg-green-700"
         sx={{ backgroundColor: 'darkgreen' }}
         onClick={action(props.onClick)}
-        variant="contained">
+        variant="contained"
+      >
         {props.children}
       </Button>
     );
