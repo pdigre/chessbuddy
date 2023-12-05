@@ -1,9 +1,7 @@
 {
   "name": "chessbuddy_react",
   "version": "0.23.0",
-  "private": true,
   "homepage": ".",
-  "type": "module",
   "dependencies": {
     "esbuild": "^0.19.8",
     "mobx": "^6.12.0",
@@ -14,12 +12,11 @@
     "react-icons": "^4.11.0"
   },
   "scripts": {
-    "dev": "bun watch:css && bunx --bun vite",
-    "prod": "bun watch:css && bunx --bun vite build",
+    "start": "bun watch:css && bunx --bun vite",
+    "build2": "bun watch:css && bunx --bun vite build",
     "build": "npm run watch:css && vite build",
-    "serve": "bun serve.ts",
-    "format": "bunx prettier . --write",
     "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
+    "serve": "bun serve.ts",
     "build:bun": "bunx --bun vite build",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
@@ -46,6 +43,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.17",
+    "@types/chess.js": "^0.13.7",
     "@types/react": "^18.2.36",
     "@types/react-dom": "^18.2.14",
     "@types/w3c-web-serial": "^1.0.6",
