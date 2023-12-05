@@ -1,10 +1,10 @@
-import {Human} from '../model/human';
-import {San} from './openings.service';
-import {makeAutoObservable} from 'mobx';
-import {Chess, Piece, Square, WHITE} from 'chess.js';
-import {Clock} from '../model/clock';
-import {toMMSS} from '../resources/library';
-import {BotRunner} from './bot.service';
+import { Human } from '../model/human';
+import { San } from './openings.service';
+import { makeAutoObservable } from 'mobx';
+import { Chess, Piece, Square, WHITE } from 'chess.js';
+import { Clock } from '../model/clock';
+import { toMMSS } from '../resources/library';
+import { BotRunner } from './bot.service';
 import {
   analyzerService,
   botService,
@@ -20,8 +20,8 @@ import {
   rulesService,
   storageService,
 } from './index.service';
-import {jsonIgnore} from 'json-ignore';
-import {FEN} from '../model/fen';
+import { jsonIgnore } from 'json-ignore';
+import { FEN } from '../model/fen';
 
 /*
  * Everything about the current game (can be restored when returning to browser later)
@@ -274,7 +274,7 @@ export class PlayService {
 
   // Board actions
 
-  readonly pieceStart = (from: Square) : any => {
+  readonly pieceStart = (from: Square): any => {
     const player = this.nextPlayer();
     if (player instanceof Human && !this.isComplete) {
       const movable = this.isMoveable(from);
@@ -286,11 +286,11 @@ export class PlayService {
     return false;
   };
 
-  pieceMove(from: Square, to: Square){
+  pieceMove(from: Square, to: Square) {
     if (
-        analyzerService.help.length > 1 &&
-        analyzerService.help[0] == to &&
-        analyzerService.help[1] == from
+      analyzerService.help.length > 1 &&
+      analyzerService.help[0] == to &&
+      analyzerService.help[1] == from
     ) {
       mediaService.playCorrect();
     }
@@ -300,7 +300,7 @@ export class PlayService {
     const isOk = state != this.log.length;
     isOk ? mediaService.soundMove() : mediaService.soundError();
     return isOk;
-  };
+  }
 
   move(from: Square, to: Square, isHuman: boolean) {
     const move = rulesService.move(this.fen, from, to);
