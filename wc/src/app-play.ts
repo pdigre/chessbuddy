@@ -4,41 +4,33 @@ import { clockService, openingsService } from '../../common/service/index.servic
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { PlayService } from '../../common/service/play.service.ts';
 import { ClockService } from '../../common/service/clock.service.ts';
-import { STYLES } from './css.ts';
-import { property } from 'lit-element/decorators.js';
+import {STYLES} from "./css.ts";
 
-@customElement('cb-ticker-top')
-export class TickerTop extends MobxLitElement {
+@customElement('cb-ticker')
+export class Ticker extends MobxLitElement {
   clock!: ClockService;
   render() {
-    return html`<span>${this.clock.top}</span>`;
-  }
-}
-
-@customElement('cb-ticker-bottom')
-export class TickerBottom extends MobxLitElement {
-  clock!: ClockService;
-  render() {
-    return html`<span>${this.clock.bottom}</span>`;
+    return html`<span>${this.clock.clockText}</span>`;
   }
 }
 
 @customElement('cb-playerinfobar')
 export class PlayerInfoBar extends MobxLitElement {
-  @property({ attribute: true })
-  isTop!: string;
+  isTop!: boolean;
   play!: PlayService;
   render() {
-    const { label, banner, isTextRight } = this.play.getPlayerInfo(this.isTop == 'true');
+    new Ticker();
+    const { other, label, showTicker, banner, isTextRight } = this.play.getPlayerInfo(this.isTop);
     return html`
       ${STYLES}
       <style>
         p {
           height: 31px;
+          padding: 1px 5px 1px 5px;
         }
       </style>
-      <p class="text-xl m-0 p-1 ${isTextRight ? ' text-right' : ''}">
-        ${label} &lt; <slot></slot>
+      <p class="text-xl m-0 ${(isTextRight ? ' text-right' : '')}">
+        ${label} &lt; ${showTicker ? html`<cb-ticker .clock=${clockService} />` : html`${other}`}
         &gt; ${banner}
       </p>
     `;

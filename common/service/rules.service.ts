@@ -1,7 +1,6 @@
 import type { Move, Square } from 'chess.js';
 import { Chess, SQUARES, QUEEN } from 'chess.js';
 import { FEN } from '../model/fen';
-import { rulesService } from './index.service';
 
 export type Fen = string;
 export type { Square, Move };

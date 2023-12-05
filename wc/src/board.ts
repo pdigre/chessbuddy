@@ -19,6 +19,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { property } from 'lit-element/decorators.js';
 import { observable } from 'mobx';
 import { Square } from '../../common/service/rules.service';
+import {css} from "lit-element";
 
 export interface ChessBoardEvent {
   source?: Square;
@@ -131,6 +132,12 @@ export class Board extends MobxLitElement {
       );
     };
 
+    const STYLE=css`
+      width: ${renderingService.boardWidth}px;
+      height: ${renderingService.boardWidth}px;
+        border-width: 0;
+    `;
+
     return html`
       <style>
         --light-color {
@@ -141,10 +148,10 @@ export class Board extends MobxLitElement {
         }
       </style>
       <chess-board
+          style=${STYLE}
         draggable-pieces
         position=${startPos}
         orientation=${rotation}
-        style="width: ${renderingService.boardWidth}px"
         @drag-start=${onDragStartAction}
         @drop=${dropHandler}
         @click=${clickHandler}

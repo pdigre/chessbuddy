@@ -16,7 +16,7 @@ export class CP extends MobxLitElement {
       ${STYLES}
       <style>
         .main {
-          width: 1.5rem;
+          width: 32px;
         }
         .divs {
           writing-mode: vertical-lr;
@@ -39,7 +39,7 @@ export class CP extends MobxLitElement {
           background-color: rgb(0 0 0 / var(--tw-bg-opacity));
         }
       </style>
-      <div class="main h-full flex flex-col flex-grow">
+      <div class="main h-full flex flex-col flex-grow text-lg">
         ${this.config.showCP
           ? html``
           : html`

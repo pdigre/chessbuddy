@@ -106,20 +106,21 @@ export const STYLES = html`
     .text-right {
       text-align: right;
     }
-
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
     .text-3xl {
       font-size: 1.875rem;
       line-height: 2.25rem;
     }
-
     .text-7xl {
       font-size: 4.5rem;
       line-height: 1;
-    }
-
-    .text-lg {
-      font-size: 1.125rem;
-      line-height: 1.75rem;
     }
     .w-full {
       width: 100%;
