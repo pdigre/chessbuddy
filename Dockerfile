@@ -1,11 +1,16 @@
 # Builder Frontend
 FROM node:latest AS fe-builder
 WORKDIR /usr/src/app
-COPY package.json ./
-COPY package-lock.json ./
-COPY tsconfig.json ./
+COPY common ./common
+COPY react ./react
+COPY wc ./wc
+WORKDIR /usr/src/app/common
 RUN npm install
-COPY . ./
+WORKDIR /usr/src/app/react
+RUN npm install
+RUN npm run build
+WORKDIR /usr/src/app/wc
+RUN npm install
 RUN npm run build
 
 # Builder backend
