@@ -11,14 +11,38 @@ import {
   TableList,
 } from './config-widgets';
 import { ConnectService } from '../../common/service/connect.service';
-import { STYLES } from './css';
 import { Engines } from '../../common/model/bot';
 import { action } from 'mobx';
+import { css } from 'lit-element';
+import { TW_CSS } from './css.ts';
 
 @customElement('cb-config-bot')
 export class ConfigBot extends MobxLitElement {
   config!: ConfigService;
   connect!: ConnectService;
+
+  static styles = [
+    css`
+      .div {
+        width: 800px;
+        height: 400px;
+        cb\-table\-list,
+        cb\-config\-button {
+          // mx-1
+          margin-left: 0.25rem;
+          margin-right: 0.25rem;
+          background-color: greenyellow;
+        }
+      }
+      mx-2 {
+        // mx-2
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+    `,
+    TW_CSS,
+  ];
+
   render() {
     this.config.setListType = ListType.Bot;
     const items = this.config.bots;
@@ -36,22 +60,6 @@ export class ConfigBot extends MobxLitElement {
     const editHandler = action(() => (this.config.setListMode = ListMode.Edit));
     const deleteHandler = action(() => this.config.deleteItem());
     return html`
-      ${STYLES}
-      <style>
-        .div {
-          width: 800px;
-          height: 400px;
-          cb-table-list, cb-config-button { // mx-1
-            margin-left: 0.25rem;
-            margin-right: 0.25rem;
-            background-color: greenyellow;
-          }
-        }
-        mx-2 { // mx-2
-            margin-left: 0.5rem;
-            margin-right: 0.5rem;
-          }
-      </style>
       <div class="div">
         <cb-table-list
           class="text-left"

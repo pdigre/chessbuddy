@@ -2,8 +2,9 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { GameEntry, HistoryService } from '../../common/service/history.service';
-import { STYLES } from './css';
 import { action } from 'mobx';
+import { css } from 'lit-element';
+import { TW_CSS } from './css.ts';
 
 @customElement('cb-panel-hist')
 export class PanelHist extends MobxLitElement {
@@ -33,23 +34,26 @@ export class PanelHist extends MobxLitElement {
     }
   };
 
+  static styles = [
+    css`
+      md-outlined-select {
+        min-width: 200px;
+      }
+      .mark {
+        --tw-bg-opacity: 1;
+        background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+      }
+      .td {
+        padding: 3px;
+      }
+    `,
+    TW_CSS,
+  ];
+
   render() {
     const rows = this.history.getGames();
     const mark = this.history.markHist;
     return html`
-      ${STYLES}
-      <style>
-        md-outlined-select {
-          min-width: 200px;
-        }
-        .mark {
-          --tw-bg-opacity: 1;
-          background-color: rgb(134 239 172 / var(--tw-bg-opacity));
-        }
-        .td {
-          padding: 3px;
-        }
-      </style>
       <div class="m-0 p-0 w-full overflow-auto" ref="{scrollRef}">
         <table
           class="m-0 table-fixed w-full"

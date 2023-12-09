@@ -19,7 +19,7 @@ import { MessageDialog } from './message-dialog.ts';
 import { action } from 'mobx';
 import { MdTextButton } from '@material/web/button/text-button';
 import { ConfigDialog } from './config-dialog.ts';
-import { STYLES } from './css.ts';
+import { TW_CSS, MD_ICONS } from './css.ts';
 import { Mp4Dialog } from './mp4dialog.ts';
 import { ConfigBluetooth } from './config-bluetooth.ts';
 import { ConfigBot } from './config-bot.ts';
@@ -33,9 +33,59 @@ import { PanelHist } from './panel-hist.ts';
 import { PanelEdit } from './panel-edit.ts';
 import { CP } from './cp.ts';
 import { FenInfo, PlayerInfoBar } from './app-play.ts';
+import { css } from 'lit-element';
 
 @customElement('cb-app')
 export class App extends LitElement {
+  static styles = [
+    css`
+      :root {
+        --md-outlined-button-container-shape: 0px;
+        --md-outlined-button-label-text-font: system-ui;
+        --md-sys-color-primary: #1d3f3f;
+        --md-sys-color-outline: #502121;
+      }
+      .main {
+        width: 1024px;
+        height: 748px;
+        --tw-bg-opacity: 1;
+        background-color: rgb(220 252 231 / var(--tw-bg-opacity));
+        :is(.dark .dark:bg-green-900) {
+          --tw-bg-opacity: 1;
+          background-color: rgb(20 83 45 / var(--tw-bg-opacity));
+        }
+        border-width: 0px;
+      }
+      .header {
+        height: 32px;
+        :is(.dark .dark:text-white) {
+          --tw-text-opacity: 1;
+          color: rgb(255 255 255 / var(--tw-text-opacity));
+        }
+      }
+      .config {
+        width: 900px;
+        height: 600px;
+      }
+      .down {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+      }
+      cb\-cp {
+        width: 24px;
+      }
+      cb\-board {
+      }
+      md\-text\-button {
+        height: 32px;
+        margin: 0;
+        padding: 0;
+      }
+    `,
+    TW_CSS,
+  ];
+
   render() {
     new Board();
 
@@ -58,58 +108,13 @@ export class App extends LitElement {
     new ConfigBluetooth();
 
     return html`
-      ${STYLES}
-      <style>
-        :root {
-          --md-outlined-button-container-shape: 0px;
-          --md-outlined-button-label-text-font: system-ui;
-          --md-sys-color-primary: #1d3f3f;
-          --md-sys-color-outline: #502121;
-        }
-        .main {
-          width: 1024px;
-          height: 748px;
-          --tw-bg-opacity: 1;
-          background-color: rgb(220 252 231 / var(--tw-bg-opacity));
-          :is(.dark .dark:bg-green-900) {
-            --tw-bg-opacity: 1;
-            background-color: rgb(20 83 45 / var(--tw-bg-opacity));
-          }
-          border-width: 0px;
-        }
-        .header {
-          height: 32px;
-          :is(.dark .dark:text-white) {
-            --tw-text-opacity: 1;
-            color: rgb(255 255 255 / var(--tw-text-opacity));
-          }
-        }
-        .config {
-          width: 900px;
-          height: 600px;
-        }
-        .down {
-          display: flex;
-          flex-grow: 1;
-          flex-direction: column;
-        }
-        cb\-cp {
-          width: 24px;
-        }
-        cb\-board {
-          
-        }
-        md\-text\-button {
-          height: 32px;
-          margin: 0;
-          padding: 0;
-        }
-      </style>
+      ${MD_ICONS}
       <div class="main flex m-0 p-0 flex-row">
         <cb-cp .analyzer=${analyzerService} .config=${configService}></cb-cp>
         <div class="down flex flex-col flex-grow">
           <cb-playerinfobar class="m-0 p-0" .isTop=${true} .play=${playService}></cb-playerinfobar>
-          <cb-board class="m-0 p-0"
+          <cb-board
+            class="m-0 p-0"
             .analyzer=${analyzerService}
             .edit=${editService}
             .rendering=${renderingService}

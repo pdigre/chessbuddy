@@ -8,13 +8,23 @@ import { MdPrimaryTab } from '@material/web/tabs/primary-tab';
 import { MdTabs } from '@material/web/tabs/tabs';
 import { configService, playService } from '../../common/service/index.service';
 import { action } from 'mobx';
-import { STYLES } from './css';
+import { TW_CSS, MD_ICONS } from './css';
+import { css } from 'lit-element';
 
 @customElement('cb-panel')
 export class Panel extends MobxLitElement {
   edit!: EditService;
   dashboard!: DashboardService;
   history!: HistoryService;
+
+  static styles = [
+    css`
+      .hidden {
+        display: none;
+      }
+    `,
+    TW_CSS,
+  ];
 
   render() {
     new MdTabs();
@@ -35,12 +45,7 @@ export class Panel extends MobxLitElement {
     const page = this.edit.showEdit ? 'edit' : this.dashboard.showHist ? 'hist' : 'log';
     const show = (name: string) => (page == name ? '' : 'hidden');
     return html`
-      ${STYLES}
-      <style>
-        .hidden {
-          display: none;
-        }
-      </style>
+      ${MD_ICONS}
       <md-tabs color="primary" aria-label="outlined primary button group" class="w-full">
         <md-primary-tab @click=${action(playService.playButtonAction)}>
           <span class="text-3xl material-symbols-outlined">${button1}</span>

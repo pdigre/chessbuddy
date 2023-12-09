@@ -10,9 +10,9 @@ import { configService } from '../../common/service/index.service';
 import { ConfigProp, ConfigService, ListItem, ListMode } from '../../common/service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
-import { STYLES } from './css';
+import { TW_CSS, MD_ICONS } from './css';
 import { MdDialog } from '@material/web/dialog/dialog';
-import { LitElement } from 'lit-element';
+import { css, LitElement } from 'lit-element';
 
 @customElement('cb-config-select')
 export class ConfigSelect extends LitElement {
@@ -22,6 +22,15 @@ export class ConfigSelect extends LitElement {
   id!: string;
   choices!: string[];
   props?: Map<string, ConfigProp<string>>;
+
+  static styles = [
+    css`
+      md\-outlined\-select {
+        min-width: 200px;
+      }
+    `,
+    TW_CSS,
+  ];
 
   render() {
     new MdOutlinedSelect();
@@ -33,12 +42,6 @@ export class ConfigSelect extends LitElement {
       prop?.set(event.target?.value);
     };
     return html`
-      ${STYLES}
-      <style>
-        md-outlined-select {
-          min-width: 200px;
-        }
-      </style>
       <label htmlFor="select"> ${this.label} </label>
       <md-outlined-select>
         <md-select-option></md-select-option>
@@ -75,15 +78,18 @@ export class TableList extends LitElement {
     }
   };
 
+  static styles = [
+    css`
+      .mark {
+        --tw-bg-opacity: 1;
+        background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+      }
+    `,
+    TW_CSS,
+  ];
+
   render() {
     return html`
-      ${STYLES}
-      <style>
-        .mark {
-          --tw-bg-opacity: 1;
-          background-color: rgb(134 239 172 / var(--tw-bg-opacity));
-        }
-      </style>
       <table
         class="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2"
         @click=${this.selectHandler}
@@ -107,10 +113,12 @@ export class TableList extends LitElement {
 export class ConfigListButtons extends MobxLitElement {
   config!: ConfigService;
 
+  static styles = [css``, TW_CSS];
+
   render() {
     const hasSelect = this.config.cursor >= 0;
     return html`
-      ${STYLES}
+      ${MD_ICONS}
       <div className="[&>button]:mx-1">
         <cb-config-button
           .onClick=${action(() => (this.config.setListMode = ListMode.Add))}
@@ -139,13 +147,15 @@ export class ConfigListButtons extends MobxLitElement {
 export class ConfigPopup extends MobxLitElement {
   config!: ConfigService;
 
+  static styles = [css``, TW_CSS];
+
   render() {
     if (this.config.listMode === ListMode.None) {
       return '';
     }
     new MdDialog();
     return html`
-      ${STYLES}
+      ${MD_ICONS}
       <md-dialog
         aria-labelledby="message"
         @close=${action(configService.closePopupAction)}
@@ -175,22 +185,26 @@ export class ConfigButton extends MobxLitElement {
   icon?: string;
   disabled?: boolean;
 
+  static styles = [
+    css`
+      md-outlined-button:root {
+        --md-outlined-button-container-shape: 0px;
+        --md-outlined-button-label-text-font: system-ui;
+        --md-sys-color-primary: #3d1818;
+        --md-sys-color-outline: #245541;
+      }
+      md-outlined-button {
+        height: 3.5rem;
+        margin: 0.5rem;
+      }
+    `,
+    TW_CSS,
+  ];
+
   render() {
     new MdOutlinedButton();
     return html`
-      ${STYLES}
-      <style>
-        md-outlined-button:root {
-          --md-outlined-button-container-shape: 0px;
-          --md-outlined-button-label-text-font: system-ui;
-          --md-sys-color-primary: #3d1818;
-          --md-sys-color-outline: #245541;
-        }
-        md-outlined-button {
-          height: 3.5rem;
-          margin: 0.5rem;
-        }
-      </style>
+      ${MD_ICONS}
       <md-outlined-button
         class="flex-grow text-lg"
         @click=${action(this.onClick)}
@@ -211,19 +225,23 @@ export class ConfigBoolean extends MobxLitElement {
   @property({ attribute: true })
   id!: string;
 
+  static styles = [
+    css`
+      .text {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        margin-left: 0.5rem;
+      }
+    `,
+    TW_CSS,
+  ];
+
   render() {
     const prop = this.props.get(this.id);
     let checked = prop?.get();
     new MdCheckbox();
     const handler = (e: Event) => prop?.set(e.target!.checked);
     return html`
-      <style>
-        .text {
-          font-size: 1.125rem;
-          line-height: 1.75rem;
-          margin-left: 0.5rem;
-        }
-      </style>
       <label>
         <md-checkbox
           touch-target="wrapper"

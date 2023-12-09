@@ -3,14 +3,18 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigProp, ConfigService, ListItem } from '../../common/service/config.service';
 import { ConfigButton } from './config-widgets';
-import { STYLES } from './css';
 import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
 import { Board } from './board';
+import { css } from 'lit-element';
+import { TW_CSS } from './css.ts';
 
 @customElement('cb-config-bluetooth')
 export class ConfigBluetooth extends MobxLitElement {
   config!: ConfigService;
+
+  static styles = [css``, TW_CSS];
+
   render() {
     const items: BT[] = [];
     bluetoothService.btDevices.map(device => new BT(device.id, device.name ?? 'UNKNOWN'));
@@ -26,7 +30,6 @@ export class ConfigBluetooth extends MobxLitElement {
     new ConfigButton();
 
     return html`
-      ${STYLES}
       <div class="w-[800px] h-[400px] [&>div]:text-left">
         <table class="w-full text-left text-lg dark:bg-slate-800 border-2 border-separate p-2">
           <tbody onClick=${action(doSelect)}>

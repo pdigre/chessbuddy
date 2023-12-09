@@ -4,8 +4,9 @@ import { customElement } from 'lit/decorators.js';
 import { dashboardService } from '../../common/service/index.service';
 import { HistoryService } from '../../common/service/history.service';
 import { PlayService } from '../../common/service/play.service';
-import { STYLES } from './css';
 import { action } from 'mobx';
+import { css } from 'lit-element';
+import { TW_CSS } from './css.ts';
 
 @customElement('cb-panel-log')
 export class PanelLog extends MobxLitElement {
@@ -36,6 +37,31 @@ export class PanelLog extends MobxLitElement {
     }
   };
 
+  static styles = [
+    css`
+      md\-outlined\-select {
+        min-width: 200px;
+      }
+      .mark {
+        --tw-bg-opacity: 1;
+        background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+      }
+      .td1 {
+        width: 1.25rem;
+        padding: 2px;
+        span {
+          --tw-text-opacity: 1;
+          color: rgb(127 29 29 / var(--tw-text-opacity));
+        }
+      }
+      .td {
+        width: 30px;
+        padding: 2px;
+      }
+    `,
+    TW_CSS,
+  ];
+
   // dashboardService.markLog == -1
   render() {
     this.history.enterLogCheck();
@@ -48,28 +74,6 @@ export class PanelLog extends MobxLitElement {
     const rows = this.history.getLogRows();
     const mark = dashboardService.markLog;
     return html`
-      ${STYLES}
-      <style>
-        md-outlined-select {
-          min-width: 200px;
-        }
-        .mark {
-          --tw-bg-opacity: 1;
-          background-color: rgb(134 239 172 / var(--tw-bg-opacity));
-        }
-        .td1 {
-          width: 1.25rem;
-          padding: 2px;
-          span {
-            --tw-text-opacity: 1;
-            color: rgb(127 29 29 / var(--tw-text-opacity));
-          }
-        }
-        .td {
-          width: 30px;
-          padding: 2px;
-        }
-      </style>
       <div class="m-0 p-0 w-full overflow-auto" ref="{scrollRef}">
         <table
           class="m-0 table-fixed w-full"

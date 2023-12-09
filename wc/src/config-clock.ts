@@ -3,8 +3,9 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListMode, ListType } from '../../common/service/config.service';
 import { ConfigListButtons, ConfigPopup, ConfigText, TableList } from './config-widgets';
-import { STYLES } from './css';
+import { TW_CSS } from './css';
 import { action } from 'mobx';
+import { css } from 'lit-element';
 
 @customElement('cb-config-clock')
 export class ConfigClock extends MobxLitElement {
@@ -19,6 +20,28 @@ export class ConfigClock extends MobxLitElement {
   });
   saveHandler = action(() => this.config.saveItem(this.config.getItem, this.config.getItems));
 
+  static styles = [
+    css`
+      .div {
+        width: 800px;
+        height: 400px;
+        cb\-table\-list,
+        cb\-config\-button {
+          // mx-1
+          margin-left: 0.25rem;
+          margin-right: 0.25rem;
+          background-color: greenyellow;
+        }
+      }
+      mx\-2 {
+        // mx-2
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+    `,
+    TW_CSS,
+  ];
+
   render() {
     this.config.setListType = ListType.Clock;
     const items = this.config.clocks;
@@ -29,22 +52,6 @@ export class ConfigClock extends MobxLitElement {
     new ConfigText();
 
     return html`
-      ${STYLES}
-      <style>
-        .div {
-          width: 800px;
-          height: 400px;
-          cb-table-list, cb-config-button { // mx-1
-            margin-left: 0.25rem;
-            margin-right: 0.25rem;
-            background-color: greenyellow;
-          }
-        }
-        mx-2 { // mx-2
-            margin-left: 0.5rem;
-            margin-right: 0.5rem;
-          }
-      </style>
       <div class="div flex flex-col text-center [&>div]:text-left">
         <cb-table-list
           class="text-left"
@@ -76,7 +83,7 @@ export class ConfigClock extends MobxLitElement {
         </div>
         <cb-config-popup .config=${this.config}>
           <p>(from move)+(plus minutes)/(seconds each move) comma separated</p>
-          <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
+          <div class="[&>button]:mx-2 [&>div]:mx-2 mt-3">
             <cb-config-text label="Clock name" id="name"></cb-config-text>
             <cb-config-text label="Timings" id="time"></cb-config-text>
             <cb-config-button

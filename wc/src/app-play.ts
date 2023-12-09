@@ -4,7 +4,8 @@ import { clockService, openingsService } from '../../common/service/index.servic
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { PlayService } from '../../common/service/play.service.ts';
 import { ClockService } from '../../common/service/clock.service.ts';
-import {STYLES} from "./css.ts";
+import { css } from 'lit-element';
+import { TW_CSS } from './css.ts';
 
 @customElement('cb-ticker')
 export class Ticker extends MobxLitElement {
@@ -18,18 +19,20 @@ export class Ticker extends MobxLitElement {
 export class PlayerInfoBar extends MobxLitElement {
   isTop!: boolean;
   play!: PlayService;
+  static styles = [
+    css`
+      p {
+        height: 31px;
+        padding: 1px 5px 1px 5px;
+      }
+    `,
+    TW_CSS,
+  ];
   render() {
     new Ticker();
     const { other, label, showTicker, banner, isTextRight } = this.play.getPlayerInfo(this.isTop);
     return html`
-      ${STYLES}
-      <style>
-        p {
-          height: 31px;
-          padding: 1px 5px 1px 5px;
-        }
-      </style>
-      <p class="text-xl m-0 ${(isTextRight ? ' text-right' : '')}">
+      <p class="text-xl m-0 ${isTextRight ? ' text-right' : ''}">
         ${label} &lt; ${showTicker ? html`<cb-ticker .clock=${clockService} />` : html`${other}`}
         &gt; ${banner}
       </p>

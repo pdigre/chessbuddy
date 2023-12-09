@@ -5,11 +5,26 @@ import { playService } from '../../common/service/index.service';
 import { action } from 'mobx';
 import { ConfigButton, ConfigSelect } from './config-widgets';
 import { ConfigService } from '../../common/service/config.service';
-import { STYLES } from './css';
+import { TW_CSS } from './css';
+import { css } from 'lit-element';
 
 @customElement('cb-config-game')
 export class ConfigGame extends MobxLitElement {
   config!: ConfigService;
+
+  static styles = [
+    css`
+      .main {
+        width: 1000px;
+        height: 400px;
+      }
+      .buttons {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+    `,
+    TW_CSS,
+  ];
 
   render() {
     const players = [...this.config.humans, ...this.config.bots];
@@ -19,17 +34,7 @@ export class ConfigGame extends MobxLitElement {
     new ConfigSelect();
     new ConfigButton();
 
-    return html`${STYLES}
-      <style>
-        .main {
-          width: 1000px;
-          height: 400px;
-        }
-        .buttons {
-          margin-left: 0.5rem;
-          margin-right: 0.5rem;
-        }
-      </style>
+    return html`
       <div class="main text-left flex flex-col">
         <cb-config-select
           label="White"
@@ -74,6 +79,7 @@ export class ConfigGame extends MobxLitElement {
             icon="edit"
           ></cb-config-button>
         </div>
-      </div> `;
+      </div>
+    `;
   }
 }

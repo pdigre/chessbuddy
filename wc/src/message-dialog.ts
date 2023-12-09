@@ -8,8 +8,8 @@ import { MdFilledButton } from '@material/web/button/filled-button';
 import { MdFilledTonalButton } from '@material/web/button/filled-tonal-button';
 import { MessageService, messageType } from '../../common/service/message.service';
 import { action } from 'mobx';
-import { STYLES } from './css';
-import { TemplateResult } from 'lit-element';
+import { TW_CSS, MD_ICONS } from './css';
+import { css, TemplateResult } from 'lit-element';
 import { SVG_DRAW, SVG_KING } from './svg';
 import { configService } from '../../common/service/index.service';
 
@@ -22,6 +22,8 @@ export class MessageDialog extends MobxLitElement {
   public buttons: ButtonType[] = [];
   public clicked = '';
 
+  static styles = [css``, TW_CSS];
+
   public render(): TemplateResult {
     new MdDialog();
     new MdTextButton();
@@ -31,7 +33,7 @@ export class MessageDialog extends MobxLitElement {
 
     const onClick = action((e: MouseEvent) => (this.clicked = e.target?.className));
     return html`
-      ${STYLES}
+      ${MD_ICONS}
       <md-dialog
         id="message-dialog"
         type="alert"

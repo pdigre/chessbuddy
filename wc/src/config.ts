@@ -6,11 +6,25 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { action, runInAction } from 'mobx';
 import { ConfigService } from '../../common/service/config.service';
 import { MdDialog } from '@material/web/dialog/dialog';
-import { STYLES } from './css';
+import { TW_CSS, MD_ICONS } from './css';
+import { css } from 'lit-element';
 
 @customElement('cb-config')
 export class Config extends MobxLitElement {
   config!: ConfigService;
+
+  static styles = [
+    css`
+      .main {
+        width: 1100px;
+        height: 600px;
+      }
+      .hidden {
+        display: none;
+      }
+    `,
+    TW_CSS,
+  ];
 
   render() {
     console.log('config ' + this.config.showConfig);
@@ -28,13 +42,14 @@ export class Config extends MobxLitElement {
     };
 
     const tab = (num: number, icon: string, title: string) => {
-      return html`<md-primary-tab
-        class="text-3xl"
-        @click=${choose(num)}
-        .active=${num === this.config.showTab}
-      >
-        <span class="text-lg material-symbols-outlined">${icon}</span>${title}</md-primary-tab
-      >`;
+      return html` ${MD_ICONS}
+        <md-primary-tab
+          class="text-3xl"
+          @click=${choose(num)}
+          .active=${num === this.config.showTab}
+        >
+          <span class="text-lg material-symbols-outlined">${icon}</span>${title}</md-primary-tab
+        >`;
     };
 
     const i = this.config.showTab;
@@ -42,16 +57,6 @@ export class Config extends MobxLitElement {
     const show = () => (i == j++ ? '' : 'hidden');
 
     return html`
-      ${STYLES}
-      <style>
-        .main {
-          width: 1100px;
-          height: 600px;
-        }
-        .hidden {
-          display: none;
-        }
-      </style>
       <md-dialog
         class="main"
         aria-labelledby="simple-dialog-title"
