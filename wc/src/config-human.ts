@@ -8,6 +8,7 @@ import { ConnectService } from '../../common/service/connect.service';
 import { Human } from '../../common/model/human';
 import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
+import {GETSET} from "./config-widgets.ts";
 
 @customElement('cb-config-human')
 export class ConfigHuman extends MobxLitElement {
@@ -49,6 +50,24 @@ export class ConfigHuman extends MobxLitElement {
     const editHandler = action(() => (this.config.setListMode = ListMode.Edit));
     const deleteHandler = action(() => this.config.deleteItem());
 
+
+    const getset = (id: string) => {
+      return {
+        get: () => {
+          this.config.properties.get(id)?.get();
+        },
+        set: action((value: string) => this.config.properties.get(id)?.set(value)),
+      };
+    };
+
+    const getTitle = () => ((this.config.isEdit() ? 'Edit ' : 'Add ') + this.config.getTitleType());
+    const onClose = action(this.config.closePopupAction);
+    const showPopup = this.config.listMode === ListMode.None;
+
+
+
+    // @ts-ignore
+    const onUpload = action((e: MouseEvent) => historyService.uploadFilesHistory(e.currentTarget?.files));
     return html`
       <table class="w-full">
         <tr>
@@ -68,8 +87,7 @@ export class ConfigHuman extends MobxLitElement {
               class="hidden"
               multiple=${false}
               accept=".txt,text/plain"
-              .onChange=${(e: MouseEvent) =>
-                historyService.uploadFilesHistory(e.currentTarget?.files)}
+              .onChange=${onUpload}
               ref="{uploadRef}"
             />
           </td>

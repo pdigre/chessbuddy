@@ -170,12 +170,12 @@ export class ConfigService {
   }
 
   deleteItem() {
-    const items = this.getItems;
+    const items = this.getItems();
     items.splice(this.cursor, 1);
     this.cursor = -1;
   }
 
-  readonly closePopupAction = () => {
+  closePopupAction = () => {
     this.cursor = -1;
     this.listMode = ListMode.None;
   };
@@ -183,7 +183,7 @@ export class ConfigService {
   set setListType(type: ListType) {
     this.listType = type;
     this.listMode = ListMode.None;
-    this.newItem = this.createItem;
+    this.newItem = this.createItem();
   }
 
   set setListMode(mode: ListMode) {
@@ -192,27 +192,23 @@ export class ConfigService {
 
   saveItem(item: ListItem, items: ListItem[]) {
     if (item.validate()) {
-      const name = this.isEdit ? 'Save' : 'Add';
+      const name = this.isEdit() ? 'Save' : 'Add';
       messageService.display({
         name,
-        title: name + this.getTitleType,
+        title: name + this.getTitleType(),
         msg: item.validate(),
       });
     } else {
-      this.isEdit ? (items[this.cursor] = item) : items.push(item);
+      this.isEdit() ? (items[this.cursor] = item) : items.push(item);
     }
     this.closePopupAction();
   }
 
-  get isEdit() {
+  isEdit() {
     return this.listMode == ListMode.Edit;
   }
 
-  get isAdd() {
-    return this.listMode == ListMode.Add;
-  }
-
-  get getTitleType() {
+  getTitleType() {
     switch (this.listType) {
       case ListType.Human:
         return 'Human';
@@ -223,7 +219,7 @@ export class ConfigService {
     }
   }
 
-  get getItems(): ListItem[] {
+  getItems(): ListItem[] {
     switch (this.listType) {
       case ListType.Human:
         return this.humans;
@@ -234,11 +230,11 @@ export class ConfigService {
     }
   }
 
-  get getItem() {
-    return this.isEdit ? this.getItems[this.cursor] : this.newItem;
+  getItem() {
+    return this.isEdit() ? this.getItems()[this.cursor] : this.newItem;
   }
 
-  get createItem(): ListItem {
+  createItem(): ListItem {
     switch (this.listType) {
       case ListType.Human:
         return Human.create();

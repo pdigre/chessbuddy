@@ -29,7 +29,7 @@ export class ConfigSelect extends LitElement {
 
   render() {
     console.log('choices=' + this.choices);
-    const prop = (this.props ? this.props : configService.getItem.properties).get(this.id);
+    const prop = (this.props ? this.props : configService.getItem().properties).get(this.id);
     const value = prop?.get();
     const onSelect = action(
       (event: MouseEvent) => prop?.set((event.target as HTMLInputElement).value)
@@ -259,10 +259,10 @@ export class ConfigBoolean extends MobxLitElement {
 export class ConfigSaveButton extends MobxLitElement {
   render() {
     const onClick = action(() =>
-      configService.saveItem(configService.getItem, configService.getItems)
+      configService.saveItem(configService.getItem(), configService.getItems())
     );
-    const label = configService.isEdit ? 'Save ' : 'Add ' + configService.getTitleType;
-    const icon = configService.isEdit ? 'save' : 'add';
+    const label = configService.isEdit() ? 'Save ' : 'Add ' + configService.getTitleType();
+    const icon = configService.isEdit() ? 'save' : 'add';
     return html`
       <cb-config-button .onClick=${onClick} label=${label} icon=${icon}></cb-config-button>
     `;
@@ -278,7 +278,7 @@ export class ConfigText2 extends MobxLitElement {
   id!: string;
 
   render() {
-    const item = configService.getItem;
+    const item = configService.getItem();
     // @ts-ignore
     const onChange = action((e: MouseEvent) => item?.properties.get(this.id)?.set(e.target.value));
     return html`
@@ -301,7 +301,7 @@ export class ConfigText extends MobxLitElement {
   id!: string;
 
   render() {
-    const item = configService.getItem;
+    const item = configService.getItem();
     // @ts-ignore
     const onChange = action((e: MouseEvent) => item?.properties.get(this.id)?.set(e.target.value));
     return html`

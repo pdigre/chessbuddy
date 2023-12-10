@@ -31,7 +31,7 @@ export const ConfigSelect = observer(
     choices: string[];
     props?: Map<string, ConfigProp<string>>;
   }) => {
-    const prop = (props ? props : configService.getItem.properties).get(id);
+    const prop = (props ? props : configService.getItem().properties).get(id);
     return (
       <FormControl variant="filled">
         <InputLabel variant="standard" htmlFor={label}>
@@ -87,9 +87,9 @@ export const ConfigButton: React.FC<{
 
 export const ConfigSaveButton: React.FC = () => (
   <ConfigButton
-    onClick={action(() => configService.saveItem(configService.getItem, configService.getItems))}
-    label={configService.isEdit ? 'Save ' : 'Add ' + configService.getTitleType}
-    icon={configService.isEdit ? <MdSave /> : <MdAdd />}
+    onClick={action(() => configService.saveItem(configService.getItem(), configService.getItems()))}
+    label={configService.isEdit() ? 'Save ' : 'Add ' + configService.getTitleType()}
+    icon={configService.isEdit() ? <MdSave /> : <MdAdd />}
   />
 );
 
@@ -98,7 +98,7 @@ export const ConfigText: React.FC<{
   id: string;
   disabled?: boolean;
 }> = ({ label, id }) => {
-  const item = configService.getItem;
+  const item = configService.getItem();
   return (
     <TextField
       label={label}
@@ -148,7 +148,7 @@ export const ConfigListTable = observer(({ config }: { config: ConfigService }) 
           config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
         }
       })}>
-      {config.getItems.map((item, iLine) => (
+      {config.getItems().map((item, iLine) => (
         <tr
           key={iLine.toString()}
           id={iLine.toString()}
@@ -201,7 +201,7 @@ export const ConfigPopup = observer(
         open={true}
       >
         <DialogTitle id="message">
-          {configService.isEdit ? 'Edit' : 'Add'} {configService.getTitleType}
+          {configService.isEdit() ? 'Edit' : 'Add'} {configService.getTitleType()}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>{children}</DialogContentText>

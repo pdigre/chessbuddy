@@ -17,7 +17,7 @@ export class ConfigClock extends MobxLitElement {
     this.config.setCursor(i);
     this.requestUpdate();
   });
-  saveHandler = action(() => this.config.saveItem(this.config.getItem, this.config.getItems));
+  saveHandler = action(() => this.config.saveItem(this.config.getItem(), this.config.getItems()));
 
   static styles = [
     css`
@@ -44,6 +44,10 @@ export class ConfigClock extends MobxLitElement {
     this.config.setListType = ListType.Clock;
     const items = this.config.clocks;
     const hasSelect = this.config.cursor >= 0;
+
+    const getTitle = () => ((this.config.isEdit() ? 'Edit ' : 'Add ') + this.config.getTitleType());
+    const onClose = action(this.config.closePopupAction);
+    const showPopup = this.config.listMode === ListMode.None;
 
     return html`
       <div class="div flex flex-col text-center [&>div]:text-left">
@@ -82,8 +86,8 @@ export class ConfigClock extends MobxLitElement {
             <cb-config-text label="Timings" id="time"></cb-config-text>
             <cb-config-button
               .onClick=${this.saveHandler}
-              label=${this.config.isEdit ? 'Save ' : 'Add ' + this.config.getTitleType}
-              icon=${this.config.isEdit ? 'save' : 'add'}
+              label=${this.config.isEdit() ? 'Save ' : 'Add ' + this.config.getTitleType()}
+              icon=${this.config.isEdit() ? 'save' : 'add'}
             ></cb-config-button>
           </div>
         </cb-config-popup>

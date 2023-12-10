@@ -57,6 +57,10 @@ export class ConfigBot extends MobxLitElement {
     let title = (configService.isEdit ? 'Edit ' : 'Add ') + configService.getTitleType;
 
 */
+    const getTitle = () => ((this.config.isEdit() ? 'Edit ' : 'Add ') + this.config.getTitleType());
+    const onClose = action(this.config.closePopupAction);
+    const showPopup = this.config.listMode === ListMode.None;
+
 
     return html`
       <div class="div">
