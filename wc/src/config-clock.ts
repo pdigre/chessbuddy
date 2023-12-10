@@ -2,7 +2,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListMode, ListType } from '../../common/service/config.service';
-import { ConfigListButtons, ConfigPopup, ConfigText, TableList } from './config-widgets';
 import { TW_CSS } from './css';
 import { action } from 'mobx';
 import { css } from 'lit-element';
@@ -30,7 +29,6 @@ export class ConfigClock extends MobxLitElement {
           // mx-1
           margin-left: 0.25rem;
           margin-right: 0.25rem;
-          background-color: greenyellow;
         }
       }
       mx\-2 {
@@ -46,10 +44,6 @@ export class ConfigClock extends MobxLitElement {
     this.config.setListType = ListType.Clock;
     const items = this.config.clocks;
     const hasSelect = this.config.cursor >= 0;
-    new TableList();
-    new ConfigListButtons();
-    new ConfigPopup();
-    new ConfigText();
 
     return html`
       <div class="div flex flex-col text-center [&>div]:text-left">

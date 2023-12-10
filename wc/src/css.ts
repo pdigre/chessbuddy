@@ -2,10 +2,6 @@ import { CSSResultArray, css, html } from 'lit-element';
 
 export const TW_CSS: CSSResultArray = [
   css`
-    @font-face {
-      font-family: 'Material Design Icons';
-      src: url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined') format('woff');
-    }
     .flex {
       display: flex;
     }
@@ -30,6 +26,18 @@ export const TW_CSS: CSSResultArray = [
     .text-right {
       text-align: right;
     }
+    .text-sm {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
 
     .text-3xl {
       font-size: 1.875rem;
@@ -41,14 +49,6 @@ export const TW_CSS: CSSResultArray = [
       line-height: 1;
     }
 
-    .text-lg {
-      font-size: 1.125rem;
-      line-height: 1.75rem;
-    }
-    .text-sm {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-    }
     .overflow-auto {
       overflow: auto;
     }

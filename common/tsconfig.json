@@ -24,6 +24,6 @@
     "allowJs": true,
     "types": ["bun-types", "web"]
   },
-  "include": ["common"],
+  "include": ["service", "model"],
   "exclude": ["react", "zap"]
 }

@@ -29,8 +29,9 @@ export class PanelLog extends MobxLitElement {
   };
 
   clickHandler = (e: MouseEvent) => {
-    if (e.target.nodeName == 'TD') {
-      const i = +e.target.id;
+    let target = e.target as HTMLElement;
+    if (target.nodeName == 'TD') {
+      const i = +target.id;
       dashboardService.setMarkLog(i);
       e.preventDefault();
       this.requestUpdate();

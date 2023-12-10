@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ChessBoardElement } from 'chessboard-element';
 import {
   configService,
   editService,
@@ -97,7 +96,6 @@ export class Board extends MobxLitElement {
         ? this.edit.editFen
         : playService.fen;
 
-    new ChessBoardElement(); // Must instantiate otherwise do not render
     const startPos = r90 ? rules.leftFen(fen) : fen;
     const rotation = !r180 ? 'white' : 'black';
     console.log(rotation + ':' + startPos);

@@ -2,14 +2,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListMode, ListType } from '../../common/service/config.service';
-import {
-  ConfigButton,
-  ConfigPopup,
-  ConfigSaveButton,
-  ConfigSelect,
-  ConfigText,
-  TableList,
-} from './config-widgets';
 import { ConnectService } from '../../common/service/connect.service';
 import { Engines } from '../../common/model/bot';
 import { action } from 'mobx';
@@ -31,7 +23,6 @@ export class ConfigBot extends MobxLitElement {
           // mx-1
           margin-left: 0.25rem;
           margin-right: 0.25rem;
-          background-color: greenyellow;
         }
       }
       mx-2 {
@@ -48,17 +39,25 @@ export class ConfigBot extends MobxLitElement {
     const items = this.config.bots;
     const engines = Array.from(Engines.map(x => x.name));
 
-    new TableList();
-    new ConfigButton();
-    new ConfigPopup();
-    new ConfigSelect();
-    new ConfigText();
-    new ConfigSaveButton();
-
     const hasSelect = this.config.cursor >= 0;
     const addHandler = action(() => (this.config.setListMode = ListMode.Add));
     const editHandler = action(() => (this.config.setListMode = ListMode.Edit));
     const deleteHandler = action(() => this.config.deleteItem());
+
+    /*
+    const getset = (id: string) => {
+      return {
+        get: () => {
+          this.config.properties.get(id)?.get();
+        },
+        set: action((value: string) => this.config.properties.get(id)?.set(value)),
+      } as GETSET;
+    };
+    let onClose = action(configService.closePopupAction);
+    let title = (configService.isEdit ? 'Edit ' : 'Add ') + configService.getTitleType;
+
+*/
+
     return html`
       <div class="div">
         <cb-table-list

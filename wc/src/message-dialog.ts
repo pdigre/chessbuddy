@@ -2,10 +2,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { PropertyValueMap, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MdDialog } from '@material/web/dialog/dialog';
-import { MdTextButton } from '@material/web/button/text-button';
-import { MdOutlinedButton } from '@material/web/button/outlined-button';
-import { MdFilledButton } from '@material/web/button/filled-button';
-import { MdFilledTonalButton } from '@material/web/button/filled-tonal-button';
 import { MessageService, messageType } from '../../common/service/message.service';
 import { action } from 'mobx';
 import { TW_CSS, MD_ICONS } from './css';
@@ -25,13 +21,7 @@ export class MessageDialog extends MobxLitElement {
   static styles = [css``, TW_CSS];
 
   public render(): TemplateResult {
-    new MdDialog();
-    new MdTextButton();
-    new MdOutlinedButton();
-    new MdFilledButton();
-    new MdFilledTonalButton();
-
-    const onClick = action((e: MouseEvent) => (this.clicked = e.target?.className));
+    const onClick = action((e: MouseEvent) => (this.clicked = (e.target as HTMLElement).className));
     return html`
       ${MD_ICONS}
       <md-dialog

@@ -2,7 +2,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigProp, ConfigService, ListItem } from '../../common/service/config.service';
-import { ConfigButton } from './config-widgets';
 import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
 import { Board } from './board';
@@ -26,8 +25,6 @@ export class ConfigBluetooth extends MobxLitElement {
     };
 
     const doBtAction = () => doBT();
-
-    new ConfigButton();
 
     return html`
       <div class="w-[800px] h-[400px] [&>div]:text-left">

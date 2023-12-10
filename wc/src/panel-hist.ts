@@ -27,8 +27,9 @@ export class PanelHist extends MobxLitElement {
 
   clickHandler = (e: MouseEvent) => {
     e.preventDefault();
-    if (e.target.nodeName == 'TD') {
-      const id = +e.target.parentNode.id;
+    let target = e.target as HTMLElement;
+    if (target.nodeName == 'TD') {
+      const id = +(target.parentNode as HTMLElement).id;
       this.history.setMarkHist(id == this.history.markHist ? -1 : id);
       this.requestUpdate();
     }

@@ -1,11 +1,8 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { MdTabs } from '@material/web/tabs/tabs.js';
-import { MdPrimaryTab } from '@material/web/tabs/primary-tab.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { action, runInAction } from 'mobx';
 import { ConfigService } from '../../common/service/config.service';
-import { MdDialog } from '@material/web/dialog/dialog';
 import { TW_CSS, MD_ICONS } from './css';
 import { css } from 'lit-element';
 
@@ -15,9 +12,23 @@ export class ConfigDialog extends MobxLitElement {
 
   static styles = [
     css`
-      .main {
-        width: 1100px;
-        height: 600px;
+      md\-dialog {
+        min-width: 800px;
+        min-height: 600px;
+      }
+      md\-tabs {
+        min-height: 90px;
+        max-width: 760px;
+        overflow: clip;
+      }
+      md\-primary-tab {
+        min-height: 90px;
+      }
+      .icon {
+        font-size: 30px;
+      }
+      .label {
+        line-height: 20px;
       }
       .hidden {
         display: none;
@@ -32,24 +43,21 @@ export class ConfigDialog extends MobxLitElement {
       return '';
     }
 
-    new MdDialog();
-    new MdTabs();
-    new MdPrimaryTab();
-
     const choose = (event: MouseEvent) => {
       event.preventDefault();
-      const target = event?.target;
+      const target = event?.target as HTMLElement;
       if (target) {
-        const num = event?.target?.id;
+        const num = target.id;
         runInAction(() => {
           this.config.switchTab(+num);
         });
-        const daddy = target.parentNode.parentNode;
-        daddy.childNodes.forEach(child => {
-          const slot = child.firstChild;
+        const daddy = (target.parentNode as HTMLElement).parentNode;
+        daddy?.childNodes.forEach(child => {
+          const slot = child.firstChild as HTMLSlotElement;
           if (slot?.name == num) {
             const assigned = slot.assignedElements();
             assigned.forEach(tab => {
+              // @ts-ignore
               tab.requestUpdate();
             });
           }
@@ -59,13 +67,9 @@ export class ConfigDialog extends MobxLitElement {
 
     const tab = (num: number, icon: string, title: string) => {
       return html` ${MD_ICONS}
-        <md-primary-tab
-          class="text-3xl"
-          id=${num}
-          @click=${choose}
-          .active=${num === this.config.showTab}
-        >
-          <span class="text-lg material-symbols-outlined">${icon}</span>${title}</md-primary-tab
+        <md-primary-tab id=${num} @click=${choose} .active=${num === this.config.showTab}>
+          <md-icon slot="icon"><span class="icon material-symbols-outlined">${icon}</span></md-icon
+          ><span class="label">${title}</span></md-primary-tab
         >`;
     };
 
@@ -73,16 +77,11 @@ export class ConfigDialog extends MobxLitElement {
     let j = 0;
     const show = () => (i == j++ ? '' : 'hidden');
 
+    let onClose = action(this.config.closeConfigAction);
     return html`
-      <md-dialog
-        class="main"
-        aria-labelledby="simple-dialog-title"
-        open
-        @close=${action(this.config.closeConfigAction)}
-        maxWidth="xl"
-      >
+      <md-dialog class="main" aria-labelledby="simple-dialog-title" open @close=${onClose}>
         <form slot="content" id="form-id" method="dialog">
-          <md-tabs class="text-lg text-center w-full">
+          <md-tabs class="text-lg text-center" aria-label="Content to view">
             ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')} ${tab(2, 'people', 'Humans')}
             ${tab(3, 'robot', 'Bots')} ${tab(4, 'av_timer', 'Clocks')}
             ${tab(5, 'bluetooth', 'Bluetooth')}

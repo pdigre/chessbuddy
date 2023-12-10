@@ -1,11 +1,8 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { MdTabs } from '@material/web/tabs/tabs.js';
-import { MdPrimaryTab } from '@material/web/tabs/primary-tab.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { action, runInAction } from 'mobx';
 import { ConfigService } from '../../common/service/config.service';
-import { MdDialog } from '@material/web/dialog/dialog';
 import { TW_CSS, MD_ICONS } from './css';
 import { css } from 'lit-element';
 
@@ -31,10 +28,6 @@ export class Config extends MobxLitElement {
     if (!this.config.showConfig) {
       return '';
     }
-
-    new MdDialog();
-    new MdTabs();
-    new MdPrimaryTab();
 
     const choose = (index: number) => (event: MouseEvent) => {
       event.preventDefault();

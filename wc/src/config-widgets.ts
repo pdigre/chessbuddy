@@ -1,17 +1,11 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { MdCheckbox } from '@material/web/checkbox/checkbox';
-import { MdOutlinedButton } from '@material/web/button/outlined-button';
-import { MdOutlinedSelect } from '@material/web/select/outlined-select';
-import { MdSelectOption } from '@material/web/select/select-option';
-import { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field';
 import { configService } from '../../common/service/index.service';
 import { ConfigProp, ConfigService, ListItem, ListMode } from '../../common/service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
-import { TW_CSS, MD_ICONS } from './css';
-import { MdDialog } from '@material/web/dialog/dialog';
+import { MD_ICONS, TW_CSS } from './css';
 import { css, LitElement } from 'lit-element';
 
 @customElement('cb-config-select')
@@ -25,32 +19,31 @@ export class ConfigSelect extends LitElement {
 
   static styles = [
     css`
-      md\-outlined\-select {
+      md\-outlined-select {
         min-width: 200px;
+        margin: 8px 2px 2px 2px;
       }
     `,
     TW_CSS,
   ];
 
   render() {
-    new MdOutlinedSelect();
-    new MdSelectOption();
     console.log('choices=' + this.choices);
     const prop = (this.props ? this.props : configService.getItem.properties).get(this.id);
     const value = prop?.get();
-    const handler = (event: MouseEvent) => {
-      prop?.set(event.target?.value);
-    };
+    const onSelect = action(
+      (event: MouseEvent) => prop?.set((event.target as HTMLInputElement).value)
+    );
+
     return html`
-      <label htmlFor="select"> ${this.label} </label>
-      <md-outlined-select>
+      <md-outlined-select label=${this.label}>
         <md-select-option></md-select-option>
         ${this.choices.map(
           name =>
             html` <md-select-option
               .selected=${name === value}
               value=${name}
-              @request-selection=${action(handler)}
+              @request-selection=${onSelect}
             >
               <div slot="headline">${name}</div>
             </md-select-option>`
@@ -73,8 +66,9 @@ export class TableList extends LitElement {
   cursor!: number;
 
   selectHandler = (event: Event) => {
-    if (event.target?.nodeName === 'TD') {
-      this.onSelect(event.target?.parentNode.id);
+    const target = event.target as HTMLElement;
+    if (target.nodeName === 'TD') {
+      this.onSelect((target.parentNode as HTMLElement).id);
     }
   };
 
@@ -117,22 +111,21 @@ export class ConfigListButtons extends MobxLitElement {
 
   render() {
     const hasSelect = this.config.cursor >= 0;
+    let onClickAdd = action(() => (this.config.setListMode = ListMode.Add));
+    let onClickEdit = action(() => (this.config.setListMode = ListMode.Edit));
+    let onClickDel = action(this.config.deleteItem);
     return html`
       ${MD_ICONS}
       <div className="[&>button]:mx-1">
+        <cb-config-button .onClick=${onClickAdd} label="Add" icon="add"></cb-config-button>
         <cb-config-button
-          .onClick=${action(() => (this.config.setListMode = ListMode.Add))}
-          label="Add"
-          icon="add"
-        ></cb-config-button>
-        <cb-config-button
-          .onClick=${action(() => (this.config.setListMode = ListMode.Edit))}
+          .onClick=${onClickEdit}
           label="Edit"
           icon="edit"
           .disabled=${!hasSelect}
         ></cb-config-button>
         <cb-config-button
-          .onClick=${action(this.config.deleteItem)}
+          .onClick=${onClickDel}
           label="Delete"
           icon="delete"
           .disabled=${!hasSelect}
@@ -153,7 +146,6 @@ export class ConfigPopup extends MobxLitElement {
     if (this.config.listMode === ListMode.None) {
       return '';
     }
-    new MdDialog();
     return html`
       ${MD_ICONS}
       <md-dialog
@@ -187,31 +179,42 @@ export class ConfigButton extends MobxLitElement {
 
   static styles = [
     css`
-      md-outlined-button:root {
-        --md-outlined-button-container-shape: 0px;
+      md\-outlined-button {
+        height: 60px;
+        margin: 2px;
+        --md-outlined-button-container-shape: 20px;
         --md-outlined-button-label-text-font: system-ui;
         --md-sys-color-primary: #3d1818;
         --md-sys-color-outline: #245541;
       }
-      md-outlined-button {
-        height: 3.5rem;
-        margin: 0.5rem;
+
+      .icon {
+        vertical-align: text-bottom;
+        line-height: 48px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .label {
+        vertical-align: top;
+        line-height: 48px;
+        margin: 0;
+        padding: 0;
       }
     `,
     TW_CSS,
   ];
 
   render() {
-    new MdOutlinedButton();
     return html`
       ${MD_ICONS}
       <md-outlined-button
         class="flex-grow text-lg"
-        @click=${action(this.onClick)}
+        @click=${this.onClick}
         .disabled=${this.disabled ?? false}
       >
-        <span class="text-3xl material-symbols-outlined">${this.icon}</span>
-        <span class="text-lg ml-2">${this.label}</span>
+        <span class="icon material-symbols-outlined">${this.icon}</span>
+        <span class="label">${this.label}</span>
       </md-outlined-button>
     `;
   }
@@ -227,10 +230,11 @@ export class ConfigBoolean extends MobxLitElement {
 
   static styles = [
     css`
-      .text {
-        font-size: 1.125rem;
-        line-height: 1.75rem;
-        margin-left: 0.5rem;
+      label {
+        font-size: 20px;
+        line-height: 34px;
+        margin: 2px 0 0 0;
+        vertical-align: text-bottom;
       }
     `,
     TW_CSS,
@@ -239,15 +243,12 @@ export class ConfigBoolean extends MobxLitElement {
   render() {
     const prop = this.props.get(this.id);
     let checked = prop?.get();
-    new MdCheckbox();
-    const handler = (e: Event) => prop?.set(e.target!.checked);
+    const onChange = action(
+      (e: Event) => prop?.set(String((e.target as HTMLInputElement).checked))
+    );
     return html`
       <label>
-        <md-checkbox
-          touch-target="wrapper"
-          .checked=${!!checked}
-          @change=${action(handler)}
-        ></md-checkbox>
+        <md-checkbox touch-target="wrapper" .checked=${!!checked} @change=${onChange}></md-checkbox>
         ${this.label}
       </label>
     `;
@@ -257,14 +258,36 @@ export class ConfigBoolean extends MobxLitElement {
 @customElement('cb-config-save-button')
 export class ConfigSaveButton extends MobxLitElement {
   render() {
-    new ConfigButton();
-    const handler = () => configService.saveItem(configService.getItem, configService.getItems);
+    const onClick = action(() =>
+      configService.saveItem(configService.getItem, configService.getItems)
+    );
+    const label = configService.isEdit ? 'Save ' : 'Add ' + configService.getTitleType;
+    const icon = configService.isEdit ? 'save' : 'add';
     return html`
-      <cb-config-button
-        .onClick=${action(handler)}
-        label=${configService.isEdit ? 'Save ' : 'Add ' + configService.getTitleType}
-        icon=${configService.isEdit ? 'save' : 'add'}
-      ></cb-config-button>
+      <cb-config-button .onClick=${onClick} label=${label} icon=${icon}></cb-config-button>
+    `;
+  }
+}
+
+@customElement('cb-config-text2')
+export class ConfigText2 extends MobxLitElement {
+  disabled?: boolean;
+  @property({ attribute: true })
+  label!: string;
+  @property({ attribute: true })
+  id!: string;
+
+  render() {
+    const item = configService.getItem;
+    // @ts-ignore
+    const onChange = action((e: MouseEvent) => item?.properties.get(this.id)?.set(e.target.value));
+    return html`
+      <md-outlined-text-field
+        label=${this.label}
+        size="medium"
+        @change=${onChange}
+        value="${item?.properties.get(this.id)?.get()}"
+      ></md-outlined-text-field>
     `;
   }
 }
@@ -278,15 +301,21 @@ export class ConfigText extends MobxLitElement {
   id!: string;
 
   render() {
-    new MdOutlinedTextField();
     const item = configService.getItem;
+    // @ts-ignore
+    const onChange = action((e: MouseEvent) => item?.properties.get(this.id)?.set(e.target.value));
     return html`
       <md-outlined-text-field
         label=${this.label}
         size="medium"
-        @change=${action(e => item?.properties.get(this.id)?.set(e.target.value))}
+        @change=${onChange}
         value="${item?.properties.get(this.id)?.get()}"
       ></md-outlined-text-field>
     `;
   }
 }
+
+export type GETSET = {
+  get: () => string;
+  set: (value: string) => void;
+};

@@ -4,8 +4,6 @@ import { customElement } from 'lit/decorators.js';
 import { DashboardService } from '../../common/service/dashboard.service';
 import { EditService } from '../../common/service/edit.service';
 import { HistoryService } from '../../common/service/history.service';
-import { MdPrimaryTab } from '@material/web/tabs/primary-tab';
-import { MdTabs } from '@material/web/tabs/tabs';
 import { configService, playService } from '../../common/service/index.service';
 import { action } from 'mobx';
 import { TW_CSS, MD_ICONS } from './css';
@@ -27,8 +25,6 @@ export class Panel extends MobxLitElement {
   ];
 
   render() {
-    new MdTabs();
-    new MdPrimaryTab();
     const isGotoHist = this.dashboard.showHist && this.history.markHist >= 0;
     const isHistUndo = !this.dashboard.showHist && this.dashboard.markLog >= 0;
     const isPlayUndo = playService.isPlaying && this.dashboard.showUndo;

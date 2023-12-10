@@ -3,15 +3,12 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService } from '../../common/service/config.service';
 import { action } from 'mobx';
-import { ConfigBoolean, ConfigButton } from './config-widgets';
 
 @customElement('cb-config-display')
 export class ConfigDisplay extends MobxLitElement {
   config!: ConfigService;
   render() {
     const props = this.config.boolprops;
-    new ConfigBoolean();
-    new ConfigButton();
 
     return html`
       <style>

@@ -1,7 +1,6 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { MdDialog } from '@material/web/dialog/dialog';
 import { action } from 'mobx';
 import { MediaService } from '../../common/service/media.service';
 import { css } from 'lit-element';
@@ -13,7 +12,6 @@ export class Mp4Dialog extends MobxLitElement {
 
   static styles = [css``, TW_CSS];
   render() {
-    new MdDialog();
     const width = Math.min(this.mp4.msg?.width ?? 480, 500);
 
     return html`

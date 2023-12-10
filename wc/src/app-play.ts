@@ -29,7 +29,6 @@ export class PlayerInfoBar extends MobxLitElement {
     TW_CSS,
   ];
   render() {
-    new Ticker();
     const { other, label, showTicker, banner, isTextRight } = this.play.getPlayerInfo(this.isTop);
     return html`
       <p class="text-xl m-0 ${isTextRight ? ' text-right' : ''}">
