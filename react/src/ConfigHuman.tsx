@@ -17,7 +17,7 @@ import { action } from 'mobx';
 
 export const ConfigHuman = observer(
   ({ config, connect }: { config: ConfigService; connect: ConnectService }) => {
-    config.setListType = ListType.Human;
+//    config.setListType(ListType.Human);
     const items = config.humans;
     const hasSelect = config.cursor >= 0;
 

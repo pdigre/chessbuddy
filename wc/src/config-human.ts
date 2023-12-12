@@ -8,7 +8,6 @@ import { ConnectService } from '../../common/service/connect.service';
 import { Human } from '../../common/model/human';
 import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
-import {GETSET} from "./config-widgets.ts";
 
 @customElement('cb-config-human')
 export class ConfigHuman extends MobxLitElement {
@@ -18,9 +17,10 @@ export class ConfigHuman extends MobxLitElement {
   static styles = [css``, TW_CSS];
 
   render() {
-    this.config.setListType = ListType.Human;
+    const type = ListType.Human;
     const items = this.config.humans;
     const hasSelect = this.config.cursor >= 0;
+    const show = this.config.listMode !== ListMode.None;
 
     //  const uploadRef = useRef<HTMLInputElement>(null);
     const hasEmail = hasSelect && (items[this.config.cursor] as Human).email;
@@ -46,34 +46,27 @@ export class ConfigHuman extends MobxLitElement {
       this.connect.connectAction(items[this.config.cursor] as Human);
     });
 
-    const addHandler = action(() => (this.config.setListMode = ListMode.Add));
-    const editHandler = action(() => (this.config.setListMode = ListMode.Edit));
+    const addHandler = action(() => this.config.setListMode(ListMode.Add));
+    const editHandler = action(() => this.config.setListMode(ListMode.Edit));
     const deleteHandler = action(() => this.config.deleteItem());
 
+    const onUpload = action((e: MouseEvent) => {
+      // @ts-ignore
+      historyService.uploadFilesHistory(e.currentTarget?.files);
+    });
 
-    const getset = (id: string) => {
-      return {
-        get: () => {
-          this.config.properties.get(id)?.get();
-        },
-        set: action((value: string) => this.config.properties.get(id)?.set(value)),
-      };
-    };
+    const item = this.config.getItemByType(type);
 
-    const getTitle = () => ((this.config.isEdit() ? 'Edit ' : 'Add ') + this.config.getTitleType());
-    const onClose = action(this.config.closePopupAction);
-    const showPopup = this.config.listMode === ListMode.None;
+    const onSave = action(() => this.config.saveItem(item, items));
 
+    const onSelect = action((i: string) => this.config.setCursor(i));
 
-
-    // @ts-ignore
-    const onUpload = action((e: MouseEvent) => historyService.uploadFilesHistory(e.currentTarget?.files));
     return html`
       <table class="w-full">
         <tr>
           <td>
             <cb-table-list
-              .onSelect=${(i: string) => this.config.setCursor(i)}
+              .onSelect=${onSelect}
               .cursor=${this.config.cursor}
               .items=${items}
             ></cb-table-list>
@@ -132,13 +125,12 @@ export class ConfigHuman extends MobxLitElement {
           </td>
         </tr>
       </table>
-      <cb-config-popup .config=${this.config}>
+      <cb-config-popup2 .show=${show} .type=${type} .onSave=${onSave}>
         <div class="[&>button]:mx-2 [&>div]:mx-2 mt-3">
-          <cb-config-text label="Name" id="name"></cb-config-text>
-          <cb-config-text label="Email" id="email"></cb-config-text>
-          <cb-config-save-button></cb-config-save-button>
+          <cb-config-text2 .item=${item} label="Name" id="name"></cb-config-text2>
+          <cb-config-text2 .item=${item} label="Email" id="email"></cb-config-text2>
         </div>
-      </cb-config-popup>
+      </cb-config-popup2>
     `;
   }
 }

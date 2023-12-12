@@ -2,7 +2,13 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { configService } from '../../common/service/index.service';
-import { ConfigProp, ConfigService, ListItem, ListMode } from '../../common/service/config.service';
+import {
+  ConfigProp,
+  ConfigService,
+  ListItem,
+  ListMode,
+  ListType,
+} from '../../common/service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
@@ -111,8 +117,8 @@ export class ConfigListButtons extends MobxLitElement {
 
   render() {
     const hasSelect = this.config.cursor >= 0;
-    let onClickAdd = action(() => (this.config.setListMode = ListMode.Add));
-    let onClickEdit = action(() => (this.config.setListMode = ListMode.Edit));
+    let onClickAdd = action(() => this.config.setListMode(ListMode.Add));
+    let onClickEdit = action(() => this.config.setListMode(ListMode.Edit));
     let onClickDel = action(this.config.deleteItem);
     return html`
       ${MD_ICONS}
@@ -155,7 +161,7 @@ export class ConfigPopup extends MobxLitElement {
         .open=${true}
       >
         <div slot="headline">
-          ${configService.isEdit ? 'Edit' : 'Add'} ${configService.getTitleType}
+          ${configService.isEdit() ? 'Edit' : 'Add'} ${configService.getTitleType()}
         </div>
         <
         <form slot="content" id="form-id" method="dialog">
@@ -168,13 +174,61 @@ export class ConfigPopup extends MobxLitElement {
   }
 }
 
+@customElement('cb-config-popup2')
+export class ConfigPopup2 extends LitElement {
+  type!: ListType;
+  @property({ attribute: true })
+  show!: boolean;
+  onSave!: () => void;
+
+  static styles = [css``, TW_CSS];
+
+  render() {
+    if (!this.show) {
+      return html``;
+    }
+
+    const typeName = configService.getTitleByType(this.type);
+    const isEdit = configService.isEdit();
+    const label = (isEdit ? 'Save ' : 'Add ') + typeName;
+    const icon = isEdit ? 'save' : 'add';
+    const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
+    const onClose = action(configService.closePopupAction);
+    return html`
+      ${MD_ICONS}
+      <md-dialog aria-labelledby="message" @close=${onClose} class="text-center text-lg" open>
+        <div slot="headline">${title}</div>
+        <form slot="content" id="form-id" method="dialog">
+          <slot></slot>
+          <cb-config-button .onClick=${this.onSave} label=${label} icon=${icon}></cb-config-button>
+        </form>
+      </md-dialog>
+    `;
+  }
+}
+
+@customElement('cb-config-save-button')
+export class ConfigSaveButton extends MobxLitElement {
+  render() {
+    const onClick = action(() =>
+      configService.saveItem(configService.getItem(), configService.getItems())
+    );
+    const label = configService.isEdit() ? 'Save ' : 'Add ' + configService.getTitleType();
+    const icon = configService.isEdit() ? 'save' : 'add';
+    return html`
+      <cb-config-button .onClick=${onClick} label=${label} icon=${icon}></cb-config-button>
+    `;
+  }
+}
+
 @customElement('cb-config-button')
-export class ConfigButton extends MobxLitElement {
+export class ConfigButton extends LitElement {
   onClick!: (event: Event) => void;
   @property({ attribute: true })
   label!: string;
   @property({ attribute: true })
   icon?: string;
+  @property({ attribute: true })
   disabled?: boolean;
 
   static styles = [
@@ -255,67 +309,56 @@ export class ConfigBoolean extends MobxLitElement {
   }
 }
 
-@customElement('cb-config-save-button')
-export class ConfigSaveButton extends MobxLitElement {
-  render() {
-    const onClick = action(() =>
-      configService.saveItem(configService.getItem(), configService.getItems())
-    );
-    const label = configService.isEdit() ? 'Save ' : 'Add ' + configService.getTitleType();
-    const icon = configService.isEdit() ? 'save' : 'add';
-    return html`
-      <cb-config-button .onClick=${onClick} label=${label} icon=${icon}></cb-config-button>
-    `;
-  }
-}
-
 @customElement('cb-config-text2')
-export class ConfigText2 extends MobxLitElement {
-  disabled?: boolean;
-  @property({ attribute: true })
+export class ConfigText2 extends LitElement {
+  @property({
+    hasChanged(newVal: ListItem, oldVal: ListItem) {
+      return JSON.stringify(newVal) !== JSON.stringify(oldVal);
+    },
+  })
+  item!: ListItem;
   label!: string;
-  @property({ attribute: true })
   id!: string;
-
   render() {
-    const item = configService.getItem();
-    // @ts-ignore
-    const onChange = action((e: MouseEvent) => item?.properties.get(this.id)?.set(e.target.value));
+    const prop = this.item?.properties?.get(this.id);
+    if (!prop || !('get' in prop)) {
+      return html``;
+    }
+    const onChange = action((e: MouseEvent) => {
+      // @ts-ignore
+      prop?.set(e.target.value);
+    });
+    const value = prop?.get();
     return html`
       <md-outlined-text-field
         label=${this.label}
         size="medium"
         @change=${onChange}
-        value="${item?.properties.get(this.id)?.get()}"
+        .value=${value}
       ></md-outlined-text-field>
     `;
   }
 }
 
 @customElement('cb-config-text')
-export class ConfigText extends MobxLitElement {
-  disabled?: boolean;
-  @property({ attribute: true })
+export class ConfigText extends LitElement {
+  type!: ListType;
   label!: string;
   @property({ attribute: true })
   id!: string;
 
   render() {
-    const item = configService.getItem();
+    const item = configService.getItemByType(this.type);
     // @ts-ignore
     const onChange = action((e: MouseEvent) => item?.properties.get(this.id)?.set(e.target.value));
+    const value = item?.properties.get(this.id)?.get();
     return html`
       <md-outlined-text-field
         label=${this.label}
         size="medium"
         @change=${onChange}
-        value="${item?.properties.get(this.id)?.get()}"
+        value=${value}
       ></md-outlined-text-field>
     `;
   }
 }
-
-export type GETSET = {
-  get: () => string;
-  set: (value: string) => void;
-};

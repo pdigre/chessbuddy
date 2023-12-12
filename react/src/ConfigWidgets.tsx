@@ -87,7 +87,9 @@ export const ConfigButton: React.FC<{
 
 export const ConfigSaveButton: React.FC = () => (
   <ConfigButton
-    onClick={action(() => configService.saveItem(configService.getItem(), configService.getItems()))}
+    onClick={action(() =>
+      configService.saveItem(configService.getItem(), configService.getItems())
+    )}
     label={configService.isEdit() ? 'Save ' : 'Add ' + configService.getTitleType()}
     icon={configService.isEdit() ? <MdSave /> : <MdAdd />}
   />
@@ -147,12 +149,14 @@ export const ConfigListTable = observer(({ config }: { config: ConfigService }) 
         if (event.target instanceof HTMLTableCellElement) {
           config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
         }
-      })}>
+      })}
+    >
       {config.getItems().map((item, iLine) => (
         <tr
           key={iLine.toString()}
           id={iLine.toString()}
-          className={iLine == config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}>
+          className={iLine == config.cursor ? 'bg-green-300 dark:bg-green-700' : ''}
+        >
           <td className="dark:text-white">{item.getName()}</td>
           <td className="dark:text-white">{item.getDescription()}</td>
         </tr>
@@ -167,12 +171,12 @@ export const ConfigListButtons = observer(
     return (
       <div className="[&>button]:mx-1">
         <ConfigButton
-          onClick={action(() => (config.setListMode = ListMode.Add))}
+          onClick={action(() => config.setListMode(ListMode.Add))}
           label="Add"
           icon={<MdAdd />}
         />
         <ConfigButton
-          onClick={action(() => (config.setListMode = ListMode.Edit))}
+          onClick={action(() => config.setListMode(ListMode.Edit))}
           label="Edit"
           icon={<MdEdit />}
           disabled={!hasSelect}

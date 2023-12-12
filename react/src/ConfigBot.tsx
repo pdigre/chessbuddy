@@ -13,7 +13,7 @@ import { Engines } from '../../common/model/bot';
 import { runInAction } from 'mobx';
 
 export const ConfigBot = observer(({ config }: { config: ConfigService }) => {
-  config.setListType = ListType.Bot;
+  config.setListType(ListType.Bot);
   //  const item = config.getItem as Bot;
   //  const selected = item.engine;
   const engines = Array.from(Engines.map(x => x.name));

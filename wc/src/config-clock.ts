@@ -10,8 +10,8 @@ import { css } from 'lit-element';
 export class ConfigClock extends MobxLitElement {
   config!: ConfigService;
 
-  addHandler = action(() => (this.config.setListMode = ListMode.Add));
-  editHandler = action(() => (this.config.setListMode = ListMode.Edit));
+  addHandler = action(() => this.config.setListMode(ListMode.Add));
+  editHandler = action(() => this.config.setListMode(ListMode.Edit));
   deleteHandler = action(() => this.config.deleteItem());
   selectHandler = action((i: string) => {
     this.config.setCursor(i);
@@ -41,13 +41,9 @@ export class ConfigClock extends MobxLitElement {
   ];
 
   render() {
-    this.config.setListType = ListType.Clock;
+    const type = ListType.Clock;
     const items = this.config.clocks;
     const hasSelect = this.config.cursor >= 0;
-
-    const getTitle = () => ((this.config.isEdit() ? 'Edit ' : 'Add ') + this.config.getTitleType());
-    const onClose = action(this.config.closePopupAction);
-    const showPopup = this.config.listMode === ListMode.None;
 
     return html`
       <div class="div flex flex-col text-center [&>div]:text-left">

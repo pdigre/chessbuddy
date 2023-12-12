@@ -20,6 +20,7 @@ import {
   ConfigButton,
   ConfigListButtons,
   ConfigPopup,
+  ConfigPopup2,
   ConfigSaveButton,
   ConfigSelect,
   ConfigText,
@@ -67,6 +68,7 @@ export function wcInit() {
   new ConfigText2();
   new ConfigSelect();
   new ConfigPopup();
+  new ConfigPopup2();
   new ConfigListButtons();
   new ConfigSaveButton();
   new TableList();

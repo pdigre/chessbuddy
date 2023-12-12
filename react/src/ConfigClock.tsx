@@ -10,7 +10,7 @@ import {
 import { ConfigService, ListType } from '../../common/service/config.service';
 
 export const ConfigClock = observer(({ config }: { config: ConfigService }) => {
-  config.setListType = ListType.Clock;
+  config.setListType(ListType.Clock);
   return (
     <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
       <ConfigListTable config={config} />

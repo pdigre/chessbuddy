@@ -35,14 +35,17 @@ export class ConfigBot extends MobxLitElement {
   ];
 
   render() {
-    this.config.setListType = ListType.Bot;
+    const type = ListType.Bot;
     const items = this.config.bots;
     const engines = Array.from(Engines.map(x => x.name));
 
     const hasSelect = this.config.cursor >= 0;
-    const addHandler = action(() => (this.config.setListMode = ListMode.Add));
-    const editHandler = action(() => (this.config.setListMode = ListMode.Edit));
+    const addHandler = action(() => this.config.setListMode(ListMode.Add));
+    const editHandler = action(() => this.config.setListMode(ListMode.Edit));
     const deleteHandler = action(() => this.config.deleteItem());
+    const saveHandler = action(() =>
+      this.config.saveItem(this.config.getItem(), this.config.getItems())
+    );
 
     /*
     const getset = (id: string) => {
@@ -56,11 +59,10 @@ export class ConfigBot extends MobxLitElement {
     let onClose = action(configService.closePopupAction);
     let title = (configService.isEdit ? 'Edit ' : 'Add ') + configService.getTitleType;
 
-*/
-    const getTitle = () => ((this.config.isEdit() ? 'Edit ' : 'Add ') + this.config.getTitleType());
+    const getTitle = () => (this.config.isEdit() ? 'Edit ' : 'Add ') + this.config.getTitleType();
     const onClose = action(this.config.closePopupAction);
     const showPopup = this.config.listMode === ListMode.None;
-
+*/
 
     return html`
       <div class="div">

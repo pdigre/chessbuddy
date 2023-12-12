@@ -180,13 +180,13 @@ export class ConfigService {
     this.listMode = ListMode.None;
   };
 
-  set setListType(type: ListType) {
+  setListType(type: ListType) {
     this.listType = type;
     this.listMode = ListMode.None;
     this.newItem = this.createItem();
   }
 
-  set setListMode(mode: ListMode) {
+  setListMode(mode: ListMode) {
     this.listMode = mode;
   }
 
@@ -209,7 +209,11 @@ export class ConfigService {
   }
 
   getTitleType() {
-    switch (this.listType) {
+    return this.getTitleByType(this.listType);
+  }
+
+  getTitleByType(n:ListType) {
+    switch (n) {
       case ListType.Human:
         return 'Human';
       case ListType.Bot:
@@ -220,7 +224,11 @@ export class ConfigService {
   }
 
   getItems(): ListItem[] {
-    switch (this.listType) {
+    return this.getItemsByType(this.listType);
+  }
+
+  getItemsByType(n:ListType): ListItem[] {
+    switch (n) {
       case ListType.Human:
         return this.humans;
       case ListType.Bot:
@@ -232,6 +240,10 @@ export class ConfigService {
 
   getItem() {
     return this.isEdit() ? this.getItems()[this.cursor] : this.newItem;
+  }
+
+  getItemByType(n:ListType) {
+    return this.isEdit() ? this.getItemsByType(n)[this.cursor] : this.newItem;
   }
 
   createItem(): ListItem {
