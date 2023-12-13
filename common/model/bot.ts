@@ -1,4 +1,4 @@
-import { ConfigProp, ListItem } from '../service/config.service';
+import { GETSET, Item } from '../service/config.service';
 
 export class Engine {
   constructor(
@@ -12,7 +12,7 @@ export const Engines: Engine[] = [
   new Engine('Lozza', 'bots/lozza-1.18/lozza.js'),
 ];
 
-export class Bot implements ListItem {
+export class Bot implements Item {
   constructor(
     public name: string,
     public engine: string,
@@ -21,7 +21,7 @@ export class Bot implements ListItem {
     public depth: number
   ) {}
   label = 'Bot';
-  properties: Map<string, ConfigProp<string>> = new Map([
+  properties: Map<string, GETSET<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
     ['engine', { get: () => this.engine, set: value => (this.engine = value) }],
     [

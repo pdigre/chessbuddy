@@ -1,4 +1,4 @@
-import { ConfigProp, ListItem } from '../service/config.service';
+import { GETSET, Item } from '../service/config.service';
 
 export type TimeRule = {
   from: number;
@@ -6,7 +6,7 @@ export type TimeRule = {
   each: number;
 };
 
-export class Clock implements ListItem {
+export class Clock implements Item {
   constructor(
     public name: string,
     public time: TimeRule[]
@@ -14,7 +14,7 @@ export class Clock implements ListItem {
   label = 'Clock';
   getName: () => string = () => this.name.trim();
   getDescription: () => string = () => Clock.time2string(this.time);
-  properties: Map<string, ConfigProp<string>> = new Map([
+  properties: Map<string, GETSET<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
     ['time', { get: this.getDescription, set: value => (this.time = Clock.string2time(value)) }],
   ]);
@@ -41,10 +41,17 @@ export class Clock implements ListItem {
       };
     });
 
-  static time2string: (time: TimeRule[]) => string = time =>
-    time
-      .map(s => `${s.from ? s.plus : ''}${s.plus ? '+' + s.plus : ''}${s.each ? '/' + s.each : ''}`)
-      .join(',');
+  static stringify = (s: TimeRule) => {
+    if (s && 'from' in s ) {
+      return `${s.from ? s.plus : ''}${s.plus ? '+' + s.plus : ''}${s.each ? '/' + s.each : ''}`;
+    }
+    return  '';
+  }
+
+  static time2string = (times?: TimeRule[]) =>
+    times ? times
+      .map(Clock.stringify)
+      .join(',') : '';
 
   public static init = [
     new Clock('No limit', []),

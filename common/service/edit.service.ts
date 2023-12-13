@@ -2,7 +2,7 @@ import { BLACK, Square, SQUARES, WHITE } from 'chess.js';
 import { jsonIgnore } from 'json-ignore';
 import { makeAutoObservable } from 'mobx';
 import { FEN } from '../model/fen';
-import { ConfigProp } from './config.service';
+import { GETSET } from './config.service';
 import { configService, playService } from './index.service';
 
 export class EditService {
@@ -16,7 +16,7 @@ export class EditService {
   bccq = false;
   bFirst = false;
 
-  @jsonIgnore() boolprops: Map<string, ConfigProp<boolean>> = new Map([
+  @jsonIgnore() boolprops: Map<string, GETSET<boolean>> = new Map([
     ['wcck', { get: () => this.wcck, set: value => (this.wcck = value) }],
     ['wccq', { get: () => this.wccq, set: value => (this.wccq = value) }],
     ['bcck', { get: () => this.bcck, set: value => (this.bcck = value) }],

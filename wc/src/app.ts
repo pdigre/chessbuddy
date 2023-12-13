@@ -120,13 +120,13 @@ export class App extends LitElement {
           .config=${configService}
           .rendering=${renderingService}
         ></cb-config-display>
+        <cb-config-clock slot="2" .config=${configService}></cb-config-clock>
         <cb-config-human
-          slot="2"
+          slot="3"
           .config=${configService}
           .connect=${connectService}
         ></cb-config-human>
-        <cb-config-bot slot="3" .config=${configService}></cb-config-bot>
-        <cb-config-clock slot="4" .config=${configService}></cb-config-clock>
+        <cb-config-bot slot="4" .config=${configService}></cb-config-bot>
         <cb-config-bluetooth slot="5" .config=${configService}></cb-config-bluetooth>
       </cb-config-dialog>
     `;

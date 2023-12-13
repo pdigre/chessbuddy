@@ -1,7 +1,7 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ConfigService, ListMode, ListType } from '../../common/service/config.service';
+import { ConfigService, ListType } from '../../common/service/config.service';
 import { action } from 'mobx';
 import { historyService } from '../../common/service/index.service';
 import { ConnectService } from '../../common/service/connect.service';
@@ -14,20 +14,48 @@ export class ConfigHuman extends MobxLitElement {
   config!: ConfigService;
   connect!: ConnectService;
 
-  static styles = [css``, TW_CSS];
+  static styles = [
+    css`
+      .div {
+        width: 800px;
+        height: 400px;
+        cb\-table\-list,
+        cb\-config\-button {
+          // mx-1
+          margin-left: 0.25rem;
+          margin-right: 0.25rem;
+        }
+      }
+      mx\-2 {
+        // mx-2
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+    `,
+    TW_CSS,
+  ];
 
   render() {
-    const type = ListType.Human;
-    const items = this.config.humans;
-    const hasSelect = this.config.cursor >= 0;
-    const show = this.config.listMode !== ListMode.None;
+    const {
+      type,
+      items,
+      item,
+      cursor,
+      hasSelect,
+      show,
+      onSelect,
+      onSave,
+      onAdd,
+      onEdit,
+      onDelete,
+    } = this.config.getListLogic(ListType.Human);
 
     //  const uploadRef = useRef<HTMLInputElement>(null);
     const hasEmail = hasSelect && (items[this.config.cursor] as Human).email;
 
     const downloadPlayerAction = (event: Event) => {
       event.preventDefault();
-      const name = items[this.config.cursor].name;
+      const name = items[cursor].getName();
       const downtext = historyService.downloadPlayerAction(name);
       const data = new Blob([downtext], { type: 'text/plain' });
       const alink = document.createElement('a');
@@ -40,36 +68,20 @@ export class ConfigHuman extends MobxLitElement {
       event.preventDefault();
       //    uploadRef.current?.click();
     });
-
     const connectPlayerAction = action((event: Event) => {
       event.preventDefault();
       this.connect.connectAction(items[this.config.cursor] as Human);
     });
-
-    const addHandler = action(() => this.config.setListMode(ListMode.Add));
-    const editHandler = action(() => this.config.setListMode(ListMode.Edit));
-    const deleteHandler = action(() => this.config.deleteItem());
-
     const onUpload = action((e: MouseEvent) => {
       // @ts-ignore
       historyService.uploadFilesHistory(e.currentTarget?.files);
     });
 
-    const item = this.config.getItemByType(type);
-
-    const onSave = action(() => this.config.saveItem(item, items));
-
-    const onSelect = action((i: string) => this.config.setCursor(i));
-
     return html`
       <table class="w-full">
         <tr>
           <td>
-            <cb-table-list
-              .onSelect=${onSelect}
-              .cursor=${this.config.cursor}
-              .items=${items}
-            ></cb-table-list>
+            <cb-table-list .onSelect=${onSelect} .cursor=${cursor} .items=${items}></cb-table-list>
           </td>
         </tr>
         <tr>
@@ -87,15 +99,15 @@ export class ConfigHuman extends MobxLitElement {
         </tr>
         <tr>
           <td>
-            <cb-config-button .onClick=${addHandler} label="Add" icon="add"></cb-config-button>
+            <cb-config-button .onClick=${onAdd} label="Add" icon="add"></cb-config-button>
             <cb-config-button
-              .onClick=${editHandler}
+              .onClick=${onEdit}
               label="Edit"
               icon="edit"
               .disabled=${!hasSelect}
             ></cb-config-button>
             <cb-config-button
-              .onClick=${deleteHandler}
+              .onClick=${onDelete}
               label="Delete"
               icon="delete"
               .disabled=${!hasSelect}
@@ -125,12 +137,12 @@ export class ConfigHuman extends MobxLitElement {
           </td>
         </tr>
       </table>
-      <cb-config-popup2 .show=${show} .type=${type} .onSave=${onSave}>
-        <div class="[&>button]:mx-2 [&>div]:mx-2 mt-3">
-          <cb-config-text2 .item=${item} label="Name" id="name"></cb-config-text2>
-          <cb-config-text2 .item=${item} label="Email" id="email"></cb-config-text2>
-        </div>
-      </cb-config-popup2>
+      <cb-config-popup .show=${show} .type=${type} .onSave=${onSave}>
+        <form name="human" class="[&>button]:mx-2 [&>div]:mx-2 mt-3" method="dialog">
+          <cb-config-text .item=${item} label="Name" id="name"></cb-config-text>
+          <cb-config-text .item=${item} label="Email" id="email"></cb-config-text>
+        </form>
+      </cb-config-popup>
     `;
   }
 }

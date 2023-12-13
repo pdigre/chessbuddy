@@ -1,7 +1,7 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ConfigProp, ConfigService, ListItem } from '../../common/service/config.service';
+import { GETSET, ConfigService, Item } from '../../common/service/config.service';
 import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
 import { Board } from './board';
@@ -53,13 +53,13 @@ export class ConfigBluetooth extends MobxLitElement {
   }
 }
 
-class BT implements ListItem {
+class BT implements Item {
   constructor(
     public name: string,
     public description: string
   ) {}
   label = 'BT';
-  properties: Map<string, ConfigProp<string>> = new Map([
+  properties: Map<string, GETSET<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
   ]);
   validate = () => '';

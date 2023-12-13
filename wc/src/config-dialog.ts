@@ -73,26 +73,17 @@ export class ConfigDialog extends MobxLitElement {
         >`;
     };
 
-    const i = this.config.showTab;
-    let j = 0;
-    const show = () => (i == j++ ? '' : 'hidden');
-
     let onClose = action(this.config.closeConfigAction);
     return html`
       <md-dialog class="main" aria-labelledby="simple-dialog-title" open @close=${onClose}>
-        <form slot="content" id="form-id" method="dialog">
+        <div slot="content">
           <md-tabs class="text-lg text-center" aria-label="Content to view">
-            ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')} ${tab(2, 'people', 'Humans')}
-            ${tab(3, 'robot', 'Bots')} ${tab(4, 'av_timer', 'Clocks')}
+            ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')}
+            ${tab(2, 'av_timer', 'Clocks')} ${tab(3, 'people', 'Humans')} ${tab(4, 'robot', 'Bots')}
             ${tab(5, 'bluetooth', 'Bluetooth')}
           </md-tabs>
-          <div class=${show()}><slot name="0"></slot></div>
-          <div class=${show()}><slot name="1"></slot></div>
-          <div class=${show()}><slot name="2"></slot></div>
-          <div class=${show()}><slot name="3"></slot></div>
-          <div class=${show()}><slot name="4"></slot></div>
-          <div class=${show()}><slot name="5"></slot></div>
-        </form>
+          <slot name="${this.config.showTab}"></slot>
+        </div>
       </md-dialog>
     `;
   }

@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { MdAdd, MdDelete, MdEdit, MdSave } from 'react-icons/md';
 import { observer } from 'mobx-react';
-import { ConfigProp, ConfigService, ListMode } from '../../common/service/config.service';
+import { GETSET, ConfigService, ListMode } from '../../common/service/config.service';
 import { configService, renderingService } from '../../common/service/index.service';
 import { action } from 'mobx';
 
@@ -29,7 +29,7 @@ export const ConfigSelect = observer(
     label: string;
     id: string;
     choices: string[];
-    props?: Map<string, ConfigProp<string>>;
+    props?: Map<string, GETSET<string>>;
   }) => {
     const prop = (props ? props : configService.getItem().properties).get(id);
     return (
@@ -118,7 +118,7 @@ export const ConfigBoolean = observer(
     label,
     id,
   }: {
-    props: Map<string, ConfigProp<boolean>>;
+    props: Map<string, GETSET<boolean>>;
     label: string;
     id: string;
   }) => {

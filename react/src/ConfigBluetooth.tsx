@@ -1,18 +1,18 @@
 import React, { MouseEvent } from 'react';
-import { ConfigService, ConfigProp, ListItem } from '../../common/service/config.service';
+import { ConfigService, GETSET, Item } from '../../common/service/config.service';
 import { observer } from 'mobx-react';
 import { ConfigButton } from './ConfigWidgets';
 import { MdBluetoothConnected } from 'react-icons/md';
 import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
 
-class BT implements ListItem {
+class BT implements Item {
   constructor(
     public name: string,
     public description: string
   ) {}
   label = 'BT';
-  properties: Map<string, ConfigProp<string>> = new Map([
+  properties: Map<string, GETSET<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
   ]);
   validate = () => '';

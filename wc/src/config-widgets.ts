@@ -3,9 +3,9 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { configService } from '../../common/service/index.service';
 import {
-  ConfigProp,
+  GETSET,
   ConfigService,
-  ListItem,
+  Item,
   ListMode,
   ListType,
 } from '../../common/service/config.service';
@@ -21,7 +21,7 @@ export class ConfigSelect extends LitElement {
   @property({ attribute: true })
   id!: string;
   choices!: string[];
-  props?: Map<string, ConfigProp<string>>;
+  props?: Map<string, GETSET<string>>;
 
   static styles = [
     css`
@@ -62,11 +62,11 @@ export class ConfigSelect extends LitElement {
 @customElement('cb-table-list')
 export class TableList extends LitElement {
   @property({
-    hasChanged(newVal: ListItem[], oldVal: ListItem[]) {
+    hasChanged(newVal: Item[], oldVal: Item[]) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  items!: ListItem[];
+  items!: Item[];
   onSelect!: (id: string) => void;
   @property({ type: Number })
   cursor!: number;
@@ -142,85 +142,6 @@ export class ConfigListButtons extends MobxLitElement {
   }
 }
 
-@customElement('cb-config-popup')
-export class ConfigPopup extends MobxLitElement {
-  config!: ConfigService;
-
-  static styles = [css``, TW_CSS];
-
-  render() {
-    if (this.config.listMode === ListMode.None) {
-      return '';
-    }
-    return html`
-      ${MD_ICONS}
-      <md-dialog
-        aria-labelledby="message"
-        @close=${action(configService.closePopupAction)}
-        class="text-center text-lg"
-        .open=${true}
-      >
-        <div slot="headline">
-          ${configService.isEdit() ? 'Edit' : 'Add'} ${configService.getTitleType()}
-        </div>
-        <
-        <form slot="content" id="form-id" method="dialog">
-          >
-          <slot></slot>
-        </form>
-        <div slot="actions"></div>
-      </md-dialog>
-    `;
-  }
-}
-
-@customElement('cb-config-popup2')
-export class ConfigPopup2 extends LitElement {
-  type!: ListType;
-  @property({ attribute: true })
-  show!: boolean;
-  onSave!: () => void;
-
-  static styles = [css``, TW_CSS];
-
-  render() {
-    if (!this.show) {
-      return html``;
-    }
-
-    const typeName = configService.getTitleByType(this.type);
-    const isEdit = configService.isEdit();
-    const label = (isEdit ? 'Save ' : 'Add ') + typeName;
-    const icon = isEdit ? 'save' : 'add';
-    const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
-    const onClose = action(configService.closePopupAction);
-    return html`
-      ${MD_ICONS}
-      <md-dialog aria-labelledby="message" @close=${onClose} class="text-center text-lg" open>
-        <div slot="headline">${title}</div>
-        <form slot="content" id="form-id" method="dialog">
-          <slot></slot>
-          <cb-config-button .onClick=${this.onSave} label=${label} icon=${icon}></cb-config-button>
-        </form>
-      </md-dialog>
-    `;
-  }
-}
-
-@customElement('cb-config-save-button')
-export class ConfigSaveButton extends MobxLitElement {
-  render() {
-    const onClick = action(() =>
-      configService.saveItem(configService.getItem(), configService.getItems())
-    );
-    const label = configService.isEdit() ? 'Save ' : 'Add ' + configService.getTitleType();
-    const icon = configService.isEdit() ? 'save' : 'add';
-    return html`
-      <cb-config-button .onClick=${onClick} label=${label} icon=${icon}></cb-config-button>
-    `;
-  }
-}
-
 @customElement('cb-config-button')
 export class ConfigButton extends LitElement {
   onClick!: (event: Event) => void;
@@ -276,7 +197,7 @@ export class ConfigButton extends LitElement {
 
 @customElement('cb-config-boolean')
 export class ConfigBoolean extends MobxLitElement {
-  props!: Map<string, ConfigProp<string>>;
+  props!: Map<string, GETSET<string>>;
   @property({ attribute: true })
   label!: string;
   @property({ attribute: true })
@@ -309,14 +230,46 @@ export class ConfigBoolean extends MobxLitElement {
   }
 }
 
-@customElement('cb-config-text2')
-export class ConfigText2 extends LitElement {
+@customElement('cb-config-popup')
+export class ConfigPopup extends LitElement {
+  type!: ListType;
+  @property({ attribute: true })
+  show!: boolean;
+  @property({ attribute: true })
+  onSave!: () => void;
+
+  static styles = [css``, TW_CSS];
+  render() {
+    if (!this.show) {
+      return html``;
+    }
+    const typeName = configService.getTitleByType(this.type);
+    const isEdit = configService.isEdit();
+    const label = (isEdit ? 'Save ' : 'Add ') + typeName;
+    const icon = isEdit ? 'save' : 'add';
+    const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
+    const onClose = action(configService.closePopupAction);
+    return html`
+      ${MD_ICONS}
+      <md-dialog aria-labelledby="message" @close=${onClose} class="text-center text-lg" open>
+        <div slot="headline">${title}</div>
+        <form slot="content" id="form-id" method="dialog">
+          <slot></slot>
+          <cb-config-button .onClick=${this.onSave} label=${label} icon=${icon}></cb-config-button>
+        </form>
+      </md-dialog>
+    `;
+  }
+}
+
+@customElement('cb-config-text')
+export class ConfigText extends LitElement {
   @property({
-    hasChanged(newVal: ListItem, oldVal: ListItem) {
+    hasChanged(newVal: Item, oldVal: Item) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  item!: ListItem;
+  item!: Item;
   label!: string;
   id!: string;
   render() {
@@ -324,40 +277,17 @@ export class ConfigText2 extends LitElement {
     if (!prop || !('get' in prop)) {
       return html``;
     }
+    const value = prop?.get();
     const onChange = action((e: MouseEvent) => {
       // @ts-ignore
       prop?.set(e.target.value);
     });
-    const value = prop?.get();
     return html`
       <md-outlined-text-field
         label=${this.label}
         size="medium"
         @change=${onChange}
         .value=${value}
-      ></md-outlined-text-field>
-    `;
-  }
-}
-
-@customElement('cb-config-text')
-export class ConfigText extends LitElement {
-  type!: ListType;
-  label!: string;
-  @property({ attribute: true })
-  id!: string;
-
-  render() {
-    const item = configService.getItemByType(this.type);
-    // @ts-ignore
-    const onChange = action((e: MouseEvent) => item?.properties.get(this.id)?.set(e.target.value));
-    const value = item?.properties.get(this.id)?.get();
-    return html`
-      <md-outlined-text-field
-        label=${this.label}
-        size="medium"
-        @change=${onChange}
-        value=${value}
       ></md-outlined-text-field>
     `;
   }

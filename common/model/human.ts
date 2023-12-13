@@ -1,12 +1,12 @@
-import { ConfigProp, ListItem } from '../service/config.service';
+import { GETSET, Item } from '../service/config.service';
 
-export class Human implements ListItem {
+export class Human implements Item {
   constructor(
     public name: string,
     public email: string
   ) {}
   label = 'Human';
-  properties: Map<string, ConfigProp<string>> = new Map([
+  properties: Map<string, GETSET<string>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
     ['email', { get: () => this.email, set: value => (this.email = value) }],
   ]);

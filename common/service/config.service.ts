@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import {action, makeAutoObservable} from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
@@ -11,14 +11,14 @@ import {
   refreshService,
 } from './index.service';
 
-export interface ConfigProp<T> {
+export interface GETSET<T> {
   get: () => T;
   set: (key: T) => void;
 }
 
-export interface ListItem {
+export interface Item {
   label: string;
-  properties: Map<string, ConfigProp<string>>;
+  properties: Map<string, GETSET<string>>;
   getName: () => string;
   getDescription: () => string;
   validate: () => string;
@@ -76,7 +76,7 @@ export class ConfigService {
   @jsonIgnore() cursor = -1;
   @jsonIgnore() listType = ListType.None;
   @jsonIgnore() listMode = ListMode.None;
-  private newItem: ListItem = Human.create();
+  private newItem: Item = Human.create();
 
   constructor() {
     makeAutoObservable(this);
@@ -123,7 +123,7 @@ export class ConfigService {
   playCorrect!: boolean;
   playWinner!: boolean;
 */
-  @jsonIgnore() boolprops: Map<string, ConfigProp<boolean>> = new Map([
+  @jsonIgnore() boolprops: Map<string, GETSET<boolean>> = new Map([
     [
       'darkTheme',
       { get: () => renderingService.darkTheme, set: value => (renderingService.darkTheme = value) },
@@ -136,7 +136,7 @@ export class ConfigService {
     ['playWinner', { get: () => this.playWinner, set: value => (this.playWinner = value) }],
   ]);
 
-  properties: Map<string, ConfigProp<string>> = new Map([
+  properties: Map<string, GETSET<string>> = new Map([
     ['clock', { get: () => this.clock, set: value => (this.clock = value) }],
     ['white', { get: () => this.white, set: value => (this.white = value) }],
     ['black', { get: () => this.black, set: value => (this.black = value) }],
@@ -190,7 +190,7 @@ export class ConfigService {
     this.listMode = mode;
   }
 
-  saveItem(item: ListItem, items: ListItem[]) {
+  saveItem(item: Item, items: Item[]) {
     if (item.validate()) {
       const name = this.isEdit() ? 'Save' : 'Add';
       messageService.display({
@@ -223,11 +223,11 @@ export class ConfigService {
     }
   }
 
-  getItems(): ListItem[] {
+  getItems(): Item[] {
     return this.getItemsByType(this.listType);
   }
 
-  getItemsByType(n:ListType): ListItem[] {
+  getItemsByType(n:ListType): Item[] {
     switch (n) {
       case ListType.Human:
         return this.humans;
@@ -246,7 +246,7 @@ export class ConfigService {
     return this.isEdit() ? this.getItemsByType(n)[this.cursor] : this.newItem;
   }
 
-  createItem(): ListItem {
+  createItem(): Item {
     switch (this.listType) {
       case ListType.Human:
         return Human.create();
@@ -262,4 +262,22 @@ export class ConfigService {
     refreshService.startRefreshTimer();
     console.log('rotation=' + this.rotation);
   };
+
+  getListLogic(n:ListType) {
+    const items = this.getItemsByType(n);
+    const item = this.getItemByType(n);
+    return {
+      type: n,
+      items,
+      item,
+      cursor: this.cursor,
+      hasSelect : this.cursor >= 0,
+      show : this.listMode !== ListMode.None,
+      onSelect : action((i: string) => this.setCursor(i)),
+      onSave : action(() => this.saveItem(item, items)),
+      onAdd : action(() => this.setListMode(ListMode.Add)),
+      onEdit : action(() => this.setListMode(ListMode.Edit)),
+      onDelete : action(() => this.deleteItem()),
+    }
+  }
 }

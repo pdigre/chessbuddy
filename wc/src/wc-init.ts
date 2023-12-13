@@ -20,11 +20,8 @@ import {
   ConfigButton,
   ConfigListButtons,
   ConfigPopup,
-  ConfigPopup2,
-  ConfigSaveButton,
   ConfigSelect,
   ConfigText,
-  ConfigText2,
   TableList,
 } from './config-widgets.ts';
 import { MdDialog } from '@material/web/dialog/dialog';
@@ -65,12 +62,9 @@ export function wcInit() {
   new ConfigButton();
   new ConfigBoolean();
   new ConfigText();
-  new ConfigText2();
   new ConfigSelect();
   new ConfigPopup();
-  new ConfigPopup2();
   new ConfigListButtons();
-  new ConfigSaveButton();
   new TableList();
 
   // External components
