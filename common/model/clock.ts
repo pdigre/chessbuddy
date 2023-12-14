@@ -1,4 +1,4 @@
-import { GETSET, Item } from '../service/config.service';
+import {GETSET, Item} from "./model.ts";
 
 export type TimeRule = {
   from: number;

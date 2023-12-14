@@ -48,13 +48,13 @@ export class MediaService {
   }
 
   playWinner() {
-    this.playRandom(configService.playWinner, 'Winner', this.winner_urls);
+    this.playRandom(configService.display.playWinner, 'Winner', this.winner_urls);
   }
   playCorrect() {
-    this.playRandom(configService.playCorrect, 'Stockfish would do the same', this.correct_urls);
+    this.playRandom(configService.display.playCorrect, 'Stockfish would do the same', this.correct_urls);
   }
   playMistake() {
-    this.playRandom(configService.playMistake, 'Mistake', this.mistake_urls);
+    this.playRandom(configService.display.playMistake, 'Mistake', this.mistake_urls);
   }
 
   readonly playAllAction = (): void => {

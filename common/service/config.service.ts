@@ -7,22 +7,10 @@ import {
   playService,
   storageService,
   messageService,
-  renderingService,
   refreshService,
 } from './index.service';
-
-export interface GETSET<T> {
-  get: () => T;
-  set: (key: T) => void;
-}
-
-export interface Item {
-  label: string;
-  properties: Map<string, GETSET<string>>;
-  getName: () => string;
-  getDescription: () => string;
-  validate: () => string;
-}
+import {Display} from "../model/display.ts";
+import {GETSET, Item} from "../model/model.ts";
 
 export const enum ListMode {
   None = 1,
@@ -40,16 +28,10 @@ type ConfigProps = {
   humans: Human[];
   bots: Bot[];
   clocks: Clock[];
+  display: Display;
   white: string;
   black: string;
   clock: string;
-  rotation: number;
-  showHints: boolean;
-  showCP: boolean;
-  showFacts: boolean;
-  playMistake: boolean;
-  playCorrect: boolean;
-  playWinner: boolean;
 };
 
 export class ConfigService {
@@ -57,18 +39,12 @@ export class ConfigService {
   white!: string;
   black!: string;
   clock!: string;
-  // Features config
-  rotation!: number;
-  showHints!: boolean;
-  showCP!: boolean;
-  showFacts!: boolean;
-  playMistake!: boolean;
-  playCorrect!: boolean;
-  playWinner!: boolean;
+
   // Config to store
   humans!: Human[];
   bots!: Bot[];
   clocks!: Clock[];
+  display!: Display;
 
   // Config runtime - no persist
   @jsonIgnore() showConfig = false;
@@ -86,13 +62,6 @@ export class ConfigService {
       white: '',
       black: '',
       clock: '',
-      rotation: 0,
-      showHints: false,
-      showCP: true,
-      showFacts: true,
-      playMistake: false,
-      playCorrect: false,
-      playWinner: false,
     }) as ConfigProps;
     // Cannot use object assign directly on "this" due to MOBX
     this.humans = (restore.humans?.length ? restore.humans : Human.init).map(
@@ -102,41 +71,14 @@ export class ConfigService {
       x => new Bot(x.name, x.engine, x.skill, x.time, x.depth)
     );
     this.clocks = (restore.clocks?.length ? restore.clocks : Clock.init).map(
-      x => new Clock(x.name, x.time)
+        x => new Clock(x.name, x.time)
     );
+    const d = restore.display ?? Display.init;
+    this.display = new Display(d.darkTheme,d.showFacts,d.showHints,d.showCP,d.playCorrect,d.playMistake,d.playWinner,d.rotation);
     this.white = restore.white;
     this.black = restore.black;
     this.clock = restore.clock;
-    this.rotation = restore.rotation;
-    this.showHints = restore.showHints;
-    this.showCP = restore.showCP;
-    this.showFacts = restore.showFacts;
-    this.playMistake = restore.playMistake;
-    this.playCorrect = restore.playCorrect;
-    this.playWinner = restore.playWinner;
   }
-
-  /*
-  rotation!: number;
-  showHints!: boolean;
-  showCP!: boolean;
-  showFacts!: boolean;
-  playMistake!: boolean;
-  playCorrect!: boolean;
-  playWinner!: boolean;
-*/
-  @jsonIgnore() boolprops: Map<string, GETSET<boolean>> = new Map([
-    [
-      'darkTheme',
-      { get: () => renderingService.darkTheme, set: value => (renderingService.darkTheme = value) },
-    ],
-    ['showHints', { get: () => this.showHints, set: value => (this.showHints = value) }],
-    ['showCP', { get: () => this.showCP, set: value => (this.showCP = value) }],
-    ['showFacts', { get: () => this.showFacts, set: value => (this.showFacts = value) }],
-    ['playMistake', { get: () => this.playMistake, set: value => (this.playMistake = value) }],
-    ['playCorrect', { get: () => this.playCorrect, set: value => (this.playCorrect = value) }],
-    ['playWinner', { get: () => this.playWinner, set: value => (this.playWinner = value) }],
-  ]);
 
   properties: Map<string, GETSET<string>> = new Map([
     ['clock', { get: () => this.clock, set: value => (this.clock = value) }],
@@ -239,6 +181,18 @@ export class ConfigService {
     }
   }
 
+  getTabByType(n:ListType) {
+    switch (n) {
+      case ListType.Human:
+        return 2;
+      case ListType.Bot:
+        return 3;
+      default:
+        return 4;
+    }
+
+  }
+
   getItem() {
     return this.isEdit() ? this.getItemsByType(this.listType)[this.getCursorByType(this.listType)] : this.newItem;
   }
@@ -255,9 +209,9 @@ export class ConfigService {
   }
 
   rotateAction = () => {
-    this.rotation = (this.rotation + 1) % 4;
+    this.display.rotation = (this.display.rotation + 1) % 4;
     refreshService.startRefreshTimer();
-    console.log('rotation=' + this.rotation);
+    console.log('rotation=' + this.display.rotation);
   };
 
   getListLogic(type:ListType) {
@@ -265,13 +219,14 @@ export class ConfigService {
     const cursor = this.getCursorByType(type);
     const isEdit = this.listMode == ListMode.Edit;
     const item = isEdit ? items[cursor] : this.newItem
+    const active = this.showTab == this.getTabByType(type);
     return {
       type,
       items,
       item,
       cursor,
       hasSelect : cursor >= 0,
-      show : this.listMode !== ListMode.None,
+      show : this.listMode !== ListMode.None && active,
       onSelect : action((i: string) => this.setCursorByType(type, Number.parseInt(i))),
       onSave : action(() => {
         if (item.validate()) {

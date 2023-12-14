@@ -2,8 +2,8 @@ import { BLACK, Square, SQUARES, WHITE } from 'chess.js';
 import { jsonIgnore } from 'json-ignore';
 import { makeAutoObservable } from 'mobx';
 import { FEN } from '../model/fen';
-import { GETSET } from './config.service';
 import { configService, playService } from './index.service';
+import {GETSET} from "../model/model.ts";
 
 export class EditService {
   showEdit = false;

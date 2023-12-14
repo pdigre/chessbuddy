@@ -15,14 +15,7 @@ import { PanelHist } from './panel-hist.ts';
 import { PanelEdit } from './panel-edit.ts';
 import { CP } from './cp.ts';
 import { FenInfo, PlayerInfoBar, Ticker } from './app-play.ts';
-import {
-  ConfigBoolean,
-  ConfigButton,
-  ConfigPopup,
-  ConfigSelect,
-  ConfigText,
-  TableList,
-} from './config-widgets.ts';
+import { ConfigBoolean, ConfigButton, ConfigSelect, ConfigText } from './config-widgets.ts';
 import { MdDialog } from '@material/web/dialog/dialog';
 import { MdOutlinedButton } from '@material/web/button/outlined-button';
 import { MdFilledButton } from '@material/web/button/filled-button';
@@ -34,6 +27,7 @@ import { MdOutlinedSelect } from '@material/web/select/outlined-select';
 import { MdSelectOption } from '@material/web/select/select-option';
 import { MdCheckbox } from '@material/web/checkbox/checkbox';
 import { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field';
+import { ConfigPopup, ConfigList } from './config-lists.ts';
 
 export function wcInit() {
   new Board();
@@ -63,7 +57,7 @@ export function wcInit() {
   new ConfigText();
   new ConfigSelect();
   new ConfigPopup();
-  new TableList();
+  new ConfigList();
 
   // External components
   new ChessBoardElement(); // Must instantiate otherwise do not render

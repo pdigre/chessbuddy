@@ -6,34 +6,15 @@ import { action } from 'mobx';
 import { historyService } from '../../common/service/index.service';
 import { ConnectService } from '../../common/service/connect.service';
 import { Human } from '../../common/model/human';
-import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
+import { LIST_CSS } from './config-lists.ts';
 
 @customElement('cb-config-human')
 export class ConfigHuman extends MobxLitElement {
   config!: ConfigService;
   connect!: ConnectService;
 
-  static styles = [
-    css`
-      .div {
-        width: 800px;
-        height: 400px;
-        cb\-table\-list,
-        cb\-config\-button {
-          // mx-1
-          margin-left: 0.25rem;
-          margin-right: 0.25rem;
-        }
-      }
-      mx\-2 {
-        // mx-2
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-      }
-    `,
-    TW_CSS,
-  ];
+  static styles = [LIST_CSS, TW_CSS];
 
   render() {
     const {
@@ -81,7 +62,11 @@ export class ConfigHuman extends MobxLitElement {
       <table class="w-full">
         <tr>
           <td>
-            <cb-table-list .onSelect=${onSelect} .cursor=${cursor} .items=${items}></cb-table-list>
+            <cb-config-list
+              .onSelect=${onSelect}
+              .cursor=${cursor}
+              .items=${items}
+            ></cb-config-list>
           </td>
         </tr>
         <tr>

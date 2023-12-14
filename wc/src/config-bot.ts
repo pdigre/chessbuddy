@@ -4,34 +4,15 @@ import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListType } from '../../common/service/config.service';
 import { ConnectService } from '../../common/service/connect.service';
 import { Engines } from '../../common/model/bot';
-import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
+import { LIST_CSS } from './config-lists.ts';
 
 @customElement('cb-config-bot')
 export class ConfigBot extends MobxLitElement {
   config!: ConfigService;
   connect!: ConnectService;
 
-  static styles = [
-    css`
-      .div {
-        width: 800px;
-        height: 400px;
-        cb\-table\-list,
-        cb\-config\-button {
-          // mx-1
-          margin-left: 0.25rem;
-          margin-right: 0.25rem;
-        }
-      }
-      mx\-2 {
-        // mx-2
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-      }
-    `,
-    TW_CSS,
-  ];
+  static styles = [LIST_CSS, TW_CSS];
 
   render() {
     const {
@@ -53,22 +34,26 @@ export class ConfigBot extends MobxLitElement {
       <table class="w-full">
         <tr>
           <td>
-            <cb-table-list .onSelect=${onSelect} .cursor=${cursor} .items=${items}></cb-table-list>
+            <cb-config-list
+              .onSelect=${onSelect}
+              .cursor=${cursor}
+              .items=${items}
+            ></cb-config-list>
           </td>
         </tr>
         <tr>
           <td>
-            <cb-config-button .onClick=${onAdd} label="Add" icon="add"></cb-config-button>
+            <cb-config-button label="Add" icon="add" .onClick=${onAdd}></cb-config-button>
             <cb-config-button
-              .onClick=${onEdit}
               label="Edit"
               icon="edit"
+              .onClick=${onEdit}
               .disabled=${!hasSelect}
             ></cb-config-button>
             <cb-config-button
-              .onClick=${onDelete}
               label="Delete"
               icon="delete"
+              .onClick=${onDelete}
               .disabled=${!hasSelect}
             ></cb-config-button>
           </td>
@@ -79,16 +64,16 @@ export class ConfigBot extends MobxLitElement {
           <cb-config-text .item=${item} label="Name" id="name"></cb-config-text>
           <cb-config-select
             .item=${item}
+            id="engine"
             label="Chess Engine"
             .choices=${engines}
-            id="engine"
           ></cb-config-select>
           <br />
-          <cb-config-text .item=${item} label="Skill level" id="skill"></cb-config-text>
+          <cb-config-text .item=${item} id="skill" label="Skill level"></cb-config-text>
           <br />
-          <cb-config-text .item=${item} label="Time (sec)" id="time"></cb-config-text>
+          <cb-config-text .item=${item} id="time" label="Time (sec)"></cb-config-text>
           <br />
-          <cb-config-text .item=${item} label="Depth (..not time)" id="depth"></cb-config-text>
+          <cb-config-text .item=${item} id="depth" label="Depth (..not time)"></cb-config-text>
         </form>
       </cb-config-popup>
     `;

@@ -3,32 +3,13 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListType } from '../../common/service/config.service';
 import { TW_CSS } from './css';
-import { css } from 'lit-element';
+import { LIST_CSS } from './config-lists.ts';
 
 @customElement('cb-config-clock')
 export class ConfigClock extends MobxLitElement {
   config!: ConfigService;
 
-  static styles = [
-    css`
-      .div {
-        width: 800px;
-        height: 400px;
-        cb\-table\-list,
-        cb\-config\-button {
-          // mx-1
-          margin-left: 0.25rem;
-          margin-right: 0.25rem;
-        }
-      }
-      mx\-2 {
-        // mx-2
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-      }
-    `,
-    TW_CSS,
-  ];
+  static styles = [LIST_CSS, TW_CSS];
 
   render() {
     const {
@@ -49,7 +30,11 @@ export class ConfigClock extends MobxLitElement {
       <table class="w-full">
         <tr>
           <td>
-            <cb-table-list .onSelect=${onSelect} .cursor=${cursor} .items=${items}></cb-table-list>
+            <cb-config-list
+              .onSelect=${onSelect}
+              .cursor=${cursor}
+              .items=${items}
+            ></cb-config-list>
           </td>
         </tr>
         <tr>

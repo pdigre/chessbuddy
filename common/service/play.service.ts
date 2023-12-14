@@ -1,7 +1,7 @@
 import { Human } from '../model/human';
 import { San } from './openings.service';
 import { makeAutoObservable } from 'mobx';
-import { Chess, Piece, Square, WHITE } from 'chess.js';
+import { Chess, Square, WHITE } from 'chess.js';
 import { Clock } from '../model/clock';
 import { toMMSS } from '../resources/library';
 import { BotRunner } from './bot.service';
@@ -326,12 +326,12 @@ export class PlayService {
     if (editService.showEdit && editService.editSquare != '') func();
   }
   markFacts(func: (x: Square) => void) {
-    if (configService.showFacts) {
+    if (configService.display.showFacts) {
       this.pgns.forEach(x => func(x));
     }
   }
   markHints(func: (x: Square, i: number) => void) {
-    if (configService.showFacts) {
+    if (configService.display.showFacts) {
       analyzerService.help.forEach((x, i) => func(x, i));
     }
   }
@@ -363,14 +363,14 @@ export class PlayService {
   readonly getStartTime = () => Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
 
   getPlayerInfo(isTop: boolean) {
-    const isWhite = isTop == configService.rotation > 1;
+    const isWhite = isTop == configService.display.rotation > 1;
     const otherTime = isWhite ? this.wtime : this.btime;
     return {
       other: toMMSS(this.allowed ? this.allowed - otherTime : otherTime),
       label: isWhite ? `White: ${configService.white}` : `Black: ${configService.black}`,
       showTicker: isWhite == this.isWhiteTurn,
       banner: isWhite != this.isWhiteTurn && this.isComplete ? ' ** Winner **' : '',
-      isTextRight: isTop && configService.rotation % 2 == 1,
+      isTextRight: isTop && configService.display.rotation % 2 == 1,
     };
   }
 }

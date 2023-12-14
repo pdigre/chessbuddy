@@ -78,8 +78,8 @@ export class ConfigDialog extends MobxLitElement {
       <md-dialog class="main" aria-labelledby="simple-dialog-title" open @close=${onClose}>
         <div slot="content">
           <md-tabs class="text-lg text-center" aria-label="Content to view">
-            ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')}
-            ${tab(2, 'av_timer', 'Clocks')} ${tab(3, 'people', 'Humans')} ${tab(4, 'robot', 'Bots')}
+            ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')} ${tab(2, 'people', 'Humans')}
+            ${tab(3, 'robot', 'Bots')} ${tab(4, 'av_timer', 'Clocks')}
             ${tab(5, 'bluetooth', 'Bluetooth')}
           </md-tabs>
           <slot name="${this.config.showTab}"></slot>

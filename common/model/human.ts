@@ -1,4 +1,4 @@
-import { GETSET, Item } from '../service/config.service';
+import {GETSET, Item} from "./model.ts";
 
 export class Human implements Item {
   constructor(
@@ -6,7 +6,7 @@ export class Human implements Item {
     public email: string
   ) {}
   label = 'Human';
-  properties: Map<string, GETSET<string>> = new Map([
+  properties: Map<string, GETSET<any>> = new Map([
     ['name', { get: () => this.name, set: value => (this.name = value) }],
     ['email', { get: () => this.email, set: value => (this.email = value) }],
   ]);
