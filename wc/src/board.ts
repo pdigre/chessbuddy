@@ -1,11 +1,9 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import {
-  configService,
   editService,
   playService,
   renderingService,
-  rulesService,
   rulesService as rules,
 } from '../../common/service/index.service';
 import { RefreshService } from '../../common/service/refresh.service';
@@ -45,7 +43,7 @@ export class Board extends MobxLitElement {
   }
 
   render() {
-    const { r90, r180 } = rules.splitRotation(this.config.display.rotation);
+    const { r90, r180, b2sq, sq2b, fen2b } = this.config.getBoardLogic();
 
     const showMarkers = () => {
       const markers = {};
@@ -59,7 +57,7 @@ export class Board extends MobxLitElement {
       );
       playService.markFacts(x =>
         Object.assign(markers, {
-          [r90 ? rules.rightSquare(x) : x]: {
+          [sq2b(x)]: {
             background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
             borderRadius: '50%',
           },
@@ -67,7 +65,7 @@ export class Board extends MobxLitElement {
       );
       playService.markHints((x, i) =>
         Object.assign(markers, {
-          [r90 ? rules.rightSquare(x) : x]:
+          [sq2b(x)]:
             i > 1
               ? {
                   background: 'radial-gradient(circle, #00ff4c 36%, transparent 30%)',
@@ -81,7 +79,7 @@ export class Board extends MobxLitElement {
       );
       playService.markCastling(x =>
         Object.assign(markers, {
-          [r90 ? rules.rightSquare(x) : x]: {
+          [sq2b(x)]: {
             background: 'radial-gradient(circle, #505050 36%, transparent 80%)',
             borderRadius: '10%',
           },
@@ -96,9 +94,6 @@ export class Board extends MobxLitElement {
         ? this.edit.editFen
         : playService.fen;
 
-    const startPos = r90 ? rules.leftFen(fen) : fen;
-    const rotation = !r180 ? 'white' : 'black';
-    console.log(rotation + ':' + startPos);
     const side = (isWhite: boolean) => (isWhite ? 'rgb(240, 217, 181)' : 'rgb(181, 136, 99)');
 
     const onPieceDropAction = (boardFrom: Square, boardTo: Square) => {
@@ -106,28 +101,18 @@ export class Board extends MobxLitElement {
         editService.editMove(boardFrom, boardTo);
         return true;
       }
-      return playService.pieceMove(
-        rulesService.board2Square(boardFrom, configService.display.rotation),
-        rulesService.board2Square(boardTo, configService.display.rotation)
-      );
+      return playService.pieceMove(b2sq(boardFrom), b2sq(boardTo));
     };
-    const dropHandler = (e: CustomEvent<ChessBoardEvent>) => {
+    const onDrop = (e: CustomEvent<ChessBoardEvent>) => {
       if (!onPieceDropAction(e.detail.source as Square, e.detail.target as Square)) {
         e.preventDefault();
         e.detail.setAction('snapback');
       }
     };
 
-    const clickHandler = (e: MouseEvent) => {
-      editService.onSquareClick(this.xy2square(e.offsetX, e.offsetY));
-    };
-
-    const onDragStartAction = (e: MouseEvent) => {
+    const onStart = (e: MouseEvent) => {
       const boardFrom = this.xy2square(e.offsetX, e.offsetY);
-      return (
-        editService.showEdit ||
-        playService.pieceStart(rulesService.board2Square(boardFrom, configService.display.rotation))
-      );
+      return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
     };
 
     const STYLE = css`
@@ -136,6 +121,11 @@ export class Board extends MobxLitElement {
       border-width: 0;
     `;
 
+    const onClick = (e: MouseEvent) => {
+      const square = this.xy2square(e.offsetX, e.offsetY);
+      return editService.onSquareClick(square);
+    };
+    const orientation = !r180 ? 'white' : 'black';
     return html`
       <style>
         --light-color {
@@ -146,13 +136,13 @@ export class Board extends MobxLitElement {
         }
       </style>
       <chess-board
+        position=${fen2b(fen)}
+        @drag-start=${onStart}
+        @drop=${onDrop}
+        @click=${onClick}
+        orientation=${orientation}
         style=${STYLE}
         draggable-pieces
-        position=${startPos}
-        orientation=${rotation}
-        @drag-start=${onDragStartAction}
-        @drop=${dropHandler}
-        @click=${clickHandler}
         customSquareStyles=${showMarkers()}
       ></chess-board>
     `;

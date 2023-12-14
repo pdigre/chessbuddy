@@ -3,10 +3,17 @@ import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
 import { jsonIgnore } from 'json-ignore';
-import { playService, storageService, messageService, refreshService } from './index.service';
+import {
+  playService,
+  storageService,
+  messageService,
+  refreshService,
+  rulesService as rules,
+} from './index.service';
 import { Display } from '../model/display.ts';
 import { Item } from '../model/model.ts';
 import { Game } from '../model/game.ts';
+import { Square } from './rules.service.ts';
 
 export const enum ListMode {
   None = 1,
@@ -190,6 +197,19 @@ export class ConfigService {
         items.splice(cursor, 1);
         listProps.setCursor(-1);
       }),
+    };
+  }
+
+  getBoardLogic() {
+    const rotation = this.display.rotation;
+    const { r90, r180 } = rules.splitRotation(rotation);
+    return {
+      rotation,
+      r90,
+      r180,
+      b2sq: (board: Square) => rules.board2Square(board, rotation),
+      sq2b: (square: Square) => (r90 ? rules.rightSquare(square) : square),
+      fen2b: (fen: string) => (r90 ? rules.leftFen(fen) : fen),
     };
   }
 }

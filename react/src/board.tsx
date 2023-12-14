@@ -5,10 +5,8 @@ import { ConfigService } from '../../common/service/config.service';
 import { RefreshService } from '../../common/service/refresh.service';
 import { observer } from 'mobx-react';
 import {
-  configService,
   editService,
   playService,
-  rulesService,
   rulesService as rules,
 } from '../../common/service/index.service';
 import { FEN } from '../../common/model/fen';
@@ -36,7 +34,7 @@ export const Board = observer(
       backgroundColor: 'rgb(181, 136, 99)',
     };
 
-    const { r90, r180 } = rules.splitRotation(config.display.rotation);
+    const { r90, r180, b2sq, sq2b, fen2b } = config.getBoardLogic();
 
     const showMarkers = () => {
       const markers = {};
@@ -50,15 +48,15 @@ export const Board = observer(
       );
       playService.markFacts(x =>
         Object.assign(markers, {
-          [r90 ? rules.rightSquare(x) : x]: {
+          [sq2b(x)]: {
             background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
             borderRadius: '50%',
           },
         })
       );
-      playService.markHints((x, i) =>
-        Object.assign(markers, {
-          [r90 ? rules.rightSquare(x) : x]:
+      playService.markHints((x, i) => {
+        return Object.assign(markers, {
+          [sq2b(x)]:
             i > 1
               ? {
                   background: 'radial-gradient(circle, #00ff4c 36%, transparent 30%)',
@@ -68,11 +66,11 @@ export const Board = observer(
                   background: 'radial-gradient(circle, #00ff4c 36%, transparent 50%)',
                   borderRadius: '10%',
                 },
-        })
-      );
+        });
+      });
       playService.markCastling(x =>
         Object.assign(markers, {
-          [r90 ? rules.rightSquare(x) : x]: {
+          [sq2b(x)]: {
             background: 'radial-gradient(circle, #505050 36%, transparent 80%)',
             borderRadius: '10%',
           },
@@ -82,32 +80,26 @@ export const Board = observer(
     };
 
     const fen = refresh.showBlank ? FEN.CLEAR_GAME : edit.showEdit ? edit.editFen : playService.fen;
-    const onPieceDropAction = (boardFrom: Square, boardTo: Square) => {
+    const onDrop = (boardFrom: Square, boardTo: Square) => {
       if (editService.showEdit) {
         editService.editMove(boardFrom, boardTo);
         return true;
       }
-      return playService.pieceMove(
-        rulesService.board2Square(boardFrom, configService.display.rotation),
-        rulesService.board2Square(boardTo, configService.display.rotation)
-      );
+      return playService.pieceMove(b2sq(boardFrom), b2sq(boardTo));
     };
-    const onDragStartAction = (piece: string, boardFrom: Square): any => {
-      return (
-        editService.showEdit ||
-        playService.pieceStart(rulesService.board2Square(boardFrom, configService.display.rotation))
-      );
+    const onStart = (piece: string, boardFrom: Square): any => {
+      return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
     };
 
-    const onSquareClickAction = (square: Square) => editService.onSquareClick(square);
-
+    const onClick = (square: Square) => editService.onSquareClick(square);
+    const orientation = !r180 ? 'white' : 'black';
     return (
       <Chessboard
-        position={r90 ? rules.leftFen(fen) : fen}
-        onPieceDragBegin={onDragStartAction}
-        onPieceDrop={onPieceDropAction}
-        onSquareClick={onSquareClickAction}
-        boardOrientation={!r180 ? 'white' : 'black'}
+        position={fen2b(fen)}
+        onPieceDragBegin={onStart}
+        onPieceDrop={onDrop}
+        onSquareClick={onClick}
+        boardOrientation={orientation}
         boardWidth={rendering.boardWidth}
         customSquareStyles={showMarkers()}
         customLightSquareStyle={r90 ? blackStyle : whiteSquareStyle}
