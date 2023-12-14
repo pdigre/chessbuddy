@@ -73,7 +73,9 @@ export class ConfigService {
   // Config runtime - no persist
   @jsonIgnore() showConfig = false;
   @jsonIgnore() showTab = 0;
-  @jsonIgnore() cursor = -1;
+  @jsonIgnore() cursorClock = -1;
+  @jsonIgnore() cursorBot = -1;
+  @jsonIgnore() cursorHuman = -1;
   @jsonIgnore() listType = ListType.None;
   @jsonIgnore() listMode = ListMode.None;
   private newItem: Item = Human.create();
@@ -161,24 +163,15 @@ export class ConfigService {
 
   switchTab(n: number) {
     this.showTab = n;
-    this.cursor = -1;
+//    this.cursor = -1;
   }
 
+  /*
   setCursor(id: string) {
     const num = Number.parseInt(id);
     this.cursor = num == this.cursor ? -1 : num;
   }
-
-  deleteItem() {
-    const items = this.getItems();
-    items.splice(this.cursor, 1);
-    this.cursor = -1;
-  }
-
-  closePopupAction = () => {
-    this.cursor = -1;
-    this.listMode = ListMode.None;
-  };
+   */
 
   setListType(type: ListType) {
     this.listType = type;
@@ -188,20 +181,6 @@ export class ConfigService {
 
   setListMode(mode: ListMode) {
     this.listMode = mode;
-  }
-
-  saveItem(item: Item, items: Item[]) {
-    if (item.validate()) {
-      const name = this.isEdit() ? 'Save' : 'Add';
-      messageService.display({
-        name,
-        title: name + this.getTitleType(),
-        msg: item.validate(),
-      });
-    } else {
-      this.isEdit() ? (items[this.cursor] = item) : items.push(item);
-    }
-    this.closePopupAction();
   }
 
   isEdit() {
@@ -238,12 +217,30 @@ export class ConfigService {
     }
   }
 
-  getItem() {
-    return this.isEdit() ? this.getItems()[this.cursor] : this.newItem;
+  getCursorByType(n:ListType): number {
+    switch (n) {
+      case ListType.Human:
+        return this.cursorHuman;
+      case ListType.Bot:
+        return this.cursorBot;
+      default:
+        return this.cursorClock;
+    }
   }
 
-  getItemByType(n:ListType) {
-    return this.isEdit() ? this.getItemsByType(n)[this.cursor] : this.newItem;
+  setCursorByType(n:ListType, i:number) {
+    switch (n) {
+      case ListType.Human:
+        return this.cursorHuman = i;
+      case ListType.Bot:
+        return this.cursorBot = i;
+      default:
+        return this.cursorClock = i;
+    }
+  }
+
+  getItem() {
+    return this.isEdit() ? this.getItemsByType(this.listType)[this.getCursorByType(this.listType)] : this.newItem;
   }
 
   createItem(): Item {
@@ -263,21 +260,39 @@ export class ConfigService {
     console.log('rotation=' + this.rotation);
   };
 
-  getListLogic(n:ListType) {
-    const items = this.getItemsByType(n);
-    const item = this.getItemByType(n);
+  getListLogic(type:ListType) {
+    const items = this.getItemsByType(type);
+    const cursor = this.getCursorByType(type);
+    const isEdit = this.listMode == ListMode.Edit;
+    const item = isEdit ? items[cursor] : this.newItem
     return {
-      type: n,
+      type,
       items,
       item,
-      cursor: this.cursor,
-      hasSelect : this.cursor >= 0,
+      cursor,
+      hasSelect : cursor >= 0,
       show : this.listMode !== ListMode.None,
-      onSelect : action((i: string) => this.setCursor(i)),
-      onSave : action(() => this.saveItem(item, items)),
+      onSelect : action((i: string) => this.setCursorByType(type, Number.parseInt(i))),
+      onSave : action(() => {
+        if (item.validate()) {
+          const name = isEdit ? 'Save' : 'Add';
+          messageService.display({
+            name,
+            title: name + this.getTitleType(),
+            msg: item.validate(),
+          });
+        } else {
+          isEdit ? (items[cursor] = item) : items.push(item);
+        }
+        this.setCursorByType(type, -1);
+        this.listMode = ListMode.None;
+      }),
       onAdd : action(() => this.setListMode(ListMode.Add)),
       onEdit : action(() => this.setListMode(ListMode.Edit)),
-      onDelete : action(() => this.deleteItem()),
+      onDelete : action(() => {
+        items.splice(cursor, 1);
+        this.setCursorByType(type, -1);
+      }),
     }
   }
 }

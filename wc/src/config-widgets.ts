@@ -2,13 +2,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { configService } from '../../common/service/index.service';
-import {
-  GETSET,
-  ConfigService,
-  Item,
-  ListMode,
-  ListType,
-} from '../../common/service/config.service';
+import {GETSET, Item, ListMode, ListType} from '../../common/service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
@@ -105,39 +99,6 @@ export class TableList extends LitElement {
           )}
         </tbody>
       </table>
-    `;
-  }
-}
-
-@customElement('cb-config-list-buttons')
-export class ConfigListButtons extends MobxLitElement {
-  config!: ConfigService;
-
-  static styles = [css``, TW_CSS];
-
-  render() {
-    const hasSelect = this.config.cursor >= 0;
-    let onClickAdd = action(() => this.config.setListMode(ListMode.Add));
-    let onClickEdit = action(() => this.config.setListMode(ListMode.Edit));
-    let onClickDel = action(this.config.deleteItem);
-    return html`
-      ${MD_ICONS}
-      <div className="[&>button]:mx-1">
-        <cb-config-button .onClick=${onClickAdd} label="Add" icon="add"></cb-config-button>
-        <cb-config-button
-          .onClick=${onClickEdit}
-          label="Edit"
-          icon="edit"
-          .disabled=${!hasSelect}
-        ></cb-config-button>
-        <cb-config-button
-          .onClick=${onClickDel}
-          label="Delete"
-          icon="delete"
-          .disabled=${!hasSelect}
-        ></cb-config-button>
-        <slot></slot>
-      </div>
     `;
   }
 }
@@ -248,7 +209,9 @@ export class ConfigPopup extends LitElement {
     const label = (isEdit ? 'Save ' : 'Add ') + typeName;
     const icon = isEdit ? 'save' : 'add';
     const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
-    const onClose = action(configService.closePopupAction);
+    const onClose = action(() => {
+      configService.setListMode(ListMode.None);
+    });
     return html`
       ${MD_ICONS}
       <md-dialog aria-labelledby="message" @close=${onClose} class="text-center text-lg" open>
@@ -285,9 +248,9 @@ export class ConfigText extends LitElement {
     return html`
       <md-outlined-text-field
         label=${this.label}
-        size="medium"
+        name=${this.id}
         @change=${onChange}
-        .value=${value}
+        value=${value}
       ></md-outlined-text-field>
     `;
   }

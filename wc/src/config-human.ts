@@ -51,7 +51,7 @@ export class ConfigHuman extends MobxLitElement {
     } = this.config.getListLogic(ListType.Human);
 
     //  const uploadRef = useRef<HTMLInputElement>(null);
-    const hasEmail = hasSelect && (items[this.config.cursor] as Human).email;
+    const hasEmail = hasSelect && (item as Human).email;
 
     const downloadPlayerAction = (event: Event) => {
       event.preventDefault();
@@ -70,7 +70,7 @@ export class ConfigHuman extends MobxLitElement {
     });
     const connectPlayerAction = action((event: Event) => {
       event.preventDefault();
-      this.connect.connectAction(items[this.config.cursor] as Human);
+      this.connect.connectAction(item as Human);
     });
     const onUpload = action((e: MouseEvent) => {
       // @ts-ignore

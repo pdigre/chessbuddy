@@ -18,7 +18,6 @@ import { FenInfo, PlayerInfoBar, Ticker } from './app-play.ts';
 import {
   ConfigBoolean,
   ConfigButton,
-  ConfigListButtons,
   ConfigPopup,
   ConfigSelect,
   ConfigText,
@@ -64,7 +63,6 @@ export function wcInit() {
   new ConfigText();
   new ConfigSelect();
   new ConfigPopup();
-  new ConfigListButtons();
   new TableList();
 
   // External components
