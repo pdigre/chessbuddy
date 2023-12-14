@@ -3,7 +3,7 @@ import { jsonIgnore } from 'json-ignore';
 import { makeAutoObservable } from 'mobx';
 import { FEN } from '../model/fen';
 import { configService, playService } from './index.service';
-import {GETSET} from "../model/model.ts";
+import { GETSET } from '../model/model.ts';
 
 export class EditService {
   showEdit = false;

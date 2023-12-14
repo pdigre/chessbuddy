@@ -13,8 +13,6 @@ import { Panel } from './panel.ts';
 import { PanelLog } from './panel-log.ts';
 import { PanelHist } from './panel-hist.ts';
 import { PanelEdit } from './panel-edit.ts';
-import { CP } from './cp.ts';
-import { FenInfo, PlayerInfoBar, Ticker } from './app-play.ts';
 import { ConfigBoolean, ConfigButton, ConfigSelect, ConfigText } from './config-widgets.ts';
 import { MdDialog } from '@material/web/dialog/dialog';
 import { MdOutlinedButton } from '@material/web/button/outlined-button';
@@ -28,6 +26,7 @@ import { MdSelectOption } from '@material/web/select/select-option';
 import { MdCheckbox } from '@material/web/checkbox/checkbox';
 import { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field';
 import { ConfigPopup, ConfigList } from './config-lists.ts';
+import { CP, FenInfo, PlayerInfoBar, Ticker } from './app-widgets.ts';
 
 export function wcInit() {
   new Board();

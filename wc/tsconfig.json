@@ -26,7 +26,11 @@
       "bun-types", "web"
     ]
   },
-  "include": ["src",
-    "../common", "package.json"],
+  "include": [
+    "src",
+    "../common",
+    "package.json",
+    "../react/build/assets/index-9bc7c2dd.js"
+  ],
   "exclude": []
 }

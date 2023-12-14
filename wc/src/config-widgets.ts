@@ -124,7 +124,7 @@ export class ConfigBoolean extends LitElement {
     }
     const checked = prop?.get();
     const onChange = action(
-        (e: Event) => prop?.set(String((e.target as HTMLInputElement).checked))
+      (e: Event) => prop?.set(String((e.target as HTMLInputElement).checked))
     );
     return html`
       <label>

@@ -24,7 +24,7 @@ import { action } from 'mobx';
 import { ConfigDialog } from './config-dialog';
 import { MessageDialog } from './message-dialog';
 import { Board } from './board';
-import { CP, FenInfo, PlayerInfoBar } from './app-play';
+import { CP, FenInfo, PlayerInfoBar } from './app-widgets';
 
 const lightTheme = createTheme({
   palette: {
@@ -76,7 +76,6 @@ const darkTheme = createTheme({
   },
 });
 export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService }) => {
-  const about = () => messageService.standard('About');
   const version = packageInfo.version;
   return (
     <ThemeProvider theme={rendering.darkTheme ? darkTheme : lightTheme}>
@@ -97,10 +96,14 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
           </div>
           <div className="flex flex-col w-full text-center">
             <h3 className="h-8 text-lg dark:text-white flex flex-row">
-              <span onClick={action(about)} className="mx-5 text-xl">
+              <span
+                onClick={action(() => messageService.standard('about'))}
+                className="mx-5 text-xl"
+              >
                 ChessBuddy {version}
               </span>
               <MdRefresh className="text-lg mx-5" onClick={action(mediaService.playAllAction)} />
+              <a href="wc.html">react</a>
             </h3>
             <PanelButtonbar
               edit={editService}

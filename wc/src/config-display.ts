@@ -2,9 +2,9 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService } from '../../common/service/config.service';
-import { action } from 'mobx';
 import { TW_CSS } from './css.ts';
 import { css } from 'lit-element';
+import { renderingService } from '../../common/service/index.service.ts';
 
 @customElement('cb-config-display')
 export class ConfigDisplay extends MobxLitElement {
@@ -23,10 +23,13 @@ export class ConfigDisplay extends MobxLitElement {
   ];
   render() {
     const item = this.config.display;
-
     return html`
       <form name="Display" method="dialog">
-        <cb-config-boolean .item=${item} id="darkTheme" label="Use dark theme"></cb-config-boolean>
+        <cb-config-boolean
+          .item=${renderingService}
+          id="darkTheme"
+          label="Use dark theme"
+        ></cb-config-boolean>
         <cb-config-boolean
           .item=${item}
           id="showFacts"
@@ -58,7 +61,7 @@ export class ConfigDisplay extends MobxLitElement {
           label="Play giphy when game ends"
         ></cb-config-boolean>
         <cb-config-button
-          .onClick=${action(this.config.rotateAction)}
+          .onClick=${this.config.rotateAction}
           label="Rotate chessboard"
           icon="rotate_right"
         ></cb-config-button>

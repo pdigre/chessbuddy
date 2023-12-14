@@ -26,9 +26,9 @@ export const CP = observer(
   }
 );
 
-export const Ticker = observer(({ clock }: { clock: ClockService }) => (
-  <span>{clock.clockText}</span>
-));
+export const FenInfo = observer(({ play }: { play: PlayService }) => {
+  return <p>{openingsService.sanTextLocate(play.log)}</p>;
+});
 
 export const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlayService }) => {
   const { other, label, showTicker, banner, isTextRight } = play.getPlayerInfo(isTop);
@@ -41,6 +41,6 @@ export const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: 
   );
 });
 
-export const FenInfo = observer(({ play }: { play: PlayService }) => {
-  return <p>{openingsService.sanTextLocate(play.log)}</p>;
-});
+export const Ticker = observer(({ clock }: { clock: ClockService }) => (
+  <span>{clock.clockText}</span>
+));

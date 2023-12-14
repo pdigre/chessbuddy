@@ -10,4 +10,3 @@ export interface Item {
   getDescription: () => string;
   validate: () => string;
 }
-

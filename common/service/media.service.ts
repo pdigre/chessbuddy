@@ -51,7 +51,11 @@ export class MediaService {
     this.playRandom(configService.display.playWinner, 'Winner', this.winner_urls);
   }
   playCorrect() {
-    this.playRandom(configService.display.playCorrect, 'Stockfish would do the same', this.correct_urls);
+    this.playRandom(
+      configService.display.playCorrect,
+      'Stockfish would do the same',
+      this.correct_urls
+    );
   }
   playMistake() {
     this.playRandom(configService.display.playMistake, 'Mistake', this.mistake_urls);

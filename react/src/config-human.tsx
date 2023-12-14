@@ -11,7 +11,9 @@ import { ConfigButton, ConfigText } from './config-widgets';
 
 export const ConfigHuman = observer(
   ({ config, connect }: { config: ConfigService; connect: ConnectService }) => {
-    const { item, hasSelect } = config.getListLogic(ListType.Human);
+    const { type, item, hasSelect, show, onSave, onSelect, cursor, items } = config.getListLogic(
+      ListType.Human
+    );
 
     const uploadRef = useRef<HTMLInputElement>(null);
     const hasEmail = hasSelect && (item as Human).email;
@@ -39,7 +41,7 @@ export const ConfigHuman = observer(
 
     return (
       <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
-        <ConfigListTable config={config} />
+        <ConfigListTable onSelect={onSelect} cursor={cursor} items={items} />
         <a className="hidden" download="games.txt">
           download it
         </a>
@@ -51,7 +53,7 @@ export const ConfigHuman = observer(
           onChange={e => historyService.uploadFilesHistory(e.currentTarget?.files)}
           ref={uploadRef}
         />
-        <ConfigListButtons config={config}>
+        <ConfigListButtons type={type}>
           <ConfigButton
             onClick={downloadPlayerAction}
             label="Download"
@@ -71,7 +73,7 @@ export const ConfigHuman = observer(
             disabled={!hasEmail}
           />
         </ConfigListButtons>
-        <ConfigPopup config={config}>
+        <ConfigPopup show={show} type={type} onSave={onSave}>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
             <ConfigText item={item} label="Name" id="name" />
             <ConfigText item={item} label="Email" id="email" />

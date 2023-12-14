@@ -1,4 +1,4 @@
-import {GETSET, Item} from "./model.ts";
+import { GETSET, Item } from './model.ts';
 
 export class Engine {
   constructor(

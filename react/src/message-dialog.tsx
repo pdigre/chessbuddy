@@ -57,7 +57,7 @@ export const MessageDialog = observer(({ message }: { message: MessageService })
     >
       <DialogTitle id="message">{msgHolder.title}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{msgHolder.msg}</DialogContentText>
+        <DialogContentText>{getMsg(msgHolder.msg)}</DialogContentText>
       </DialogContent>
       <DialogActions>
         {msgHolder.buttons?.map(x => (
@@ -67,12 +67,6 @@ export const MessageDialog = observer(({ message }: { message: MessageService })
     </Dialog>
   );
 });
-
-type ButtonType = {
-  name: string;
-  label: string;
-  icon?: JSX.Element;
-};
 
 function getButtons(name: string): ButtonType[] {
   switch (name) {
@@ -113,6 +107,12 @@ function getButtons(name: string): ButtonType[] {
   }
 }
 
+type ButtonType = {
+  name: string;
+  label: string;
+  icon?: JSX.Element;
+};
+
 function getMsg(name: string) {
   switch (name) {
     case 'about':
@@ -145,6 +145,6 @@ function getMsg(name: string) {
         </div>
       );
     default:
-      return <span>${name}</span>;
+      return <span>{name}</span>;
   }
 }

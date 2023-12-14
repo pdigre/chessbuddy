@@ -81,7 +81,6 @@ export class MessageDialog extends MobxLitElement {
         }
       });
     };
-
     this.message.initialize(func);
   }
 }
@@ -105,8 +104,8 @@ function getButtons(name: string): ButtonType[] {
         { name: 'b', label: 'Bishop', icon: 'FaChessBishop' },
       ];
     case 'end':
-      const white = configService.white.split(' ')[0];
-      const black = configService.black.split(' ')[0];
+      const white = configService.game.white.split(' ')[0];
+      const black = configService.game.black.split(' ')[0];
       return [
         {
           name: 'w',
@@ -167,7 +166,7 @@ function getMsg(name: string) {
         </ul>
       </div>`;
     case 'end':
-      return html` <div className="text-3xl">
+      return html` <div class="text-3xl">
         Who won?
         <img src="/png/win.png" />
       </div>`;

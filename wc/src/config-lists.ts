@@ -6,7 +6,7 @@ import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
 import { css, LitElement } from 'lit-element';
-import {Item} from "../../common/model/model.ts";
+import { Item } from '../../common/model/model.ts';
 
 export const LIST_CSS = css`
   .div {

@@ -7,23 +7,25 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { MdAdd, MdDelete, MdEdit, MdSave } from 'react-icons/md';
-import { observer } from 'mobx-react';
-import { ConfigService, ListMode } from '../../common/service/config.service';
-import { configService, renderingService } from '../../common/service/index.service';
+import { ListMode, ListType } from '../../common/service/config.service';
+import { configService } from '../../common/service/index.service';
 import { action } from 'mobx';
 import { ConfigButton } from './config-widgets';
+import { Item } from '../../common/model/model';
 
-export const ConfigListTable = observer(({ config }: { config: ConfigService }) => {
-  const { onSelect, items, cursor } = config.getListLogic(config.listType);
+export const ConfigListTable: React.FC<{
+  items: Item[];
+  onSelect: (id: string) => void;
+  cursor: number;
+}> = ({ items, onSelect, cursor }) => {
+  const onClick = (event: MouseEvent<HTMLTableSectionElement>) => {
+    if (event.target instanceof HTMLTableCellElement) {
+      onSelect((event.target.parentNode as HTMLTableRowElement).id);
+    }
+  };
   return (
     <table className="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2">
-      <tbody
-        onClick={action((event: MouseEvent<HTMLTableSectionElement>) => {
-          if (event.target instanceof HTMLTableCellElement) {
-            onSelect((event.target.parentNode as HTMLTableRowElement).id);
-          }
-        })}
-      >
+      <tbody onClick={onClick}>
         {items.map((item, iLine) => (
           <tr
             key={iLine.toString()}
@@ -37,50 +39,51 @@ export const ConfigListTable = observer(({ config }: { config: ConfigService }) 
       </tbody>
     </table>
   );
-});
+};
 
-export const ConfigListButtons = observer(
-  ({ config, children }: { config: ConfigService; children?: React.ReactNode }) => {
-    const { hasSelect, onDelete, onAdd, onEdit } = config.getListLogic(config.listType);
-    return (
-      <div className="[&>button]:mx-1">
-        <ConfigButton onClick={onAdd} label="Add" icon={<MdAdd />} />
-        <ConfigButton onClick={onEdit} label="Edit" icon={<MdEdit />} disabled={!hasSelect} />
-        <ConfigButton onClick={onDelete} label="Delete" icon={<MdDelete />} disabled={!hasSelect} />
-        {children}
-      </div>
-    );
-  }
-);
+export const ConfigListButtons: React.FC<{
+  type: ListType;
+  children?: React.ReactNode;
+}> = ({ type, children }) => {
+  const { hasSelect, onDelete, onAdd, onEdit } = configService.getListLogic(type);
+  return (
+    <div className="[&>button]:mx-1">
+      <ConfigButton onClick={onAdd} label="Add" icon={<MdAdd />} />
+      <ConfigButton onClick={onEdit} label="Edit" icon={<MdEdit />} disabled={!hasSelect} />
+      <ConfigButton onClick={onDelete} label="Delete" icon={<MdDelete />} disabled={!hasSelect} />
+      {children}
+    </div>
+  );
+};
 
-export const ConfigPopup = observer(
-  ({ config, children }: { config: ConfigService; children?: React.ReactNode }) => {
-    const { show, type, onSave, isEdit } = config.getListLogic(config.listType);
-    const listProps = configService.ListTypes.get(type);
-    const typeName = listProps?.title;
-    const label = (isEdit ? 'Save ' : 'Add ') + typeName;
-    const icon = isEdit ? <MdSave /> : <MdAdd />;
-    const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
-    const onClose = action(() => {
-      configService.setListMode(ListMode.None);
-    });
-    return !show ? (
-      <div></div>
-    ) : (
-      <Dialog
-        aria-labelledby="message"
-        onClose={onClose}
-        className="text-center text-lg"
-        open={true}
-      >
-        <DialogTitle id="message">{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{children}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <ConfigButton onClick={onSave} label={label} icon={icon} />
-        </DialogActions>
-      </Dialog>
-    );
+export const ConfigPopup: React.FC<{
+  type: ListType;
+  show: boolean;
+  onSave: () => void;
+  children?: React.ReactNode;
+}> = ({ type, show, onSave, children }) => {
+  if (!show) {
+    return <div></div>;
   }
-);
+
+  const listProps = configService.ListTypes.get(type);
+  const typeName = listProps?.title;
+  const isEdit = configService.isEdit();
+  const label = (isEdit ? 'Save ' : 'Add ') + typeName;
+  const icon = isEdit ? <MdSave /> : <MdAdd />;
+  const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
+  const onClose = action(() => {
+    configService.setListMode(ListMode.None);
+  });
+  return (
+    <Dialog aria-labelledby="message" onClose={onClose} className="text-center text-lg" open>
+      <DialogTitle id="message">{title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{children}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <ConfigButton onClick={onSave} label={label} icon={icon} />
+      </DialogActions>
+    </Dialog>
+  );
+};

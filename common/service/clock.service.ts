@@ -24,7 +24,7 @@ export class ClockService {
     const current = Math.floor(this.elapsed) + playService.getStartTime();
     const allowed = playService.allowed;
     if (!allowed) {
-      return current;
+      return toMMSS(current);
     }
     const remains = allowed - current;
     if (remains < 11) {

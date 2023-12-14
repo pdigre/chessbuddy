@@ -45,7 +45,7 @@ export class Board extends MobxLitElement {
   }
 
   render() {
-    const { r90, r180 } = rules.splitRotation(this.config.rotation);
+    const { r90, r180 } = rules.splitRotation(this.config.display.rotation);
 
     const showMarkers = () => {
       const markers = {};
@@ -107,8 +107,8 @@ export class Board extends MobxLitElement {
         return true;
       }
       return playService.pieceMove(
-        rulesService.board2Square(boardFrom, configService.rotation),
-        rulesService.board2Square(boardTo, configService.rotation)
+        rulesService.board2Square(boardFrom, configService.display.rotation),
+        rulesService.board2Square(boardTo, configService.display.rotation)
       );
     };
     const dropHandler = (e: CustomEvent<ChessBoardEvent>) => {
@@ -126,7 +126,7 @@ export class Board extends MobxLitElement {
       const boardFrom = this.xy2square(e.offsetX, e.offsetY);
       return (
         editService.showEdit ||
-        playService.pieceStart(rulesService.board2Square(boardFrom, configService.rotation))
+        playService.pieceStart(rulesService.board2Square(boardFrom, configService.display.rotation))
       );
     };
 

@@ -28,7 +28,6 @@ export class ConfigGame extends MobxLitElement {
     console.log(playerNames);
     const item = this.config.game;
 
-
     return html`
       <table class="w-full">
         <tr>

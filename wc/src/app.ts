@@ -101,6 +101,7 @@ export class App extends LitElement {
             <md-text-button @click=${action(mediaService.playAllAction)}>
               <span class="material-symbols-outlined">refresh</span>
             </md-text-button>
+            <a href="react.html">wc</a>
           </h3>
           <cb-panel .edit=${editService} .dashboard=${dashboardService} .history=${historyService}>
             <cb-feninfo slot="top" .play=${playService}></cb-feninfo>

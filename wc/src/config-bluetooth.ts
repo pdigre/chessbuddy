@@ -7,7 +7,7 @@ import { action } from 'mobx';
 import { Board } from './board';
 import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
-import {GETSET, Item} from "../../common/model/model.ts";
+import { GETSET, Item } from '../../common/model/model.ts';
 
 @customElement('cb-config-bluetooth')
 export class ConfigBluetooth extends MobxLitElement {

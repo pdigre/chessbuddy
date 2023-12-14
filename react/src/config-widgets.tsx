@@ -1,4 +1,4 @@
-import React, { ReactNode, MouseEvent, ChangeEvent } from 'react';
+import React, { ReactNode, MouseEvent, ChangeEvent, useState } from 'react';
 import {
   Button,
   TextField,
@@ -57,16 +57,18 @@ export const ConfigBoolean: React.FC<{
   if (!prop || !('get' in prop)) {
     return <div></div>;
   }
-  let checked = prop?.get();
+  let value = prop?.get();
   const onChange = action((e: ChangeEvent<HTMLInputElement>) => {
-    checked = e.target.checked;
-    prop?.set(checked);
+    value = e.target.checked;
+    prop?.set(value);
+    setV(value);
   });
+  const [v, setV] = useState(value);
   return (
     <FormControlLabel
       control={
         <Checkbox
-          checked={checked}
+          checked={v}
           onChange={onChange}
           inputProps={{ 'aria-label': 'primary checkbox' }}
         />
@@ -86,7 +88,13 @@ export const ConfigSelect: React.FC<{
   if (!prop || !('get' in prop)) {
     return <div></div>;
   }
-  const onChange = action((e: ChangeEvent<HTMLSelectElement>) => prop?.set(e.target.value));
+  const onChange = action((e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    prop?.set(value);
+    setV(value);
+  });
+  const value = prop?.get();
+  const [v, setV] = useState(value);
   return (
     <FormControl variant="filled">
       <InputLabel variant="standard" htmlFor={label}>
@@ -94,7 +102,7 @@ export const ConfigSelect: React.FC<{
       </InputLabel>
       <NativeSelect
         className="min-w-[200px]"
-        value={prop?.get()}
+        value={v}
         onChange={onChange}
         inputProps={{
           name: label,
