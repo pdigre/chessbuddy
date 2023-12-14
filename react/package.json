@@ -13,7 +13,7 @@
     "react-icons": "^4.11.0"
   },
   "scripts": {
-    "start": "bun watch:css && bunx --bun vite",
+    "dev": "bun watch:css && bunx --bun vite",
     "build2": "bun watch:css && bunx --bun vite build",
     "build": "npm run watch:css && vite build",
     "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",

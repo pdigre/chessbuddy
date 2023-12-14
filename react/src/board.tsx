@@ -36,7 +36,7 @@ export const Board = observer(
       backgroundColor: 'rgb(181, 136, 99)',
     };
 
-    const { r90, r180 } = rules.splitRotation(config.rotation);
+    const { r90, r180 } = rules.splitRotation(config.display.rotation);
 
     const showMarkers = () => {
       const markers = {};
@@ -88,14 +88,14 @@ export const Board = observer(
         return true;
       }
       return playService.pieceMove(
-        rulesService.board2Square(boardFrom, configService.rotation),
-        rulesService.board2Square(boardTo, configService.rotation)
+        rulesService.board2Square(boardFrom, configService.display.rotation),
+        rulesService.board2Square(boardTo, configService.display.rotation)
       );
     };
     const onDragStartAction = (piece: string, boardFrom: Square): any => {
       return (
         editService.showEdit ||
-        playService.pieceStart(rulesService.board2Square(boardFrom, configService.rotation))
+        playService.pieceStart(rulesService.board2Square(boardFrom, configService.display.rotation))
       );
     };
 

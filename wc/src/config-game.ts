@@ -26,6 +26,8 @@ export class ConfigGame extends MobxLitElement {
     console.log(players);
     const playerNames = Array.from(players.map(x => x.getName()));
     console.log(playerNames);
+    const item = this.config.game;
+
 
     return html`
       <table class="w-full">
@@ -35,7 +37,7 @@ export class ConfigGame extends MobxLitElement {
               label="White"
               id="white"
               .choices=${playerNames}
-              .props=${this.config.properties}
+              .item=${item}
             ></cb-config-select>
           </td>
           <td>
@@ -43,7 +45,7 @@ export class ConfigGame extends MobxLitElement {
               label="Black"
               id="black"
               .choices=${playerNames}
-              .props=${this.config.properties}
+              .item=${item}
             ></cb-config-select>
           </td>
         </tr>
@@ -54,7 +56,7 @@ export class ConfigGame extends MobxLitElement {
               label="Timer setting"
               id="clock"
               .choices=${this.config.clocks.map(x => x.name)}
-              .props=${this.config.properties}
+              .item=${item}
             ></cb-config-select>
           </td>
         </tr>

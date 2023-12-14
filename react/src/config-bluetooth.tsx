@@ -1,10 +1,11 @@
 import React, { MouseEvent } from 'react';
-import { ConfigService, GETSET, Item } from '../../common/service/config.service';
+import { ConfigService } from '../../common/service/config.service';
 import { observer } from 'mobx-react';
-import { ConfigButton } from './ConfigWidgets';
 import { MdBluetoothConnected } from 'react-icons/md';
 import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
+import { GETSET, Item } from '../../common/model/model';
+import { ConfigButton } from './config-widgets';
 
 class BT implements Item {
   constructor(

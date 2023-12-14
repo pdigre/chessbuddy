@@ -3,30 +3,22 @@ import { Human } from '../../common/model/human';
 import { ConnectService } from '../../common/service/connect.service';
 import { observer } from 'mobx-react';
 import { historyService } from '../../common/service/index.service';
-import {
-  ConfigButton,
-  ConfigListButtons,
-  ConfigListTable,
-  ConfigPopup,
-  ConfigSaveButton,
-  ConfigText,
-} from './ConfigWidgets';
 import { MdDownload, MdOnlinePrediction, MdUpload } from 'react-icons/md';
 import { ConfigService, ListType } from '../../common/service/config.service';
 import { action } from 'mobx';
+import { ConfigListButtons, ConfigListTable, ConfigPopup } from './config-lists';
+import { ConfigButton, ConfigText } from './config-widgets';
 
 export const ConfigHuman = observer(
   ({ config, connect }: { config: ConfigService; connect: ConnectService }) => {
-//    config.setListType(ListType.Human);
-    const items = config.humans;
-    const hasSelect = config.cursor >= 0;
+    const { item, hasSelect } = config.getListLogic(ListType.Human);
 
     const uploadRef = useRef<HTMLInputElement>(null);
-    const hasEmail = hasSelect && (items[config.cursor] as Human).email;
+    const hasEmail = hasSelect && (item as Human).email;
 
     const downloadPlayerAction = (event: MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
-      const name = items[config.cursor].name;
+      const name = item.getName();
       const downtext = historyService.downloadPlayerAction(name);
       const data = new Blob([downtext], { type: 'text/plain' });
       const alink = document.createElement('a');
@@ -42,7 +34,7 @@ export const ConfigHuman = observer(
 
     const connectPlayerAction = (event: MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
-      connect.connectAction(items[config.cursor] as Human);
+      connect.connectAction(item as Human);
     };
 
     return (
@@ -81,9 +73,8 @@ export const ConfigHuman = observer(
         </ConfigListButtons>
         <ConfigPopup config={config}>
           <div className="[&>button]:mx-2 [&>div]:mx-2 mt-3">
-            <ConfigText label="Name" id="name" />
-            <ConfigText label="Email" id="email" />
-            <ConfigSaveButton />
+            <ConfigText item={item} label="Name" id="name" />
+            <ConfigText item={item} label="Email" id="email" />
           </div>
         </ConfigPopup>
       </div>

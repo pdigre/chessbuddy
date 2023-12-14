@@ -1,12 +1,13 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { GETSET, ConfigService, Item } from '../../common/service/config.service';
+import { ConfigService } from '../../common/service/config.service';
 import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
 import { Board } from './board';
 import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
+import {GETSET, Item} from "../../common/model/model.ts";
 
 @customElement('cb-config-bluetooth')
 export class ConfigBluetooth extends MobxLitElement {

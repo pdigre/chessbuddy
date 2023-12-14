@@ -1,17 +1,17 @@
 import React, { ChangeEvent, MouseEvent, ReactElement } from 'react';
 import { Box, Dialog, Tab, Tabs, Typography } from '@mui/material';
-import { ConfigGame } from './ConfigGame';
-import { ConfigHuman } from './ConfigHuman';
-import { ConfigDisplay } from './ConfigDisplay';
-import { ConfigBot } from './ConfigBot';
 import { connectService, renderingService } from '../../common/service/index.service';
 import { observer } from 'mobx-react';
 import { ConfigService } from '../../common/service/config.service';
 import { FaChess, FaClock, FaConnectdevelop, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
-import { ConfigClock } from './ConfigClock';
-import { ConfigBluetooth } from './ConfigBluetooth';
 import { action } from 'mobx';
+import { ConfigHuman } from './config-human';
+import { ConfigClock } from './config-clock';
+import { ConfigBluetooth } from './config-bluetooth';
+import { ConfigBot } from './config-bot';
+import { ConfigDisplay } from './config-display';
+import { ConfigGame } from './config-game';
 
 export const ConfigDialog = observer(({ config }: { config: ConfigService }) => {
   const TabPanel = (props: { children: ReactElement; index: number }) => {

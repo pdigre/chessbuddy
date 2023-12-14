@@ -59,6 +59,39 @@ export class ConfigButton extends LitElement {
   }
 }
 
+@customElement('cb-config-text')
+export class ConfigText extends LitElement {
+  @property({
+    hasChanged(newVal: Item, oldVal: Item) {
+      return JSON.stringify(newVal) !== JSON.stringify(oldVal);
+    },
+  })
+  item!: Item;
+  @property({ attribute: true })
+  label!: string;
+  @property({ attribute: true })
+  id!: string;
+  render() {
+    const prop = this.item?.properties?.get(this.id);
+    if (!prop || !('get' in prop)) {
+      return html``;
+    }
+    const value = prop?.get();
+    const onChange = action((e: MouseEvent) => {
+      // @ts-ignore
+      prop?.set(e.target.value);
+    });
+    return html`
+      <md-outlined-text-field
+        label=${this.label}
+        name=${this.id}
+        @change=${onChange}
+        value=${value}
+      ></md-outlined-text-field>
+    `;
+  }
+}
+
 @customElement('cb-config-boolean')
 export class ConfigBoolean extends LitElement {
   @property({
@@ -91,47 +124,13 @@ export class ConfigBoolean extends LitElement {
     }
     const checked = prop?.get();
     const onChange = action(
-      (e: Event) => prop?.set(String((e.target as HTMLInputElement).checked))
+        (e: Event) => prop?.set(String((e.target as HTMLInputElement).checked))
     );
-    const label = 'Hi: ' + this.label;
     return html`
       <label>
         <md-checkbox touch-target="wrapper" .checked=${!!checked} @change=${onChange}></md-checkbox>
-        <span>${label}</span>
+        ${this.label}
       </label>
-    `;
-  }
-}
-
-@customElement('cb-config-text')
-export class ConfigText extends LitElement {
-  @property({
-    hasChanged(newVal: Item, oldVal: Item) {
-      return JSON.stringify(newVal) !== JSON.stringify(oldVal);
-    },
-  })
-  item!: Item;
-  @property({ attribute: true })
-  label!: string;
-  @property({ attribute: true })
-  id!: string;
-  render() {
-    const prop = this.item?.properties?.get(this.id);
-    if (!prop || !('get' in prop)) {
-      return html``;
-    }
-    const value = prop?.get();
-    const onChange = action((e: MouseEvent) => {
-      // @ts-ignore
-      prop?.set(e.target.value);
-    });
-    return html`
-      <md-outlined-text-field
-        label=${this.label}
-        name=${this.id}
-        @change=${onChange}
-        value=${value}
-      ></md-outlined-text-field>
     `;
   }
 }

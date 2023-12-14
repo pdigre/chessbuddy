@@ -1,11 +1,12 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { configService } from '../../common/service/index.service';
-import { Item, ListMode, ListType } from '../../common/service/config.service';
+import { ListMode, ListType } from '../../common/service/config.service';
 import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
 import { css, LitElement } from 'lit-element';
+import {Item} from "../../common/model/model.ts";
 
 export const LIST_CSS = css`
   .div {
@@ -88,7 +89,8 @@ export class ConfigPopup extends LitElement {
     if (!this.show) {
       return html``;
     }
-    const typeName = configService.getTitleByType(this.type);
+    const listProps = configService.ListTypes.get(this.type);
+    const typeName = listProps?.title;
     const isEdit = configService.isEdit();
     const label = (isEdit ? 'Save ' : 'Add ') + typeName;
     const icon = isEdit ? 'save' : 'add';

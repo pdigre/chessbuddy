@@ -17,7 +17,7 @@ import { HistoryService } from '../../common/service/history.service';
 import { EditService } from '../../common/service/edit.service';
 import { action } from 'mobx';
 
-export const MainButtonBar = observer(
+export const PanelButtonbar = observer(
   ({
     dashboard,
     edit,

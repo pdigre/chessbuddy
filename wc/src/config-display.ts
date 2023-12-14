@@ -3,7 +3,6 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService } from '../../common/service/config.service';
 import { action } from 'mobx';
-import { LIST_CSS } from './config-lists.ts';
 import { TW_CSS } from './css.ts';
 import { css } from 'lit-element';
 

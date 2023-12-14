@@ -76,7 +76,7 @@ export class PlayService {
       this.isPlaying = false;
     }
     this.clock =
-      configService.clocks.find(p => p.getName() == configService.clock) || new Clock('', []);
+      configService.clocks.find(p => p.getName() == configService.game.clock) || new Clock('', []);
     this.allowed = this.clock.getAllowed(this.log.length / 2);
     this.isWhiteTurn = this.chess.turn() === WHITE;
     this.pgns = this.calculatePgns();
@@ -119,9 +119,9 @@ export class PlayService {
 
   initBots() {
     const players = [...configService.humans, ...configService.bots];
-    const w = players.find(p => p.getName() == configService.white);
+    const w = players.find(p => p.getName() == configService.game.white);
     this.wplayer = botService.instantiate(w, this.wplayer);
-    const b = players.find(p => p.getName() == configService.black);
+    const b = players.find(p => p.getName() == configService.game.black);
     this.bplayer = botService.instantiate(b, this.bplayer);
   }
 
@@ -367,7 +367,7 @@ export class PlayService {
     const otherTime = isWhite ? this.wtime : this.btime;
     return {
       other: toMMSS(this.allowed ? this.allowed - otherTime : otherTime),
-      label: isWhite ? `White: ${configService.white}` : `Black: ${configService.black}`,
+      label: isWhite ? `White: ${configService.game.white}` : `Black: ${configService.game.black}`,
       showTicker: isWhite == this.isWhiteTurn,
       banner: isWhite != this.isWhiteTurn && this.isComplete ? ' ** Winner **' : '',
       isTextRight: isTop && configService.display.rotation % 2 == 1,

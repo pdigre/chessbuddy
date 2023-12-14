@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import { observer } from 'mobx-react';
 import { CALLBACK, MessageService, messageType } from '../../common/service/message.service';
-import { ConfigButton } from './ConfigWidgets';
 import {
   FaChessQueen,
   FaChessRook,
@@ -19,6 +18,7 @@ import {
 } from 'react-icons/fa';
 import { MdCheck, MdCancel } from 'react-icons/md';
 import { configService } from '../../common/service/index.service';
+import { ConfigButton } from './config-widgets';
 
 const msgHolder: {
   title: string;
@@ -93,8 +93,8 @@ function getButtons(name: string): ButtonType[] {
         { name: 'b', label: 'Bishop', icon: <FaChessBishop /> },
       ];
     case 'end':
-      const white = configService.white.split(' ')[0];
-      const black = configService.black.split(' ')[0];
+      const white = configService.game.white.split(' ')[0];
+      const black = configService.game.black.split(' ')[0];
       return [
         {
           name: 'w',

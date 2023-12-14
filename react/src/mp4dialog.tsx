@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { MediaService } from '../../common/service/media.service';
 import { action } from 'mobx';
 
-export const Mp4Dialog = observer(({ mp4 }: { mp4: MediaService }) => {
+export const Mp4dialog = observer(({ mp4 }: { mp4: MediaService }) => {
   const width = Math.min(mp4.msg?.width ?? 480, 500);
   return (
     <Dialog

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import React from 'react';
-import { editService, renderingService, clockService } from '../../common/service/index.service';
+import { editService, renderingService } from '../../common/service/index.service';
 import {
   playService,
   analyzerService,
@@ -10,25 +10,21 @@ import {
   historyService,
   configService,
   refreshService,
-  openingsService,
 } from '../../common/service/index.service';
-import { ConfigDialog } from './ConfigDialog';
-import { Board } from './Board';
-import { AnalyzerService } from '../../common/service/analyzer.service';
 import packageInfo from '../package.json';
-import { Mp4Dialog } from './Mp4Dialog';
-import { MessageDialog } from './MessageDialog';
+import { Mp4dialog } from './mp4dialog';
 import { RenderingService } from '../../common/service/rendering.service';
 import { observer } from 'mobx-react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { MdRefresh } from 'react-icons/md';
-import { MainButtonBar } from './MainButtonBar';
-import { MainView } from './MainView';
-import { ConfigService } from '../../common/service/config.service';
-import { PlayService } from '../../common/service/play.service';
-import { ClockService } from '../../common/service/clock.service';
+import { PanelButtonbar } from './panel-buttonbar';
+import { Panel } from './panel';
 import { action } from 'mobx';
+import { ConfigDialog } from './config-dialog';
+import { MessageDialog } from './message-dialog';
+import { Board } from './board';
+import { CP, FenInfo, PlayerInfoBar } from './app-play';
 
 const lightTheme = createTheme({
   palette: {
@@ -79,44 +75,6 @@ const darkTheme = createTheme({
     },
   },
 });
-
-const CP = observer(
-  ({ analyzer, config }: { analyzer: AnalyzerService; config: ConfigService }) => {
-    if (!config.showCP) {
-      return <div className="w-6 h-full flex flex-col flex-grow"></div>;
-    }
-    const { txt, blackTop, h1, h2 } = analyzer.getCpInfo();
-    const coloring = (black: boolean) => (black ? 'bg-black text-white' : 'bg-white text-black');
-    return (
-      <div className="w-6 h-full flex flex-col flex-grow [&>div]:[writing-mode:vertical-lr] [&>div]:text-center">
-        <div className={coloring(!blackTop)} style={{ height: h1 }}>
-          {txt}
-        </div>
-        <div className={coloring(blackTop)} style={{ height: h2 }}>
-          {txt}
-        </div>
-      </div>
-    );
-  }
-);
-
-const Ticker = observer(({ clock }: { clock: ClockService }) => <span>{clock.clockText}</span>);
-
-const PlayerInfoBar = observer(({ isTop, play }: { isTop: boolean; play: PlayService }) => {
-  const { other, label, showTicker, banner, isTextRight } = play.getPlayerInfo(isTop);
-  return (
-    <p className={'h-[31px] text-xl dark:text-white m-0 p-1' + (isTextRight ? ' text-right' : '')}>
-      {label} &lt;
-      {showTicker ? <Ticker clock={clockService} /> : other} &gt;
-      {banner}
-    </p>
-  );
-});
-
-const FenInfo = observer(({ play }: { play: PlayService }) => {
-  return <p>{openingsService.sanTextLocate(play.log)}</p>;
-});
-
 export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService }) => {
   const about = () => messageService.standard('About');
   const version = packageInfo.version;
@@ -144,16 +102,16 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
               </span>
               <MdRefresh className="text-lg mx-5" onClick={action(mediaService.playAllAction)} />
             </h3>
-            <MainButtonBar
+            <PanelButtonbar
               edit={editService}
               dashboard={dashboardService}
               history={historyService}
             />
             <FenInfo play={playService} />
-            <MainView dashboard={dashboardService} edit={editService} />
+            <Panel dashboard={dashboardService} edit={editService} />
           </div>
           <MessageDialog message={messageService} />
-          <Mp4Dialog mp4={mediaService} />
+          <Mp4dialog mp4={mediaService} />
           <ConfigDialog config={configService} />
         </div>
       </div>

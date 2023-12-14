@@ -10,7 +10,8 @@ import {
   refreshService,
 } from './index.service';
 import {Display} from "../model/display.ts";
-import {GETSET, Item} from "../model/model.ts";
+import { Item} from "../model/model.ts";
+import {Game} from "../model/game.ts";
 
 export const enum ListMode {
   None = 1,
@@ -24,27 +25,24 @@ export const enum ListType {
   Clock,
 }
 
-type ConfigProps = {
-  humans: Human[];
-  bots: Bot[];
-  clocks: Clock[];
-  display: Display;
-  white: string;
-  black: string;
-  clock: string;
-};
+export interface ListProps{
+  tab: number;
+  title: string;
+  getItems: () => Item[];
+  getCursor: () => number;
+  setCursor: (i:number) => void;
+  createItem: () => Item;
+}
 
 export class ConfigService {
   static storage = 'config';
-  white!: string;
-  black!: string;
-  clock!: string;
 
   // Config to store
   humans!: Human[];
   bots!: Bot[];
   clocks!: Clock[];
   display!: Display;
+  game!: Game;
 
   // Config runtime - no persist
   @jsonIgnore() showConfig = false;
@@ -59,10 +57,13 @@ export class ConfigService {
   constructor() {
     makeAutoObservable(this);
     const restore = storageService.restoreObject(ConfigService.storage, {
-      white: '',
-      black: '',
-      clock: '',
-    }) as ConfigProps;
+    }) as {
+      humans: Human[];
+      bots: Bot[];
+      clocks: Clock[];
+      display: Display;
+      game: Game;
+    };
     // Cannot use object assign directly on "this" due to MOBX
     this.humans = (restore.humans?.length ? restore.humans : Human.init).map(
       x => new Human(x.name, x.email)
@@ -75,16 +76,9 @@ export class ConfigService {
     );
     const d = restore.display ?? Display.init;
     this.display = new Display(d.darkTheme,d.showFacts,d.showHints,d.showCP,d.playCorrect,d.playMistake,d.playWinner,d.rotation);
-    this.white = restore.white;
-    this.black = restore.black;
-    this.clock = restore.clock;
+    const g = restore.game ?? Game.init;
+    this.game = new Game(g.white,g.black,g.clock);
   }
-
-  properties: Map<string, GETSET<string>> = new Map([
-    ['clock', { get: () => this.clock, set: value => (this.clock = value) }],
-    ['white', { get: () => this.white, set: value => (this.white = value) }],
-    ['black', { get: () => this.black, set: value => (this.black = value) }],
-  ]);
 
   store: VoidFunction = () => storageService.storeObject(ConfigService.storage, this);
 
@@ -105,20 +99,6 @@ export class ConfigService {
 
   switchTab(n: number) {
     this.showTab = n;
-//    this.cursor = -1;
-  }
-
-  /*
-  setCursor(id: string) {
-    const num = Number.parseInt(id);
-    this.cursor = num == this.cursor ? -1 : num;
-  }
-   */
-
-  setListType(type: ListType) {
-    this.listType = type;
-    this.listMode = ListMode.None;
-    this.newItem = this.createItem();
   }
 
   setListMode(mode: ListMode) {
@@ -129,125 +109,64 @@ export class ConfigService {
     return this.listMode == ListMode.Edit;
   }
 
-  getTitleType() {
-    return this.getTitleByType(this.listType);
-  }
-
-  getTitleByType(n:ListType) {
-    switch (n) {
-      case ListType.Human:
-        return 'Human';
-      case ListType.Bot:
-        return 'Bot';
-      default:
-        return 'Clock';
-    }
-  }
-
-  getItems(): Item[] {
-    return this.getItemsByType(this.listType);
-  }
-
-  getItemsByType(n:ListType): Item[] {
-    switch (n) {
-      case ListType.Human:
-        return this.humans;
-      case ListType.Bot:
-        return this.bots;
-      default:
-        return this.clocks;
-    }
-  }
-
-  getCursorByType(n:ListType): number {
-    switch (n) {
-      case ListType.Human:
-        return this.cursorHuman;
-      case ListType.Bot:
-        return this.cursorBot;
-      default:
-        return this.cursorClock;
-    }
-  }
-
-  setCursorByType(n:ListType, i:number) {
-    switch (n) {
-      case ListType.Human:
-        return this.cursorHuman = i;
-      case ListType.Bot:
-        return this.cursorBot = i;
-      default:
-        return this.cursorClock = i;
-    }
-  }
-
-  getTabByType(n:ListType) {
-    switch (n) {
-      case ListType.Human:
-        return 2;
-      case ListType.Bot:
-        return 3;
-      default:
-        return 4;
-    }
-
-  }
-
-  getItem() {
-    return this.isEdit() ? this.getItemsByType(this.listType)[this.getCursorByType(this.listType)] : this.newItem;
-  }
-
-  createItem(): Item {
-    switch (this.listType) {
-      case ListType.Human:
-        return Human.create();
-      case ListType.Bot:
-        return Bot.create();
-      default:
-        return Clock.create();
-    }
-  }
-
   rotateAction = () => {
     this.display.rotation = (this.display.rotation + 1) % 4;
     refreshService.startRefreshTimer();
     console.log('rotation=' + this.display.rotation);
   };
 
+
+  ListTypes  = new Map<ListType, ListProps>([
+    [ListType.Human, {tab: 2, title: 'Human', getItems: () => this.humans, getCursor: () => this.cursorHuman,
+      setCursor: (i:number) => this.cursorHuman = i,
+      createItem: () => Human.create()}],
+    [ListType.Bot, {tab: 3, title: 'Bot', getItems: () => this.bots, getCursor: () => this.cursorBot,
+      setCursor: (i:number) => this.cursorBot = i,
+      createItem: () => Bot.create()}],
+    [ListType.Clock, {tab: 4, title: 'Clock', getItems: () => this.clocks, getCursor: () => this.cursorClock,
+      setCursor: (i:number) => this.cursorClock = i,
+      createItem: () => Clock.create()}],
+  ]);
+
+
   getListLogic(type:ListType) {
-    const items = this.getItemsByType(type);
-    const cursor = this.getCursorByType(type);
+    const listProps = this.ListTypes.get(type)!;
+    const items = listProps.getItems();
+    const cursor = listProps.getCursor();
     const isEdit = this.listMode == ListMode.Edit;
     const item = isEdit ? items[cursor] : this.newItem
-    const active = this.showTab == this.getTabByType(type);
+    const active = this.showTab == listProps.tab;
     return {
       type,
       items,
       item,
       cursor,
+      isEdit,
       hasSelect : cursor >= 0,
       show : this.listMode !== ListMode.None && active,
-      onSelect : action((i: string) => this.setCursorByType(type, Number.parseInt(i))),
+      onSelect : action((i: string) => listProps.setCursor(Number.parseInt(i))),
       onSave : action(() => {
         if (item.validate()) {
           const name = isEdit ? 'Save' : 'Add';
           messageService.display({
             name,
-            title: name + this.getTitleType(),
+            title: name + listProps.title,
             msg: item.validate(),
           });
         } else {
           isEdit ? (items[cursor] = item) : items.push(item);
         }
-        this.setCursorByType(type, -1);
+        listProps.setCursor(-1);
         this.listMode = ListMode.None;
       }),
       onAdd : action(() => this.setListMode(ListMode.Add)),
       onEdit : action(() => this.setListMode(ListMode.Edit)),
       onDelete : action(() => {
         items.splice(cursor, 1);
-        this.setCursorByType(type, -1);
+        listProps.setCursor(-1);
       }),
     }
   }
 }
+
+

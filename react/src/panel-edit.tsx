@@ -7,13 +7,13 @@ import {
   FaChessQueen,
   FaChessRook,
 } from 'react-icons/fa';
-import { ConfigBoolean, ConfigButton } from './ConfigWidgets';
 import { MdCheck, MdDelete } from 'react-icons/md';
 import { observer } from 'mobx-react';
 import { EditService } from '../../common/service/edit.service';
 import { action } from 'mobx';
+import { ConfigBoolean, ConfigButton } from './config-widgets';
 
-export const MainEditView = observer(({ edit }: { edit: EditService }) => {
+export const PanelEdit = observer(({ edit }: { edit: EditService }) => {
   const TD = (name: string, img: ReactNode) => (
     <td onClick={action(() => edit.editPiece(name))}>{img}</td>
   );

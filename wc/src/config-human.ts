@@ -36,7 +36,7 @@ export class ConfigHuman extends MobxLitElement {
 
     const downloadPlayerAction = (event: Event) => {
       event.preventDefault();
-      const name = items[cursor].getName();
+      const name = item.getName();
       const downtext = historyService.downloadPlayerAction(name);
       const data = new Blob([downtext], { type: 'text/plain' });
       const alink = document.createElement('a');
