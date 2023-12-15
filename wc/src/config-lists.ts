@@ -51,6 +51,10 @@ export class ConfigList extends LitElement {
         --tw-bg-opacity: 1;
         background-color: rgb(134 239 172 / var(--tw-bg-opacity));
       }
+      table {
+        border: 2px solid #ccc;
+        width: 100%;
+      }
     `,
     TW_CSS,
   ];

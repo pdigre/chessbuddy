@@ -8,10 +8,13 @@ import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
 import { AnalyzerService } from '../../common/service/analyzer.service.ts';
 import { ConfigService } from '../../common/service/config.service.ts';
+import { property } from 'lit-element/decorators.js';
 
 @customElement('cb-cp')
 export class CP extends MobxLitElement {
+  @property({ attribute: true })
   analyzer!: AnalyzerService;
+  @property({ attribute: true })
   config!: ConfigService;
   static styles = [
     css`
@@ -47,13 +50,13 @@ export class CP extends MobxLitElement {
     return html`
       <div class="main h-full flex flex-col flex-grow text-lg">
         ${this.config.display.showCP
-          ? html``
-          : html`
+          ? html`
               <div class="divs text-center ${coloring(!blackTop)}" style="height: ${h1}">
                 ${txt}
               </div>
               <div class="divs text-center ${coloring(blackTop)}" style="height: ${h2}">${txt}</div>
-            `}
+            `
+          : html``}
       </div>
     `;
   }

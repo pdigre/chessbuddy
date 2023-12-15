@@ -9,11 +9,13 @@ import {
   messageService,
   refreshService,
   rulesService as rules,
+  editService,
 } from './index.service';
 import { Display } from '../model/display.ts';
 import { Item } from '../model/model.ts';
 import { Game } from '../model/game.ts';
 import { Square } from './rules.service.ts';
+import { FEN } from '../model/fen.ts';
 
 export const enum ListMode {
   None = 1,
@@ -77,7 +79,6 @@ export class ConfigService {
     );
     const d = restore.display ?? Display.init;
     this.display = new Display(
-      d.darkTheme,
       d.showFacts,
       d.showHints,
       d.showCP,
@@ -176,7 +177,10 @@ export class ConfigService {
       isEdit,
       hasSelect: cursor >= 0,
       show: this.listMode !== ListMode.None && active,
-      onSelect: action((i: string) => listProps.setCursor(Number.parseInt(i))),
+      onSelect: action((i: string) => {
+        const c = Number.parseInt(i);
+        listProps.setCursor(c == cursor ? -1 : c);
+      }),
       onSave: action(() => {
         if (item.validate()) {
           const name = isEdit ? 'Save' : 'Add';
@@ -203,13 +207,21 @@ export class ConfigService {
   getBoardLogic() {
     const rotation = this.display.rotation;
     const { r90, r180 } = rules.splitRotation(rotation);
+    const b2sq = (board: Square) => rules.board2Square(board, rotation);
     return {
       rotation,
       r90,
       r180,
-      b2sq: (board: Square) => rules.board2Square(board, rotation),
+      b2sq,
       sq2b: (square: Square) => (r90 ? rules.rightSquare(square) : square),
       fen2b: (fen: string) => (r90 ? rules.leftFen(fen) : fen),
+      pieceDropAction: (boardFrom: Square, boardTo: Square) => {
+        if (editService.showEdit) {
+          editService.editMove(boardFrom, boardTo);
+          return true;
+        }
+        return playService.pieceMove(b2sq(boardFrom), b2sq(boardTo));
+      },
     };
   }
 }

@@ -1,11 +1,6 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import {
-  editService,
-  playService,
-  renderingService,
-  rulesService as rules,
-} from '../../common/service/index.service';
+import { editService, playService, renderingService } from '../../common/service/index.service';
 import { RefreshService } from '../../common/service/refresh.service';
 import { ConfigService } from '../../common/service/config.service';
 import { EditService } from '../../common/service/edit.service';
@@ -43,48 +38,28 @@ export class Board extends MobxLitElement {
   }
 
   render() {
-    const { r90, r180, b2sq, sq2b, fen2b } = this.config.getBoardLogic();
+    const { r90, r180, b2sq, sq2b, fen2b, pieceDropAction } = this.config.getBoardLogic();
+
+    const marker = (sq: string, col: string) => `
+      ::part(${sq}) {
+        background: radial-gradient(${col}, transparent 90%);
+        background-color: ${side(((r90 ? 0 : 1) + sq.charCodeAt(0) + sq.charCodeAt(1)) % 2 == 1)}
+      }`;
 
     const showMarkers = () => {
-      const markers = {};
-      playService.markEdit(() =>
-        Object.assign(markers, {
-          [this.edit.editSquare]: {
-            background: 'radial-gradient(circle, #ff0000 36%, transparent 40%)',
-            borderRadius: '50%',
-          },
-        })
-      );
-      playService.markFacts(x =>
-        Object.assign(markers, {
-          [sq2b(x)]: {
-            background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
-            borderRadius: '50%',
-          },
-        })
-      );
-      playService.markHints((x, i) =>
-        Object.assign(markers, {
-          [sq2b(x)]:
-            i > 1
-              ? {
-                  background: 'radial-gradient(circle, #00ff4c 36%, transparent 30%)',
-                  borderRadius: '10%',
-                }
-              : {
-                  background: 'radial-gradient(circle, #00ff4c 36%, transparent 50%)',
-                  borderRadius: '10%',
-                },
-        })
-      );
-      playService.markCastling(x =>
-        Object.assign(markers, {
-          [sq2b(x)]: {
-            background: 'radial-gradient(circle, #505050 36%, transparent 80%)',
-            borderRadius: '10%',
-          },
-        })
-      );
+      let markers = ``;
+      playService.markEdit(() => {
+        markers += marker(this.edit.editSquare, '#ff0000');
+      });
+      playService.markFacts(x => {
+        markers += marker(sq2b(x), '#fffc00');
+      });
+      playService.markHints((x, i) => {
+        markers += marker(sq2b(x), i > 1 ? '#80ff4c' : '#00ff4c');
+      });
+      playService.markCastling(x => {
+        markers += marker(sq2b(x), '#505050');
+      });
       return markers;
     };
 
@@ -96,15 +71,8 @@ export class Board extends MobxLitElement {
 
     const side = (isWhite: boolean) => (isWhite ? 'rgb(240, 217, 181)' : 'rgb(181, 136, 99)');
 
-    const onPieceDropAction = (boardFrom: Square, boardTo: Square) => {
-      if (editService.showEdit) {
-        editService.editMove(boardFrom, boardTo);
-        return true;
-      }
-      return playService.pieceMove(b2sq(boardFrom), b2sq(boardTo));
-    };
     const onDrop = (e: CustomEvent<ChessBoardEvent>) => {
-      if (!onPieceDropAction(e.detail.source as Square, e.detail.target as Square)) {
+      if (!pieceDropAction(e.detail.source as Square, e.detail.target as Square)) {
         e.preventDefault();
         e.detail.setAction('snapback');
       }
@@ -118,7 +86,6 @@ export class Board extends MobxLitElement {
     const STYLE = css`
       width: ${renderingService.boardWidth}px;
       height: ${renderingService.boardWidth}px;
-      border-width: 0;
     `;
 
     const onClick = (e: MouseEvent) => {
@@ -128,12 +95,11 @@ export class Board extends MobxLitElement {
     const orientation = !r180 ? 'white' : 'black';
     return html`
       <style>
-        --light-color {
-          backgroundcolor: ${side(r90)};
+        chess-board {
+          --light-color: ${side(r90)};
+          --dark-color : ${side(!r90)};
         }
-        --dark-color {
-          backgroundcolor: ${side(!r90)};
-        }
+        ${showMarkers()}
       </style>
       <chess-board
         position=${fen2b(fen)}
@@ -143,7 +109,6 @@ export class Board extends MobxLitElement {
         orientation=${orientation}
         style=${STYLE}
         draggable-pieces
-        customSquareStyles=${showMarkers()}
       ></chess-board>
     `;
   }

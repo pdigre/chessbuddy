@@ -4,11 +4,7 @@ import { Chessboard } from 'react-chessboard';
 import { ConfigService } from '../../common/service/config.service';
 import { RefreshService } from '../../common/service/refresh.service';
 import { observer } from 'mobx-react';
-import {
-  editService,
-  playService,
-  rulesService as rules,
-} from '../../common/service/index.service';
+import { editService, playService } from '../../common/service/index.service';
 import { FEN } from '../../common/model/fen';
 import { RenderingService } from '../../common/service/rendering.service';
 import { EditService } from '../../common/service/edit.service';
@@ -34,7 +30,7 @@ export const Board = observer(
       backgroundColor: 'rgb(181, 136, 99)',
     };
 
-    const { r90, r180, b2sq, sq2b, fen2b } = config.getBoardLogic();
+    const { r90, r180, b2sq, sq2b, fen2b, pieceDropAction } = config.getBoardLogic();
 
     const showMarkers = () => {
       const markers = {};
@@ -80,13 +76,6 @@ export const Board = observer(
     };
 
     const fen = refresh.showBlank ? FEN.CLEAR_GAME : edit.showEdit ? edit.editFen : playService.fen;
-    const onDrop = (boardFrom: Square, boardTo: Square) => {
-      if (editService.showEdit) {
-        editService.editMove(boardFrom, boardTo);
-        return true;
-      }
-      return playService.pieceMove(b2sq(boardFrom), b2sq(boardTo));
-    };
     const onStart = (piece: string, boardFrom: Square): any => {
       return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
     };
@@ -97,7 +86,7 @@ export const Board = observer(
       <Chessboard
         position={fen2b(fen)}
         onPieceDragBegin={onStart}
-        onPieceDrop={onDrop}
+        onPieceDrop={pieceDropAction}
         onSquareClick={onClick}
         boardOrientation={orientation}
         boardWidth={rendering.boardWidth}
