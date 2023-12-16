@@ -7,8 +7,8 @@ export class Human implements Item {
   ) {}
   label = 'Human';
   properties: Map<string, GETSET<any>> = new Map([
-    ['name', { get: () => this.name, set: value => (this.name = value) }],
-    ['email', { get: () => this.email, set: value => (this.email = value) }],
+    ['name', [() => this.name, v => (this.name = v)]],
+    ['email', [() => this.email, v => (this.email = v)]],
   ]);
   getName = () => this.name;
   getDescription = () => this.email;

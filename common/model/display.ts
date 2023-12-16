@@ -13,43 +13,13 @@ export class Display implements Item {
   label = 'Display';
   bool: (v: any) => boolean = v => 'true' == v || v == true;
   properties: Map<string, GETSET<any>> = new Map([
-    [
-      'showFacts',
-      {
-        get: () => this.showFacts,
-        set: value => (this.showFacts = this.bool(value)),
-      },
-    ],
-    [
-      'showHints',
-      {
-        get: () => this.showHints,
-        set: value => (this.showHints = this.bool(value)),
-      },
-    ],
-    ['showCP', { get: () => this.showCP, set: value => (this.showCP = this.bool(value)) }],
-    [
-      'playCorrect',
-      {
-        get: () => this.playCorrect,
-        set: value => (this.playCorrect = this.bool(value)),
-      },
-    ],
-    [
-      'playMistake',
-      {
-        get: () => this.playMistake,
-        set: value => (this.playMistake = this.bool(value)),
-      },
-    ],
-    [
-      'playWinner',
-      {
-        get: () => this.playWinner,
-        set: value => (this.playWinner = this.bool(value)),
-      },
-    ],
-    ['rotation', { get: () => this.rotation, set: value => (this.rotation = value) }],
+    ['showFacts', [() => this.showFacts, v => (this.showFacts = this.bool(v))]],
+    ['showHints', [() => this.showHints, v => (this.showHints = this.bool(v))]],
+    ['showCP', [() => this.showCP, v => (this.showCP = this.bool(v))]],
+    ['playCorrect', [() => this.playCorrect, v => (this.playCorrect = this.bool(v))]],
+    ['playMistake', [() => this.playMistake, v => (this.playMistake = this.bool(v))]],
+    ['playWinner', [() => this.playWinner, v => (this.playWinner = this.bool(v))]],
+    ['rotation', [() => this.rotation, v => (this.rotation = v)]],
   ]);
   getName = () => 'display';
   getDescription = () => 'Display';

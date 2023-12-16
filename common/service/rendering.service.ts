@@ -12,7 +12,7 @@ export class RenderingService implements Item {
   }
   label = 'Render';
   properties: Map<string, GETSET<any>> = new Map([
-    ['darkTheme', { get: () => this.darkTheme, set: value => (this.darkTheme = value) }],
+    ['darkTheme', [() => this.darkTheme, value => (this.darkTheme = value)]],
   ]);
   getName = () => 'render';
   getDescription = () => 'Render';

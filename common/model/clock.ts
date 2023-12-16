@@ -14,9 +14,10 @@ export class Clock implements Item {
   label = 'Clock';
   getName: () => string = () => this.name.trim();
   getDescription: () => string = () => Clock.time2string(this.time);
+
   properties: Map<string, GETSET<string>> = new Map([
-    ['name', { get: () => this.name, set: value => (this.name = value) }],
-    ['time', { get: this.getDescription, set: value => (this.time = Clock.string2time(value)) }],
+    ['name', [() => this.name, v => (this.name = v)]],
+    ['time', [() => this.getDescription(), v => (this.time = Clock.string2time(v))]],
   ]);
   validate: () => string = () => (this.name.length ? '' : 'Need to enter a name');
 

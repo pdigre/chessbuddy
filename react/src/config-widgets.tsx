@@ -38,12 +38,13 @@ export const ConfigText: React.FC<{
   id: string;
 }> = ({ item, label, id }) => {
   const prop = item?.properties?.get(id);
-  if (!prop || !('get' in prop)) {
+  if (!prop) {
     return <div></div>;
   }
-  const value = prop?.get();
+  const [getter, setter] = prop;
+  const value = getter();
   const onChange = action((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    prop.set(e.target.value)
+    setter(e.target.value)
   );
   return <TextField label={label} id={id} size="medium" onChange={onChange} defaultValue={value} />;
 };
@@ -54,14 +55,16 @@ export const ConfigBoolean: React.FC<{
   id: string;
 }> = ({ item, label, id }) => {
   const prop = item?.properties?.get(id);
-  if (!prop || !('get' in prop)) {
+  if (!prop) {
     return <div></div>;
   }
-  let value = prop.get();
+  const [getter, setter] = prop;
+  const value = getter();
+
   const [v, setV] = useState(value);
   const onChange = action((e: ChangeEvent<HTMLInputElement>) => {
     setV(e.target.checked);
-    prop.set(e.target.checked);
+    setter(e.target.checked);
   });
   return (
     <FormControlLabel
@@ -84,15 +87,16 @@ export const ConfigSelect: React.FC<{
   item: Item;
 }> = ({ label, id, choices, item }) => {
   const prop = item?.properties?.get(id);
-  if (!prop || !('get' in prop)) {
+  if (!prop) {
     return <div></div>;
   }
+  const [getter, setter] = prop;
   const onChange = action((e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    prop?.set(value);
+    setter(value);
     setV(value);
   });
-  const value = prop?.get();
+  const value = getter();
   const [v, setV] = useState(value);
   return (
     <FormControl variant="filled">

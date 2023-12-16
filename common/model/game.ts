@@ -8,9 +8,9 @@ export class Game implements Item {
   ) {}
   label = 'Display';
   properties: Map<string, GETSET<any>> = new Map([
-    ['white', { get: () => this.white, set: value => (this.white = value) }],
-    ['black', { get: () => this.black, set: value => (this.black = value) }],
-    ['clock', { get: () => this.clock, set: value => (this.clock = value) }],
+    ['white', [() => this.white, v => (this.white = v)]],
+    ['black', [() => this.black, v => (this.black = v)]],
+    ['clock', [() => this.clock, v => (this.clock = v)]],
   ]);
   getName = () => 'game';
   getDescription = () => 'Game';

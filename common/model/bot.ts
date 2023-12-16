@@ -22,17 +22,11 @@ export class Bot implements Item {
   ) {}
   label = 'Bot';
   properties: Map<string, GETSET<string>> = new Map([
-    ['name', { get: () => this.name, set: value => (this.name = value) }],
-    ['engine', { get: () => this.engine, set: value => (this.engine = value) }],
-    [
-      'skill',
-      { get: () => this.toTxt(this.skill), set: value => (this.skill = this.toInt(value)) },
-    ],
-    ['time', { get: () => this.toTxt(this.time), set: value => (this.time = this.toInt(value)) }],
-    [
-      'depth',
-      { get: () => this.toTxt(this.depth), set: value => (this.depth = this.toInt(value)) },
-    ],
+    ['name', [() => this.name, v => (this.name = v)]],
+    ['engine', [() => this.engine, v => (this.engine = v)]],
+    ['skill', [() => this.toTxt(this.skill), v => (this.skill = this.toInt(v))]],
+    ['time', [() => this.toTxt(this.time), v => (this.time = this.toInt(v))]],
+    ['depth', [() => this.toTxt(this.depth), v => (this.depth = this.toInt(v))]],
   ]);
   getName: () => string = () => this.name;
   getDescription: () => string = () =>

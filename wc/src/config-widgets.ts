@@ -73,13 +73,14 @@ export class ConfigText extends LitElement {
   id!: string;
   render() {
     const prop = this.item?.properties?.get(this.id);
-    if (!prop || !('get' in prop)) {
+    if (!prop) {
       return html``;
     }
-    const value = prop?.get();
+    const [getter, setter] = prop;
+    const value = getter();
     const onChange = action((e: MouseEvent) => {
       // @ts-ignore
-      prop?.set(e.target.value);
+      setter(e.target.value);
     });
     return html`
       <md-outlined-text-field
@@ -119,13 +120,12 @@ export class ConfigBoolean extends LitElement {
 
   render() {
     const prop = this.item?.properties?.get(this.id);
-    if (!prop || !('get' in prop)) {
+    if (!prop) {
       return html``;
     }
-    const checked = prop?.get();
-    const onChange = action(
-      (e: Event) => prop?.set(String((e.target as HTMLInputElement).checked))
-    );
+    const [getter, setter] = prop;
+    const checked = getter();
+    const onChange = action((e: Event) => setter(String((e.target as HTMLInputElement).checked)));
     return html`
       <label>
         <md-checkbox touch-target="wrapper" .checked=${!!checked} @change=${onChange}></md-checkbox>
@@ -161,12 +161,13 @@ export class ConfigSelect extends LitElement {
   render() {
     console.log('choices=' + this.choices);
     const prop = this.item?.properties?.get(this.id);
-    if (!prop || !('get' in prop)) {
+    if (!prop) {
       return html``;
     }
-    const value = prop?.get();
-    const onSelect = action(
-      (event: MouseEvent) => prop?.set((event.target as HTMLInputElement).value)
+    const [getter, setter] = prop;
+    const value = getter();
+    const onSelect = action((event: MouseEvent) =>
+      setter((event.target as HTMLInputElement).value)
     );
 
     return html`
