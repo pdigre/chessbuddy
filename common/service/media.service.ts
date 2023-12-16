@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { configService } from './index.service';
 
 type Mp4Type = {
@@ -33,8 +33,10 @@ export class MediaService {
 
   clear() {
     this.title = '';
+    this.show = false;
   }
   display(title: string, msg: Mp4Type) {
+    this.show = true;
     this.title = title;
     this.msg = msg;
   }
@@ -88,4 +90,17 @@ export class MediaService {
     { src: '/mp4/no3.mp4', width: 638, height: 266, length: 1 },
     { src: '/mp4/no4.mp4', width: 640, height: 360, length: 5 },
   ];
+
+  getDialogControls() {
+    return {
+      width: Math.min(this.msg?.width ?? 480, 500),
+      src: this.msg?.src ?? '',
+      title: this.title,
+      onClose: action(() => {
+        this.title = '';
+        this.show = false;
+      }),
+      open: this.show,
+    };
+  }
 }

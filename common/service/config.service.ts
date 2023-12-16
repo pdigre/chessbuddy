@@ -15,7 +15,6 @@ import { Display } from '../model/display.ts';
 import { Item } from '../model/model.ts';
 import { Game } from '../model/game.ts';
 import { Square } from './rules.service.ts';
-import { FEN } from '../model/fen.ts';
 
 export const enum ListMode {
   None = 1,

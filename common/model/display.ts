@@ -11,21 +11,43 @@ export class Display implements Item {
     public rotation: number
   ) {}
   label = 'Display';
+  bool: (v: any) => boolean = v => 'true' == v || v == true;
   properties: Map<string, GETSET<any>> = new Map([
-    ['showFacts', { get: () => this.showFacts, set: value => (this.showFacts = 'true' == value) }],
-    ['showHints', { get: () => this.showHints, set: value => (this.showHints = 'true' == value) }],
-    ['showCP', { get: () => this.showCP, set: value => (this.showCP = 'true' == value) }],
+    [
+      'showFacts',
+      {
+        get: () => this.showFacts,
+        set: value => (this.showFacts = this.bool(value)),
+      },
+    ],
+    [
+      'showHints',
+      {
+        get: () => this.showHints,
+        set: value => (this.showHints = this.bool(value)),
+      },
+    ],
+    ['showCP', { get: () => this.showCP, set: value => (this.showCP = this.bool(value)) }],
     [
       'playCorrect',
-      { get: () => this.playCorrect, set: value => (this.playCorrect = 'true' == value) },
+      {
+        get: () => this.playCorrect,
+        set: value => (this.playCorrect = this.bool(value)),
+      },
     ],
     [
       'playMistake',
-      { get: () => this.playMistake, set: value => (this.playMistake = 'true' == value) },
+      {
+        get: () => this.playMistake,
+        set: value => (this.playMistake = this.bool(value)),
+      },
     ],
     [
       'playWinner',
-      { get: () => this.playWinner, set: value => (this.playWinner = 'true' == value) },
+      {
+        get: () => this.playWinner,
+        set: value => (this.playWinner = this.bool(value)),
+      },
     ],
     ['rotation', { get: () => this.rotation, set: value => (this.rotation = value) }],
   ]);

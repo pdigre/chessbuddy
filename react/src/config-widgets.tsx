@@ -57,18 +57,17 @@ export const ConfigBoolean: React.FC<{
   if (!prop || !('get' in prop)) {
     return <div></div>;
   }
-  let value = prop?.get();
-  const onChange = action((e: ChangeEvent<HTMLInputElement>) => {
-    value = e.target.checked;
-    prop?.set(value);
-    setV(value);
-  });
+  let value = prop.get();
   const [v, setV] = useState(value);
+  const onChange = action((e: ChangeEvent<HTMLInputElement>) => {
+    setV(e.target.checked);
+    prop.set(e.target.checked);
+  });
   return (
     <FormControlLabel
       control={
         <Checkbox
-          checked={v}
+          checked={!!v}
           onChange={onChange}
           inputProps={{ 'aria-label': 'primary checkbox' }}
         />
