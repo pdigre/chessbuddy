@@ -10,7 +10,6 @@ export class Display implements Item {
     public playWinner: boolean,
     public rotation: number
   ) {}
-  label = 'Display';
   bool: (v: any) => boolean = v => 'true' == v || v == true;
   properties: Map<string, GETSET<any>> = new Map([
     ['showFacts', [() => this.showFacts, v => (this.showFacts = this.bool(v))]],
@@ -21,8 +20,5 @@ export class Display implements Item {
     ['playWinner', [() => this.playWinner, v => (this.playWinner = this.bool(v))]],
     ['rotation', [() => this.rotation, v => (this.rotation = v)]],
   ]);
-  getName = () => 'display';
-  getDescription = () => 'Display';
-  validate: () => string = () => '';
   public static init = new Display(true, true, true, false, false, false, 1);
 }

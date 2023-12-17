@@ -12,7 +12,7 @@ import {
   editService,
 } from './index.service';
 import { Display } from '../model/display.ts';
-import { Item } from '../model/model.ts';
+import { ListItem } from '../model/model.ts';
 import { Game } from '../model/game.ts';
 import { Square } from './rules.service.ts';
 
@@ -31,10 +31,10 @@ export const enum ListType {
 export interface ListProps {
   tab: number;
   title: string;
-  getItems: () => Item[];
+  getItems: () => ListItem[];
   getCursor: () => number;
   setCursor: (i: number) => void;
-  createItem: () => Item;
+  createItem: () => ListItem;
 }
 
 export class ConfigService {
@@ -55,7 +55,7 @@ export class ConfigService {
   @jsonIgnore() cursorHuman = -1;
   @jsonIgnore() listType = ListType.None;
   @jsonIgnore() listMode = ListMode.None;
-  private newItem: Item = Human.create();
+  private newItem: ListItem = Human.create();
 
   constructor() {
     makeAutoObservable(this);

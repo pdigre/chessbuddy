@@ -1,4 +1,4 @@
-import { GETSET, Item } from './model.ts';
+import { GETSET, ListItem } from './model.ts';
 
 export class Engine {
   constructor(
@@ -12,7 +12,7 @@ export const Engines: Engine[] = [
   new Engine('Lozza', 'bots/lozza-1.18/lozza.js'),
 ];
 
-export class Bot implements Item {
+export class Bot implements ListItem {
   constructor(
     public name: string,
     public engine: string,

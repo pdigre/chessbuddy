@@ -1,6 +1,6 @@
-import { GETSET, Item } from './model.ts';
+import { GETSET, ListItem } from './model.ts';
 
-export class Human implements Item {
+export class Human implements ListItem {
   constructor(
     public name: string,
     public email: string

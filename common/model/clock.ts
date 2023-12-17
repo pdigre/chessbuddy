@@ -1,4 +1,4 @@
-import { GETSET, Item } from './model.ts';
+import { GETSET, ListItem } from './model.ts';
 
 export type TimeRule = {
   from: number;
@@ -6,7 +6,7 @@ export type TimeRule = {
   each: number;
 };
 
-export class Clock implements Item {
+export class Clock implements ListItem {
   constructor(
     public name: string,
     public time: TimeRule[]

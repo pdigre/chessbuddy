@@ -6,7 +6,7 @@ import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
 import { css, LitElement } from 'lit-element';
-import { Item } from '../../common/model/model.ts';
+import { ListItem } from '../../common/model/model.ts';
 
 export const LIST_CSS = css`
   .div {
@@ -29,11 +29,11 @@ export const LIST_CSS = css`
 @customElement('cb-config-list')
 export class ConfigList extends LitElement {
   @property({
-    hasChanged(newVal: Item[], oldVal: Item[]) {
+    hasChanged(newVal: ListItem[], oldVal: ListItem[]) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  items!: Item[];
+  items!: ListItem[];
   onSelect!: (id: string) => void;
   @property({ type: Number })
   cursor!: number;
