@@ -53,7 +53,6 @@ export class PanelHist extends MobxLitElement {
         background-color: var(--background-color);
         color: var(--text-color);
       }
-
     `,
     TW_CSS,
   ];

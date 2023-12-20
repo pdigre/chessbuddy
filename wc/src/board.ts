@@ -1,17 +1,17 @@
-import {html} from 'lit';
-import {customElement} from 'lit/decorators.js';
-import {editService, playService, renderingService} from '../../common/service/index.service';
-import {RefreshService} from '../../common/service/refresh.service';
-import {ConfigService} from '../../common/service/config.service';
-import {EditService} from '../../common/service/edit.service';
-import {RenderingService} from '../../common/service/rendering.service';
-import {FEN} from '../../common/model/fen';
-import {AnalyzerService} from '../../common/service/analyzer.service';
-import {MobxLitElement} from '@adobe/lit-mobx';
-import {property} from 'lit-element/decorators.js';
-import {observable} from 'mobx';
-import {Square} from '../../common/service/rules.service';
-import {css} from 'lit-element';
+import { html } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { editService, playService, renderingService } from '../../common/service/index.service';
+import { RefreshService } from '../../common/service/refresh.service';
+import { ConfigService } from '../../common/service/config.service';
+import { EditService } from '../../common/service/edit.service';
+import { RenderingService } from '../../common/service/rendering.service';
+import { FEN } from '../../common/model/fen';
+import { AnalyzerService } from '../../common/service/analyzer.service';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { property } from 'lit-element/decorators.js';
+import { observable } from 'mobx';
+import { Square } from '../../common/service/rules.service';
+import { css } from 'lit-element';
 
 export interface ChessBoardEvent {
   source?: Square;
@@ -42,11 +42,11 @@ export class Board extends MobxLitElement {
   render() {
     const { r90, r180, b2sq, sq2b, fen2b, pieceDropAction } = this.config.getBoardLogic();
 
-   if(this.rendering.darkTheme){
-     document.body.classList.add(this.DARK_MODE);
-   } else {
-     document.body.classList.remove('dark-mode');
-   }
+    if (this.rendering.darkTheme) {
+      document.body.classList.add(this.DARK_MODE);
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
 
     const marker = (sq: string, col: string) => `
       ::part(${sq}) {

@@ -61,10 +61,7 @@ export class ConfigList extends LitElement {
 
   render() {
     return html`
-      <table
-        class="m-1 text-left text-xl border-separate p-2"
-        @click=${this.selectHandler}
-      >
+      <table class="m-1 text-left text-xl border-separate p-2" @click=${this.selectHandler}>
         <tbody>
           ${this.items.map(
             (item, iLine) => html`
