@@ -21,6 +21,23 @@
     body {
         margin: 0;
         padding: 0;
+        background: rgb(220 252 231);
+        color: black;
+        --background-color: rgb(220 252 231);
+        --text-color: black;
+        --link-color: blue;
+        --menu-color: white;
+        --menu-bg-color: rgb(20 83 45);
+
+    }
+    body.dark-mode {
+        background: rgb(20 83 45);
+        color: white;
+        --background-color: rgb(20 83 45);
+        --text-color: white;
+        --link-color: yellow;
+        --menu-color: black;
+        --menu-bg-color: rgb(220 252 231);
     }
 </style>
 <body ontouchmove="BlockMove(event);">

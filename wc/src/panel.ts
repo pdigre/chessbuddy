@@ -20,6 +20,13 @@ export class Panel extends MobxLitElement {
       .hidden {
         display: none;
       }
+      md\-primary-tab {
+        --_container-color: var(--menu-bg-color);
+        --_label-text-color: var(--menu-color);
+        --_active-label-text-color: var(--menu-color);
+        --_active-hover-label-text-color: var(--menu-color);
+        --_hover-label-text-color: var(--menu-color);
+      }
     `,
     TW_CSS,
   ];

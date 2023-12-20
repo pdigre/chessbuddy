@@ -35,20 +35,10 @@ export class App extends LitElement {
       .main {
         width: 1024px;
         height: 748px;
-        --tw-bg-opacity: 1;
-        background-color: rgb(220 252 231 / var(--tw-bg-opacity));
-        :is(.dark .dark:bg-green-900) {
-          --tw-bg-opacity: 1;
-          background-color: rgb(20 83 45 / var(--tw-bg-opacity));
-        }
         border-width: 0px;
       }
       .header {
         height: 32px;
-        :is(.dark .dark:text-white) {
-          --tw-text-opacity: 1;
-          color: rgb(255 255 255 / var(--tw-text-opacity));
-        }
       }
       .config {
         width: 900px;
@@ -58,6 +48,9 @@ export class App extends LitElement {
         display: flex;
         flex-grow: 1;
         flex-direction: column;
+      }
+      .link {
+        color: var(--link-color);
       }
       cb\-cp {
         width: 24px;
@@ -96,12 +89,12 @@ export class App extends LitElement {
               @click=${action(() => messageService.standard('about'))}
               class="text-xl"
             >
-              ChessBuddy ${packageInfo.version}
+              <span class="link">ChessBuddy ${packageInfo.version}</span>
             </md-text-button>
             <md-text-button @click=${action(mediaService.playAllAction)}>
-              <span class="material-symbols-outlined">refresh</span>
+              <span class="link material-symbols-outlined">refresh</span>
             </md-text-button>
-            <a href="react.html">wc</a>
+            <a class="link" href="react.html">wc</a>
           </h3>
           <cb-panel .edit=${editService} .dashboard=${dashboardService} .history=${historyService}>
             <cb-feninfo slot="top" .play=${playService}></cb-feninfo>

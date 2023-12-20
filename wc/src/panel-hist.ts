@@ -44,9 +44,16 @@ export class PanelHist extends MobxLitElement {
         --tw-bg-opacity: 1;
         background-color: rgb(134 239 172 / var(--tw-bg-opacity));
       }
-      .td {
+      td {
         padding: 3px;
       }
+      .table {
+        border: 2px solid #ccc;
+        width: 100%;
+        background-color: var(--background-color);
+        color: var(--text-color);
+      }
+
     `,
     TW_CSS,
   ];
@@ -57,7 +64,7 @@ export class PanelHist extends MobxLitElement {
     return html`
       <div class="m-0 p-0 w-full overflow-auto" ref="{scrollRef}">
         <table
-          class="m-0 table-fixed w-full"
+          class="table m-0 table-fixed w-full"
           @touch-start=${action(this.onTouchStartAction)}
           @touch-move=${action(this.onTouchMoveAction)}
           @click=${action(this.clickHandler)}
@@ -72,7 +79,7 @@ export class PanelHist extends MobxLitElement {
   renderRows(rows: GameEntry[], mark: number) {
     return rows.map((row, iRow) => {
       const { time, win, c1, c2 } = row;
-      return html`<tr id=${iRow.toString()} class="[&td]:p-[3px]  ${iRow == mark ? ' mark' : ''}">
+      return html`<tr id=${iRow.toString()} class="${iRow == mark ? ' mark' : ''}">
         <td class="text-center text-lg">${time}</td>
         <td>${c1}</td>
         <td>${c2}</td>

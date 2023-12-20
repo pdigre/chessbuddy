@@ -11,8 +11,9 @@ export class RenderingService implements Item {
     this.darkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
   label = 'Render';
-  properties: Map<string, GETSET<any>> = new Map([
-    ['darkTheme', [() => this.darkTheme, value => (this.darkTheme = value)]],
+  bool: (v: any) => boolean = v => 'true' == v || v == true;
+  properties: Map<string, GETSET<boolean>> = new Map([
+    ['darkTheme', [() => this.darkTheme, v => (this.darkTheme = this.bool(v))]],
   ]);
   getName = () => 'render';
   getDescription = () => 'Render';

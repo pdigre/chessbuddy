@@ -40,24 +40,19 @@ export class PanelLog extends MobxLitElement {
 
   static styles = [
     css`
-      md\-outlined\-select {
-        min-width: 200px;
+      table {
+        background-color: var(--background-color);
+        color: var(--text-color);
       }
       .mark {
-        --tw-bg-opacity: 1;
-        background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+        background-color: rgb(134 239 172);
       }
       .td1 {
         width: 1.25rem;
         padding: 2px;
         span {
-          --tw-text-opacity: 1;
-          color: rgb(127 29 29 / var(--tw-text-opacity));
+          color: rgb(127 29 29);
         }
-      }
-      .td {
-        width: 30px;
-        padding: 2px;
       }
     `,
     TW_CSS,

@@ -1,17 +1,17 @@
-import { html } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { editService, playService, renderingService } from '../../common/service/index.service';
-import { RefreshService } from '../../common/service/refresh.service';
-import { ConfigService } from '../../common/service/config.service';
-import { EditService } from '../../common/service/edit.service';
-import { RenderingService } from '../../common/service/rendering.service';
-import { FEN } from '../../common/model/fen';
-import { AnalyzerService } from '../../common/service/analyzer.service';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { property } from 'lit-element/decorators.js';
-import { observable } from 'mobx';
-import { Square } from '../../common/service/rules.service';
-import { css } from 'lit-element';
+import {html} from 'lit';
+import {customElement} from 'lit/decorators.js';
+import {editService, playService, renderingService} from '../../common/service/index.service';
+import {RefreshService} from '../../common/service/refresh.service';
+import {ConfigService} from '../../common/service/config.service';
+import {EditService} from '../../common/service/edit.service';
+import {RenderingService} from '../../common/service/rendering.service';
+import {FEN} from '../../common/model/fen';
+import {AnalyzerService} from '../../common/service/analyzer.service';
+import {MobxLitElement} from '@adobe/lit-mobx';
+import {property} from 'lit-element/decorators.js';
+import {observable} from 'mobx';
+import {Square} from '../../common/service/rules.service';
+import {css} from 'lit-element';
 
 export interface ChessBoardEvent {
   source?: Square;
@@ -37,13 +37,21 @@ export class Board extends MobxLitElement {
     return s as Square;
   }
 
+  private readonly DARK_MODE = 'dark-mode';
+
   render() {
     const { r90, r180, b2sq, sq2b, fen2b, pieceDropAction } = this.config.getBoardLogic();
+
+   if(this.rendering.darkTheme){
+     document.body.classList.add(this.DARK_MODE);
+   } else {
+     document.body.classList.remove('dark-mode');
+   }
 
     const marker = (sq: string, col: string) => `
       ::part(${sq}) {
         background: radial-gradient(${col}, transparent 90%);
-        background-color: ${side(((r90 ? 0 : 1) + sq.charCodeAt(0) + sq.charCodeAt(1)) % 2 == 1)}
+        background-color: ${side(((r90 ? 1 : 0) + sq.charCodeAt(0) + sq.charCodeAt(1)) % 2 == 1)}
       }`;
 
     const showMarkers = () => {
@@ -96,8 +104,8 @@ export class Board extends MobxLitElement {
     return html`
       <style>
         chess-board {
-          --light-color: ${side(r90)};
-          --dark-color : ${side(!r90)};
+          --dark-color: ${side(r90)};
+          --light-color : ${side(!r90)};
         }
         ${showMarkers()}
       </style>

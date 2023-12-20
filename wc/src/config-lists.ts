@@ -47,13 +47,13 @@ export class ConfigList extends LitElement {
 
   static styles = [
     css`
+      table {
+        background-color: var(--background-color);
+        color: var(--text-color);
+      }
       .mark {
         --tw-bg-opacity: 1;
         background-color: rgb(134 239 172 / var(--tw-bg-opacity));
-      }
-      table {
-        border: 2px solid #ccc;
-        width: 100%;
       }
     `,
     TW_CSS,
@@ -62,15 +62,15 @@ export class ConfigList extends LitElement {
   render() {
     return html`
       <table
-        class="m-1 text-left text-xl dark:bg-slate-800 border-2 border-separate p-2"
+        class="m-1 text-left text-xl border-separate p-2"
         @click=${this.selectHandler}
       >
         <tbody>
           ${this.items.map(
             (item, iLine) => html`
               <tr id=${iLine.toString()} class="${iLine == this.cursor ? 'mark' : ''}">
-                <td class="dark:text-white">${item.getName()}</td>
-                <td class="dark:text-white">${item.getDescription()}</td>
+                <td>${item.getName()}</td>
+                <td>${item.getDescription()}</td>
               </tr>
             `
           )}
