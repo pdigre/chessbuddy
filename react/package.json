@@ -2,9 +2,8 @@
   "name": "chessbuddy_react",
   "version": "0.23.0",
   "homepage": ".",
-  "type": "module",
   "dependencies": {
-    "esbuild": "^0.19.8",
+    "esbuild": "^0.19.10",
     "mobx": "^6.10.2",
     "mobx-react": "^9.0.2",
     "react": "^18.2.0",
