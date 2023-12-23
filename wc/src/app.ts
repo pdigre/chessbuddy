@@ -10,8 +10,6 @@ import {
   dashboardService,
   historyService,
   configService,
-  refreshService,
-  connectService,
 } from '../../common/service/index.service.ts';
 import packageInfo from '../package.json';
 import { action } from 'mobx';
@@ -75,11 +73,9 @@ export class App extends LitElement {
           <cb-playerinfobar class="m-0 p-0" .isTop=${true} .play=${playService}></cb-playerinfobar>
           <cb-board
             class="m-0 p-0"
-            .analyzer=${analyzerService}
             .edit=${editService}
             .rendering=${renderingService}
             .config=${configService}
-            .refresh=${refreshService}
           ></cb-board>
           <cb-playerinfobar class="m-0 p-0" .isTop=${false} .play=${playService}></cb-playerinfobar>
         </div>
@@ -109,16 +105,8 @@ export class App extends LitElement {
       </div>
       <cb-config-dialog class="config" .config=${configService}>
         <cb-config-game slot="0" .config=${configService}></cb-config-game>
-        <cb-config-display
-          slot="1"
-          .config=${configService}
-          .rendering=${renderingService}
-        ></cb-config-display>
-        <cb-config-human
-          slot="2"
-          .config=${configService}
-          .connect=${connectService}
-        ></cb-config-human>
+        <cb-config-display slot="1"></cb-config-display>
+        <cb-config-human slot="2" .config=${configService}></cb-config-human>
         <cb-config-bot slot="3" .config=${configService}></cb-config-bot>
         <cb-config-clock slot="4" .config=${configService}></cb-config-clock>
         <cb-config-bluetooth slot="5" .config=${configService}></cb-config-bluetooth>

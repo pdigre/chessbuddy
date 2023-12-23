@@ -7,8 +7,7 @@ export class Display implements Item {
     public showCP: boolean,
     public playCorrect: boolean,
     public playMistake: boolean,
-    public playWinner: boolean,
-    public rotation: number
+    public playWinner: boolean
   ) {}
   bool: (v: any) => boolean = v => 'true' == v || v == true;
   properties: Map<string, GETSET<any>> = new Map([
@@ -18,7 +17,15 @@ export class Display implements Item {
     ['playCorrect', [() => this.playCorrect, v => (this.playCorrect = this.bool(v))]],
     ['playMistake', [() => this.playMistake, v => (this.playMistake = this.bool(v))]],
     ['playWinner', [() => this.playWinner, v => (this.playWinner = this.bool(v))]],
-    ['rotation', [() => this.rotation, v => (this.rotation = v)]],
   ]);
-  public static init = new Display(true, true, true, false, false, false, 1);
+
+  static restore = (display?: Display) =>
+    new Display(
+      display?.showFacts ?? true,
+      display?.showHints ?? true,
+      display?.showCP ?? true,
+      display?.playCorrect ?? false,
+      display?.playMistake ?? false,
+      display?.playWinner ?? false
+    );
 }

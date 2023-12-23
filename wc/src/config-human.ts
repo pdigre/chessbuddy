@@ -3,8 +3,7 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ConfigService, ListType } from '../../common/service/config.service';
 import { action } from 'mobx';
-import { historyService } from '../../common/service/index.service';
-import { ConnectService } from '../../common/service/connect.service';
+import { connectService, historyService } from '../../common/service/index.service';
 import { Human } from '../../common/model/human';
 import { TW_CSS } from './css.ts';
 import { LIST_CSS } from './config-lists.ts';
@@ -12,7 +11,6 @@ import { LIST_CSS } from './config-lists.ts';
 @customElement('cb-config-human')
 export class ConfigHuman extends MobxLitElement {
   config!: ConfigService;
-  connect!: ConnectService;
 
   static styles = [LIST_CSS, TW_CSS];
 
@@ -51,7 +49,7 @@ export class ConfigHuman extends MobxLitElement {
     });
     const connectPlayerAction = action((event: Event) => {
       event.preventDefault();
-      this.connect.connectAction(item as Human);
+      connectService.connectAction(item as Human);
     });
     const onUpload = action((e: MouseEvent) => {
       // @ts-ignore

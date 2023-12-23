@@ -106,7 +106,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
         <ConfigGame config={config} />
       </TabPanel>
       <TabPanel index={1}>
-        <ConfigDisplay config={config} rendering={renderingService} />
+        <ConfigDisplay config={config} />
       </TabPanel>
       <TabPanel index={2}>
         <ConfigHuman config={config} connect={connectService} />

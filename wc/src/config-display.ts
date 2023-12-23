@@ -1,14 +1,11 @@
-import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ConfigService } from '../../common/service/config.service';
 import { TW_CSS } from './css.ts';
-import { css } from 'lit-element';
-import { renderingService } from '../../common/service/index.service.ts';
+import { css, LitElement } from 'lit-element';
+import { configService, renderingService } from '../../common/service/index.service.ts';
 
 @customElement('cb-config-display')
-export class ConfigDisplay extends MobxLitElement {
-  config!: ConfigService;
+export class ConfigDisplay extends LitElement {
   static styles = [
     css`
       form {
@@ -22,46 +19,47 @@ export class ConfigDisplay extends MobxLitElement {
     TW_CSS,
   ];
   render() {
-    const item = this.config.display;
+    const display = configService.display;
+    const render = renderingService;
     return html`
       <form name="Display" method="dialog">
         <cb-config-boolean
-          .item=${renderingService}
+          .item=${render}
           id="darkTheme"
           label="Use dark theme"
         ></cb-config-boolean>
         <cb-config-boolean
-          .item=${item}
+          .item=${display}
           id="showFacts"
           label="Show openings information"
         ></cb-config-boolean>
         <cb-config-boolean
-          .item=${item}
+          .item=${display}
           id="showHints"
           label="Training mode / Stockfish suggestions"
         ></cb-config-boolean>
         <cb-config-boolean
-          .item=${item}
+          .item=${display}
           id="showCP"
           label="Show CP - CentiPawns estimate"
         ></cb-config-boolean>
         <cb-config-boolean
-          .item=${item}
+          .item=${display}
           id="playCorrect"
           label="Play giphy for correct moves"
         ></cb-config-boolean>
         <cb-config-boolean
-          .item=${item}
+          .item=${display}
           id="playMistake"
           label="Play giphy for big mistake"
         ></cb-config-boolean>
         <cb-config-boolean
-          .item=${item}
+          .item=${display}
           id="playWinner"
           label="Play giphy when game ends"
         ></cb-config-boolean>
         <cb-config-button
-          .onClick=${this.config.rotateAction}
+          .onClick=${render.rotateAction}
           label="Rotate chessboard"
           icon="rotate_right"
         ></cb-config-button>

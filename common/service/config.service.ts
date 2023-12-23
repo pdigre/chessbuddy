@@ -7,14 +7,15 @@ import {
   playService,
   storageService,
   messageService,
-  refreshService,
   rulesService as rules,
   editService,
+  renderingService,
 } from './index.service';
 import { Display } from '../model/display.ts';
 import { ListItem } from '../model/model.ts';
 import { Game } from '../model/game.ts';
 import { Square } from './rules.service.ts';
+import { RenderingService } from './rendering.service.ts';
 
 export const enum ListMode {
   None = 1,
@@ -67,30 +68,17 @@ export class ConfigService {
       game: Game;
     };
     // Cannot use object assign directly on "this" due to MOBX
-    this.humans = (restore.humans?.length ? restore.humans : Human.init).map(
-      x => new Human(x.name, x.email)
-    );
-    this.bots = (restore.bots?.length ? restore.bots : Bot.init).map(
-      x => new Bot(x.name, x.engine, x.skill, x.time, x.depth)
-    );
-    this.clocks = (restore.clocks?.length ? restore.clocks : Clock.init).map(
-      x => new Clock(x.name, x.time)
-    );
-    const d = restore.display ?? Display.init;
-    this.display = new Display(
-      d.showFacts,
-      d.showHints,
-      d.showCP,
-      d.playCorrect,
-      d.playMistake,
-      d.playWinner,
-      d.rotation
-    );
-    const g = restore.game ?? Game.init;
-    this.game = new Game(g.white, g.black, g.clock);
+    this.humans = Human.restore(restore.humans);
+    this.bots = Bot.restore(restore.bots);
+    this.clocks = Clock.restore(restore.clocks);
+    this.display = Display.restore(restore.display);
+    this.game = Game.restore(restore.game);
   }
 
-  store: VoidFunction = () => storageService.storeObject(ConfigService.storage, this);
+  store: VoidFunction = () => {
+    storageService.storeObject(ConfigService.storage, this);
+    storageService.storeObject(RenderingService.storage, renderingService);
+  };
 
   // ****************************
   // Actions
@@ -104,7 +92,6 @@ export class ConfigService {
   closeConfigAction = () => {
     this.showConfig = false;
     this.store();
-    refreshService.startRefreshTimer();
   };
 
   switchTab(n: number) {
@@ -118,12 +105,6 @@ export class ConfigService {
   isEdit() {
     return this.listMode == ListMode.Edit;
   }
-
-  rotateAction = action(() => {
-    const num = this.display.rotation;
-    this.display.rotation = (Number.isInteger(num) ? num + 1 : 0) % 4;
-    refreshService.startRefreshTimer();
-  });
 
   ListTypes = new Map<ListType, ListProps>([
     [
@@ -204,7 +185,7 @@ export class ConfigService {
   }
 
   getBoardLogic() {
-    const rotation = this.display.rotation;
+    const rotation = renderingService.rotation;
     const { r90, r180 } = rules.splitRotation(rotation);
     const b2sq = (board: Square) => rules.board2Square(board, rotation);
     return {

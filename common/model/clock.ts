@@ -22,10 +22,9 @@ export class Clock implements ListItem {
   validate: () => string = () => (this.name.length ? '' : 'Need to enter a name');
 
   getAllowed(moves: number): number {
-    const total = this.time
+    return this.time
       .filter(time => moves >= time.from)
-      .reduce((total, time) => time.plus * 60 + time.each * (moves - time.from), 0);
-    return total;
+      .reduce((_total, time) => time.plus * 60 + time.each * (moves - time.from), 0);
   }
 
   static string2time: (text: string) => TimeRule[] = text =>
@@ -51,17 +50,21 @@ export class Clock implements ListItem {
 
   static time2string = (times?: TimeRule[]) => (times ? times.map(Clock.stringify).join(',') : '');
 
-  public static init = [
-    new Clock('No limit', []),
-    new Clock('FIDE Classic - 120/60/13/30', [
-      { from: 0, plus: 120, each: 0 },
-      { from: 40, plus: 60, each: 0 },
-      { from: 60, plus: 15, each: 10 },
-    ]),
-    new Clock('FIDE Rapid - 15/10', [{ from: 0, plus: 15, each: 10 }]),
-    new Clock('Rapid - 10/10', [{ from: 0, plus: 10, each: 10 }]),
-    new Clock('FIDE Blitz - 3/2', [{ from: 0, plus: 3, each: 2 }]),
-    new Clock('Blitz - 5/0', [{ from: 0, plus: 5, each: 0 }]),
-  ];
   public static create: () => Clock = () => new Clock('', []);
+
+  static restore = (clocks?: Clock[]) =>
+    clocks?.length
+      ? clocks.map(x => new Clock(x.name, x.time))
+      : [
+          new Clock('No limit', []),
+          new Clock('FIDE Classic - 120/60/13/30', [
+            { from: 0, plus: 120, each: 0 },
+            { from: 40, plus: 60, each: 0 },
+            { from: 60, plus: 15, each: 10 },
+          ]),
+          new Clock('FIDE Rapid - 15/10', [{ from: 0, plus: 15, each: 10 }]),
+          new Clock('Rapid - 10/10', [{ from: 0, plus: 10, each: 10 }]),
+          new Clock('FIDE Blitz - 3/2', [{ from: 0, plus: 3, each: 2 }]),
+          new Clock('Blitz - 5/0', [{ from: 0, plus: 5, each: 0 }]),
+        ];
 }

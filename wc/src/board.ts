@@ -1,12 +1,10 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { editService, playService, renderingService } from '../../common/service/index.service';
-import { RefreshService } from '../../common/service/refresh.service';
 import { ConfigService } from '../../common/service/config.service';
 import { EditService } from '../../common/service/edit.service';
 import { RenderingService } from '../../common/service/rendering.service';
 import { FEN } from '../../common/model/fen';
-import { AnalyzerService } from '../../common/service/analyzer.service';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { property } from 'lit-element/decorators.js';
 import { observable } from 'mobx';
@@ -21,14 +19,13 @@ export interface ChessBoardEvent {
 
 @customElement('cb-board')
 export class Board extends MobxLitElement {
-  analyzer!: AnalyzerService;
   edit!: EditService;
+  @property({ attribute: false })
+  @observable
   rendering!: RenderingService;
-
   @property({ attribute: false })
   @observable
   config!: ConfigService;
-  refresh!: RefreshService;
 
   xy2square(x: number, y: number) {
     const w = renderingService.boardWidth;
@@ -71,7 +68,7 @@ export class Board extends MobxLitElement {
       return markers;
     };
 
-    const fen = this.refresh.showBlank
+    const fen = this.rendering.showBlank
       ? FEN.CLEAR_GAME
       : this.edit.showEdit
         ? this.edit.editFen

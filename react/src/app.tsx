@@ -9,7 +9,6 @@ import {
   dashboardService,
   historyService,
   configService,
-  refreshService,
 } from '../../common/service/index.service';
 import packageInfo from '../package.json';
 import { Mp4dialog } from './mp4dialog';
@@ -85,13 +84,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
           <CP analyzer={analyzerService} config={configService} />
           <div className="flex flex-col flex-grow">
             <PlayerInfoBar isTop={true} play={playService} />
-            <Board
-              analyzer={analyzerService}
-              edit={editService}
-              rendering={rendering}
-              config={configService}
-              refresh={refreshService}
-            />
+            <Board edit={editService} rendering={rendering} config={configService} />
             <PlayerInfoBar isTop={false} play={playService} />
           </div>
           <div className="flex flex-col w-full text-center">

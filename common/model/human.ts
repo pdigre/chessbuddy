@@ -14,6 +14,8 @@ export class Human implements ListItem {
   getDescription = () => this.email;
   validate: () => string = () => (this.name.length ? '' : 'Need to enter a name');
 
-  public static init = [new Human('User', '')];
   public static create: () => Human = () => new Human('', '');
+
+  static restore = (humans?: Human[]) =>
+    humans?.length ? humans.map(x => new Human(x.name, x.email)) : [new Human('User', '')];
 }

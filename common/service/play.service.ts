@@ -16,7 +16,7 @@ import {
   mediaService,
   messageService,
   openingsService,
-  refreshService,
+  renderingService,
   rulesService,
   storageService,
 } from './index.service';
@@ -43,8 +43,6 @@ export class PlayService {
   @jsonIgnore() allowed = 0;
   @jsonIgnore() isPlaying = false;
   @jsonIgnore() pgns: Square[] = [];
-
-  private date = Date.now();
 
   constructor() {
     makeAutoObservable(this);
@@ -128,7 +126,6 @@ export class PlayService {
   addMove(san: string) {
     const prev = this.nextPlayer();
     if (prev instanceof Human) this.isPlaying = true;
-    this.date = Date.now();
     this.log.push(san);
     analyzerService.reset();
     this.fen = rulesService.newFen(this.fen, san);
@@ -232,7 +229,7 @@ export class PlayService {
     this.clearAnalyzer();
   }
   private clearAnalyzer() {
-    refreshService.startRefreshTimer();
+    renderingService.startRefreshTimer();
     analyzerService.cp = 0;
     analyzerService.help = [];
   }
@@ -363,14 +360,14 @@ export class PlayService {
   readonly getStartTime = () => Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
 
   getPlayerInfo(isTop: boolean) {
-    const isWhite = isTop == configService.display.rotation > 1;
+    const isWhite = isTop == renderingService.rotation > 1;
     const otherTime = isWhite ? this.wtime : this.btime;
     return {
       other: toMMSS(this.allowed ? this.allowed - otherTime : otherTime),
       label: isWhite ? `White: ${configService.game.white}` : `Black: ${configService.game.black}`,
       showTicker: isWhite == this.isWhiteTurn,
       banner: isWhite != this.isWhiteTurn && this.isComplete ? ' ** Winner **' : '',
-      isTextRight: isTop && configService.display.rotation % 2 == 1,
+      isTextRight: isTop && renderingService.rotation % 2 == 1,
     };
   }
 }

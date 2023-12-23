@@ -11,5 +11,6 @@ export class Game implements Item {
     ['black', [() => this.black, v => (this.black = v)]],
     ['clock', [() => this.clock, v => (this.clock = v)]],
   ]);
-  public static init = new Game('', '', '');
+  static restore = (game?: Game) =>
+    new Game(game?.white ?? '', game?.black ?? '', game?.clock ?? '');
 }

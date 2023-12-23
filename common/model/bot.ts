@@ -64,13 +64,17 @@ export class Bot implements ListItem {
     return Engines.find(engine => engine.name == this.engine) ?? Engines[0];
   }
 
-  public static init = [
-    new Bot('Stockfish easy', 'Stockfish', 20, 1, 0),
-    new Bot('Stockfish med', 'Stockfish', 1, 0, 10),
-    new Bot('Stockfish hard', 'Stockfish', 20, 0, 1),
-    new Bot('Lozza easy', 'Lozza', 20, 1, 0),
-    new Bot('Lozza med', 'Lozza', 1, 0, 10),
-    new Bot('Lozza hard', 'Lozza', 20, 0, 1),
-  ];
   public static create: () => Bot = () => new Bot('', 'Stockfish', 0, 0, 0);
+
+  static restore = (bots?: Bot[]) =>
+    bots?.length
+      ? bots.map(x => new Bot(x.name, x.engine, x.skill, x.time, x.depth))
+      : [
+          new Bot('Stockfish easy', 'Stockfish', 20, 1, 0),
+          new Bot('Stockfish med', 'Stockfish', 1, 0, 10),
+          new Bot('Stockfish hard', 'Stockfish', 20, 0, 1),
+          new Bot('Lozza easy', 'Lozza', 20, 1, 0),
+          new Bot('Lozza med', 'Lozza', 1, 0, 10),
+          new Bot('Lozza hard', 'Lozza', 20, 0, 1),
+        ];
 }

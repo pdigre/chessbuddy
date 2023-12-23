@@ -1,8 +1,6 @@
 import React from 'react';
-import { AnalyzerService } from '../../common/service/analyzer.service';
 import { Chessboard } from 'react-chessboard';
 import { ConfigService } from '../../common/service/config.service';
-import { RefreshService } from '../../common/service/refresh.service';
 import { observer } from 'mobx-react';
 import { editService, playService } from '../../common/service/index.service';
 import { FEN } from '../../common/model/fen';
@@ -15,13 +13,10 @@ export const Board = observer(
     edit,
     rendering,
     config,
-    refresh,
   }: {
-    analyzer: AnalyzerService;
     edit: EditService;
     rendering: RenderingService;
     config: ConfigService;
-    refresh: RefreshService;
   }) => {
     const whiteSquareStyle: Record<string, string> = {
       backgroundColor: 'rgb(240, 217, 181)',
@@ -75,7 +70,11 @@ export const Board = observer(
       return markers;
     };
 
-    const fen = refresh.showBlank ? FEN.CLEAR_GAME : edit.showEdit ? edit.editFen : playService.fen;
+    const fen = rendering.showBlank
+      ? FEN.CLEAR_GAME
+      : edit.showEdit
+        ? edit.editFen
+        : playService.fen;
     const onStart = (piece: string, boardFrom: Square): any => {
       return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
     };
