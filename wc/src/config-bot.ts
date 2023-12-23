@@ -43,18 +43,25 @@ export class ConfigBot extends MobxLitElement {
         </tr>
         <tr>
           <td>
-            <cb-config-button label="Add" icon="add" .onClick=${onAdd}></cb-config-button>
+            <cb-config-button
+              label="Add"
+              icon="add"
+              .onClick=${onAdd}
+              type="filled"
+            ></cb-config-button>
             <cb-config-button
               label="Edit"
               icon="edit"
               .onClick=${onEdit}
               .disabled=${!hasSelect}
+              type="tonal"
             ></cb-config-button>
             <cb-config-button
               label="Delete"
               icon="delete"
               .onClick=${onDelete}
               .disabled=${!hasSelect}
+              type="tonal"
             ></cb-config-button>
           </td>
         </tr>

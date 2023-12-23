@@ -19,25 +19,29 @@
     <script type="module" src="/src/app.ts"></script></head>
 <style>
     body {
-        margin: 0;
-        padding: 0;
-        background: rgb(220 252 231);
-        color: black;
         --background-color: rgb(220 252 231);
         --text-color: black;
         --link-color: blue;
-        --menu-color: white;
+        --menu-fg-color: white;
         --menu-bg-color: rgb(20 83 45);
-
     }
     body.dark-mode {
-        background: rgb(20 83 45);
-        color: white;
         --background-color: rgb(20 83 45);
         --text-color: white;
         --link-color: yellow;
-        --menu-color: black;
+        --menu-fg-color: black;
         --menu-bg-color: rgb(220 252 231);
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        opacity: 1;
+        color: var(--text-color);
+        --md-sys-color-outline: var(--text-color);
+        --md-sys-color-on-surface: var(--text-color);
+        --md-sys-color-on-surface-variant: var(--text-color);
+        --md-menu-container-color: var(--background-color);
     }
 </style>
 <body ontouchmove="BlockMove(event);">

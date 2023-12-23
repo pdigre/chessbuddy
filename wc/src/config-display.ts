@@ -62,6 +62,7 @@ export class ConfigDisplay extends LitElement {
           .onClick=${render.rotateAction}
           label="Rotate chessboard"
           icon="rotate_right"
+          type="tonal"
         ></cb-config-button>
       </form>
     `;

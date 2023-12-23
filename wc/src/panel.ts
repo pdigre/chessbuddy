@@ -21,7 +21,8 @@ export class Panel extends MobxLitElement {
         display: none;
       }
       md\-primary-tab {
-        --_container-color: var(--menu-bg-color);
+        --menu-color: color-mix(in oklch, transparent, var(--menu-fg-color) 95%);
+        --_container-color: color-mix(in oklch, transparent, var(--menu-bg-color) 80%);
         --_label-text-color: var(--menu-color);
         --_active-label-text-color: var(--menu-color);
         --_active-hover-label-text-color: var(--menu-color);

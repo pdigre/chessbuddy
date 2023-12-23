@@ -15,20 +15,30 @@ export class ConfigDialog extends MobxLitElement {
       md\-dialog {
         min-width: 800px;
         min-height: 600px;
+        --md-dialog-container-color: var(--background-color);
       }
       md\-tabs {
         min-height: 90px;
         max-width: 760px;
         overflow: clip;
       }
+
       md\-primary-tab {
+        --menu-color: color-mix(in oklch, transparent, var(--menu-fg-color) 90%);
+        --_container-color: color-mix(in oklch, transparent, var(--menu-bg-color) 80%);
+        --_label-text-color: var(--menu-color);
+        --_active-label-text-color: var(--menu-color);
+        --_active-hover-label-text-color: var(--menu-color);
+        --_hover-label-text-color: var(--menu-color);
         min-height: 90px;
       }
       .icon {
         font-size: 30px;
+        color: color-mix(in oklch, transparent, var(--menu-fg-color) 90%);
       }
       .label {
         line-height: 20px;
+        color: color-mix(in oklch, transparent, var(--menu-fg-color) 90%);
       }
       .hidden {
         display: none;

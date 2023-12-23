@@ -65,17 +65,20 @@ export class ConfigGame extends MobxLitElement {
               .onClick=${action(playService.startGameAction)}
               label="Play"
               icon="play_circle"
+              type="filled"
             ></cb-config-button>
             <cb-config-button
               .onClick=${action(playService.endGameAction)}
               label="End game"
               icon="exit_to_app"
               .disabled=${playService.isComplete}
+              type="tonal"
             ></cb-config-button>
             <cb-config-button
               .onClick=${action(playService.resetGameAction)}
               label="Reset"
               icon="clear"
+              type="tonal"
             ></cb-config-button>
             <cb-config-button
               .onClick=${action(playService.editGameAction)}

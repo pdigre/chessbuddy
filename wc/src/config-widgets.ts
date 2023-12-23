@@ -15,25 +15,29 @@ export class ConfigButton extends LitElement {
   icon?: string;
   @property({ attribute: true })
   disabled?: boolean;
+  @property({ attribute: true })
+  type?: string;
 
   static styles = [
     css`
-      md\-outlined-button {
+      .button {
         height: 60px;
         margin: 2px;
         --md-outlined-button-container-shape: 20px;
         --md-outlined-button-label-text-font: system-ui;
+        --md-filled-button-container-shape: 20px;
+        --md-filled-button-label-text-font: system-ui;
+        --md-filled-tonal-button-container-shape: 20px;
+        --md-filled-tonal-button-label-text-font: system-ui;
         --md-sys-color-primary: #3d1818;
         --md-sys-color-outline: #245541;
       }
-
       .icon {
         vertical-align: text-bottom;
         line-height: 48px;
         margin: 0;
         padding: 0;
       }
-
       .label {
         vertical-align: top;
         line-height: 48px;
@@ -45,10 +49,36 @@ export class ConfigButton extends LitElement {
   ];
 
   render() {
+    if (this.type == 'filled') {
+      return html`
+        ${MD_ICONS}
+        <md-filled-button
+          class="button flex-grow text-lg"
+          @click=${this.onClick}
+          .disabled=${this.disabled ?? false}
+        >
+          <span class="icon material-symbols-outlined">${this.icon}</span>
+          <span class="label">${this.label}</span>
+        </md-filled-button>
+      `;
+    }
+    if (this.type == 'tonal') {
+      return html`
+        ${MD_ICONS}
+        <md-filled-tonal-button
+          class="button flex-grow text-lg"
+          @click=${this.onClick}
+          .disabled=${this.disabled ?? false}
+        >
+          <span class="icon material-symbols-outlined">${this.icon}</span>
+          <span class="label">${this.label}</span>
+        </md-filled-tonal-button>
+      `;
+    }
     return html`
       ${MD_ICONS}
       <md-outlined-button
-        class="flex-grow text-lg"
+        class="button flex-grow text-lg"
         @click=${this.onClick}
         .disabled=${this.disabled ?? false}
       >

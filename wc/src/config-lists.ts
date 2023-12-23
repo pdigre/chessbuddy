@@ -9,20 +9,11 @@ import { css, LitElement } from 'lit-element';
 import { ListItem } from '../../common/model/model.ts';
 
 export const LIST_CSS = css`
-  .div {
-    width: 800px;
-    height: 400px;
-    cb\-table\-list,
-    cb\-config\-button {
-      // mx-1
-      margin-left: 0.25rem;
-      margin-right: 0.25rem;
-    }
-  }
-  mx\-2 {
-    // mx-2
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+  cb\-config\-list,
+  cb\-config\-button {
+    // mx-1
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
   }
 `;
 
@@ -50,6 +41,7 @@ export class ConfigList extends LitElement {
       table {
         background-color: var(--background-color);
         color: var(--text-color);
+        border: 1px solid;
       }
       .mark {
         --tw-bg-opacity: 1;
@@ -61,7 +53,7 @@ export class ConfigList extends LitElement {
 
   render() {
     return html`
-      <table class="m-1 text-left text-xl border-separate p-2" @click=${this.selectHandler}>
+      <table class="w-full m-1 text-left text-xl border-separate p-2" @click=${this.selectHandler}>
         <tbody>
           ${this.items.map(
             (item, iLine) => html`
