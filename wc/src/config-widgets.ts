@@ -29,8 +29,6 @@ export class ConfigButton extends LitElement {
         --md-filled-button-label-text-font: system-ui;
         --md-filled-tonal-button-container-shape: 20px;
         --md-filled-tonal-button-label-text-font: system-ui;
-        --md-sys-color-primary: #3d1818;
-        --md-sys-color-outline: #245541;
       }
       .icon {
         vertical-align: text-bottom;

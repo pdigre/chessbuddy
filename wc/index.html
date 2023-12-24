@@ -38,9 +38,14 @@
         background-color: var(--background-color);
         opacity: 1;
         color: var(--text-color);
+        --md-sys-color-surface: var(--background-color);
+        --md-sys-color-primary: color-mix(in oklch, transparent, var(--menu-bg-color) 90%);
         --md-sys-color-outline: var(--text-color);
+        --md-sys-color-on-primary: var(--background-color);
+        --md-sys-color-primary-container: color-mix(in oklch, transparent, var(--menu-bg-color) 80%);
+        --md-sys-color-secondary-container: color-mix(in oklch, transparent, var(--menu-bg-color) 20%);
         --md-sys-color-on-surface: var(--text-color);
-        --md-sys-color-on-surface-variant: var(--text-color);
+        --md-sys-color-on-surface-variant: color-mix(in oklch, transparent, var(--text-color) 90%);
         --md-menu-container-color: var(--background-color);
     }
 </style>
