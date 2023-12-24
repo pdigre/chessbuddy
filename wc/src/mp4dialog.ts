@@ -10,18 +10,37 @@ export class Mp4Dialog extends MobxLitElement {
   @property({ attribute: false })
   public mp4!: MediaService;
 
-  static styles = [css``, TW_CSS];
+  static styles = [
+    css`
+      md\-dialog {
+        min-width: 800px;
+        min-height: 600px;
+        --md-dialog-container-color: var(--background-color);
+      }
+    `,
+    TW_CSS,
+  ];
   render() {
     const { width, src, title, onClose, open } = this.mp4.getDialogControls();
-    return html`
-      <md-dialog .open=${open} @close=${onClose} class="text-center text-lg">
-        <div slot="headline" id="mp4">${title} - ${src}</div>
-        <div slot="content">
-          <video id="myVideo" autoplay muted width="${width}">
-            <source src="${src}" type="video/mp4" />
-          </video>
-        </div>
-      </md-dialog>
-    `;
+    const source = document.querySelector('#cb-video') as HTMLSourceElement;
+    if (source) {
+      source.setAttribute('src', src);
+      const video = source?.parentNode as HTMLVideoElement;
+      if (video) {
+        const modal = video.parentNode?.parentNode as HTMLElement;
+        const classList = modal.classList;
+        if (open) {
+          modal.onclick = onClose;
+          (video.previousElementSibling as HTMLElement).innerText = title ?? '';
+          classList.add('show');
+          video.setAttribute('width', width + 'px');
+          video.load();
+          video.play().finally(() => {});
+        } else {
+          classList.remove('show');
+        }
+      }
+    }
+    return html``;
   }
 }

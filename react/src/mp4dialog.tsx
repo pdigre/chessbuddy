@@ -5,8 +5,14 @@ import { MediaService } from '../../common/service/media.service';
 
 export const Mp4dialog = observer(({ mp4 }: { mp4: MediaService }) => {
   const { width, src, title, onClose, open } = mp4.getDialogControls();
-  return (
-    <Dialog aria-labelledby="mp4" open={open} onClose={onClose} className="text-center text-lg">
+  return mp4.show ? (
+    <Dialog
+      aria-labelledby="mp4"
+      open
+      onClose={onClose}
+      onClick={onClose}
+      className="text-center text-lg"
+    >
       <DialogTitle id="mp4">
         {title} - {src}
       </DialogTitle>
@@ -16,5 +22,7 @@ export const Mp4dialog = observer(({ mp4 }: { mp4: MediaService }) => {
         </video>
       </DialogContent>
     </Dialog>
+  ) : (
+    <div></div>
   );
 });

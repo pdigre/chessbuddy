@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { configService } from './index.service';
 
 type Mp4Type = {
@@ -18,7 +18,9 @@ export class MediaService {
   sound_error = new Audio('/mp3/buzzer.mp3');
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      show: observable,
+    });
   }
 
   soundMove() {
@@ -31,22 +33,15 @@ export class MediaService {
     this.sound_error.play().then();
   }
 
-  clear() {
-    this.title = '';
-    this.show = false;
-  }
-  display(title: string, msg: Mp4Type) {
-    this.show = true;
-    this.title = title;
-    this.msg = msg;
-  }
   playRandom(enable: boolean, title: string, emos: Mp4Type[]) {
     if (enable) this.play(emos[Math.floor(Math.random() * emos.length)], title);
   }
 
   play(emo: Mp4Type, title: string) {
-    window.setTimeout(() => this.clear(), (emo.length ?? 10) * 1000 + 1000);
-    this.display(title, emo);
+    this.show = true;
+    this.title = title;
+    this.msg = emo;
+    window.setTimeout(this.onClose, Math.max(emo.length ?? 3, 2) * 1000);
   }
 
   playWinner() {
@@ -62,6 +57,11 @@ export class MediaService {
   playMistake() {
     this.playRandom(configService.display.playMistake, 'Mistake', this.mistake_urls);
   }
+
+  onClose = action(() => {
+    this.title = '';
+    this.show = false;
+  });
 
   readonly playAllAction = (): void => {
     this.prev++;
@@ -96,10 +96,7 @@ export class MediaService {
       width: Math.min(this.msg?.width ?? 480, 500),
       src: this.msg?.src ?? '',
       title: this.title,
-      onClose: action(() => {
-        this.title = '';
-        this.show = false;
-      }),
+      onClose: this.onClose,
       open: this.show,
     };
   }
