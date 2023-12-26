@@ -1,25 +1,11 @@
 import React, { MouseEvent } from 'react';
-import { ConfigService } from '../../common/service/config.service';
+import { ConfigService, ListType } from '../../common/service/config.service';
 import { observer } from 'mobx-react';
 import { MdBluetoothConnected } from 'react-icons/md';
 import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
-import { GETSET, Item } from '../../common/model/model';
-import { ConfigButton } from './config-widgets';
-
-class BT implements Item {
-  constructor(
-    public name: string,
-    public description: string
-  ) {}
-  label = 'BT';
-  properties: Map<string, GETSET<string>> = new Map([
-    ['name', [() => this.name, v => (this.name = v)]],
-  ]);
-  validate = () => '';
-  getName = () => this.name;
-  getDescription = () => this.description;
-}
+import { ConfigButton, ConfigSelect, ConfigText } from './config-widgets';
+import { ConfigListButtons, ConfigListTable, ConfigPopup } from './config-lists';
 
 async function getPort() {
   const FILTERS = [{ usbVendorId: 0x0403, usbProductId: 0x6001 }];
@@ -56,32 +42,15 @@ async function doBT() {
 }
 
 export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) => {
-  const items: BT[] = [];
-  bluetoothService.btDevices.map(device => new BT(device.id, device.name ?? 'UNKNOWN'));
-
-  const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
-    if (event.target instanceof HTMLTableCellElement) {
-      //      config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
-    }
-  };
+  const { type, item, hasSelect, show, onSave, onSelect, cursor, items } = config.getListLogic(
+    ListType.BT
+  );
 
   const doBtAction = () => doBT();
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">
-      <table className="w-full text-left text-lg dark:bg-slate-800 border-2 border-separate p-2">
-        <tbody onClick={action(doSelect)}>
-          {items.map((item, iLine) => (
-            <tr
-              key={iLine.toString()}
-              id={iLine.toString()}
-              className={iLine == config.cursor ? 'bg-green-300' : ''}
-            >
-              <td className="dark:text-white">{item.getName()}</td>
-              <td className="dark:text-white">{item.getDescription()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <ConfigListTable onSelect={onSelect} cursor={cursor} items={items} />
+      <ConfigListButtons type={type} />
       <ConfigButton onClick={action(doBtAction)} label="Delete" icon={<MdBluetoothConnected />} />
     </div>
   );

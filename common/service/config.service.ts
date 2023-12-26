@@ -2,6 +2,7 @@ import { action, makeAutoObservable } from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
+import { BT } from '../model/bt.ts';
 import { jsonIgnore } from 'json-ignore';
 import {
   playService,
@@ -27,6 +28,7 @@ export const enum ListType {
   Human,
   Bot,
   Clock,
+  BT,
 }
 
 export interface ListProps {
@@ -45,6 +47,7 @@ export class ConfigService {
   humans!: Human[];
   bots!: Bot[];
   clocks!: Clock[];
+  bts!: BT[];
   display!: Display;
   game!: Game;
 
@@ -54,6 +57,7 @@ export class ConfigService {
   @jsonIgnore() cursorClock = -1;
   @jsonIgnore() cursorBot = -1;
   @jsonIgnore() cursorHuman = -1;
+  @jsonIgnore() cursorBT = -1;
   @jsonIgnore() listType = ListType.None;
   @jsonIgnore() listMode = ListMode.None;
   private newItem: ListItem = Human.create();
@@ -64,6 +68,7 @@ export class ConfigService {
       humans: Human[];
       bots: Bot[];
       clocks: Clock[];
+      bts: BT[];
       display: Display;
       game: Game;
     };
@@ -71,6 +76,7 @@ export class ConfigService {
     this.humans = Human.restore(restore.humans);
     this.bots = Bot.restore(restore.bots);
     this.clocks = Clock.restore(restore.clocks);
+    this.bts = BT.restore(restore.bts);
     this.display = Display.restore(restore.display);
     this.game = Game.restore(restore.game);
   }
@@ -138,6 +144,17 @@ export class ConfigService {
         getCursor: () => this.cursorClock,
         setCursor: (i: number) => (this.cursorClock = i),
         createItem: () => Clock.create(),
+      },
+    ],
+    [
+      ListType.BT,
+      {
+        tab: 5,
+        title: 'Bluetooth',
+        getItems: () => this.bts,
+        getCursor: () => this.cursorBT,
+        setCursor: (i: number) => (this.cursorBT = i),
+        createItem: () => BT.create(),
       },
     ],
   ]);

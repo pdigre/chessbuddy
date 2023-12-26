@@ -4,6 +4,9 @@
   "homepage": ".",
   "type": "module",
   "dependencies": {
+    "@types/node": "^20.10.5",
+    "@types/w3c-web-serial": "^1.0.6",
+    "@types/web-bluetooth": "^0.0.20",
     "chess.js": "^1.0.0-beta.6",
     "esbuild": "^0.19.8",
     "json-ignore": "^0.4.0",
