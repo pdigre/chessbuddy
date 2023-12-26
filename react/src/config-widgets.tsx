@@ -58,13 +58,12 @@ export const ConfigBoolean: React.FC<{
   if (!prop) {
     return <div></div>;
   }
-  const [getter, setter] = prop;
-  const value = getter();
+  const value = item.getProp(id);
 
   const [v, setV] = useState(value);
   const onChange = action((e: ChangeEvent<HTMLInputElement>) => {
     setV(e.target.checked);
-    setter(e.target.checked);
+    item.setProp(id, e.target.checked);
   });
   return (
     <FormControlLabel
@@ -90,13 +89,12 @@ export const ConfigSelect: React.FC<{
   if (!prop) {
     return <div></div>;
   }
-  const [getter, setter] = prop;
-  const onChange = action((e: ChangeEvent<HTMLSelectElement>) => {
+  const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setter(value);
+    item.setProp(id, value);
     setV(value);
-  });
-  const value = getter();
+  };
+  const value = item.getProp(id);
   const [v, setV] = useState(value);
   return (
     <FormControl variant="filled">

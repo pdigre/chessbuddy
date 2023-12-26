@@ -2,7 +2,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { playService } from '../../common/service/index.service';
-import { action } from 'mobx';
 import { ConfigService } from '../../common/service/config.service';
 import { TW_CSS } from './css';
 import { css } from 'lit-element';
@@ -62,26 +61,26 @@ export class ConfigGame extends MobxLitElement {
         <tr>
           <td colspan="2">
             <cb-config-button
-              .onClick=${action(playService.startGameAction)}
+              .onClick=${playService.startGameAction}
               label="Play"
               icon="play_circle"
               type="filled"
             ></cb-config-button>
             <cb-config-button
-              .onClick=${action(playService.endGameAction)}
+              .onClick=${playService.endGameAction}
               label="End game"
               icon="exit_to_app"
               .disabled=${playService.isComplete}
               type="tonal"
             ></cb-config-button>
             <cb-config-button
-              .onClick=${action(playService.resetGameAction)}
+              .onClick=${playService.resetGameAction}
               label="Reset"
               icon="clear"
               type="tonal"
             ></cb-config-button>
             <cb-config-button
-              .onClick=${action(playService.editGameAction)}
+              .onClick=${playService.editGameAction}
               label="Edit"
               icon="edit"
             ></cb-config-button>

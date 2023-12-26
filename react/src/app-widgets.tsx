@@ -1,14 +1,18 @@
 import { observer } from 'mobx-react';
 import { AnalyzerService } from '../../common/service/analyzer.service';
-import { ConfigService } from '../../common/service/config.service';
 import { ClockService } from '../../common/service/clock.service';
 import { PlayService } from '../../common/service/play.service';
-import { clockService, openingsService } from '../../common/service/index.service';
+import {
+  clockService,
+  openingsService,
+  renderingService,
+} from '../../common/service/index.service';
 import React from 'react';
+import { RenderingService } from '../../common/service/rendering.service';
 
 export const CP = observer(
-  ({ analyzer, config }: { analyzer: AnalyzerService; config: ConfigService }) => {
-    if (!config.display.showCP) {
+  ({ analyzer, rendering }: { analyzer: AnalyzerService; rendering: RenderingService }) => {
+    if (!rendering.showCP) {
       return <div className="w-6 h-full flex flex-col flex-grow"></div>;
     }
     const { txt, blackTop, h1, h2 } = analyzer.getCpInfo();

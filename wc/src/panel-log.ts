@@ -28,7 +28,7 @@ export class PanelLog extends MobxLitElement {
     event.preventDefault();
   };
 
-  clickHandler = (e: MouseEvent) => {
+  clickAction = action((e: MouseEvent) => {
     let target = e.target as HTMLElement;
     if (target.nodeName == 'TD') {
       const i = +target.id;
@@ -36,7 +36,7 @@ export class PanelLog extends MobxLitElement {
       e.preventDefault();
       this.requestUpdate();
     }
-  };
+  });
 
   static styles = [
     css`
@@ -73,9 +73,9 @@ export class PanelLog extends MobxLitElement {
       <div class="m-0 p-0 w-full overflow-auto" ref="{scrollRef}">
         <table
           class="m-0 table-fixed w-full"
-          @touch-start=${action(this.onTouchStartAction)}
-          @touch-move=${action(this.onTouchMoveAction)}
-          @click=${action(this.clickHandler)}
+          @touch-start=${this.onTouchStartAction}
+          @touch-move=${this.onTouchMoveAction}
+          @click=${this.clickAction}
         >
           <tbody>
             ${this.renderRows(rows, mark)}

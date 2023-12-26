@@ -25,7 +25,7 @@ export class PanelHist extends MobxLitElement {
     event.preventDefault();
   };
 
-  clickHandler = (e: MouseEvent) => {
+  clickAction = action((e: MouseEvent) => {
     e.preventDefault();
     let target = e.target as HTMLElement;
     if (target.nodeName == 'TD') {
@@ -33,7 +33,7 @@ export class PanelHist extends MobxLitElement {
       this.history.setMarkHist(id == this.history.markHist ? -1 : id);
       this.requestUpdate();
     }
-  };
+  });
 
   static styles = [
     css`
@@ -64,9 +64,9 @@ export class PanelHist extends MobxLitElement {
       <div class="m-0 p-0 w-full overflow-auto" ref="{scrollRef}">
         <table
           class="table m-0 table-fixed w-full"
-          @touch-start=${action(this.onTouchStartAction)}
-          @touch-move=${action(this.onTouchMoveAction)}
-          @click=${action(this.clickHandler)}
+          @touch-start=${this.onTouchStartAction}
+          @touch-move=${this.onTouchMoveAction}
+          @click=${this.clickAction}
         >
           <tbody>
             ${this.renderRows(rows, mark)}

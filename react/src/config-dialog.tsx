@@ -43,7 +43,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
     <Dialog
       aria-labelledby="simple-dialog-title"
       open={config.showConfig}
-      onClose={action(config.closeConfigAction)}
+      onClose={config.closeConfigAction}
       maxWidth="xl"
       className={'text-center text-xl'}
     >

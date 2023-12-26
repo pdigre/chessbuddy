@@ -1,10 +1,10 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { action, runInAction } from 'mobx';
 import { ConfigService } from '../../common/service/config.service';
 import { TW_CSS, MD_ICONS } from './css';
 import { css } from 'lit-element';
+import { runInAction } from 'mobx';
 
 @customElement('cb-config')
 export class Config extends MobxLitElement {
@@ -54,7 +54,7 @@ export class Config extends MobxLitElement {
         class="main"
         aria-labelledby="simple-dialog-title"
         open
-        @close=${action(this.config.closeConfigAction)}
+        @close=${this.config.closeConfigAction}
         maxWidth="xl"
       >
         <form slot="content" id="form-id" method="dialog">

@@ -1,9 +1,10 @@
-import type { Move, Square } from 'chess.js';
+// @ts-ignore
+import type { Move, Square, ShortMove } from 'chess.js';
 import { Chess, SQUARES, QUEEN } from 'chess.js';
 import { FEN } from '../model/fen';
 
 export type Fen = string;
-export type { Square, Move };
+export type { Square, Move, ShortMove };
 
 export class RulesService {
   isEndMove: (san: string) => boolean = (san: string) =>

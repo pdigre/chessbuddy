@@ -83,16 +83,16 @@ export class ConfigService {
   // ****************************
   // Actions
   // ****************************
-  openConfigAction = () => {
+  openConfigAction = action(() => {
     this.showConfig = true;
     playService.isPlaying = false;
     console.log('openConfigAction');
-  };
+  });
 
-  closeConfigAction = () => {
+  closeConfigAction = action(() => {
     this.showConfig = false;
     this.store();
-  };
+  });
 
   switchTab(n: number) {
     this.showTab = n;

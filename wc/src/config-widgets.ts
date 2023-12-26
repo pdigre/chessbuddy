@@ -104,12 +104,10 @@ export class ConfigText extends LitElement {
     if (!prop) {
       return html``;
     }
-    const [getter, setter] = prop;
-    const value = getter();
-    const onChange = action((e: MouseEvent) => {
-      // @ts-ignore
-      setter(e.target.value);
-    });
+    const value = this.item.getProp(this.id);
+    const onChange = (e: MouseEvent) =>
+      this.item.setProp(this.id, (e.target as HTMLInputElement).value);
+
     return html`
       <md-outlined-text-field
         label=${this.label}
@@ -151,9 +149,9 @@ export class ConfigBoolean extends LitElement {
     if (!prop) {
       return html``;
     }
-    const [getter, setter] = prop;
-    const checked = getter();
-    const onChange = action((e: Event) => setter(String((e.target as HTMLInputElement).checked)));
+    const checked = this.item.getProp(this.id);
+    const onChange = (e: Event) =>
+      this.item.setProp(this.id, String((e.target as HTMLInputElement).checked));
     return html`
       <label>
         <md-checkbox touch-target="wrapper" .checked=${!!checked} @change=${onChange}></md-checkbox>
@@ -192,12 +190,9 @@ export class ConfigSelect extends LitElement {
     if (!prop) {
       return html``;
     }
-    const [getter, setter] = prop;
-    const value = getter();
-    const onSelect = action((event: MouseEvent) =>
-      setter((event.target as HTMLInputElement).value)
-    );
-
+    const value = this.item.getProp(this.id);
+    const onSelect = (event: MouseEvent) =>
+      this.item.setProp(this.id, (event.target as HTMLInputElement).value);
     return html`
       <md-outlined-select label=${this.label}>
         <md-select-option></md-select-option>

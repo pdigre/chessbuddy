@@ -1,4 +1,5 @@
 import { GETSET, Item } from './model.ts';
+import { action } from 'mobx';
 
 export class Game implements Item {
   constructor(
@@ -11,6 +12,9 @@ export class Game implements Item {
     ['black', [() => this.black, v => (this.black = v)]],
     ['clock', [() => this.clock, v => (this.clock = v)]],
   ]);
+  getProp = (name: string) => this.properties.get(name)![0]();
+  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
+
   static restore = (game?: Game) =>
     new Game(game?.white ?? '', game?.black ?? '', game?.clock ?? '');
 }

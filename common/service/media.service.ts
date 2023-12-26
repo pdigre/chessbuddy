@@ -63,13 +63,13 @@ export class MediaService {
     this.show = false;
   });
 
-  readonly playAllAction = (): void => {
+  readonly playAllAction = action((): void => {
     this.prev++;
     const all_urls = [...this.winner_urls, ...this.correct_urls, ...this.mistake_urls];
     if (this.prev == all_urls.length) this.prev = 0;
     const emo = all_urls[this.prev];
     this.play(emo, 'Url:' + emo.src);
-  };
+  });
 
   private winner_urls: Mp4Type[] = [
     { src: '/mp4/win1.mp4', width: 640, height: 360, length: 22 },

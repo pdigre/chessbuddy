@@ -1,4 +1,5 @@
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
+import { messageService } from './index.service.ts';
 
 type SET_CALLBACK = (msg: messageType) => void;
 
@@ -40,6 +41,8 @@ export class MessageService {
     this.title = title;
     this.resultHolder({ name, title, msg, callback });
   }
+
+  aboutAction = action(() => messageService.standard('about'));
 
   error(title: string, msg: string) {
     this.display({

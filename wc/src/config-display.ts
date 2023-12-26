@@ -20,11 +20,11 @@ export class ConfigDisplay extends LitElement {
   ];
   render() {
     const display = configService.display;
-    const render = renderingService;
+    const rendering = renderingService;
     return html`
       <form name="Display" method="dialog">
         <cb-config-boolean
-          .item=${render}
+          .item=${rendering}
           id="darkTheme"
           label="Use dark theme"
         ></cb-config-boolean>
@@ -39,7 +39,7 @@ export class ConfigDisplay extends LitElement {
           label="Training mode / Stockfish suggestions"
         ></cb-config-boolean>
         <cb-config-boolean
-          .item=${display}
+          .item=${rendering}
           id="showCP"
           label="Show CP - CentiPawns estimate"
         ></cb-config-boolean>
@@ -59,7 +59,7 @@ export class ConfigDisplay extends LitElement {
           label="Play giphy when game ends"
         ></cb-config-boolean>
         <cb-config-button
-          .onClick=${render.rotateAction}
+          .onClick=${rendering.rotateAction}
           label="Rotate chessboard"
           icon="rotate_right"
           type="tonal"

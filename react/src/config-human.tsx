@@ -5,7 +5,6 @@ import { observer } from 'mobx-react';
 import { historyService } from '../../common/service/index.service';
 import { MdDownload, MdOnlinePrediction, MdUpload } from 'react-icons/md';
 import { ConfigService, ListType } from '../../common/service/config.service';
-import { action } from 'mobx';
 import { ConfigListButtons, ConfigListTable, ConfigPopup } from './config-lists';
 import { ConfigButton, ConfigText } from './config-widgets';
 
@@ -61,13 +60,13 @@ export const ConfigHuman = observer(
             disabled={!hasSelect}
           />
           <ConfigButton
-            onClick={action(uploadPlayerAction)}
+            onClick={uploadPlayerAction}
             label="Upload"
             icon={<MdUpload />}
             disabled={!hasSelect}
           />
           <ConfigButton
-            onClick={action(connectPlayerAction)}
+            onClick={connectPlayerAction}
             label="Update"
             icon={<MdOnlinePrediction />}
             disabled={!hasEmail}

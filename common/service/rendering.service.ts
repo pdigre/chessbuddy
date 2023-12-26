@@ -11,16 +11,19 @@ export class RenderingService implements Item {
   showBlank = false;
   darkTheme = false;
   rotation = 1;
+  showCP = true;
 
   constructor() {
     makeObservable(this, {
       showBlank: observable,
       darkTheme: observable,
       rotation: observable,
+      showCP: observable,
     });
     const restore = storageService.restoreObject(RenderingService.storage, {}) as {
       darkTheme: boolean;
       rotation: number;
+      showCP: boolean;
     };
     this.darkTheme =
       restore?.darkTheme ?? window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -31,7 +34,10 @@ export class RenderingService implements Item {
   properties: Map<string, GETSET<any>> = new Map([
     ['darkTheme', [() => this.darkTheme, v => (this.darkTheme = this.bool(v))]],
     ['rotation', [() => this.rotation, v => (this.rotation = v)]],
+    ['showCP', [() => this.showCP, v => (this.showCP = this.bool(v))]],
   ]);
+  getProp = (name: string) => this.properties.get(name)![0]();
+  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
 
   rotateAction = action(() => {
     const num = this.rotation;

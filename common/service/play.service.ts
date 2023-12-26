@@ -1,6 +1,6 @@
 import { Human } from '../model/human';
 import { San } from './openings.service';
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { Chess, Square, WHITE } from 'chess.js';
 import { Clock } from '../model/clock';
 import { toMMSS } from '../resources/library';
@@ -104,7 +104,7 @@ export class PlayService {
 
   readonly isMoveable = (from: Square): boolean => this.chess.moves({ square: from }).length > 0;
 
-  readonly resetGameAction: VoidFunction = () => {
+  readonly resetGameAction: VoidFunction = action(() => {
     this.wtime = 0;
     this.btime = 0;
     this.log = [];
@@ -113,7 +113,7 @@ export class PlayService {
     this.isComplete = false;
     analyzerService.reset();
     this.run();
-  };
+  });
 
   initBots() {
     const players = [...configService.humans, ...configService.bots];
@@ -244,19 +244,19 @@ export class PlayService {
   }
 
   // Game config actions
-  startGameAction: VoidFunction = () => {
+  startGameAction: VoidFunction = action(() => {
     configService.store();
     configService.closeConfigAction();
     configService.showConfig = false;
     this.playContinue();
-  };
+  });
 
-  readonly editGameAction = () => {
+  editGameAction = action(() => {
     configService.store();
     editService.editStart(this.fen);
-  };
+  });
 
-  readonly endGameAction = () => {
+  endGameAction = action(() => {
     const winner = this.whoWon();
     if (winner) {
       messageService.display({
@@ -267,11 +267,11 @@ export class PlayService {
     } else {
       messageService.standard('end', reply => this.recordScore(reply));
     }
-  };
+  });
 
   // Board actions
 
-  readonly pieceStart = (from: Square): any => {
+  pieceStart = (from: Square): any => {
     const player = this.nextPlayer();
     if (player instanceof Human && !this.isComplete) {
       const movable = this.isMoveable(from);
@@ -338,7 +338,7 @@ export class PlayService {
 
   // Log / History Panel
 
-  readonly playButtonAction: VoidFunction = () => {
+  playButtonAction: VoidFunction = action(() => {
     const isHistUndo = !dashboardService.showHist && dashboardService.markLog >= 0;
     const isPlayUndo = this.isPlaying && dashboardService.showUndo;
     if (this.isComplete) this.resetGameAction();
@@ -354,10 +354,10 @@ export class PlayService {
       return;
     }
     this.setPlaying(!this.isPlaying);
-  };
+  });
 
   // PlayerInfo
-  readonly getStartTime = () => Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
+  getStartTime = () => Math.floor(this.isWhiteTurn ? this.wtime : this.btime);
 
   getPlayerInfo(isTop: boolean) {
     const isWhite = isTop == renderingService.rotation > 1;

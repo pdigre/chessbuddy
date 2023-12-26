@@ -5,7 +5,6 @@ import { DashboardService } from '../../common/service/dashboard.service';
 import { EditService } from '../../common/service/edit.service';
 import { HistoryService } from '../../common/service/history.service';
 import { configService, playService } from '../../common/service/index.service';
-import { action } from 'mobx';
 import { TW_CSS, MD_ICONS } from './css';
 import { css } from 'lit-element';
 
@@ -51,13 +50,13 @@ export class Panel extends MobxLitElement {
     return html`
       ${MD_ICONS}
       <md-tabs color="primary" aria-label="outlined primary button group" class="w-full">
-        <md-primary-tab @click=${action(playService.playButtonAction)}>
+        <md-primary-tab @click=${playService.playButtonAction}>
           <span class="text-3xl material-symbols-outlined">${button1}</span>
         </md-primary-tab>
-        <md-primary-tab @click=${action(this.dashboard.toggleHistoryAction)}>
+        <md-primary-tab @click=${this.dashboard.toggleHistoryAction}>
           <span class="text-3xl material-symbols-outlined">${button2}</span>
         </md-primary-tab>
-        <md-primary-tab @click=${action(configService.openConfigAction)}>
+        <md-primary-tab @click=${configService.openConfigAction}>
           <span class="text-3xl material-symbols-outlined">settings</span>
         </md-primary-tab>
       </md-tabs>

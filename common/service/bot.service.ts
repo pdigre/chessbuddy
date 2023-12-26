@@ -1,6 +1,7 @@
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import type { Fen, ShortMove } from './rules.service';
+import type {} from 'chess.js';
 
 type LoadBot = () => RunBot;
 type RunBot = (fen: Fen) => Promise<ShortMove>;

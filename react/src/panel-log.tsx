@@ -4,16 +4,17 @@ import { dashboardService } from '../../common/service/index.service';
 import { HistoryService } from '../../common/service/history.service';
 import { PlayService } from '../../common/service/play.service';
 import { GridWidget } from './main-widgets';
+import { action } from 'mobx';
 
 export const PanelLog = observer(
   ({ play, history }: { play: PlayService; history: HistoryService }) => {
     history.enterLogCheck();
 
-    const logClickAction = (event: MouseEvent<HTMLTableElement>) => {
+    const logClickAction = action((event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
       play.undoTo(id == dashboardService.markLog ? -1 : id);
-    };
+    });
 
     const viewLog = history.getLogRows().map((row, iRow) => (
       <tr key={iRow} className="[&td]:p-[2px] [&td]:text-left [&td]:text-lg dark:text-white">

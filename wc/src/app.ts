@@ -12,7 +12,6 @@ import {
   configService,
 } from '../../common/service/index.service.ts';
 import packageInfo from '../package.json';
-import { action } from 'mobx';
 import { TW_CSS, MD_ICONS } from './css.ts';
 import { css } from 'lit-element';
 import { wcInit } from './wc-init.ts';
@@ -68,7 +67,7 @@ export class App extends LitElement {
     return html`
       ${MD_ICONS}
       <div class="main flex m-0 p-0 flex-row">
-        <cb-cp .analyzer=${analyzerService} .config=${configService}></cb-cp>
+        <cb-cp .analyzer=${analyzerService} .rendering=${renderingService}></cb-cp>
         <div class="down flex flex-col flex-grow">
           <cb-playerinfobar class="m-0 p-0" .isTop=${true} .play=${playService}></cb-playerinfobar>
           <cb-board
@@ -81,13 +80,10 @@ export class App extends LitElement {
         </div>
         <div class="flex flex-col w-full text-center">
           <h3 class="header text-lg flex flex-row m-0 p-0">
-            <md-text-button
-              @click=${action(() => messageService.standard('about'))}
-              class="text-xl"
-            >
+            <md-text-button @click=${messageService.aboutAction} class="text-xl">
               <span class="link">ChessBuddy ${packageInfo.version}</span>
             </md-text-button>
-            <md-text-button @click=${action(mediaService.playAllAction)}>
+            <md-text-button @click=${mediaService.playAllAction}>
               <span class="link material-symbols-outlined">refresh</span>
             </md-text-button>
             <a class="link" href="react.html">wc</a>

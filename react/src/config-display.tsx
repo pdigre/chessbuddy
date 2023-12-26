@@ -12,7 +12,7 @@ export const ConfigDisplay = observer(({ config }: { config: ConfigService }) =>
       <ConfigBoolean item={renderingService} id="darkTheme" label="Use dark theme" />
       <ConfigBoolean item={item} id="showFacts" label="Show openings information" />
       <ConfigBoolean item={item} id="showHints" label="Training mode / Stockfish suggestions" />
-      <ConfigBoolean item={item} id="showCP" label="Show CP - CentiPawns estimate" />
+      <ConfigBoolean item={renderingService} id="showCP" label="Show CP - CentiPawns estimate" />
       <ConfigBoolean item={item} id="playCorrect" label="Play giphy for correct moves" />
       <ConfigBoolean item={item} id="playMistake" label="Play giphy for big mistake" />
       <ConfigBoolean item={item} id="playWinner" label="Play giphy when game ends" />

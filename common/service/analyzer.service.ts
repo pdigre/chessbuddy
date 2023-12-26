@@ -1,7 +1,7 @@
 import type { Fen } from './rules.service';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
-import { configService, mediaService, renderingService } from './index.service';
+import { mediaService, renderingService } from './index.service';
 import { Engines } from '../model/bot';
 
 type AnalyzerReturn = { moves: string[]; cp: number | undefined };
@@ -113,7 +113,7 @@ export class AnalyzerService {
 
   getCpInfo = () => {
     const cp = this.cp;
-    const blackTop = configService.rotation > 1;
+    const blackTop = renderingService.rotation > 1;
     const cp2 = isNaN(cp) ? 10000 : Math.abs(cp);
     const whiteLead = cp > 0;
     const h = renderingService.height - 150;

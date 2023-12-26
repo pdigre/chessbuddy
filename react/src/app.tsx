@@ -81,7 +81,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
       <CssBaseline />
       <div className={rendering.darkTheme ? 'dark' : 'light'}>
         <div className="w-[1024px] h-[748px] bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row">
-          <CP analyzer={analyzerService} config={configService} />
+          <CP analyzer={analyzerService} rendering={renderingService} />
           <div className="flex flex-col flex-grow">
             <PlayerInfoBar isTop={true} play={playService} />
             <Board edit={editService} rendering={rendering} config={configService} />

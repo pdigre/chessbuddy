@@ -7,58 +7,46 @@ import { ClockService } from '../../common/service/clock.service.ts';
 import { css } from 'lit-element';
 import { TW_CSS } from './css.ts';
 import { AnalyzerService } from '../../common/service/analyzer.service.ts';
-import { ConfigService } from '../../common/service/config.service.ts';
 import { property } from 'lit-element/decorators.js';
+import { RenderingService } from '../../common/service/rendering.service.ts';
 
 @customElement('cb-cp')
 export class CP extends MobxLitElement {
   @property({ attribute: true })
   analyzer!: AnalyzerService;
   @property({ attribute: true })
-  config!: ConfigService;
+  rendering!: RenderingService;
   static styles = [
     css`
-      .main {
+      div {
         width: 32px;
       }
-      .divs {
+      span {
         writing-mode: vertical-lr;
         margin-right: 0.5rem;
       }
-      .text-white {
-        --tw-text-opacity: 1;
-        color: rgb(255 255 255 / var(--tw-text-opacity));
+      .black {
+        color: white;
+        background-color: black;
       }
-      .bg-white {
-        --tw-bg-opacity: 1;
-        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-      }
-      .text-black {
-        --tw-text-opacity: 1;
-        color: rgb(0 0 0 / var(--tw-text-opacity));
-      }
-      .bg-black {
-        --tw-bg-opacity: 1;
-        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+      .white {
+        background-color: white;
+        color: black;
       }
     `,
     TW_CSS,
   ];
   render() {
     const { txt, blackTop, h1, h2 } = this.analyzer.getCpInfo();
-    const coloring = (black: boolean) => (black ? 'bg-black text-white' : 'bg-white text-black');
-    return html`
-      <div class="main h-full flex flex-col flex-grow text-lg">
-        ${this.config.display.showCP
-          ? html`
-              <div class="divs text-center ${coloring(!blackTop)}" style="height: ${h1}">
-                ${txt}
-              </div>
-              <div class="divs text-center ${coloring(blackTop)}" style="height: ${h2}">${txt}</div>
-            `
-          : html``}
-      </div>
-    `;
+    const coloring = (black: boolean) => (black ? 'black' : 'white');
+    return this.rendering.showCP
+      ? html`
+          <div class="h-full flex flex-col flex-grow text-lg">
+            <span class="text-center ${coloring(!blackTop)}" style="height: ${h1}"> ${txt} </span>
+            <span class="text-center ${coloring(blackTop)}" style="height: ${h2}">${txt}</span>
+          </div>
+        `
+      : html``;
   }
 }
 

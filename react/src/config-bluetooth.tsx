@@ -14,7 +14,7 @@ class BT implements Item {
   ) {}
   label = 'BT';
   properties: Map<string, GETSET<string>> = new Map([
-    ['name', { get: () => this.name, set: value => (this.name = value) }],
+    ['name', [() => this.name, v => (this.name = v)]],
   ]);
   validate = () => '';
   getName = () => this.name;
@@ -61,7 +61,7 @@ export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) 
 
   const doSelect = (event: MouseEvent<HTMLTableSectionElement>) => {
     if (event.target instanceof HTMLTableCellElement) {
-      config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
+      //      config.setCursor((event.target.parentNode as HTMLTableRowElement).id);
     }
   };
 

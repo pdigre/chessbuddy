@@ -44,7 +44,7 @@ export const PanelButtonbar = observer(
 
     return (
       <ButtonGroup color="primary" aria-label="outlined primary button group" className="w-full">
-        <PanelButton onClick={action(playService.playButtonAction)}>
+        <PanelButton onClick={playService.playButtonAction}>
           {isHistUndo || isPlayUndo ? (
             <MdUndo className="text-3xl" />
           ) : playService.isPlaying ? (
@@ -53,7 +53,7 @@ export const PanelButtonbar = observer(
             <MdPause className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={action(dashboard.toggleHistoryAction)}>
+        <PanelButton onClick={dashboard.toggleHistoryAction}>
           {isGotoHist ? (
             <MdInput className="text-3xl" />
           ) : edit.showEdit ? (
@@ -64,7 +64,7 @@ export const PanelButtonbar = observer(
             <MdOutlineHistory className="text-3xl" />
           )}
         </PanelButton>
-        <PanelButton onClick={action(configService.openConfigAction)}>
+        <PanelButton onClick={configService.openConfigAction}>
           <MdSettings className="text-3xl" />
         </PanelButton>
       </ButtonGroup>

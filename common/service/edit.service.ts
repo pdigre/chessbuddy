@@ -1,11 +1,11 @@
 import { BLACK, Square, SQUARES, WHITE } from 'chess.js';
 import { jsonIgnore } from 'json-ignore';
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { FEN } from '../model/fen';
 import { configService, playService } from './index.service';
-import { GETSET } from '../model/model.ts';
+import { GETSET, Item } from '../model/model.ts';
 
-export class EditService {
+export class EditService implements Item {
   showEdit = false;
   editSquare = '';
   editFen = '';
@@ -16,13 +16,15 @@ export class EditService {
   bccq = false;
   bFirst = false;
 
-  @jsonIgnore() boolprops: Map<string, GETSET<boolean>> = new Map([
-    ['wcck', { get: () => this.wcck, set: value => (this.wcck = value) }],
-    ['wccq', { get: () => this.wccq, set: value => (this.wccq = value) }],
-    ['bcck', { get: () => this.bcck, set: value => (this.bcck = value) }],
-    ['bccq', { get: () => this.bccq, set: value => (this.bccq = value) }],
-    ['bFirst', { get: () => this.bFirst, set: value => (this.bFirst = value) }],
+  @jsonIgnore() properties: Map<string, GETSET<boolean>> = new Map([
+    ['wcck', [() => this.wcck, v => (this.wcck = v)]],
+    ['wccq', [() => this.wccq, v => (this.wccq = v)]],
+    ['bcck', [() => this.bcck, v => (this.bcck = v)]],
+    ['bccq', [() => this.bccq, v => (this.bccq = v)]],
+    ['bFirst', [() => this.bFirst, v => (this.bFirst = v)]],
   ]);
+  getProp = (name: string) => this.properties.get(name)![0]();
+  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
 
   constructor() {
     makeAutoObservable(this);
@@ -34,7 +36,7 @@ export class EditService {
     configService.showConfig = false;
   }
 
-  readonly editDoneAction = () => {
+  editDoneAction = action(() => {
     const fenArr = this.editFen.split(' ');
     fenArr[1] = this.bFirst ? BLACK : WHITE;
     fenArr[2] =
@@ -47,9 +49,9 @@ export class EditService {
     this.showEdit = false;
     playService.fen = fen;
     configService.showConfig = true;
-  };
+  });
 
-  readonly editPiece = (piece: string) => {
+  editPiece = (piece: string) => {
     const fenArr = this.editFen.split(' ');
     const brd = FEN.fen2brd(this.editFen).split('');
     const p = SQUARES.indexOf(this.editSquare as Square);
