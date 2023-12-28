@@ -3,7 +3,6 @@ import { San } from './openings.service';
 import { action, makeAutoObservable } from 'mobx';
 import { Chess, Square, WHITE } from 'chess.js';
 import { Clock } from '../model/clock';
-import { toMMSS } from '../resources/library';
 import { BotRunner } from './bot.service';
 import {
   analyzerService,
@@ -22,6 +21,7 @@ import {
 } from './index.service';
 import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
+import {toMMSS} from "./clock.service.ts";
 
 /*
  * Everything about the current game (can be restored when returning to browser later)

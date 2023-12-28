@@ -13,19 +13,7 @@ export class ConfigBluetooth extends MobxLitElement {
   static styles = [LIST_CSS, TW_CSS];
 
   render() {
-    const {
-      type,
-      items,
-      item,
-      cursor,
-      hasSelect,
-      show,
-      onSelect,
-      onSave,
-      onAdd,
-      onEdit,
-      onDelete,
-    } = this.config.getListLogic(ListType.BT);
+    const { items, cursor, hasSelect, onSelect, onDelete } = this.config.getListLogic(ListType.BT);
 
     return html`
       <table class="w-full">
@@ -43,15 +31,8 @@ export class ConfigBluetooth extends MobxLitElement {
             <cb-config-button
               label="Add"
               icon="add"
-              .onClick=${onAdd}
+              .onClick=${bluetoothService.addBT}
               type="filled"
-            ></cb-config-button>
-            <cb-config-button
-              label="Edit"
-              icon="edit"
-              .onClick=${onEdit}
-              .disabled=${!hasSelect}
-              type="tonal"
             ></cb-config-button>
             <cb-config-button
               label="Delete"
@@ -60,25 +41,15 @@ export class ConfigBluetooth extends MobxLitElement {
               .disabled=${!hasSelect}
               type="tonal"
             ></cb-config-button>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <cb-config-button
-              .onClick=${bluetoothService.getDevices}
+              .onClick=${bluetoothService.connect}
               label="Connect"
-              icon="connect"
+              icon="bluetooth"
               .disabled=${!hasSelect}
             ></cb-config-button>
           </td>
         </tr>
       </table>
-      <cb-config-popup .show=${show} .type=${type} .onSave=${onSave}>
-        <form name="bot" class="popup [&>button]:mx-2 [&>div]:mx-2 mt-3" method="dialog">
-          <cb-config-text .item=${item} label="Name" id="name"></cb-config-text>
-          <cb-config-text .item=${item} label="Description" id="description"></cb-config-text>
-        </form>
-      </cb-config-popup>
     `;
   }
 }

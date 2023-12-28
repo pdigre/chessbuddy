@@ -1,13 +1,12 @@
 import { Human } from '../model/human';
-import {} from '../resources/library';
-import { historyService, messageService, utilService } from './index.service';
+import {historyService, messageService, renderingService} from './index.service';
 
 export type RESP = { stored: number; games: string[] };
 
 export class ConnectService {
   readonly connectAction: (human: Human) => void = async human => {
     const games1 = historyService.getFilteredGames(human.name);
-    const connect = { email: human.email, device: utilService, games: games1.join('\n') };
+    const connect = { email: human.email, device: renderingService, games: games1.join('\n') };
     const url = window.document.location.hostname == 'http://chess.digre.com';
     await fetch(url + '/api.php', {
       method: 'POST',

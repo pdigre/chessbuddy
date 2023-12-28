@@ -1,4 +1,4 @@
-const moves = `
+window.openings = `
 d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 Be3 c6 d5 Ng4 Bg5 f6 Bh4 h5/King's Indian/Gligoric-Taimanov system
 d4 Nf6 Nf3 g6 g3 Bg7 Bg2 O-O O-O d5 c4 c6 cxd5 cxd5 Ne5 Nc6 Nc3 e6 Bf4 Nxe5/Neo-Gruenfeld, 6.O-O, main line/
 c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 f4 f5 Nh3 Nf6 O-O O-O/English/closed system
@@ -2399,4 +2399,3 @@ e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Bc4 Qa5 O-O Ng4 Nb3 Qh5 Bf4 Be5/Si
 d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 Nc3 O-O Qc2 d5 cxd5 exd5 O-O Na6 Rd1 Re8/Queen's Indian/anti-Queen's Indian system
 e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 Nbd7 Bg5 Qa5 Qd2 Be7 O-O-O Nc5/Sicilian/Najdorf, Lipnitzky attack
 `;
-export default moves;

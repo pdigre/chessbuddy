@@ -1,5 +1,4 @@
 import { ConfigService } from './config.service';
-import { UtilService } from '../resources/library';
 import { AnalyzerService } from './analyzer.service';
 import { BluetoothService } from './bluetooth.service';
 import { BotService } from './bot.service';
@@ -18,7 +17,6 @@ import { EditService } from './edit.service';
 
 export const messageService = new MessageService();
 export const storageService = new StorageService();
-export const utilService = new UtilService();
 export const configService = new ConfigService();
 export const mediaService = new MediaService();
 export const rulesService = new RulesService();

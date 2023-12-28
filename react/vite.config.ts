@@ -10,6 +10,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig(({ mode }) => {
   setEnv(mode);
   return {
+    publicDir: "../public",
     plugins: [
       react(),
 
