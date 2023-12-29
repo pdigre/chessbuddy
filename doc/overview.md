@@ -14,6 +14,20 @@
 * Messager - Message box, prompts
 
 ## Class diagram
+
+```mermaid 
+erDiagram
+    CUSTOMER ||--|| ORDER : places
+    ORDER ||--|{ LINE-ITEM : contains
+    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
+
+```
+    abstract Player
+    class Human
+    class Bot
+    Player <|-- Human
+    Player <|-- Bot
+
 ![Objects](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/pdigre/chessbuddy/master/doc/objects.iuml)
 
 ## UI components
