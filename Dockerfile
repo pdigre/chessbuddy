@@ -10,9 +10,13 @@ RUN npm install
 WORKDIR /usr/src/app/react
 RUN npm install
 RUN npm run build
+CMD mv build/index.html build/react.html
+CMD cp ../public/index.html build/index.html
 WORKDIR /usr/src/app/wc
 RUN npm install
 RUN npm run build
+CMD cp dist/index.html ../react/build/wc.html
+CMD ls -al build
 
 # Builder backend
 FROM rust:alpine AS be-builder
@@ -32,10 +36,6 @@ FROM scratch
 # FROM alpine:latest
 WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/react/build ./build
-COPY --from=fe-builder /usr/src/app/react/build/index.html ./build/react.html
-COPY --from=fe-builder /usr/src/app/wc/dist ./build
-COPY --from=fe-builder /usr/src/app/wc/dist/index.html ./build/wc.html
-COPY --from=fe-builder /usr/src/app/public/index.html ./build/index.html
 COPY --from=be-builder /usr/src/rust/target/release/chessbuddy ./
 USER 1000
 # CMD ["tail", "-f", "/dev/null"]
