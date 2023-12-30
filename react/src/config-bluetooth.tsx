@@ -2,7 +2,6 @@ import React, { MouseEvent } from 'react';
 import { ConfigService, ListType } from '../../common/service/config.service';
 import { observer } from 'mobx-react';
 import { MdBluetoothConnected } from 'react-icons/md';
-import { bluetoothService } from '../../common/service/bluetooth.service';
 import { action } from 'mobx';
 import { ConfigButton, ConfigSelect, ConfigText } from './config-widgets';
 import { ConfigListButtons, ConfigListTable, ConfigPopup } from './config-lists';
