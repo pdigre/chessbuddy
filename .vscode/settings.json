@@ -13,5 +13,7 @@
   // other settings
   "editor.quickSuggestions": {
     "strings": true
-  }
+  },
+  "zig.initialSetupDone": true,
+  "liveServer.settings.port": 5501
 }

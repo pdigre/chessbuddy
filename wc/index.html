@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <link href="/png/chessbuddy.png" rel="icon">
+    <meta charset="utf-8"/>
+    <meta name="theme-color" content="#317EFB"/>
+    <meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link rel="apple-touch-icon" href="/png/chessbuddy.png">
+    <meta content="user-scalable=no, width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport"/>
+    <title>Chessbuddy</title>
+    <script>
+        function BlockMove(event) {
+            // Tell Safari not to move the window.
+            event.preventDefault();
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="/openings.js"></script>
+<script type="module" src="/src/app.ts"></script></head>
+<style>
+    body {
+        --background-color: rgb(220 252 231);
+        --text-color: black;
+        --link-color: blue;
+        --menu-fg-color: white;
+        --menu-bg-color: rgb(20 83 45);
+    }
+    body.dark-mode {
+        --background-color: rgb(20 83 45);
+        --text-color: white;
+        --link-color: yellow;
+        --menu-fg-color: black;
+        --menu-bg-color: rgb(220 252 231);
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        opacity: 1;
+        color: var(--text-color);
+        --md-sys-color-surface: var(--background-color);
+        --md-sys-color-primary: color-mix(in oklch, transparent, var(--menu-bg-color) 90%);
+        --md-sys-color-outline: var(--text-color);
+        --md-sys-color-on-primary: var(--background-color);
+        --md-sys-color-primary-container: color-mix(in oklch, transparent, var(--menu-bg-color) 80%);
+        --md-sys-color-secondary-container: color-mix(in oklch, transparent, var(--menu-bg-color) 20%);
+        --md-sys-color-on-surface: var(--text-color);
+        --md-sys-color-on-surface-variant: color-mix(in oklch, transparent, var(--text-color) 90%);
+        --md-menu-container-color: var(--background-color);
+    }
+    video {
+        width: 480px;
+        height: auto;
+        background-color: #8B0000;
+    }
+    .slot {
+        width: 700px;
+        height: 600px;
+        background-color: blue;
+    }
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+    .show {
+        display: block;
+    }
+</style>
+<body ontouchmove="BlockMove(event);">
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<cb-app></cb-app>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <h3>title</h3>
+        <video>
+            <source id="cb-video" src="/mp4/yes1.mp4" type="video/mp4" >
+        </video>
+    </div>
+</div>
+</body>
+</html>

@@ -1,12 +1,22 @@
 # Builder Frontend
 FROM node:latest AS fe-builder
 WORKDIR /usr/src/app
-COPY package.json ./
-COPY package-lock.json ./
-COPY tsconfig.json ./
+COPY common ./common
+COPY react ./react
+COPY public ./public
+COPY wc ./wc
+WORKDIR /usr/src/app/common
 RUN npm install
-COPY . ./
+WORKDIR /usr/src/app/react
+RUN npm install
 RUN npm run build
+CMD mv build/index.html build/react.html
+CMD cp ../public/index.html build/index.html
+WORKDIR /usr/src/app/wc
+RUN npm install
+RUN npm run build
+CMD cp dist/index.html ../react/build/wc.html
+CMD ls -al build
 
 # Builder backend
 FROM rust:alpine AS be-builder
@@ -25,7 +35,7 @@ RUN strip target/release/chessbuddy
 FROM scratch
 # FROM alpine:latest
 WORKDIR /bin/
-COPY --from=fe-builder /usr/src/app/build ./build
+COPY --from=fe-builder /usr/src/app/react/build ./build
 COPY --from=be-builder /usr/src/rust/target/release/chessbuddy ./
 USER 1000
 # CMD ["tail", "-f", "/dev/null"]

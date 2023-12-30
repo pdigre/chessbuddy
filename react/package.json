@@ -1,0 +1,70 @@
+{
+  "name": "chessbuddy_react",
+  "version": "0.23.0",
+  "homepage": ".",
+  "dependencies": {
+    "esbuild": "^0.19.10",
+    "mobx": "^6.10.2",
+    "mobx-react": "^9.0.2",
+    "react": "^18.2.0",
+    "react-chessboard": "^4.3.2",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0"
+  },
+  "scripts": {
+    "dev": "bun watch:css && bunx --bun vite",
+    "build2": "bun watch:css && bunx --bun vite build",
+    "build": "npm run watch:css && vite build",
+    "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
+    "format": "bunx prettier src --write",
+    "serve": "bun serve.ts",
+    "build:bun": "bunx --bun vite build",
+    "lint": "eslint ./src/**/*.{ts,tsx}",
+    "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.17",
+    "@types/chess.js": "^0.13.7",
+    "@types/react": "^18.2.36",
+    "@types/react-dom": "^18.2.14",
+    "@types/w3c-web-serial": "^1.0.6",
+    "@types/web-bluetooth": "^0.0.20",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "@vitejs/plugin-react": "^4.1.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-mobx": "^0.0.9",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.3.2",
+    "vite": "5.0.5",
+    "vite-tsconfig-paths": "4.2.1"
+  }
+}
