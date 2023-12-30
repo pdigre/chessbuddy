@@ -74,8 +74,18 @@ Some of this is not yet production ready and I lack experience.
 ## Installation
 <details>
   <summary>Expand</summary>
-- configuration
-- gameplay
+
+Installation:
+1. == need npm and bun ==
+2. react:> npm install
+3. react:> bun install
+4. react:> bun dev
+5. wc> npm install
+6. wc:> bun install
+7. wc:> bun dev
+8. common:> npm install
+9. common:> bun install
+
 </details>
 
 
