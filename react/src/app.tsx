@@ -96,7 +96,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
                 ChessBuddy {version}
               </span>
               <MdRefresh className="text-lg mx-5" onClick={action(mediaService.playAllAction)} />
-              <a href="wc.html">react</a>
+              <a href="index.html">react</a>
             </h3>
             <PanelButtonbar
               edit={editService}

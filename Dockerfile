@@ -1,3 +1,7 @@
+# ChessBuddy multistage build
+# docker compose build --no-cache --progress=plain
+# docker compose up
+
 # Builder Frontend
 FROM node:latest AS fe-builder
 WORKDIR /usr/src/app
@@ -10,14 +14,13 @@ RUN npm install
 WORKDIR /usr/src/app/react
 RUN npm install
 RUN npm run build
-CMD mv ./build/index.html ./build/react.html
-CMD cp ../public/index.html ./build/index.html
+RUN mv ./build/index.html ./build/react.html
 WORKDIR /usr/src/app/wc
 RUN npm install
 RUN npm run build
-CMD cp ./dist/index.html ../react/build/wc.html
-CMD ls -al build
-CMD ls
+RUN cp ./dist/assets/* ../react/build/assets
+RUN cp ./dist/index.html ../react/build/index.html
+RUN echo $(ls -al build)
 
 # Builder backend
 FROM rust:alpine AS be-builder
@@ -33,8 +36,8 @@ RUN cargo build --release
 RUN strip target/release/chessbuddy
 
 # Bundle Stage
-FROM scratch
-# FROM alpine:latest
+# FROM scratch
+FROM alpine:latest
 WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/react/build ./build
 COPY --from=be-builder /usr/src/rust/target/release/chessbuddy ./

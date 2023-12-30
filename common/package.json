@@ -1,6 +1,6 @@
 {
   "name": "chessbuddy_common",
-  "version": "0.23.0",
+  "version": "0.30.0",
   "homepage": ".",
   "type": "module",
   "dependencies": {
