@@ -14,12 +14,11 @@ RUN npm install
 WORKDIR /usr/src/app/react
 RUN npm install
 RUN npm run build
-RUN mv ./build/index.html ./build/react.html
 WORKDIR /usr/src/app/wc
 RUN npm install
 RUN npm run build
+RUN mv ./dist/index.html ./dist/wc.html
 RUN cp ./dist/assets/* ../react/build/assets
-RUN cp ./dist/index.html ../react/build/index.html
 RUN echo $(ls -al build)
 
 # Builder backend
