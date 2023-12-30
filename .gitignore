@@ -31,3 +31,9 @@ public/bundle.js
 /common/node_modules/
 /oldcb/
 /test/
+/common/bun.lockb
+/react/bun.lockb
+/wc/bun.lockb
+/common/package-lock.json
+/react/package-lock.json
+/wc/package-lock.json
