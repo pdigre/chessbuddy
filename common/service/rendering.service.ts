@@ -4,7 +4,7 @@ import { storageService } from './index.service.ts';
 
 export class RenderingService implements Item {
   static storage = 'render';
-  iPad = navigator.userAgent.includes('(iPad;');
+  iPad = !!navigator.userAgent.match(/(iPad)/);
   boardWidth = 680;
   height = 748;
 
@@ -28,6 +28,9 @@ export class RenderingService implements Item {
     this.darkTheme =
       restore?.darkTheme ?? window.matchMedia('(prefers-color-scheme: dark)').matches;
     this.rotation = restore?.rotation ?? 1;
+    const size = this.getSize();
+    this.height = size.height;
+    this.boardWidth = size.height - 68;
   }
 
   bool: (v: any) => boolean = v => 'true' == v || v == true;
@@ -67,6 +70,20 @@ export class RenderingService implements Item {
     storageService.storeObject('device', dev);
     return dev;
   }
+
+  getSize() {
+    const PWA = {width: 1280, height: 760};
+    const CHROME = {width: 1200, height: 740};
+
+    const isIpad = !!navigator.userAgent.match(/(iPad)/);
+    if(!isIpad){
+      return PWA;
+    }
+
+    const isChrome = !!navigator.userAgent.match(/(Chrome)/);
+    return isChrome ? CHROME : PWA;
+  }
+
 }
 
 

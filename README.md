@@ -5,9 +5,13 @@ Play at: [https://chessbuddy.net/](https://chessbuddy.net/)
 
 
 <details>
-  <summary>Expand</summary>
+  <summary>Introduction</summary>
 
-Also an iPad app that follows along when playing chess with my friends.
+## Introduction
+
+![Chessbuddy](doc/chessbuddy.png)
+
+An iPad app that follows along when playing chess with my friends.
 
 - chess clock
 - logs games
@@ -15,12 +19,13 @@ Also an iPad app that follows along when playing chess with my friends.
 - Names of openings 
 - Suggest moves
 - Evaluates CP score throughout the game
-  ![Chessbuddy](doc/chessbuddy.png)
 </details>
 
-## User guide
 <details>
-  <summary>Expand</summary>
+  <summary>User guide</summary>
+
+## User guide
+
 This has been used as an assistant like chess clock during friendly two player games. It helps learning.
 
 - It marks board with openings it knows.
@@ -32,9 +37,10 @@ This has been used as an assistant like chess clock during friendly two player g
 
 </details>
 
-## Tech exploration
 <details>
-  <summary>Expand</summary>
+  <summary>Tech exploration</summary>
+
+## Tech exploration
 
 ### 1. React version
 My first learning experience
@@ -63,35 +69,20 @@ My second learning trip
 - MobX for Lit Element
 - Structure project for both React and WC
 
-### 3. Future plans
+### 3. Next to do
 Some of this is not yet production ready and I lack experience.
+- Use media queries to fix size issues
 - Connect Bluetooth chessboard
+- Connect other iPad to use as slave display
 - Store games in Google cloud
 - Use new multi-threaded AI version of Stockfish WASM
 
 </details>
 
-## Installation
 <details>
-  <summary>Expand</summary>
-
-Installation:
-1. == need npm and bun ==
-2. react:> npm install
-3. react:> bun install
-4. react:> bun dev
-5. wc> npm install
-6. wc:> bun install
-7. wc:> bun dev
-8. common:> npm install
-9. common:> bun install
-
-</details>
-
+  <summary>Developer</summary>
 
 ## Developer
-<details>
-  <summary>Expand</summary>
 
 [Development here](doc/dev.md)
 
@@ -111,10 +102,10 @@ flowchart TD;
 - gameplay
 </details>
 
-## Credits and resources
-
 <details>
-  <summary>Expand</summary>
+  <summary>Credits and resources</summary>
+
+## Credits and resources
 
 Credits:
 - [https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/](https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/)
@@ -125,6 +116,14 @@ Resources
 - Material Design on Github - https://github.com/material-components/material-web/tree/main/docs/components
 - Chessboard - https://github.com/justinfagnani/chessboard-element
 - Example pages WC - https://github.com/klyngen/webcomponents-examples
+
+* REACT-JS for UI components https://reactjs.org/
+* MOBX for state management https://mobx.js.org/README.html
+* https://material-ui.com/ based on https://material.io/design
+* Chess Rules - https://github.com/jhlywa/chess.js
+* Chess Board - https://github.com/Clariity/react-chessboard
+* WASM - Use with Stockfish
+* Lozza JS chess engine
 
 
 </details>
