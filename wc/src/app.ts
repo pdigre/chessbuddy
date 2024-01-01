@@ -32,7 +32,9 @@ export class App extends LitElement {
       .main {
         width: 1024px;
         height: 748px;
-        border-width: 0px;
+        border-width: 0;
+        background-color: var(--background-color);
+        opacity: 1;
       }
       .header {
         height: 32px;
@@ -64,9 +66,14 @@ export class App extends LitElement {
   ];
 
   render() {
+    const size = renderingService.getSize();
+    const style = css`
+      width: ${size.width}px;
+      height: ${size.height}px;
+    `;
     return html`
       ${MD_ICONS}
-      <div class="main flex m-0 p-0 flex-row">
+      <div class="main flex m-0 p-0 flex-row" style=${style}>
         <cb-cp .analyzer=${analyzerService} .rendering=${renderingService}></cb-cp>
         <div class="down flex flex-col flex-grow">
           <cb-playerinfobar class="m-0 p-0" .isTop=${true} .play=${playService}></cb-playerinfobar>
