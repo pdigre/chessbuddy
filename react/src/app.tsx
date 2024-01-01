@@ -76,11 +76,20 @@ const darkTheme = createTheme({
 });
 export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService }) => {
   const version = packageInfo.version;
+  const { width, height } = renderingService.getSize();
+  const style: React.CSSProperties = {
+    width: width + 'px',
+    height: height + 'px',
+  };
+
   return (
     <ThemeProvider theme={rendering.darkTheme ? darkTheme : lightTheme}>
       <CssBaseline />
       <div className={rendering.darkTheme ? 'dark' : 'light'}>
-        <div className="w-[1024px] h-[748px] bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row">
+        <div
+          className="bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row"
+          style={style}
+        >
           <CP analyzer={analyzerService} rendering={renderingService} />
           <div className="flex flex-col flex-grow">
             <PlayerInfoBar isTop={true} play={playService} />
