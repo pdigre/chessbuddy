@@ -4,6 +4,11 @@ import { storageService } from './index.service.ts';
 
 export class RenderingService implements Item {
   static storage = 'render';
+
+  static PWA = {width: 1190, height: 762};
+  static CHROME = {width: 1180, height: 740};
+  static DEFAULT = RenderingService.PWA;
+
   iPad = !!navigator.userAgent.match(/(iPad)/);
   boardWidth = 680;
   height = 748;
@@ -72,16 +77,11 @@ export class RenderingService implements Item {
   }
 
   getSize() {
-    const PWA = {width: 1280, height: 760};
-    const CHROME = {width: 1200, height: 740};
-
-    const isIpad = !!navigator.userAgent.match(/(iPad)/);
-    if(!isIpad){
-      return PWA;
+    if(!navigator.userAgent.match(/(iPad)/)){
+      return RenderingService.DEFAULT;  // Use when on laptop
     }
-
-    const isChrome = !!navigator.userAgent.match(/(Chrome)/);
-    return isChrome ? CHROME : PWA;
+    // On iPad either as PWA with Safari or Chrome which has more controls that takes space
+    return !!navigator.userAgent.match(/(Chrome)/) ? RenderingService.CHROME : RenderingService.PWA;
   }
 
 }
