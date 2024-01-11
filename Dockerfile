@@ -21,25 +21,27 @@ RUN cp ./dist/index.html ../react/build//wc.html
 RUN cp ./dist/assets/* ../react/build/assets
 RUN echo $(ls -al build)
 
-# Builder backend
-FROM rust:alpine AS be-builder
-RUN apk update
-RUN apk add clang musl-dev
-WORKDIR /usr/src/
-WORKDIR /usr/src/rust
-COPY rust/src src
-COPY rust/Cargo.toml rust/Cargo.lock ./
-RUN cargo add tracing
-RUN cargo add tracing-subscriber
-RUN cargo build --release
-RUN strip target/release/chessbuddy
+FROM cgr.dev/chainguard/zig AS be-builder
+RUN zig version
+WORKDIR /usr/src
+# COPY chessbuddy ./
+COPY zig /usr/src/zig
+WORKDIR /usr/src/zig
+RUN echo "$( ls -al /usr/src/chessbuddy )"
+RUN zig build chessbuddy
+RUN echo "$( ls -al zig-out/bin)"
+# RUN strip zig-out/bin/chessbuddy
+# CMD ["tail", "-f", "/dev/null"]
+# ENTRYPOINT [ "/usr/src/zig/zig-out/bin/chessbuddy" ]
 
 # Bundle Stage
-# FROM scratch
 FROM alpine:latest
+# FROM scratch
 WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/react/build ./build
-COPY --from=be-builder /usr/src/rust/target/release/chessbuddy ./
+COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy ./
 USER 1000
-# CMD ["tail", "-f", "/dev/null"]
+RUN echo "$( ls -al /bin)"
+
+#CMD ["tail", "-f", "/dev/null"]
 CMD ["/bin/chessbuddy"]

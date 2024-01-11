@@ -20,8 +20,8 @@ npm-debug.log*
 /server/node_modules/
 /rust/target/
 /chessbuddy
-/zap/zig-cache/
-/zap/zig-out/
+/zig/zig-cache/
+/zig/zig-out/
 
 public/bundle.js
 /wc/dist/

@@ -1,24 +1,32 @@
-# Usage
-# ================
-# docker build . --progress=plain --no-cache
-# docker compose up 
+# ChessBuddy multistage build
+# docker compose build --no-cache --progress=plain
+# docker compose up
 
 # Builder Frontend
-FROM oven/bun:latest AS fe-builder
+FROM node:latest AS fe-builder
 WORKDIR /usr/src/app
-COPY *.json ./
-COPY index.html ./
-COPY . ./
-RUN bun install
-RUN bun -v
-RUN bun run build
+COPY public ./public
+COPY common ./common
+COPY react ./react
+COPY wc ./wc
+WORKDIR /usr/src/app/common
+RUN npm install
+WORKDIR /usr/src/app/react
+RUN npm install
+RUN npm run build
+WORKDIR /usr/src/app/wc
+RUN npm install
+RUN npm run build
+RUN cp ./dist/index.html ../react/build//wc.html
+RUN cp ./dist/assets/* ../react/build/assets
+RUN echo $(ls -al build)
 
 FROM cgr.dev/chainguard/zig AS be-builder
 RUN zig version
 WORKDIR /usr/src
 # COPY chessbuddy ./
-COPY zap /usr/src/zap
-WORKDIR /usr/src/zap
+COPY zig /usr/src/zig
+WORKDIR /usr/src/zig
 RUN echo "$( ls -al /usr/src/chessbuddy )"
 RUN zig build chessbuddy
 RUN echo "$( ls -al zig-out/bin)"
@@ -26,15 +34,12 @@ RUN echo "$( ls -al zig-out/bin)"
 # CMD ["tail", "-f", "/dev/null"]
 # ENTRYPOINT [ "/usr/src/chessbuddy" ]
 
-
 # Bundle Stage
-FROM alpine
+FROM alpine:latest
 # FROM scratch
-WORKDIR /usr/bin/
-COPY --from=fe-builder /usr/src/app/build ./build
-COPY --from=be-builder /usr/src/zap/zig-out/bin/chessbuddy /usr/bin/chessbuddy
-RUN echo "$( ls -al chessbuddy)"
-RUN echo "$( ls -al build)"
-# USER 1000
+WORKDIR /bin/
+COPY --from=fe-builder /usr/src/app/react/build ./build
+COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy ./
+USER 1000
 #CMD ["tail", "-f", "/dev/null"]
-ENTRYPOINT ["/usr/bin/chessbuddy"]
+CMD ["/bin/chessbuddy"]
