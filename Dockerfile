@@ -28,12 +28,10 @@ WORKDIR /usr/src/zig
 RUN zig build chessbuddy
 
 # Bundle Stage
-# FROM alpine:latest
-FROM scratch
-WORKDIR /bin/
-COPY --from=fe-builder /usr/src/app/react/build ./build
-COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy ./
-USER 1000
+FROM alpine:latest
+# FROM scratch
+COPY --from=fe-builder /usr/src/app/react/build /bin/build/
+COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy /bin/
 # RUN echo "$( ls -al /bin)"
 #CMD ["tail", "-f", "/dev/null"]
 ENTRYPOINT ["/bin/chessbuddy"]
