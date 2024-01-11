@@ -19,7 +19,6 @@ RUN npm install
 RUN npm run build
 RUN cp ./dist/index.html ../react/build//wc.html
 RUN cp ./dist/assets/* ../react/build/assets
-RUN echo $(ls -al build)
 
 FROM buddyspencer/ziglang AS be-builder
 RUN zig version
@@ -30,6 +29,7 @@ RUN zig build chessbuddy
 # Bundle Stage
 FROM alpine:latest
 # FROM scratch
+# FROM gcr.io/google.com/cloudsdktool/cloud-sdk:slim
 COPY --from=fe-builder /usr/src/app/react/build /bin/build/
 COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy /bin/
 # RUN echo "$( ls -al /bin)"
