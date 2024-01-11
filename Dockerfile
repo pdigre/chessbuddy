@@ -22,6 +22,7 @@ RUN cp ./dist/assets/* ../react/build/assets
 
 FROM buddyspencer/ziglang AS be-builder
 RUN zig version
+WORKDIR /usr/src
 COPY zig /usr/src/zig
 WORKDIR /usr/src/zig
 RUN zig build chessbuddy
@@ -29,9 +30,11 @@ RUN zig build chessbuddy
 # Bundle Stage
 FROM alpine:latest
 # FROM scratch
-# FROM gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-COPY --from=fe-builder /usr/src/app/react/build /bin/build/
-COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy /bin/
+WORKDIR /bin/
+COPY --from=fe-builder /usr/src/app/react/build ./build
+COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy ./
+# COPY zig/chessbuddy ./
+USER 1000
 # RUN echo "$( ls -al /bin)"
 #CMD ["tail", "-f", "/dev/null"]
 ENTRYPOINT ["/bin/chessbuddy"]
