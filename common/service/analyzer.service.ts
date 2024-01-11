@@ -1,8 +1,9 @@
 import type { Fen } from './rules.service';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
-import { mediaService, renderingService } from './index.service';
+import { mediaService, openingsService, playService, renderingService } from './index.service';
 import { Engines } from '../model/bot';
+import { FEN } from '../model/fen.ts';
 
 type AnalyzerReturn = { moves: string[]; cp: number | undefined };
 type AnalyzerCallback = (ret: AnalyzerReturn) => void;
@@ -107,7 +108,10 @@ export class AnalyzerService {
       (isWhiteTurn && this.cp - this.prevcp > 100) ||
       (!isWhiteTurn && this.prevcp - this.cp > 100)
     ) {
-      mediaService.playMistake();
+      // Check that game is not NEW or its in the opening books
+      if (playService.fen != FEN.NEW_GAME && !openingsService.locate(playService.log)){
+        mediaService.playMistake();
+      }
     }
   };
 
