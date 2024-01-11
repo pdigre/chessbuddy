@@ -3,7 +3,7 @@
 # docker compose up
 
 # Builder Frontend
-FROM node:latest AS fe-builder
+FROM node AS fe-builder
 WORKDIR /usr/src/app
 COPY public ./public
 COPY common ./common
@@ -21,25 +21,19 @@ RUN cp ./dist/index.html ../react/build//wc.html
 RUN cp ./dist/assets/* ../react/build/assets
 RUN echo $(ls -al build)
 
-FROM cgr.dev/chainguard/zig AS be-builder
+FROM buddyspencer/ziglang AS be-builder
 RUN zig version
-WORKDIR /usr/src
-# COPY chessbuddy ./
 COPY zig /usr/src/zig
 WORKDIR /usr/src/zig
-RUN echo "$( ls -al /usr/src/chessbuddy )"
 RUN zig build chessbuddy
-RUN echo "$( ls -al zig-out/bin)"
-# RUN strip /usr/src/zig-out/bin/chessbuddy
-# CMD ["tail", "-f", "/dev/null"]
-# ENTRYPOINT [ "/usr/src/chessbuddy" ]
 
 # Bundle Stage
-FROM alpine:latest
-# FROM scratch
+# FROM alpine:latest
+FROM scratch
 WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/react/build ./build
 COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy ./
 USER 1000
+# RUN echo "$( ls -al /bin)"
 #CMD ["tail", "-f", "/dev/null"]
-CMD ["/bin/chessbuddy"]
+ENTRYPOINT ["/bin/chessbuddy"]
