@@ -16,6 +16,7 @@
   "scripts": {
     "dev": "bunx --bun vite",
     "format": "bunx prettier src --write",
+    "build:npm": "vite build",
     "build": "vite build",
     "serve": "bun serve.ts",
     "prod": "bun build src/app.ts --outfile=../public/wc.js --watch"

@@ -13,12 +13,11 @@
   },
   "scripts": {
     "dev": "bun watch:css && bunx --bun vite",
-    "build2": "bun watch:css && bunx --bun vite build",
-    "build": "npm run watch:css && vite build",
+    "build:npm": "npm run watch:css && vite build",
     "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
     "format": "bunx prettier src --write",
     "serve": "bun serve.ts",
-    "build:bun": "bunx --bun vite build",
+    "build": "bun run watch:css && vite build",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
   },

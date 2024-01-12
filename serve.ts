@@ -1,10 +1,10 @@
 console.log("WC - http://localhost:3003/index.html");
-let assets="";
+let assets="./react/build/assets/";
 Bun.serve({
   port: 3003,
   async fetch(req) {
     const url = req.url;
-    let tgt = "./index.html";
+    let tgt = "./react/build/index.html";
     const route=(match:string, replace:string, memoize?:string) => {
       if(url.includes(match)) {
         const n=url.indexOf(match);
@@ -14,7 +14,7 @@ Bun.serve({
         }
       }
     }
-    route("/react.html","./react/build/index.html","./react/build/assets/");
+    route("/index.html","./react/build/index.html","./react/build/assets/");
     route("/wc.html","./wc/dist/index.html", "./wc/dist/assets/");
     route("/assets/",assets);
     route("/png/","./public/png/");
