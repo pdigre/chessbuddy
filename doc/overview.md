@@ -11,26 +11,128 @@
 * Helper - gets CP and Stockfish suggestions
 * TimeKeeper - updates timer every second of play
 * RefreshTimer - 100ms refresh, due to ChessBoard bug
-* Messager - Message box, prompts
+* Messages- Message box, prompts
 
-## Class diagram
 
 ```mermaid 
-erDiagram
-    CUSTOMER ||--|| ORDER : places
-    ORDER ||--|{ LINE-ITEM : contains
-    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
+---
+title: Chessbuddy observed state
+---
+classDiagram
+    App <|-- render : darkMode 
+    Board <|-- render : rotation
+    Board <|-- config : fen
+    CP <|-- analyzer : cp
+    CP <|-- render : showCP
+    FenInfo <|-- play : log
+    PlayerInfo <|-- play
+    Ticker <|-- clock : log
 
+    CP <|-- analyzer : cp
+
+
+    class App{
+        boolean darkMode
+    }
+    class Board{
+        string FEN
+        int rotation
+    }
+    class CP{
+    }
+    class FenInfo{
+        string log
+    }
+    class PlayerInfo{
+    }
+    class Ticker{
+    }
+
+    class play{
+       string log
+    }
+    class render{
+       boolean darkTheme
+       int rotation
+       boolean showCP
+    }
+    class analyzer{
+       int cp
+    }
+    class config{
+        boolean showConfig
+        string listMode
+        int showTab
+    }
+    class message{
+        boolean show
+    }
+    class clock{
+        string clockText
+    }
 ```
-    abstract Player
-    class Human
-    class Bot
-    Player <|-- Human
-    Player <|-- Bot
 
-![Objects](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/pdigre/chessbuddy/master/doc/objects.iuml)
+```mermaid 
+---
+title: Chessbuddy Storage data model
+---
+erDiagram
+    Chessbuddy ||--o{ History : games
+    Chessbuddy ||--|| Render : render
+    Chessbuddy ||--|| Config : config
 
-## UI components
-![UI](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/pdigre/chessbuddy/master/doc/ui.iuml)
+    Config ||--|| Game : game
+    Config ||--|| Display : display
+    Config ||--o{  Human : humans
+    Config ||--o{  Bot : bots
+    Config ||--o{ Clock : clocks
+
+    Human{
+        string name
+        string email
+    }
+    Bot{
+        string name
+        string engine
+        int skill
+        int time
+        int depth
+    }
+    Clock{
+        String name
+        TimeRule[] time
+    }
+    Game{
+       string white
+       string black
+       string clock
+    }
+    Display{
+       boolean showFacts
+       boolean showHints
+       boolean playCorrect
+       boolean playMistake
+       boolean playWinner
+    }
+    Render{
+       boolean darkTheme
+       int rotation
+       boolean showCP
+    }
+    Chessbuddy{
+
+    }
+    History{
+    string id
+    Date date
+    string white
+    string black
+    number wtime
+    number btime
+    string[] log
+    string fen
+    }
+```
+
 
 
