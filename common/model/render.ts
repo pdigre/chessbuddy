@@ -1,7 +1,7 @@
 import { action } from 'mobx';
-import { GETSET, Item } from './model.ts';
+import { GETSET, Item, Storage } from './model.ts';
 
-export class Render implements Item {
+export class Render implements Item, Storage<Render> {
 
   constructor(    public darkTheme: boolean,
                   public rotation: number,
@@ -17,11 +17,16 @@ export class Render implements Item {
   getProp = (name: string) => this.properties.get(name)![0]();
   setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
 
-  restoreThis = (render?: Render) => {
-    this.darkTheme = render?.darkTheme ??  window.matchMedia('(prefers-color-scheme: dark)').matches;
-    this.rotation = render?.rotation ?? 0;
-    this.showCP = render?.showCP ?? true;
+  name = () => 'render';
+  load = (obj:Render) => {
+    const o= obj ?? new Render(window.matchMedia('(prefers-color-scheme: dark)').matches, 0, true);;
+    Object.assign(this, o)
   };
+  save = () => ({
+      darkTheme: this.darkTheme,
+      rotation: this.rotation,
+      showCP: this.showCP,
+    } as Render);
 }
 
 

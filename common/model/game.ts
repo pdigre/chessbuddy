@@ -14,7 +14,5 @@ export class Game implements Item {
   ]);
   getProp = (name: string) => this.properties.get(name)![0]();
   setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
-
-  static restore = (game?: Game) =>
-    new Game(game?.white ?? 'User', game?.black ?? 'Stockfish easy', game?.clock ?? '');
+  newItem = () => new Game('User', 'Stockfish easy', '');
 }

@@ -11,3 +11,9 @@ export interface ListItem extends Item {
   getDescription: () => string;
   validate: () => string;
 }
+
+export interface Storage<T>{
+  name: () => string;
+  load: (obj:T) => void;
+  save: () => T;
+}
