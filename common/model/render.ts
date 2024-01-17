@@ -19,8 +19,7 @@ export class Render implements Item, Storage<Render> {
 
   name = () => 'render';
   load = (obj:Render) => {
-    const o= obj ?? new Render(window.matchMedia('(prefers-color-scheme: dark)').matches, 0, true);;
-    Object.assign(this, o)
+    Object.assign(this, obj ?? new Render(window.matchMedia('(prefers-color-scheme: dark)').matches, 0, true));
   };
   save = () => ({
       darkTheme: this.darkTheme,

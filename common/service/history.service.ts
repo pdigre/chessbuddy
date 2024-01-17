@@ -1,12 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { History, Games } from '../model/history';
-import {
-  storageService,
-  playService,
-  historyService,
-  rulesService,
-  messageService,
-} from './index.service';
+import { History, OldGame } from '../model/history.ts';
+import { historyService, messageService, playService, rulesService, storageService } from './index.service';
 
 export type GameEntry = {
   moves: string[];
@@ -25,10 +19,9 @@ export class HistoryService {
   constructor() {
     makeAutoObservable(this);
     this.history = this.loadHistory();
-    History.oldgames.forEach(x => this.history.push(x));
-    const arr = this.history.map(x => History.create(x)).filter(x => x) as History[];
-    const games = new Games(arr);
-    storageService.storeObject('games', games);
+    OldGame.oldgames.forEach(x => this.history.push(x));
+    const arr = this.history.map(x => OldGame.create(x)).filter(x => x) as OldGame[];
+    storageService.save(new History(arr));
   }
 
   storeGame() {
@@ -84,7 +77,7 @@ export class HistoryService {
 
   private static upload: (text: string, history: string[]) => void = (text, history) => {
     const lines = text.replace(/\r/gi, '').split('\n');
-    const games = lines.map(x => History.readHistory(x)).filter(x => x) as string[];
+    const games = lines.map(x => OldGame.readHistory(x)).filter(x => x) as string[];
     const h1 = history;
     games.forEach(game => {
       const key = game.split(';')[0];
@@ -95,7 +88,7 @@ export class HistoryService {
 
   private loadHistory() {
     const h1 = storageService.restoreLines(HistoryService.storage, []);
-    const h2 = h1.map(x => History.readHistory(x)).filter(x => x) as string[];
+    const h2 = h1.map(x => OldGame.readHistory(x)).filter(x => x) as string[];
     h2.sort((n1, n2) => (n1 > n2 ? 1 : n1 == n2 ? 0 : -1));
     return h2;
   }

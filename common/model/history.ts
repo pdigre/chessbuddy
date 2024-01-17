@@ -1,10 +1,14 @@
 import { FEN } from './fen';
+import { Storage } from './model.ts';
 
-export class Games {
-  constructor(public games: History[]) {}
+export class History  implements Storage<History>{
+  constructor(public games: OldGame[]) {}
+  name = () => 'games';
+  save = () => this;
+  load = (obj:History) => (this.games = obj.games);
 }
 
-export class History {
+export class OldGame {
   constructor(
     public id: string,
     public date: Date,
@@ -16,10 +20,10 @@ export class History {
     public fen: string
   ) {}
 
-  public static create(txt: string): History | undefined {
-    const split = History.readHistory(txt)?.split(';');
+  public static create(txt: string): OldGame | undefined {
+    const split = OldGame.readHistory(txt)?.split(';');
     return split
-      ? new History(
+      ? new OldGame(
           split[0],
           new Date(Number.parseInt(split[0], 36)),
           split[1],
@@ -34,7 +38,7 @@ export class History {
 
   public static readHistory: (x: string) => string | undefined = x => {
     const s = x.split(';');
-    const date = History.readDate(s[0]);
+    const date = OldGame.readDate(s[0]);
     if (!date) return undefined;
     if (s.length == 6) {
       return date + ';' + s[1] + ';' + s[2] + ';' + s[3] + ';' + s[4] + ';' + s[5];

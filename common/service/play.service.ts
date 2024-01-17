@@ -1,6 +1,6 @@
 import { Human } from '../model/human';
 import { San } from './openings.service';
-import { action, makeAutoObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { Chess, Square, WHITE } from 'chess.js';
 import { Clock } from '../model/clock';
 import { BotRunner } from './bot.service';
@@ -19,48 +19,36 @@ import {
   rulesService,
   storageService,
 } from './index.service';
-import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
 import {toMMSS} from "./clock.service.ts";
+import { Play } from '../model/play.ts';
 
 /*
  * Everything about the current game (can be restored when returning to browser later)
  */
-export class PlayService {
-  static storage = 'play';
-  wtime = 0;
-  btime = 0;
-  log: string[] = [];
-  fen = FEN.NEW_GAME;
+export class PlayService extends Play{
 
   // runtime does not need persisting
   private chess = new Chess(this.fen);
-  @jsonIgnore() isWhiteTurn = true;
-  @jsonIgnore() isComplete = false;
-  @jsonIgnore() private bplayer?: BotRunner;
-  @jsonIgnore() private wplayer?: BotRunner;
-  @jsonIgnore() private clock?: Clock;
-  @jsonIgnore() allowed = 0;
-  @jsonIgnore() isPlaying = false;
-  @jsonIgnore() pgns: Square[] = [];
+  isWhiteTurn = true;
+  isComplete = false;
+  private bplayer?: BotRunner;
+  private wplayer?: BotRunner;
+  private clock?: Clock;
+  allowed = 0;
+  isPlaying = false;
+  pgns: Square[] = [];
 
   constructor() {
-    makeAutoObservable(this);
-    const restore = storageService.restoreObject(PlayService.storage, {
-      wtime: 0,
-      btime: 0,
-      log: [],
-      fen: FEN.NEW_GAME,
+    super();
+    makeObservable(this,{
+      wtime: observable,
+      btime: observable,
+      log: observable,
+      fen: observable,
     });
-    this.wtime = restore.wtime;
-    this.btime = restore.btime;
-    this.log = restore.log;
-    this.fen = restore.fen;
+    storageService.load(this);
     this.calculate();
-  }
-
-  store() {
-    storageService.storeObject(PlayService.storage, this);
   }
 
   private calculate() {
@@ -148,7 +136,7 @@ export class PlayService {
     if (!(next instanceof BotRunner)) {
       analyzerService.run(this.fen, this.isWhiteTurn);
     }
-    this.store();
+    storageService.save(this);
     if (this.isPlaying) {
       this.runBot();
     }
@@ -171,7 +159,7 @@ export class PlayService {
 
   playMove(san: string) {
     this.addMove(san);
-    this.store();
+    storageService.save(this);
     if (this.isComplete) {
       historyService.storeGame();
     }
@@ -245,14 +233,14 @@ export class PlayService {
 
   // Game config actions
   startGameAction: VoidFunction = action(() => {
-    configService.store();
+    storageService.save(configService);
     configService.closeConfigAction();
     configService.showConfig = false;
     this.playContinue();
   });
 
   editGameAction = action(() => {
-    configService.store();
+    storageService.save(configService);
     editService.editStart(this.fen);
   });
 

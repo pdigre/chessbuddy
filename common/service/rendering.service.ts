@@ -1,6 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 import { storageService } from './index.service.ts';
 import { Render } from '../model/render.ts';
+import { Device } from '../model/device.ts';
 
 export class RenderingService extends Render {
 
@@ -45,17 +46,8 @@ export class RenderingService extends Render {
   }
 
   getDeviceInfo() {
-    const dev = {
-      first: Date.now().toString(36),
-      userAgent: navigator.userAgent,
-      width: window.screen.width,
-      height: window.screen.height,
-      availWidth: window.screen.availWidth,
-      availHeight: window.screen.availHeight,
-      innerWidth: window.innerWidth,
-      innerHeight: window.innerHeight,
-    };
-    storageService.storeObject('device', dev);
+    const dev = new Device();
+    storageService.save(dev);
     return dev;
   }
 
