@@ -19,7 +19,6 @@ import {
   rulesService,
   storageService,
 } from './index.service';
-import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
 import { toMMSS } from './clock.service.ts';
 
@@ -35,14 +34,14 @@ export class PlayService {
 
   // runtime does not need persisting
   private chess = new Chess(this.fen);
-  @jsonIgnore() isWhiteTurn = true;
-  @jsonIgnore() isComplete = false;
-  @jsonIgnore() private bplayer?: BotRunner;
-  @jsonIgnore() private wplayer?: BotRunner;
-  @jsonIgnore() private clock?: Clock;
-  @jsonIgnore() allowed = 0;
-  @jsonIgnore() isPlaying = false;
-  @jsonIgnore() pgns: Square[] = [];
+  isWhiteTurn = true;
+  isComplete = false;
+  private bplayer?: BotRunner;
+  private wplayer?: BotRunner;
+  private clock?: Clock;
+  allowed = 0;
+  isPlaying = false;
+  pgns: Square[] = [];
 
   constructor() {
     makeAutoObservable(this);

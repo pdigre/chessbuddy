@@ -1,11 +1,9 @@
 import { BLACK, Square, SQUARES, WHITE } from 'chess.js';
-import { jsonIgnore } from 'json-ignore';
 import { action, makeAutoObservable } from 'mobx';
 import { FEN } from '../model/fen';
-import { configService, playService } from './index.service';
-import { GETSET, Item } from '../model/model.ts';
+import { configService } from './index.service';
 
-export class EditService implements Item {
+export class EditService {
   showEdit = false;
   editSquare = '';
   editFen = '';
@@ -15,16 +13,6 @@ export class EditService implements Item {
   bcck = false;
   bccq = false;
   bFirst = false;
-
-  @jsonIgnore() properties: Map<string, GETSET<boolean>> = new Map([
-    ['wcck', [() => this.wcck, v => (this.wcck = v)]],
-    ['wccq', [() => this.wccq, v => (this.wccq = v)]],
-    ['bcck', [() => this.bcck, v => (this.bcck = v)]],
-    ['bccq', [() => this.bccq, v => (this.bccq = v)]],
-    ['bFirst', [() => this.bFirst, v => (this.bFirst = v)]],
-  ]);
-  getProp = (name: string) => this.properties.get(name)![0]();
-  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
 
   constructor() {
     makeAutoObservable(this);
@@ -47,7 +35,7 @@ export class EditService implements Item {
     const fen = fenArr.join(' ');
     this.editFen = fen;
     this.showEdit = false;
-    playService.fen = fen;
+    //    playService.fen = fen;
     configService.showConfig = true;
   });
 

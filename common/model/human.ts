@@ -1,5 +1,4 @@
-import { GETSET, ListItem } from './model.ts';
-import { action } from 'mobx';
+import { ListItem } from './model.ts';
 
 export class Human implements ListItem {
   constructor(
@@ -7,12 +6,6 @@ export class Human implements ListItem {
     public email: string
   ) {}
   label = 'Human';
-  properties: Map<string, GETSET<any>> = new Map([
-    ['name', [() => this.name, v => (this.name = v)]],
-    ['email', [() => this.email, v => (this.email = v)]],
-  ]);
-  getProp = (name: string) => this.properties.get(name)![0]();
-  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
 
   getName = () => this.name;
   getDescription = () => this.email;

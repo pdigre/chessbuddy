@@ -1,5 +1,4 @@
-import { GETSET, ListItem } from './model.ts';
-import { action } from 'mobx';
+import { ListItem } from './model.ts';
 
 export class Engine {
   constructor(
@@ -22,15 +21,6 @@ export class Bot implements ListItem {
     public depth: number
   ) {}
   label = 'Bot';
-  properties: Map<string, GETSET<string>> = new Map([
-    ['name', [() => this.name, v => (this.name = v)]],
-    ['engine', [() => this.engine, v => (this.engine = v)]],
-    ['skill', [() => this.toTxt(this.skill), v => (this.skill = this.toInt(v))]],
-    ['time', [() => this.toTxt(this.time), v => (this.time = this.toInt(v))]],
-    ['depth', [() => this.toTxt(this.depth), v => (this.depth = this.toInt(v))]],
-  ]);
-  getProp = (name: string) => this.properties.get(name)![0]();
-  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
   getName: () => string = () => this.name;
   getDescription: () => string = () =>
     `${this.engine},${this.skill},${this.time ?? ''},${this.depth ?? ''}`;

@@ -1,8 +1,6 @@
-import { action } from 'mobx';
-import { GETSET, Item } from './model.ts';
 import { Persist } from './model.ts';
 
-export class Render implements Item, Persist {
+export class Render implements Persist {
   static initial = {
     darkTheme: window.matchMedia('(prefers-color-scheme: dark)').matches,
     rotation: 0,
@@ -13,15 +11,6 @@ export class Render implements Item, Persist {
     public rotation: number,
     public showCP: boolean
   ) {}
-
-  bool: (v: any) => boolean = v => 'true' == v || v == true;
-  properties: Map<string, GETSET<any>> = new Map([
-    ['darkTheme', [() => this.darkTheme, v => (this.darkTheme = this.bool(v))]],
-    ['rotation', [() => this.rotation, v => (this.rotation = v)]],
-    ['showCP', [() => this.showCP, v => (this.showCP = this.bool(v))]],
-  ]);
-  getProp = (name: string) => this.properties.get(name)![0]();
-  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
 
   init = () => Render.initial;
   name = () => 'render';

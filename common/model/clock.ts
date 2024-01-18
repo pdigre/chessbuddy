@@ -1,5 +1,4 @@
-import { GETSET, ListItem } from './model.ts';
-import { action } from 'mobx';
+import { ListItem } from './model.ts';
 
 export type TimeRule = {
   from: number;
@@ -16,12 +15,6 @@ export class Clock implements ListItem {
   getName: () => string = () => this.name.trim();
   getDescription: () => string = () => Clock.time2string(this.time);
 
-  properties: Map<string, GETSET<string>> = new Map([
-    ['name', [() => this.name, v => (this.name = v)]],
-    ['time', [() => this.getDescription(), v => (this.time = Clock.string2time(v))]],
-  ]);
-  getProp = (name: string) => this.properties.get(name)![0]();
-  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
   validate: () => string = () => (this.name.length ? '' : 'Need to enter a name');
 
   getAllowed(moves: number): number {

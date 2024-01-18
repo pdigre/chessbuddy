@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { renderingService } from '../../common/service/index.service';
 import { action } from 'mobx';
-import { Item } from '../../common/model/model';
+import { getProp, setProp } from '../../common/model/model';
 
 export const ConfigButton: React.FC<{
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -33,37 +33,27 @@ export const ConfigButton: React.FC<{
 };
 
 export const ConfigText: React.FC<{
-  item: Item;
+  item: Object;
   label: string;
   id: string;
 }> = ({ item, label, id }) => {
-  const prop = item?.properties?.get(id);
-  if (!prop) {
-    return <div></div>;
-  }
-  const [getter, setter] = prop;
-  const value = getter();
+  const value = getProp(item, id);
   const onChange = action((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setter(e.target.value)
+    setProp(item, id, e.target.value)
   );
   return <TextField label={label} id={id} size="medium" onChange={onChange} defaultValue={value} />;
 };
 
 export const ConfigBoolean: React.FC<{
-  item: Item;
+  item: Object;
   label: string;
   id: string;
 }> = ({ item, label, id }) => {
-  const prop = item?.properties?.get(id);
-  if (!prop) {
-    return <div></div>;
-  }
-  const value = item.getProp(id);
-
+  const value = getProp(item, id);
   const [v, setV] = useState(value);
   const onChange = action((e: ChangeEvent<HTMLInputElement>) => {
     setV(e.target.checked);
-    item.setProp(id, e.target.checked);
+    setProp(item, id, e.target.checked);
   });
   return (
     <FormControlLabel
@@ -83,18 +73,18 @@ export const ConfigSelect: React.FC<{
   label: string;
   id: string;
   choices: string[];
-  item: Item;
+  item: Object;
 }> = ({ label, id, choices, item }) => {
-  const prop = item?.properties?.get(id);
+  const prop = getProp(item, id);
   if (!prop) {
     return <div></div>;
   }
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    item.setProp(id, value);
+    setProp(item, id, value);
     setV(value);
   };
-  const value = item.getProp(id);
+  const value = getProp(item, id);
   const [v, setV] = useState(value);
   return (
     <FormControl variant="filled">
