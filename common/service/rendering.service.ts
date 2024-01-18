@@ -3,7 +3,6 @@ import { storageService } from './index.service.ts';
 import { Render } from '../model/render.ts';
 
 export class RenderingService extends Render {
-  static storage = 'render';
 
   static PWA = {width: 1190, height: 762};
   static CHROME = {width: 1180, height: 740};
@@ -25,8 +24,7 @@ export class RenderingService extends Render {
       rotation: observable,
       showCP: observable,
     });
-    const restore = storageService.restoreObject(RenderingService.storage, {}) as Render;
-    this.restoreThis(restore);
+    storageService.load(this);
     const size = this.getSize();
     this.height = size.height;
     this.boardWidth = size.height - 68;

@@ -16,7 +16,6 @@ import { Display } from '../model/display.ts';
 import { ListItem } from '../model/model.ts';
 import { Game } from '../model/game.ts';
 import { Square } from './rules.service.ts';
-import { RenderingService } from './rendering.service.ts';
 
 export const enum ListMode {
   None = 1,
@@ -83,7 +82,7 @@ export class ConfigService {
 
   store: VoidFunction = () => {
     storageService.storeObject(ConfigService.storage, this);
-    storageService.storeObject(RenderingService.storage, renderingService);
+    storageService.save(renderingService);
   };
 
   // ****************************

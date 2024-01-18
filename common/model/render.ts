@@ -1,7 +1,8 @@
 import { action } from 'mobx';
 import { GETSET, Item } from './model.ts';
+import { Storage } from './model.ts';
 
-export class Render implements Item {
+export class Render implements Item, Storage<Render> {
 
   constructor(    public darkTheme: boolean,
                   public rotation: number,
@@ -22,6 +23,15 @@ export class Render implements Item {
     this.rotation = render?.rotation ?? 0;
     this.showCP = render?.showCP ?? true;
   };
+  name = () => 'render';
+  load = (obj:Render) => {
+    Object.assign(this, obj ?? new Render(window.matchMedia('(prefers-color-scheme: dark)').matches, 0, true));
+  };
+  save = () => ({
+      darkTheme: this.darkTheme,
+      rotation: this.rotation,
+      showCP: this.showCP,
+    } as Render);
 }
 
 
