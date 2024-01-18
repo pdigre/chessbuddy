@@ -21,7 +21,7 @@ import {
 } from './index.service';
 import { jsonIgnore } from 'json-ignore';
 import { FEN } from '../model/fen';
-import {toMMSS} from "./clock.service.ts";
+import { toMMSS } from './clock.service.ts';
 
 /*
  * Everything about the current game (can be restored when returning to browser later)

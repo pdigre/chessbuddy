@@ -1,6 +1,6 @@
 import { jsonIgnoreReplacer } from 'json-ignore';
 import { messageService } from './index.service';
-import { Storage } from '../model/model.ts';
+import { Persist } from '../model/model.ts';
 
 export class StorageService {
   storeLines = (name: string, lines: string[]) => {
@@ -28,13 +28,32 @@ export class StorageService {
     }
   };
 
-  save = <T>(obj: Storage<T>) => {
-      localStorage.setItem(obj.name(), JSON.stringify(obj.save()))
-  }
-  load = <T>(obj: Storage<T>) => {
+  save = (persist: Persist) => {
+    const defObj = persist.init();
+    const props = new Map(Object.entries(defObj));
+    Object.entries(persist).forEach(([key, value]) => {
+      if (props.has(key)) {
+        props.set(key, value);
+      }
+    });
+    localStorage.setItem(persist.name(), JSON.stringify(Object.fromEntries(props)));
+  };
+  load = (persist: Persist) => {
     try {
-      const data = localStorage.getItem(obj.name());
-      return data ? obj.load(JSON.parse(data) as T) : null;
+      const restore = localStorage.getItem(persist.name());
+      const defObj = persist.init();
+      if (restore) {
+        const restored = JSON.parse(restore);
+        const props = new Map(Object.entries(defObj));
+        Object.entries(restored).forEach(([key, value]) => {
+          if (props.has(key)) {
+            props.set(key, value);
+          }
+        });
+        Object.assign(persist, Object.fromEntries(props));
+      } else {
+        Object.assign(persist, defObj);
+      }
     } catch (error) {
       messageService.error('Storage error ' + name, String(error));
       return null;

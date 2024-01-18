@@ -1,9 +1,8 @@
-import { Storage } from './model.ts';
+import { Persist } from './model.ts';
 
-export class Device implements Storage<Device>{
-
+export class Device implements Persist {
   // Config to store
-  first= Date.now().toString(36);
+  first = Date.now().toString(36);
   userAgent = navigator.userAgent;
   width = window.screen.width;
   height = window.screen.height;
@@ -13,7 +12,5 @@ export class Device implements Storage<Device>{
   innerHeight = window.innerHeight;
 
   name = () => 'device';
-  save = () => this;
-  load = () => {};
-
+  init = () => this;
 }

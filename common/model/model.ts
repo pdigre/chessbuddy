@@ -12,8 +12,7 @@ export interface ListItem extends Item {
   validate: () => string;
 }
 
-export interface Storage<T>{
+export interface Persist {
   name: () => string;
-  load: (obj:T) => void;
-  save: () => T;
+  init: () => Object;
 }

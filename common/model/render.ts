@@ -1,12 +1,17 @@
 import { action } from 'mobx';
 import { GETSET, Item } from './model.ts';
-import { Storage } from './model.ts';
+import { Persist } from './model.ts';
 
-export class Render implements Item, Storage<Render> {
-
-  constructor(    public darkTheme: boolean,
-                  public rotation: number,
-                  public showCP: boolean,
+export class Render implements Item, Persist {
+  static initial = {
+    darkTheme: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    rotation: 0,
+    showCP: true,
+  };
+  constructor(
+    public darkTheme: boolean,
+    public rotation: number,
+    public showCP: boolean
   ) {}
 
   bool: (v: any) => boolean = v => 'true' == v || v == true;
@@ -18,20 +23,6 @@ export class Render implements Item, Storage<Render> {
   getProp = (name: string) => this.properties.get(name)![0]();
   setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
 
-  restoreThis = (render?: Render) => {
-    this.darkTheme = render?.darkTheme ??  window.matchMedia('(prefers-color-scheme: dark)').matches;
-    this.rotation = render?.rotation ?? 0;
-    this.showCP = render?.showCP ?? true;
-  };
+  init = () => Render.initial;
   name = () => 'render';
-  load = (obj:Render) => {
-    Object.assign(this, obj ?? new Render(window.matchMedia('(prefers-color-scheme: dark)').matches, 0, true));
-  };
-  save = () => ({
-      darkTheme: this.darkTheme,
-      rotation: this.rotation,
-      showCP: this.showCP,
-    } as Render);
 }
-
-

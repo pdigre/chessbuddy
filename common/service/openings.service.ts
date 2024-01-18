@@ -8,7 +8,7 @@ export class OpeningsService {
   tree: San[] = [];
 
   constructor() {
-    window.setTimeout(()=>{
+    window.setTimeout(() => {
       // @ts-ignore
       const openings: string = window.openings;
       openings.split('\n').forEach(line => {
@@ -16,7 +16,7 @@ export class OpeningsService {
         const san = this.create(parts[0].split(' '));
         san.info = parts[1] + '/' + parts[2];
       });
-    },2000);
+    }, 2000);
   }
 
   create: (moves: string[]) => San = moves => {
