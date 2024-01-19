@@ -8,7 +8,7 @@ export type TimeRule = {
 
 export class Clock implements ListItem {
   constructor(
-    public name ='',
+    public name = '',
     public time: TimeRule[] = []
   ) {}
   label = 'Clock';

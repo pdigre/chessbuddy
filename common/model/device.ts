@@ -11,6 +11,5 @@ export class Device implements Persist {
   innerWidth = window.innerWidth;
   innerHeight = window.innerHeight;
 
-  name = () => 'device';
-  init = () => this;
+  persist = () => ({ name: 'device', init: new Device() });
 }

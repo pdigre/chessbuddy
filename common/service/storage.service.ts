@@ -29,22 +29,22 @@ export class StorageService {
   };
 
   save = (persist: Persist) => {
-    const defObj = persist.init();
-    const props = new Map(Object.entries(defObj));
+    const { name, init } = persist.persist();
+    const props = new Map(Object.entries(init));
     Object.entries(persist).forEach(([key, value]) => {
       if (props.has(key)) {
         props.set(key, value);
       }
     });
-    localStorage.setItem(persist.name(), JSON.stringify(Object.fromEntries(props)));
+    localStorage.setItem(name, JSON.stringify(Object.fromEntries(props)));
   };
   load = (persist: Persist) => {
     try {
-      const restore = localStorage.getItem(persist.name());
-      const defObj = persist.init();
+      const { name, init } = persist.persist();
+      const restore = localStorage.getItem(name);
       if (restore) {
         const restored = JSON.parse(restore);
-        const props = new Map(Object.entries(defObj));
+        const props = new Map(Object.entries(init));
         Object.entries(restored).forEach(([key, value]) => {
           if (props.has(key)) {
             props.set(key, value);
@@ -52,7 +52,7 @@ export class StorageService {
         });
         Object.assign(persist, Object.fromEntries(props));
       } else {
-        Object.assign(persist, defObj);
+        Object.assign(persist, init);
       }
     } catch (error) {
       messageService.error('Storage error ' + name, String(error));

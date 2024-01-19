@@ -6,8 +6,7 @@ export interface ListItem {
 }
 
 export interface Persist {
-  name: () => string;
-  init: () => Object;
+  persist: () => { name: string; init: Object };
 }
 
 export const getProp = (obj: Object, name: string) =>

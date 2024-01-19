@@ -1,7 +1,6 @@
 import { ListItem } from './model.ts';
 
 export class Human implements ListItem {
-
   constructor(
     public name = '',
     public email = ''
@@ -15,5 +14,5 @@ export class Human implements ListItem {
 
   public static create: () => Human = () => new Human();
 
-  public static initial = [new Human('User', '')];
+  public static initial = [new Human()];
 }

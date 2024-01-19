@@ -5,5 +5,5 @@ export class Game {
     public clock = ''
   ) {}
 
-  public static initial = new Game('User', 'Stockfish easy', '');
+  public static initial = new Game();
 }
