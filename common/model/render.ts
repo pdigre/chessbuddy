@@ -6,10 +6,11 @@ export class Render implements Persist {
     rotation: 0,
     showCP: true,
   };
+
   constructor(
-    public darkTheme: boolean,
-    public rotation: number,
-    public showCP: boolean
+    public darkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches,
+    public rotation = 0,
+    public showCP = true,
   ) {}
 
   init = () => Render.initial;

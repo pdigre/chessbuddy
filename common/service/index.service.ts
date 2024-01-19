@@ -28,6 +28,6 @@ export const botService = new BotService();
 export const playService = new PlayService();
 export const editService = new EditService();
 export const analyzerService = new AnalyzerService();
-export const renderingService = new RenderingService(false, 0, false);
+export const renderingService = new RenderingService();
 export const bluetoothService = new BluetoothService();
 export const clockService = new ClockService();

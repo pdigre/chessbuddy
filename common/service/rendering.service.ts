@@ -13,12 +13,8 @@ export class RenderingService extends Render {
   height = 748;
   showBlank = false;
 
-  constructor(
-    public darkTheme: boolean,
-    public rotation: number,
-    public showCP: boolean
-  ) {
-    super(darkTheme, rotation, showCP);
+  constructor() {
+    super();
     makeObservable(this, {
       showBlank: observable,
       darkTheme: observable,

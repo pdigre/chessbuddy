@@ -8,8 +8,8 @@ export type TimeRule = {
 
 export class Clock implements ListItem {
   constructor(
-    public name: string,
-    public time: TimeRule[]
+    public name ='',
+    public time: TimeRule[] = []
   ) {}
   label = 'Clock';
   getName: () => string = () => this.name.trim();
@@ -46,21 +46,18 @@ export class Clock implements ListItem {
 
   static time2string = (times?: TimeRule[]) => (times ? times.map(Clock.stringify).join(',') : '');
 
-  public static create: () => Clock = () => new Clock('', []);
+  public static create: () => Clock = () => new Clock();
 
-  static restore = (clocks?: Clock[]) =>
-    clocks?.length
-      ? clocks.map(x => new Clock(x.name, x.time))
-      : [
-          new Clock('No limit', []),
-          new Clock('FIDE Classic - 120/60/13/30', [
-            { from: 0, plus: 120, each: 0 },
-            { from: 40, plus: 60, each: 0 },
-            { from: 60, plus: 15, each: 10 },
-          ]),
-          new Clock('FIDE Rapid - 15/10', [{ from: 0, plus: 15, each: 10 }]),
-          new Clock('Rapid - 10/10', [{ from: 0, plus: 10, each: 10 }]),
-          new Clock('FIDE Blitz - 3/2', [{ from: 0, plus: 3, each: 2 }]),
-          new Clock('Blitz - 5/0', [{ from: 0, plus: 5, each: 0 }]),
-        ];
+  public static initial = [
+    new Clock('No limit', []),
+    new Clock('FIDE Classic - 120/60/13/30', [
+      { from: 0, plus: 120, each: 0 },
+      { from: 40, plus: 60, each: 0 },
+      { from: 60, plus: 15, each: 10 },
+    ]),
+    new Clock('FIDE Rapid - 15/10', [{ from: 0, plus: 15, each: 10 }]),
+    new Clock('Rapid - 10/10', [{ from: 0, plus: 10, each: 10 }]),
+    new Clock('FIDE Blitz - 3/2', [{ from: 0, plus: 3, each: 2 }]),
+    new Clock('Blitz - 5/0', [{ from: 0, plus: 5, each: 0 }]),
+  ];
 }

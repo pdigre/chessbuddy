@@ -1,10 +1,9 @@
 export class Game {
   constructor(
-    public white: string,
-    public black: string,
-    public clock: string
+    public white = 'User',
+    public black = 'Stockfish easy',
+    public clock = ''
   ) {}
 
-  static restore = (game?: Game) =>
-    new Game(game?.white ?? 'User', game?.black ?? 'Stockfish easy', game?.clock ?? '');
+  public static initial = new Game('User', 'Stockfish easy', '');
 }

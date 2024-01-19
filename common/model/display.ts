@@ -1,17 +1,10 @@
 export class Display {
   constructor(
-    public showFacts: boolean,
-    public showHints: boolean,
-    public playCorrect: boolean,
-    public playMistake: boolean,
-    public playWinner: boolean
+    public showFacts= true,
+    public showHints= true,
+    public playCorrect= false,
+    public playMistake= false,
+    public playWinner= false
   ) {}
-  static restore = (display?: Display) =>
-    new Display(
-      display?.showFacts ?? true,
-      display?.showHints ?? true,
-      display?.playCorrect ?? false,
-      display?.playMistake ?? false,
-      display?.playWinner ?? false
-    );
+  static initial = new Display(true, true, false, false, false);
 }
