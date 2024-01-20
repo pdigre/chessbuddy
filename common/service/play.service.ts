@@ -1,6 +1,6 @@
 import { Human } from '../model/human';
 import { San } from './openings.service';
-import { action, makeAutoObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { Chess, Square, WHITE } from 'chess.js';
 import { Clock } from '../model/clock';
 import { BotRunner } from './bot.service';
@@ -21,17 +21,12 @@ import {
 } from './index.service';
 import { FEN } from '../model/fen';
 import { toMMSS } from './clock.service.ts';
+import { Play } from '../model/play.ts';
 
 /*
  * Everything about the current game (can be restored when returning to browser later)
  */
-export class PlayService {
-  static storage = 'play';
-  wtime = 0;
-  btime = 0;
-  log: string[] = [];
-  fen = FEN.NEW_GAME;
-
+export class PlayService extends Play {
   // runtime does not need persisting
   private chess = new Chess(this.fen);
   isWhiteTurn = true;
@@ -44,22 +39,19 @@ export class PlayService {
   pgns: Square[] = [];
 
   constructor() {
-    makeAutoObservable(this);
-    const restore = storageService.restoreObject(PlayService.storage, {
-      wtime: 0,
-      btime: 0,
-      log: [],
-      fen: FEN.NEW_GAME,
+    super();
+    makeObservable(this, {
+      wtime: observable,
+      btime: observable,
+      log: observable,
+      fen: observable,
     });
-    this.wtime = restore.wtime;
-    this.btime = restore.btime;
-    this.log = restore.log;
-    this.fen = restore.fen;
+    storageService.load(this);
     this.calculate();
   }
 
   store() {
-    storageService.storeObject(PlayService.storage, this);
+    storageService.save(this);
   }
 
   private calculate() {

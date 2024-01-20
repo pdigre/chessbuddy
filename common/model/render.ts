@@ -3,7 +3,7 @@ import { Persist } from './model.ts';
 export class Render implements Persist {
   persist = () => ({
     name: 'render',
-    init: new Render()
+    init: new Render(),
   });
 
   constructor(

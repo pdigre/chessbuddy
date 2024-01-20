@@ -1,4 +1,3 @@
-import { jsonIgnoreReplacer } from 'json-ignore';
 import { messageService } from './index.service';
 import { Persist } from '../model/model.ts';
 
@@ -17,15 +16,6 @@ export class StorageService {
 
   storeObject = <T>(name: string, obj: T) => {
     return localStorage.setItem(name, JSON.stringify(obj, jsonIgnoreReplacer));
-  };
-  restoreObject = <T>(name: string, init: T) => {
-    try {
-      const data = localStorage.getItem(name);
-      return data ? (JSON.parse(data) as T) : init;
-    } catch (error) {
-      messageService.error('Storage error ' + name, String(error));
-      return init;
-    }
   };
 
   save = (persist: Persist) => {
