@@ -1,5 +1,4 @@
-import { GETSET, ListItem } from './model.ts';
-import { action } from 'mobx';
+import { ListItem } from './model.ts';
 
 export class Engine {
   constructor(
@@ -15,22 +14,13 @@ export const Engines: Engine[] = [
 
 export class Bot implements ListItem {
   constructor(
-    public name: string,
-    public engine: string,
-    public skill: number,
-    public time: number,
-    public depth: number
+    public name = '',
+    public engine = 'Stockfish',
+    public skill = 0,
+    public time = 0,
+    public depth = 0
   ) {}
   label = 'Bot';
-  properties: Map<string, GETSET<string>> = new Map([
-    ['name', [() => this.name, v => (this.name = v)]],
-    ['engine', [() => this.engine, v => (this.engine = v)]],
-    ['skill', [() => this.toTxt(this.skill), v => (this.skill = this.toInt(v))]],
-    ['time', [() => this.toTxt(this.time), v => (this.time = this.toInt(v))]],
-    ['depth', [() => this.toTxt(this.depth), v => (this.depth = this.toInt(v))]],
-  ]);
-  getProp = (name: string) => this.properties.get(name)![0]();
-  setProp = action((name: string, v: any) => this.properties.get(name)![1](v));
   getName: () => string = () => this.name;
   getDescription: () => string = () =>
     `${this.engine},${this.skill},${this.time ?? ''},${this.depth ?? ''}`;
@@ -67,17 +57,14 @@ export class Bot implements ListItem {
     return Engines.find(engine => engine.name == this.engine) ?? Engines[0];
   }
 
-  public static create: () => Bot = () => new Bot('', 'Stockfish', 0, 0, 0);
+  public static create: () => Bot = () => new Bot();
 
-  static restore = (bots?: Bot[]) =>
-    bots?.length
-      ? bots.map(x => new Bot(x.name, x.engine, x.skill, x.time, x.depth))
-      : [
-          new Bot('Stockfish easy', 'Stockfish', 20, 1, 0),
-          new Bot('Stockfish med', 'Stockfish', 1, 0, 10),
-          new Bot('Stockfish hard', 'Stockfish', 20, 0, 1),
-          new Bot('Lozza easy', 'Lozza', 20, 1, 0),
-          new Bot('Lozza med', 'Lozza', 1, 0, 10),
-          new Bot('Lozza hard', 'Lozza', 20, 0, 1),
-        ];
+  public static initial = [
+    new Bot('Stockfish easy', 'Stockfish', 20, 1, 0),
+    new Bot('Stockfish med', 'Stockfish', 1, 0, 10),
+    new Bot('Stockfish hard', 'Stockfish', 20, 0, 1),
+    new Bot('Lozza easy', 'Lozza', 20, 1, 0),
+    new Bot('Lozza med', 'Lozza', 1, 0, 10),
+    new Bot('Lozza hard', 'Lozza', 20, 0, 1),
+  ];
 }

@@ -1,13 +1,15 @@
-export type GETSET<T> = [() => T, (key: T) => void];
-
-export interface Item {
-  properties: Map<string, GETSET<any>>;
-  setProp: (prop: string, value: any) => void;
-  getProp: (prop: string) => any;
-}
-export interface ListItem extends Item {
+export interface ListItem {
   label: string;
   getName: () => string;
   getDescription: () => string;
   validate: () => string;
 }
+
+export interface Persist {
+  persist: () => { name: string; init: Object };
+}
+
+export const getProp = (obj: Object, name: string) =>
+  Object.entries(obj).find(([key, _value]) => key == name)![1];
+export const setProp = (obj: Object, name: string, value: any) =>
+  Object.assign(obj, Object.fromEntries([[name, value]]));

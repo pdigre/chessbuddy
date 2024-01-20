@@ -84,24 +84,10 @@ Some of this is not yet production ready and I lack experience.
 
 ## Developer
 
-[Development here](doc/dev.md)
+- [Install](doc/install.md)
+- [Overview](doc/overview.md)
 
-Notes:
-1. May need to uninstall esbuild and use npm install esbuild
-
-```mermaid
-flowchart TD;
-    setup-dev((Setup))
-    bci(Build Container Image In Dev)
-    style bci fill:blue
-    setup-dev--> bci
-```
-
-
-- configuration
-- gameplay
 </details>
-
 <details>
   <summary>Credits and resources</summary>
 

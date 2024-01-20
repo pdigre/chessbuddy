@@ -1,6 +1,6 @@
 {
   "name": "chessbuddy_react",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "homepage": ".",
   "dependencies": {
     "esbuild": "^0.19.10",

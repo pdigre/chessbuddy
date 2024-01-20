@@ -1,5 +1,5 @@
 import { Human } from '../model/human';
-import {historyService, messageService, renderingService} from './index.service';
+import { historyService, messageService, renderingService } from './index.service';
 
 export type RESP = { stored: number; games: string[] };
 

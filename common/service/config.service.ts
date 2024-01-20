@@ -1,9 +1,8 @@
-import { action, makeAutoObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
 import { BT } from '../model/bt.ts';
-import { jsonIgnore } from 'json-ignore';
 import {
   playService,
   storageService,
@@ -12,11 +11,9 @@ import {
   editService,
   renderingService,
 } from './index.service';
-import { Display } from '../model/display.ts';
 import { ListItem } from '../model/model.ts';
-import { Game } from '../model/game.ts';
 import { Square } from './rules.service.ts';
-import { RenderingService } from './rendering.service.ts';
+import { Config } from '../model/config.ts';
 
 export const enum ListMode {
   None = 1,
@@ -40,50 +37,40 @@ export interface ListProps {
   createItem: () => ListItem;
 }
 
-export class ConfigService {
-  static storage = 'config';
-
-  // Config to store
-  humans!: Human[];
-  bots!: Bot[];
-  clocks!: Clock[];
-  bts!: BT[];
-  display!: Display;
-  game!: Game;
-
+export class ConfigService extends Config {
   // Config runtime - no persist
-  @jsonIgnore() showConfig = false;
-  @jsonIgnore() showTab = 0;
-  @jsonIgnore() cursorClock = -1;
-  @jsonIgnore() cursorBot = -1;
-  @jsonIgnore() cursorHuman = -1;
-  @jsonIgnore() cursorBT = -1;
-  @jsonIgnore() listType = ListType.None;
-  @jsonIgnore() listMode = ListMode.None;
+  showConfig = false;
+  showTab = 0;
+  cursorClock = -1;
+  cursorBot = -1;
+  cursorHuman = -1;
+  cursorBT = -1;
+  listType = ListType.None;
+  listMode = ListMode.None;
   private newItem: ListItem = Human.create();
 
   constructor() {
-    makeAutoObservable(this);
-    const restore = storageService.restoreObject(ConfigService.storage, {}) as {
-      humans: Human[];
-      bots: Bot[];
-      clocks: Clock[];
-      bts: BT[];
-      display: Display;
-      game: Game;
-    };
-    // Cannot use object assign directly on "this" due to MOBX
-    this.humans = Human.restore(restore.humans);
-    this.bots = Bot.restore(restore.bots);
-    this.clocks = Clock.restore(restore.clocks);
-    this.bts = BT.restore(restore.bts);
-    this.display = Display.restore(restore.display);
-    this.game = Game.restore(restore.game);
+    super();
+    makeObservable(this, {
+      showConfig: observable,
+      showTab: observable,
+      cursorClock: observable,
+      cursorBot: observable,
+      cursorHuman: observable,
+      listType: observable,
+      listMode: observable,
+      humans: observable,
+      bots: observable,
+      clocks: observable,
+      bts: observable,
+      game: observable,
+      display: observable,
+    });
   }
 
   store: VoidFunction = () => {
-    storageService.storeObject(ConfigService.storage, this);
-    storageService.storeObject(RenderingService.storage, renderingService);
+    storageService.save(this);
+    storageService.save(renderingService);
   };
 
   // ****************************

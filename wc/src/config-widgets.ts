@@ -1,10 +1,9 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
 import { css, LitElement } from 'lit-element';
-import { Item } from '../../common/model/model.ts';
+import { getProp, setProp } from '../../common/model/model.ts';
 
 @customElement('cb-config-button')
 export class ConfigButton extends LitElement {
@@ -90,23 +89,19 @@ export class ConfigButton extends LitElement {
 @customElement('cb-config-text')
 export class ConfigText extends LitElement {
   @property({
-    hasChanged(newVal: Item, oldVal: Item) {
+    hasChanged(newVal: Object, oldVal: Object) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  item!: Item;
+  item!: Object;
   @property({ attribute: true })
   label!: string;
   @property({ attribute: true })
   id!: string;
   render() {
-    const prop = this.item?.properties?.get(this.id);
-    if (!prop) {
-      return html``;
-    }
-    const value = this.item.getProp(this.id);
+    const value = getProp(this.item, this.id);
     const onChange = (e: MouseEvent) =>
-      this.item.setProp(this.id, (e.target as HTMLInputElement).value);
+      setProp(this.item, this.id, (e.target as HTMLInputElement).value);
 
     return html`
       <md-outlined-text-field
@@ -122,11 +117,11 @@ export class ConfigText extends LitElement {
 @customElement('cb-config-boolean')
 export class ConfigBoolean extends LitElement {
   @property({
-    hasChanged(newVal: Item, oldVal: Item) {
+    hasChanged(newVal: Object, oldVal: Object) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  item!: Item;
+  item!: Object;
   @property({ attribute: true })
   label!: string;
   @property({ attribute: true })
@@ -145,13 +140,9 @@ export class ConfigBoolean extends LitElement {
   ];
 
   render() {
-    const prop = this.item?.properties?.get(this.id);
-    if (!prop) {
-      return html``;
-    }
-    const checked = this.item.getProp(this.id);
+    const checked = getProp(this.item, this.id);
     const onChange = (e: Event) =>
-      this.item.setProp(this.id, String((e.target as HTMLInputElement).checked));
+      setProp(this.item, this.id, String((e.target as HTMLInputElement).checked));
     return html`
       <label>
         <md-checkbox touch-target="wrapper" .checked=${!!checked} @change=${onChange}></md-checkbox>
@@ -164,11 +155,11 @@ export class ConfigBoolean extends LitElement {
 @customElement('cb-config-select')
 export class ConfigSelect extends LitElement {
   @property({
-    hasChanged(newVal: Item, oldVal: Item) {
+    hasChanged(newVal: Object, oldVal: Object) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  item!: Item;
+  item!: Object;
   @property({ attribute: true })
   label!: string;
   id!: string;
@@ -186,13 +177,9 @@ export class ConfigSelect extends LitElement {
 
   render() {
     console.log('choices=' + this.choices);
-    const prop = this.item?.properties?.get(this.id);
-    if (!prop) {
-      return html``;
-    }
-    const value = this.item.getProp(this.id);
+    const value = getProp(this.item, this.id);
     const onSelect = (event: MouseEvent) =>
-      this.item.setProp(this.id, (event.target as HTMLInputElement).value);
+      setProp(this.item, this.id, (event.target as HTMLInputElement).value);
     return html`
       <md-outlined-select label=${this.label}>
         <md-select-option></md-select-option>

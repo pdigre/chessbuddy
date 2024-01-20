@@ -43,4 +43,3 @@ export const toMMSS: (sec_num: number) => string = sec_num => {
   const s = secs - m * 60;
   return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
 };
-
