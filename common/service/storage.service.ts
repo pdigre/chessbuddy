@@ -15,7 +15,7 @@ export class StorageService {
   };
 
   storeObject = <T>(name: string, obj: T) => {
-    return localStorage.setItem(name, JSON.stringify(obj, jsonIgnoreReplacer));
+    return localStorage.setItem(name, JSON.stringify(obj));
   };
 
   save = (persist: Persist) => {
