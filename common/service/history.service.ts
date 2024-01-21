@@ -19,7 +19,7 @@ export type GameEntry = {
  * History of previous games, should store a maximum locally
  */
 export class HistoryService {
-  history: string[];
+  history: string[] = [];
   markHist = -1;
 
   constructor() {
