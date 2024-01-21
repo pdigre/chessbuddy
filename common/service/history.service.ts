@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { History, Games } from '../model/history';
 import {
   storageService,
@@ -23,7 +23,10 @@ export class HistoryService {
   markHist = -1;
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      history: observable,
+      markHist: observable,
+    });
     this.history = this.loadHistory();
     History.oldgames.forEach(x => this.history.push(x));
     const arr = this.history.map(x => History.create(x)).filter(x => x) as History[];

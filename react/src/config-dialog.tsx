@@ -1,11 +1,10 @@
 import React, { ChangeEvent, MouseEvent, ReactElement } from 'react';
-import { Box, Dialog, Tab, Tabs, Typography } from '@mui/material';
-import { connectService, renderingService } from '../../common/service/index.service';
+import { Box, Dialog, Tab, Tabs } from '@mui/material';
+import { connectService } from '../../common/service/index.service';
 import { observer } from 'mobx-react';
 import { ConfigService } from '../../common/service/config.service';
 import { FaChess, FaClock, FaConnectdevelop, FaRobot } from 'react-icons/fa';
 import { MdMonitor, MdPeople } from 'react-icons/md';
-import { action } from 'mobx';
 import { ConfigHuman } from './config-human';
 import { ConfigClock } from './config-clock';
 import { ConfigBluetooth } from './config-bluetooth';
@@ -26,7 +25,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
       >
         {config.showTab === index && (
           <Box p={3}>
-            <Typography>{children}</Typography>
+            {children}
           </Box>
         )}
       </div>
@@ -35,7 +34,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
 
   // eslint-disable-next-line
   const handleChange = (event: ChangeEvent<{}>, newValue: number) =>
-    config.switchTab(newValue as number);
+    config.switchTabAction(newValue as number);
 
   const prevent = (event: MouseEvent<HTMLAnchorElement>) => event.preventDefault();
 

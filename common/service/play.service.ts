@@ -28,12 +28,12 @@ import { Play } from '../model/play.ts';
  */
 export class PlayService extends Play {
   // runtime does not need persisting
-  private chess = new Chess(this.fen);
+   chess = new Chess(this.fen);
   isWhiteTurn = true;
   isComplete = false;
-  private bplayer?: BotRunner;
-  private wplayer?: BotRunner;
-  private clock?: Clock;
+   bplayer?: BotRunner;
+   wplayer?: BotRunner;
+   clock?: Clock;
   allowed = 0;
   isPlaying = false;
   pgns: Square[] = [];
@@ -45,6 +45,19 @@ export class PlayService extends Play {
       btime: observable,
       log: observable,
       fen: observable,
+      isWhiteTurn: observable,
+      isComplete: observable,
+      allowed: observable,
+      isPlaying: observable,
+      pgns: observable,
+      setPlaying: action,
+      initGame: action,
+      undoTo: action,
+      resetGameAction: action,
+      startGameAction: action,
+      editGameAction: action,
+      endGameAction: action,
+      pieceMoveAction: action,
     });
     storageService.load(this);
     this.calculate();
@@ -95,7 +108,7 @@ export class PlayService extends Play {
 
   readonly isMoveable = (from: Square): boolean => this.chess.moves({ square: from }).length > 0;
 
-  readonly resetGameAction: VoidFunction = action(() => {
+  readonly resetGameAction: VoidFunction = () => {
     this.wtime = 0;
     this.btime = 0;
     this.log = [];
@@ -104,7 +117,7 @@ export class PlayService extends Play {
     this.isComplete = false;
     analyzerService.reset();
     this.run();
-  });
+  };
 
   initBots() {
     const players = [...configService.humans, ...configService.bots];
@@ -148,12 +161,12 @@ export class PlayService extends Play {
   runBot() {
     const next = this.nextPlayer();
     if (next instanceof BotRunner) {
-      next.processFen(this.fen, ({ from, to }) => {
+      next.processFen(this.fen, action(({ from, to }) => {
         const move = rulesService.move(this.fen, from, to);
         if (move) {
           this.playMove(move[1].san);
         }
-      });
+      }));
     }
   }
 
@@ -214,7 +227,7 @@ export class PlayService extends Play {
 
   undoTo(mark: number) {
     this.setPlaying(false);
-    dashboardService.setMarkLog(mark);
+    dashboardService.setMarkLogAction(mark);
     const pos = mark >= 0 ? mark : this.log.length;
     this.fen = rulesService.replay(this.log, pos);
     this.clearAnalyzer();
@@ -230,7 +243,7 @@ export class PlayService extends Play {
     const moves = games[historyService.markHist].split(';')[5].split(' ');
     this.log = moves;
     const mark = moves.length - 1;
-    dashboardService.setMarkLog(mark);
+    dashboardService.setMarkLogAction(mark);
     this.fen = rulesService.replay(moves, mark);
   }
 
@@ -242,12 +255,12 @@ export class PlayService extends Play {
     this.playContinue();
   });
 
-  editGameAction = action(() => {
+  editGameAction = () => {
     configService.store();
     editService.editStart(this.fen);
-  });
+  };
 
-  endGameAction = action(() => {
+  endGameAction = () => {
     const winner = this.whoWon();
     if (winner) {
       messageService.display({
@@ -258,7 +271,7 @@ export class PlayService extends Play {
     } else {
       messageService.standard('end', reply => this.recordScore(reply));
     }
-  });
+  };
 
   // Board actions
 
@@ -274,7 +287,7 @@ export class PlayService extends Play {
     return false;
   };
 
-  pieceMove(from: Square, to: Square) {
+  pieceMoveAction = (from: Square, to: Square) => {
     if (
       analyzerService.help.length > 1 &&
       analyzerService.help[0] == to &&
@@ -337,10 +350,10 @@ export class PlayService extends Play {
       messageService.standard(isPlayUndo ? 'undo' : 'revert', reply => {
         if (reply == 'Yes') {
           this.initGame(
-            this.log.slice(0, isPlayUndo ? dashboardService.undopos : dashboardService.markLog)
+            this.log.slice(0, isPlayUndo ? dashboardService.undoPos : dashboardService.markLog)
           );
         }
-        dashboardService.setMarkLog(-1);
+        dashboardService.setMarkLogAction(-1);
       });
       return;
     }

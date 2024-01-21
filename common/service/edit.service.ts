@@ -1,5 +1,5 @@
 import { BLACK, Square, SQUARES, WHITE } from 'chess.js';
-import { action, makeAutoObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { FEN } from '../model/fen';
 import { configService } from './index.service';
 
@@ -15,7 +15,19 @@ export class EditService {
   bFirst = false;
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      showEdit: observable,
+      editSquare: observable,
+      editFen: observable,
+      wcck: observable,
+      wccq: observable,
+      bcck: observable,
+      bccq: observable,
+      bFirst: observable,
+      editDoneAction: action,
+      editPiece: action,
+      editMove: action,
+    });
   }
 
   editStart(fen: string) {

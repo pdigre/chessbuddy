@@ -73,7 +73,7 @@ export const ConfigPopup: React.FC<{
   const icon = isEdit ? <MdSave /> : <MdAdd />;
   const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
   const onClose = action(() => {
-    configService.setListMode(ListMode.None);
+    configService.setListModeAction(ListMode.None);
   });
   return (
     <Dialog aria-labelledby="message" onClose={onClose} className="text-center text-lg" open>

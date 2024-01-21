@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
@@ -65,6 +65,10 @@ export class ConfigService extends Config {
       bts: observable,
       game: observable,
       display: observable,
+      switchTabAction: action,
+      closeConfigAction: action,
+      openConfigAction: action,
+      setListModeAction: action,
     });
   }
 
@@ -76,24 +80,22 @@ export class ConfigService extends Config {
   // ****************************
   // Actions
   // ****************************
-  openConfigAction = action(() => {
+  openConfigAction = () => {
     this.showConfig = true;
     playService.isPlaying = false;
     console.log('openConfigAction');
-  });
+  };
 
-  closeConfigAction = action(() => {
+  closeConfigAction = () => {
     this.showConfig = false;
     this.store();
-  });
+  };
 
-  switchTab(n: number) {
-    this.showTab = n;
-  }
+  switchTabAction = (n: number) => (this.showTab = n);
 
-  setListMode(mode: ListMode) {
-    this.listMode = mode;
-  }
+  setListModeAction = (mode: ListMode) => (
+    this.listMode = mode
+  );
 
   isEdit() {
     return this.listMode == ListMode.Edit;
@@ -179,8 +181,8 @@ export class ConfigService extends Config {
         listProps.setCursor(-1);
         this.listMode = ListMode.None;
       }),
-      onAdd: action(() => this.setListMode(ListMode.Add)),
-      onEdit: action(() => this.setListMode(ListMode.Edit)),
+      onAdd: this.setListModeAction(ListMode.Add),
+      onEdit: this.setListModeAction(ListMode.Edit),
       onDelete: action(() => {
         items.splice(cursor, 1);
         listProps.setCursor(-1);
@@ -199,12 +201,12 @@ export class ConfigService extends Config {
       b2sq,
       sq2b: (square: Square) => (r90 ? rules.rightSquare(square) : square),
       fen2b: (fen: string) => (r90 ? rules.leftFen(fen) : fen),
-      pieceDropAction: (boardFrom: Square, boardTo: Square) => {
+      onPieceDrop: (boardFrom: Square, boardTo: Square) => {
         if (editService.showEdit) {
           editService.editMove(boardFrom, boardTo);
           return true;
         }
-        return playService.pieceMove(b2sq(boardFrom), b2sq(boardTo));
+        return playService.pieceMoveAction(b2sq(boardFrom), b2sq(boardTo));
       },
     };
   }
