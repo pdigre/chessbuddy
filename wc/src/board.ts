@@ -85,7 +85,7 @@ export class Board extends MobxLitElement {
 
     const onStart = (e: MouseEvent) => {
       const boardFrom = this.xy2square(e.offsetX, e.offsetY);
-      return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
+      return editService.showEdit || playService.pieceStartAction(b2sq(boardFrom));
     };
     const h = renderingService.getSize().height - 64;
     const STYLE = css`

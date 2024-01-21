@@ -28,12 +28,15 @@ export class DashboardService {
   startUndoTimer(pos: number) {
     this.showUndo = true;
     this.undoPos = pos;
-    window.setTimeout(action(() => {
+    window.setTimeout(
+      action(() => {
         if (this.showUndo) {
           this.undoPos = 0; // In the case you're already in a UNDO confirmation box.
         }
         this.showUndo = false;
-    }), 9000);
+      }),
+      9000
+    );
   }
 
   setMarkLogAction(n: number) {

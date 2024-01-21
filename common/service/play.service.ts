@@ -28,12 +28,12 @@ import { Play } from '../model/play.ts';
  */
 export class PlayService extends Play {
   // runtime does not need persisting
-   chess = new Chess(this.fen);
+  chess = new Chess(this.fen);
   isWhiteTurn = true;
   isComplete = false;
-   bplayer?: BotRunner;
-   wplayer?: BotRunner;
-   clock?: Clock;
+  bplayer?: BotRunner;
+  wplayer?: BotRunner;
+  clock?: Clock;
   allowed = 0;
   isPlaying = false;
   pgns: Square[] = [];
@@ -161,12 +161,15 @@ export class PlayService extends Play {
   runBot() {
     const next = this.nextPlayer();
     if (next instanceof BotRunner) {
-      next.processFen(this.fen, action(({ from, to }) => {
-        const move = rulesService.move(this.fen, from, to);
-        if (move) {
-          this.playMove(move[1].san);
-        }
-      }));
+      next.processFen(
+        this.fen,
+        action(({ from, to }) => {
+          const move = rulesService.move(this.fen, from, to);
+          if (move) {
+            this.playMove(move[1].san);
+          }
+        })
+      );
     }
   }
 
@@ -248,7 +251,7 @@ export class PlayService extends Play {
   }
 
   // Game config actions
-  startGameAction: VoidFunction = action(() => {
+  startGameAction = action(() => {
     configService.store();
     configService.closeConfigAction();
     configService.showConfig = false;
@@ -275,7 +278,7 @@ export class PlayService extends Play {
 
   // Board actions
 
-  pieceStart = (from: Square): any => {
+  pieceStartAction = (from: Square): any => {
     const player = this.nextPlayer();
     if (player instanceof Human && !this.isComplete) {
       const movable = this.isMoveable(from);
@@ -301,7 +304,7 @@ export class PlayService extends Play {
     const isOk = state != this.log.length;
     isOk ? mediaService.soundMove() : mediaService.soundError();
     return isOk;
-  }
+  };
 
   move(from: Square, to: Square, isHuman: boolean) {
     const move = rulesService.move(this.fen, from, to);

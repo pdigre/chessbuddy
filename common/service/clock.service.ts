@@ -7,11 +7,14 @@ export class ClockService {
   constructor() {
     makeObservable(this, {
       elapsed: observable,
-      clockText: computed
+      clockText: computed,
     });
-    setInterval(action(() => {
-      playService.isPlaying ? this.elapsed++ : this.elapsed;
-    }), 1000);
+    setInterval(
+      action(() => {
+        playService.isPlaying ? this.elapsed++ : this.elapsed;
+      }),
+      1000
+    );
   }
 
   reset() {

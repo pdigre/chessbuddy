@@ -76,7 +76,7 @@ export const Board = observer(
         ? edit.editFen
         : playService.fen;
     const onStart = (piece: string, boardFrom: Square): any => {
-      return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
+      return editService.showEdit || playService.pieceStartAction(b2sq(boardFrom));
     };
 
     const onClick = (square: Square) => editService.onSquareClick(square);

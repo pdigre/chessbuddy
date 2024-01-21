@@ -58,7 +58,7 @@ export class ConfigDialog extends MobxLitElement {
       const target = event?.target as HTMLElement;
       if (target) {
         const num = target.id;
-          this.config.switchTabAction(+num);
+        this.config.switchTabAction(+num);
         const daddy = (target.parentNode as HTMLElement).parentNode;
         daddy?.childNodes.forEach(child => {
           const slot = child.firstChild as HTMLSlotElement;

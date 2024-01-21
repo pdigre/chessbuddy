@@ -93,9 +93,7 @@ export class ConfigService extends Config {
 
   switchTabAction = (n: number) => (this.showTab = n);
 
-  setListModeAction = (mode: ListMode) => (
-    this.listMode = mode
-  );
+  setListModeAction = (mode: ListMode) => (this.listMode = mode);
 
   isEdit() {
     return this.listMode == ListMode.Edit;
