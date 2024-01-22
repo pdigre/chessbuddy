@@ -15,6 +15,7 @@ export type GameEntry = {
   c1: string;
   c2: string;
 };
+
 /*
  * History of previous games, should store a maximum locally
  */
