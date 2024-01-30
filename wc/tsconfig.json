@@ -28,9 +28,9 @@
   },
   "include": [
     "src",
-    "../common",
-    "package.json",
-    "../react/build/assets/index-9bc7c2dd.js"
+    "../common/model",
+    "../common/services",
+    "package.json"
   ],
-  "exclude": []
+  "exclude": ["node_modules", "dist"]
 }

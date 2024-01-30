@@ -178,8 +178,8 @@ export class ConfigService extends Config {
         listProps.setCursor(-1);
         this.listMode = ListMode.None;
       }),
-      onAdd: () => (this.setListModeAction(ListMode.Add)),
-      onEdit: () => (this.setListModeAction(ListMode.Edit)),
+      onAdd: () => this.setListModeAction(ListMode.Add),
+      onEdit: () => this.setListModeAction(ListMode.Edit),
       onDelete: action(() => {
         items.splice(cursor, 1);
         listProps.setCursor(-1);

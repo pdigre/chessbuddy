@@ -22,8 +22,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "types": ["bun-types", "web", "web-bluetooth", "w3c-web-serial"]
+    "types": ["bun-types", "web", "web-bluetooth", "w3c-web-serial"],
   },
-  "include": ["service", "model"],
-  "exclude": ["react", "zap"]
+  "include": ["service", "model"]
 }
