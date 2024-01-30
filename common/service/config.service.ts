@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
@@ -47,7 +47,6 @@ export class ConfigService extends Config {
   cursorBT = -1;
   listType = ListType.None;
   listMode = ListMode.None;
-  private newItem: ListItem = Human.create();
 
   constructor() {
     super();
@@ -151,7 +150,7 @@ export class ConfigService extends Config {
     const items = listProps.getItems();
     const cursor = listProps.getCursor();
     const isEdit = this.listMode == ListMode.Edit;
-    const item = isEdit ? items[cursor] : this.newItem;
+    const item = isEdit ? items[cursor] : listProps.createItem();
     const active = this.showTab == listProps.tab;
     return {
       type,
@@ -179,8 +178,8 @@ export class ConfigService extends Config {
         listProps.setCursor(-1);
         this.listMode = ListMode.None;
       }),
-      onAdd: this.setListModeAction(ListMode.Add),
-      onEdit: this.setListModeAction(ListMode.Edit),
+      onAdd: () => (this.setListModeAction(ListMode.Add)),
+      onEdit: () => (this.setListModeAction(ListMode.Edit)),
       onDelete: action(() => {
         items.splice(cursor, 1);
         listProps.setCursor(-1);

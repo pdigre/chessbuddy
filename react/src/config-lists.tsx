@@ -1,4 +1,4 @@
-import React, { ReactNode, MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -9,12 +9,11 @@ import {
 import { MdAdd, MdDelete, MdEdit, MdSave } from 'react-icons/md';
 import { ListMode, ListType } from '../../common/service/config.service';
 import { configService } from '../../common/service/index.service';
-import { action } from 'mobx';
 import { ConfigButton } from './config-widgets';
-import { Item } from '../../common/model/model';
+import { ListItem } from '../../common/model/model';
 
 export const ConfigListTable: React.FC<{
-  items: Item[];
+  items: ListItem[];
   onSelect: (id: string) => void;
   cursor: number;
 }> = ({ items, onSelect, cursor }) => {
@@ -72,9 +71,9 @@ export const ConfigPopup: React.FC<{
   const label = (isEdit ? 'Save ' : 'Add ') + typeName;
   const icon = isEdit ? <MdSave /> : <MdAdd />;
   const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
-  const onClose = action(() => {
+  const onClose = () => {
     configService.setListModeAction(ListMode.None);
-  });
+  };
   return (
     <Dialog aria-labelledby="message" onClose={onClose} className="text-center text-lg" open>
       <DialogTitle id="message">{title}</DialogTitle>
