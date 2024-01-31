@@ -4,6 +4,7 @@ import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
 import { css, LitElement } from 'lit-element';
 import { getProp, setProp } from '../../common/model/model.ts';
+import { action } from 'mobx';
 
 @customElement('cb-config-button')
 export class ConfigButton extends LitElement {
@@ -178,8 +179,9 @@ export class ConfigSelect extends LitElement {
   render() {
     console.log('choices=' + this.choices);
     const value = getProp(this.item, this.id);
-    const onSelect = (event: MouseEvent) =>
+    const onSelect = action((event: MouseEvent) => {
       setProp(this.item, this.id, (event.target as HTMLInputElement).value);
+    });
     return html`
       <md-outlined-select label=${this.label}>
         <md-select-option></md-select-option>
