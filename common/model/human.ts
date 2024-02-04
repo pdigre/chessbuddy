@@ -14,5 +14,5 @@ export class Human implements ListItem {
 
   public static create: () => Human = () => new Human();
 
-  public static initial = [new Human("User","")];
+  public static initial = [new Human('User', '')];
 }
