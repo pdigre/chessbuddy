@@ -47,7 +47,6 @@ export class ConfigService extends Config {
   cursorBT = -1;
   listType = ListType.None;
   listMode = ListMode.None;
-  private newItem: ListItem = Human.create();
 
   constructor() {
     super();
@@ -65,6 +64,10 @@ export class ConfigService extends Config {
       bts: observable,
       game: observable,
       display: observable,
+      switchTabAction: action,
+      closeConfigAction: action,
+      openConfigAction: action,
+      setListModeAction: action,
     });
   }
 
@@ -76,24 +79,20 @@ export class ConfigService extends Config {
   // ****************************
   // Actions
   // ****************************
-  openConfigAction = action(() => {
+  openConfigAction = () => {
     this.showConfig = true;
     playService.isPlaying = false;
     console.log('openConfigAction');
-  });
+  };
 
-  closeConfigAction = action(() => {
+  closeConfigAction = () => {
     this.showConfig = false;
     this.store();
-  });
+  };
 
-  switchTab(n: number) {
-    this.showTab = n;
-  }
+  switchTabAction = (n: number) => (this.showTab = n);
 
-  setListMode(mode: ListMode) {
-    this.listMode = mode;
-  }
+  setListModeAction = (mode: ListMode) => (this.listMode = mode);
 
   isEdit() {
     return this.listMode == ListMode.Edit;
@@ -151,7 +150,7 @@ export class ConfigService extends Config {
     const items = listProps.getItems();
     const cursor = listProps.getCursor();
     const isEdit = this.listMode == ListMode.Edit;
-    const item = isEdit ? items[cursor] : this.newItem;
+    const item = isEdit ? items[cursor] : listProps.createItem();
     const active = this.showTab == listProps.tab;
     return {
       type,
@@ -179,8 +178,8 @@ export class ConfigService extends Config {
         listProps.setCursor(-1);
         this.listMode = ListMode.None;
       }),
-      onAdd: action(() => this.setListMode(ListMode.Add)),
-      onEdit: action(() => this.setListMode(ListMode.Edit)),
+      onAdd: () => this.setListModeAction(ListMode.Add),
+      onEdit: () => this.setListModeAction(ListMode.Edit),
       onDelete: action(() => {
         items.splice(cursor, 1);
         listProps.setCursor(-1);
@@ -199,12 +198,12 @@ export class ConfigService extends Config {
       b2sq,
       sq2b: (square: Square) => (r90 ? rules.rightSquare(square) : square),
       fen2b: (fen: string) => (r90 ? rules.leftFen(fen) : fen),
-      pieceDropAction: (boardFrom: Square, boardTo: Square) => {
+      onPieceDrop: (boardFrom: Square, boardTo: Square) => {
         if (editService.showEdit) {
           editService.editMove(boardFrom, boardTo);
           return true;
         }
-        return playService.pieceMove(b2sq(boardFrom), b2sq(boardTo));
+        return playService.pieceMoveAction(b2sq(boardFrom), b2sq(boardTo));
       },
     };
   }

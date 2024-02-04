@@ -4,7 +4,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { ConfigService } from '../../common/service/config.service';
 import { TW_CSS, MD_ICONS } from './css';
 import { css } from 'lit-element';
-import { runInAction } from 'mobx';
 
 @customElement('cb-config')
 export class Config extends MobxLitElement {
@@ -31,7 +30,7 @@ export class Config extends MobxLitElement {
 
     const choose = (index: number) => (event: MouseEvent) => {
       event.preventDefault();
-      runInAction(() => this.config.switchTab(index));
+      this.config.switchTabAction(index);
     };
 
     const tab = (num: number, icon: string, title: string) => {

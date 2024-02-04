@@ -32,7 +32,7 @@ export class PanelLog extends MobxLitElement {
     let target = e.target as HTMLElement;
     if (target.nodeName == 'TD') {
       const i = +target.id;
-      dashboardService.setMarkLog(i);
+      dashboardService.setMarkLogAction(i);
       e.preventDefault();
       this.requestUpdate();
     }

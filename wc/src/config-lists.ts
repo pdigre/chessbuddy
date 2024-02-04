@@ -89,7 +89,7 @@ export class ConfigPopup extends LitElement {
     const icon = isEdit ? 'save' : 'add';
     const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
     const onClose = action(() => {
-      configService.setListMode(ListMode.None);
+      configService.setListModeAction(ListMode.None);
     });
     return html`
       ${MD_ICONS}

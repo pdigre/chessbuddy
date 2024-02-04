@@ -25,7 +25,7 @@ export const Board = observer(
       backgroundColor: 'rgb(181, 136, 99)',
     };
 
-    const { r90, r180, b2sq, sq2b, fen2b, pieceDropAction } = config.getBoardLogic();
+    const { r90, r180, b2sq, sq2b, fen2b, onPieceDrop } = config.getBoardLogic();
 
     const showMarkers = () => {
       const markers = {};
@@ -76,7 +76,7 @@ export const Board = observer(
         ? edit.editFen
         : playService.fen;
     const onStart = (piece: string, boardFrom: Square): any => {
-      return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
+      return editService.showEdit || playService.pieceStartAction(b2sq(boardFrom));
     };
 
     const onClick = (square: Square) => editService.onSquareClick(square);
@@ -85,7 +85,7 @@ export const Board = observer(
       <Chessboard
         position={fen2b(fen)}
         onPieceDragBegin={onStart}
-        onPieceDrop={pieceDropAction}
+        onPieceDrop={onPieceDrop}
         onSquareClick={onClick}
         boardOrientation={orientation}
         boardWidth={rendering.boardWidth}

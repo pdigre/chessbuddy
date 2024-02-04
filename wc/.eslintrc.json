@@ -1,13 +1,11 @@
 {
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
     "plugin:mobx/recommended"
   ],
   "plugins": [
-    "react",
     "@typescript-eslint",
     "prettier",
     "import",
@@ -27,14 +25,9 @@
     "mobx/missing-observer": "off" 
   },
   "settings": {
-    "react": {
-      "pragma": "React",
-      "version": "detect"
-    },
     "import/parsers": {
       "@typescript-eslint/parser": [
-        ".ts",
-        ".tsx"
+        ".ts"
       ]
     },
     "import/resolver": {
@@ -48,7 +41,7 @@
     // https://github.com/yannickcr/eslint-plugin-react/issues/2353#issuecomment-674792754
     {
       "files": [
-        "**/*.tsx"
+        "src/*.ts"
       ],
       "rules": {
         "react/prop-types": "off"

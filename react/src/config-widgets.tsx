@@ -79,11 +79,11 @@ export const ConfigSelect: React.FC<{
   if (!prop) {
     return <div></div>;
   }
-  const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const onChange = action((e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setProp(item, id, value);
     setV(value);
-  };
+  });
   const value = getProp(item, id);
   const [v, setV] = useState(value);
   return (

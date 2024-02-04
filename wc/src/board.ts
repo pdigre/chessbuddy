@@ -37,7 +37,7 @@ export class Board extends MobxLitElement {
   private readonly DARK_MODE = 'dark-mode';
 
   render() {
-    const { r90, r180, b2sq, sq2b, fen2b, pieceDropAction } = this.config.getBoardLogic();
+    const { r90, r180, b2sq, sq2b, fen2b, onPieceDrop } = this.config.getBoardLogic();
 
     if (this.rendering.darkTheme) {
       document.body.classList.add(this.DARK_MODE);
@@ -77,7 +77,7 @@ export class Board extends MobxLitElement {
     const side = (isWhite: boolean) => (isWhite ? 'rgb(240, 217, 181)' : 'rgb(181, 136, 99)');
 
     const onDrop = (e: CustomEvent<ChessBoardEvent>) => {
-      if (!pieceDropAction(e.detail.source as Square, e.detail.target as Square)) {
+      if (!onPieceDrop(e.detail.source as Square, e.detail.target as Square)) {
         e.preventDefault();
         e.detail.setAction('snapback');
       }
@@ -85,7 +85,7 @@ export class Board extends MobxLitElement {
 
     const onStart = (e: MouseEvent) => {
       const boardFrom = this.xy2square(e.offsetX, e.offsetY);
-      return editService.showEdit || playService.pieceStart(b2sq(boardFrom));
+      return editService.showEdit || playService.pieceStartAction(b2sq(boardFrom));
     };
     const h = renderingService.getSize().height - 64;
     const STYLE = css`

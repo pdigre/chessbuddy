@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { action, runInAction } from 'mobx';
+import { action } from 'mobx';
 import { ConfigService } from '../../common/service/config.service';
 import { TW_CSS, MD_ICONS } from './css';
 import { css } from 'lit-element';
@@ -48,19 +48,15 @@ export class ConfigDialog extends MobxLitElement {
   ];
 
   render() {
-    console.log('config ' + this.config.showConfig);
-    if (!this.config.showConfig) {
-      return '';
-    }
+    const showConfig = this.config.showConfig;
+    console.log('config ' + showConfig);
 
     const choose = (event: MouseEvent) => {
       event.preventDefault();
       const target = event?.target as HTMLElement;
       if (target) {
         const num = target.id;
-        runInAction(() => {
-          this.config.switchTab(+num);
-        });
+        this.config.switchTabAction(+num);
         const daddy = (target.parentNode as HTMLElement).parentNode;
         daddy?.childNodes.forEach(child => {
           const slot = child.firstChild as HTMLSlotElement;
@@ -85,7 +81,12 @@ export class ConfigDialog extends MobxLitElement {
 
     let onClose = action(this.config.closeConfigAction);
     return html`
-      <md-dialog class="main" aria-labelledby="simple-dialog-title" open @close=${onClose}>
+      <md-dialog
+        class="main"
+        aria-labelledby="simple-dialog-title"
+        .open=${showConfig}
+        @close=${onClose}
+      >
         <div slot="content">
           <md-tabs class="text-lg text-center" aria-label="Content to view">
             ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')} ${tab(2, 'people', 'Humans')}

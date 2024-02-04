@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { messageService } from './index.service.ts';
 
 type SET_CALLBACK = (msg: messageType) => void;
@@ -21,7 +21,12 @@ export class MessageService {
   title?: string;
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      show: observable,
+      display: action,
+      aboutAction: action,
+      error: action,
+    });
   }
 
   initialize(resultHolder: SET_CALLBACK) {

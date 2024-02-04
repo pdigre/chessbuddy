@@ -1,18 +1,20 @@
-import { makeAutoObservable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { mediaService, playService } from './index.service';
 
 export class ClockService {
   elapsed = 0;
 
   constructor() {
-    makeAutoObservable(this);
-    setInterval(() => {
-      this.update(playService.isPlaying);
-    }, 1000);
-  }
-
-  update(isPlaying: boolean) {
-    isPlaying ? this.elapsed++ : this.elapsed;
+    makeObservable(this, {
+      elapsed: observable,
+      clockText: computed,
+    });
+    setInterval(
+      action(() => {
+        playService.isPlaying ? this.elapsed++ : this.elapsed;
+      }),
+      1000
+    );
   }
 
   reset() {

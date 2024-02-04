@@ -1,5 +1,5 @@
 import type { Fen } from './rules.service';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
 import { mediaService, openingsService, playService, renderingService } from './index.service';
 import { Engines } from '../model/bot';
@@ -83,7 +83,11 @@ export class AnalyzerService {
   helperBot = new AnalyzerBot();
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      help: observable,
+      cp: observable,
+      reset: action,
+    });
   }
 
   reset: VoidFunction = () => (this.help = []);

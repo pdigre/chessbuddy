@@ -10,14 +10,15 @@
     "chessboard-element": "^1.2.0",
     "esbuild": "^0.19.8",
     "lit-element": "^4.0.0",
-    "mobx": "^6.12.0",
-    "prettier": "^3.0.3"
+    "mobx": "^6.12.0"
   },
   "scripts": {
     "dev": "bunx --bun vite",
     "format": "bunx prettier src --write",
     "build:npm": "vite build",
     "build": "vite build",
+    "lint": "eslint src/*.ts",
+    "lint:fix": "eslint src/*.ts --fix",
     "serve": "bun serve.ts",
     "prod": "bun build src/app.ts --outfile=../public/wc.js --watch"
   },
@@ -26,6 +27,11 @@
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "bun-types": "latest",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-mobx": "^0.0.9",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.4",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"
   }
