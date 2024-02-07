@@ -2,7 +2,6 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { configService } from '../../common/service/index.service';
 import { ListMode, ListType } from '../../common/service/config.service';
-import { action } from 'mobx';
 import { property } from 'lit-element/decorators.js';
 import { MD_ICONS, TW_CSS } from './css';
 import { css, LitElement } from 'lit-element';
@@ -20,8 +19,8 @@ export const LIST_CSS = css`
 @customElement('cb-config-list')
 export class ConfigList extends LitElement {
   @property({
-    hasChanged(newVal: ListItem[], oldVal: ListItem[]) {
-      return JSON.stringify(newVal) !== JSON.stringify(oldVal);
+    hasChanged(_newVal: ListItem[], _oldVal: ListItem[]) {
+      return true;
     },
   })
   items!: ListItem[];
@@ -88,9 +87,7 @@ export class ConfigPopup extends LitElement {
     const label = (isEdit ? 'Save ' : 'Add ') + typeName;
     const icon = isEdit ? 'save' : 'add';
     const title = (isEdit ? 'Edit ' : 'Add ') + typeName;
-    const onClose = action(() => {
-      configService.setListModeAction(ListMode.None);
-    });
+    const onClose = () => configService.setListModeAction(ListMode.None);
     return html`
       ${MD_ICONS}
       <md-dialog aria-labelledby="message" @close=${onClose} class="text-center text-lg" open>

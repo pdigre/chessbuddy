@@ -24,6 +24,6 @@
       }
     ]
   },
-  "include": ["src", "../common/service/", "../common/model/", "index.js", "package.json"],
+  "include": ["src", "../common/service/", "../common/model/", "index.js"],
   "exclude": ["node_modules", "build"]
 }

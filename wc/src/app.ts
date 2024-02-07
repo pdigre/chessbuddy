@@ -11,7 +11,6 @@ import {
   historyService,
   configService,
 } from '../../common/service/index.service.ts';
-import packageInfo from '../package.json';
 import { TW_CSS, MD_ICONS } from './css.ts';
 import { css } from 'lit-element';
 import { wcInit } from './wc-init.ts';
@@ -88,7 +87,7 @@ export class App extends LitElement {
         <div class="flex flex-col w-full text-center">
           <h3 class="header text-lg flex flex-row m-0 p-0">
             <md-text-button @click=${messageService.aboutAction} class="text-xl">
-              <span class="link">ChessBuddy ${packageInfo.version}</span>
+              <span class="link">ChessBuddy ${messageService.getVersion()}</span>
             </md-text-button>
             <md-text-button @click=${mediaService.playAllAction}>
               <span class="link material-symbols-outlined">refresh</span>

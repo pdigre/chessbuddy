@@ -29,8 +29,7 @@
   "include": [
     "src",
     "../common/model",
-    "../common/services",
-    "package.json"
+    "../common/services"
   ],
   "exclude": ["node_modules", "dist"]
 }

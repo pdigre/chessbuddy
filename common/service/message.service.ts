@@ -1,5 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 import { messageService } from './index.service.ts';
+import packageInfo from '../package.json';
 
 type SET_CALLBACK = (msg: messageType) => void;
 
@@ -27,6 +28,10 @@ export class MessageService {
       aboutAction: action,
       error: action,
     });
+  }
+
+  public getVersion() {
+    return packageInfo.version;
   }
 
   initialize(resultHolder: SET_CALLBACK) {
