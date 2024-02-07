@@ -1,8 +1,5 @@
 {
   "name": "chessbuddy_wc",
-  "version": "0.31.0",
-  "private": true,
-  "homepage": ".",
   "type": "module",
   "dependencies": {
     "@adobe/lit-mobx": "^2.2.0",

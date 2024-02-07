@@ -10,7 +10,6 @@ import {
   historyService,
   configService,
 } from '../../common/service/index.service';
-import packageInfo from '../package.json';
 import { Mp4dialog } from './mp4dialog';
 import { RenderingService } from '../../common/service/rendering.service';
 import { observer } from 'mobx-react';
@@ -75,7 +74,7 @@ const darkTheme = createTheme({
   },
 });
 export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService }) => {
-  const version = packageInfo.version;
+  const version = messageService.getVersion();
   const { width, height } = renderingService.getSize();
   const style: React.CSSProperties = {
     width: width + 'px',
