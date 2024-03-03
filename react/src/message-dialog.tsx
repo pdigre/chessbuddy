@@ -42,10 +42,10 @@ export const MessageDialog = observer(({ message }: { message: MessageService })
   };
   message.initialize(func);
   const closeFunc = (e: MouseEvent) => {
-    setShow(false);
     if (msgHolder.callback) {
       msgHolder.callback((e.target as HTMLButtonElement).innerHTML);
     }
+    setShow(false);
   };
 
   return (
