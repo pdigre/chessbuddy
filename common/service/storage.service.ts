@@ -1,4 +1,4 @@
-import { messageService } from './index.service';
+import { isBrowser, messageService } from './index.service';
 import { Persist } from '../model/model.ts';
 
 export class StorageService {
@@ -15,7 +15,9 @@ export class StorageService {
   };
 
   storeObject = <T>(name: string, obj: T) => {
-    return localStorage.setItem(name, JSON.stringify(obj));
+    if (isBrowser) {
+      localStorage.setItem(name, JSON.stringify(obj));
+    }
   };
 
   save = (persist: Persist) => {
@@ -26,9 +28,14 @@ export class StorageService {
         props.set(key, value);
       }
     });
-    localStorage.setItem(name, JSON.stringify(Object.fromEntries(props)));
+    if (isBrowser) {
+      localStorage.setItem(name, JSON.stringify(Object.fromEntries(props)));
+    }
   };
   load = (persist: Persist) => {
+    if (!isBrowser) {
+      return null;
+    }
     try {
       const { name, init } = persist.persist();
       const restore = localStorage.getItem(name);
@@ -45,7 +52,7 @@ export class StorageService {
         Object.assign(persist, init);
       }
     } catch (error) {
-      messageService.error('Storage error ' + name, String(error));
+      messageService.error('Storage error ', String(error));
       return null;
     }
   };

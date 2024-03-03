@@ -13,9 +13,11 @@ export class MediaService {
   msg?: Mp4Type;
   show = false;
   prev = 0;
-  sound_move = new Audio('/mp3/move1.mp3');
-  sound_click = new Audio('/mp3/click.mp3');
-  sound_error = new Audio('/mp3/buzzer.mp3');
+  sounds: Map<string, string> = new Map([
+    ['move', '/mp3/move1.mp3'],
+    ['click', '/mp3/click.mp3'],
+    ['error', '/mp3/buzzer.mp3'],
+  ]);
 
   constructor() {
     makeObservable(this, {
@@ -23,14 +25,19 @@ export class MediaService {
     });
   }
 
+  playSound(name: string) {
+    const sound = this.sounds.get(name);
+    if (sound) new Audio(sound).play().then();
+  }
+
   soundMove() {
-    this.sound_move.play().then();
+    this.playSound('move');
   }
   soundClick() {
-    this.sound_click.play().then();
+    this.playSound('click');
   }
   soundError() {
-    this.sound_error.play().then();
+    this.playSound('error');
   }
 
   playRandom(enable: boolean, title: string, emos: Mp4Type[]) {

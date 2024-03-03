@@ -23,7 +23,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
         aria-labelledby={`nav-tab-${index}`}
         className="dark:bg-green-900 dark:text-white"
       >
-        {config.showTab === index && <Box p={3}>{children}</Box>}
+        <Box>{children}</Box>
       </div>
     );
   };
