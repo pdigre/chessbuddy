@@ -14,8 +14,8 @@ export type messageType = {
 export type CALLBACK = (txt: string) => void;
 
 export class MessageService {
-  public resultHolder: SET_CALLBACK = (msg: messageType) => {
-    alert('undefined ' + msg);
+  public resultHolder: SET_CALLBACK = (_msg: messageType) => {
+    //    alert('undefined ' + msg);
   };
 
   show = false;

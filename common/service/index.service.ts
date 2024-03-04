@@ -15,6 +15,7 @@ import { RenderingService } from './rendering.service';
 import { ClockService } from './clock.service';
 import { EditService } from './edit.service';
 
+export const isBrowser = typeof window !== 'undefined';
 export const messageService = new MessageService();
 export const storageService = new StorageService();
 export const configService = new ConfigService();

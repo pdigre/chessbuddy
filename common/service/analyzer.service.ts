@@ -1,7 +1,13 @@
 import type { Fen } from './rules.service';
 import { action, makeObservable, observable, runInAction } from 'mobx';
 import { Square } from 'chess.js';
-import { mediaService, openingsService, playService, renderingService } from './index.service';
+import {
+  isBrowser,
+  mediaService,
+  openingsService,
+  playService,
+  renderingService,
+} from './index.service';
 import { Engines } from '../model/bot';
 import { FEN } from '../model/fen.ts';
 
@@ -11,11 +17,11 @@ type LoadHelper = () => RunAnalyzer;
 type RunAnalyzer = (fen: Fen) => Promise<AnalyzerReturn>;
 
 class AnalyzerBot {
-  instance: RunAnalyzer;
+  instance?: RunAnalyzer;
   isRunning = false;
 
   constructor() {
-    this.instance = this.helpWorker()();
+    this.instance = isBrowser ? this.helpWorker()() : undefined;
   }
 
   helpWorker = (): LoadHelper => () => {
@@ -65,10 +71,12 @@ class AnalyzerBot {
   run = (fen: string, resolver: AnalyzerCallback) => {
     if (!this.isRunning) {
       this.isRunning = true;
-      this.instance(fen).then(ret => {
-        resolver(ret);
-        this.isRunning = false;
-      });
+      if (this.instance) {
+        this.instance(fen).then(ret => {
+          resolver(ret);
+          this.isRunning = false;
+        });
+      }
     }
   };
 }

@@ -1,4 +1,5 @@
 import { Persist } from './model.ts';
+import { isBrowser } from '../service/index.service.ts';
 
 export class Render implements Persist {
   persist = () => ({
@@ -7,7 +8,9 @@ export class Render implements Persist {
   });
 
   constructor(
-    public darkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches,
+    public darkTheme = isBrowser
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : false,
     public rotation = 0,
     public showCP = true
   ) {}
