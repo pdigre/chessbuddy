@@ -76,7 +76,7 @@ export const ConfigSelect: React.FC<{
   item: Object;
 }> = ({ label, id, choices, item }) => {
   const prop = getProp(item, id);
-  if (!prop) {
+  if (prop == null) {
     return <div></div>;
   }
   const onChange = action((e: ChangeEvent<HTMLSelectElement>) => {

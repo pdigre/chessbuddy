@@ -117,8 +117,8 @@ export class AnalyzerService {
 
   checkMistake = (isWhiteTurn: boolean) => {
     if (
-      (isWhiteTurn && this.cp - this.prevcp > 100) ||
-      (!isWhiteTurn && this.prevcp - this.cp > 100)
+      (!isWhiteTurn && this.cp - this.prevcp > 100) ||
+      (isWhiteTurn && this.prevcp - this.cp > 100)
     ) {
       // Check that game is not NEW or its in the opening books
       if (playService.fen != FEN.NEW_GAME && !openingsService.locate(playService.log)) {

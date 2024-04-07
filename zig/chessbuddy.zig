@@ -1,4 +1,4 @@
-const std = @import("std");
+// const std = @import("std");
 const zap = @import("zap");
 
 fn on_request(r: zap.Request) void {
@@ -7,7 +7,7 @@ fn on_request(r: zap.Request) void {
 }
 
 pub fn main() !void {
-    std.debug.print("Starting chessbuddy\n", .{});
+//    std.debug.print("Starting chessbuddy\n", .{});
     var listener = zap.HttpListener.init(.{
         .port = 80,
         .on_request = on_request,
@@ -16,7 +16,7 @@ pub fn main() !void {
     });
     try listener.listen();
 
-    std.debug.print("Listening on 0.0.0.0:80\n", .{});
+//    std.debug.print("Listening on 0.0.0.0:80\n", .{});
 
     // start worker threads
     zap.start(.{

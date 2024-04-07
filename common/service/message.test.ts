@@ -22,6 +22,7 @@ describe('MessageService', () => {
     runInAction(() => {
       messageService.display(message);
     });
+    debugger;
     expect(messageService.show).toBe(true);
     close();
     expect(callback).toHaveBeenCalledWith(message);
