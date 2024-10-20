@@ -2,12 +2,12 @@
   "name": "chessbuddy_wc",
   "type": "module",
   "dependencies": {
-    "@adobe/lit-mobx": "^2.2.0",
-    "@material/web": "^1.4.0",
+    "@adobe/lit-mobx": "^2.2.2",
+    "@material/web": "^2.2.0",
     "chessboard-element": "^1.2.0",
-    "esbuild": "^0.19.8",
-    "lit-element": "^4.0.0",
-    "mobx": "^6.12.3"
+    "esbuild": "^0.24.0",
+    "lit-element": "^4.1.1",
+    "mobx": "^6.13.5"
   },
   "scripts": {
     "dev": "bunx --bun vite",
@@ -20,16 +20,16 @@
     "prod": "bun build src/app.ts --outfile=../public/wc.js --watch"
   },
   "devDependencies": {
-    "@types/web": "^0.0.119",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "bun-types": "1.1.2",
+    "@types/web": "^0.0.174",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.10.0",
+    "bun-types": "1.1.31",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-mobx": "^0.0.9",
-    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-mobx": "^0.0.12",
+    "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.4",
-    "vite": "^4.5.3"
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9"
   }
 }
