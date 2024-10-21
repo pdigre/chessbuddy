@@ -1,7 +1,10 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) !void {
-    const target = b.standardTargetOptions(.{});
+    const windows = b.option(bool, "windows", "Target Microsoft Windows") orelse false;
+    const target = b.resolveTargetQuery(.{
+                               .os_tag = if (windows) .windows else null,
+                           });
     const optimize = b.standardOptimizeOption(.{});
     const zap = b.dependency("zap", .{
         .target = target,
