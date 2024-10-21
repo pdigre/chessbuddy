@@ -20,7 +20,7 @@ RUN bun run build
 RUN cp ./dist/index.html ../react/build//wc.html
 RUN cp ./dist/assets/* ../react/build/assets
 
-FROM buddyspencer/ziglang AS be-builder
+FROM buddyspencer/ziglang:0.12.0-r0 AS be-builder
 RUN zig version
 WORKDIR /usr/src
 COPY zig /usr/src/zig
