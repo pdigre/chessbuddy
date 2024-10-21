@@ -1,14 +1,7 @@
-.{
-    .name = "chessbuddy",
-    .version = "0.0.1",
-
-    .dependencies = .{
-
-        // zap v0.4.0
-        .zap = .{
-            .url = "https://github.com/zigzap/zap/archive/refs/tags/v0.4.0.tar.gz",
-            .hash = "1220a20e883195793cff0f298d647d35f675ad25e6556fe75b9ccabc98a349cbf082",
-        }
-        
-    }
-}
+.{ .name = "chessbuddy", .version = "0.0.1", .paths = .{
+    "src/*.zig",
+    "build.zig.zon",
+}, .dependencies = .{ .zap = .{
+            .url = "git+https://github.com/zigzap/zap?ref=v0.9.1#ae5c9278335d8e1133cd6d22707323dda712e120",
+            .hash = "12200223d76ab6cd32f75bc2e31463b0b429bb5b2b6fa4ce8f68dea494ca1ec3398b",
+        }, } }

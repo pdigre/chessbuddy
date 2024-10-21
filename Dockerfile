@@ -25,7 +25,7 @@ RUN zig version
 WORKDIR /usr/src
 COPY zig /usr/src/zig
 WORKDIR /usr/src/zig
-RUN zig build chessbuddy
+RUN zig build
 
 # Bundle Stage
 FROM alpine
