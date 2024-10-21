@@ -20,7 +20,7 @@ RUN bun run build
 RUN cp ./dist/index.html ../react/build//wc.html
 RUN cp ./dist/assets/* ../react/build/assets
 
-FROM buddyspencer/ziglang:0.12.0-r0 AS be-builder
+FROM buddyspencer/ziglang AS be-builder
 RUN zig version
 WORKDIR /usr/src
 COPY zig /usr/src/zig
@@ -33,6 +33,7 @@ FROM alpine
 WORKDIR /bin/
 COPY --from=fe-builder /usr/src/app/react/build ./build
 COPY --from=be-builder /usr/src/zig/zig-out/bin/chessbuddy ./
+WORKDIR /bin/build/
 USER 1000
 # RUN echo "$( ls -al /bin)"
 #CMD ["tail", "-f", "/dev/null"]
