@@ -1,7 +1,15 @@
-.{ .name = "chessbuddy", .version = "0.0.1", .paths = .{
+.{
+  .name = "chessbuddy",
+  .version = "0.0.1",
+  .paths = .{
     "src/*.zig",
     "build.zig.zon",
-}, .dependencies = .{ .zap = .{
-            .url = "git+https://github.com/zigzap/zap?ref=v0.9.1#ae5c9278335d8e1133cd6d22707323dda712e120",
-            .hash = "12200223d76ab6cd32f75bc2e31463b0b429bb5b2b6fa4ce8f68dea494ca1ec3398b",
-        }, } }
+  },
+  .dependencies = .{
+    // zap v0.5.1
+    .zap = .{
+      .url = "https://github.com/zigzap/zap/archive/refs/tags/v0.5.1.tar.gz",
+      .hash = "1220d4802fb09d4e99c0e7265f90d6f3cfdc3e5e31c1b05f0924ee2dd26d9d6dbbf4",
+    },
+  }
+}
