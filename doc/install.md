@@ -28,6 +28,12 @@ Chessbuddy:
 8. In wc run: `bun install`
 9. In wc run: `bun dev`
 
+To run via Docker:
+1. docker build --no-cache --progress=plain .
+2. docker compose up
+
+
+
 To test build:
 1. In react run: `npm run build`
 2. In wc run: `npm run build`

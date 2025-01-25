@@ -1,7 +1,7 @@
-console.log("WC - http://localhost:3003/index.html");
+console.log("Chessbuddy - http://localhost:80/index.html");
 let assets="./react/build/assets/";
 Bun.serve({
-  port: 3003,
+  port: 80,
   async fetch(req) {
     const url = req.url;
     let tgt = "./react/build/index.html";
