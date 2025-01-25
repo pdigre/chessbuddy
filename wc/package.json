@@ -5,7 +5,7 @@
     "@adobe/lit-mobx": "^2.2.2",
     "@material/web": "^2.2.0",
     "chessboard-element": "^1.2.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.24.2",
     "lit-element": "^4.1.1",
     "mobx": "^6.13.5"
   },
@@ -20,16 +20,20 @@
     "prod": "bun build src/app.ts --outfile=../public/wc.js --watch"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.5",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.19.0",
     "@types/web": "^0.0.174",
-    "@typescript-eslint/eslint-plugin": "^8.10.0",
-    "@typescript-eslint/parser": "^8.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0",
     "bun-types": "1.1.31",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-mobx": "^0.0.12",
-    "eslint-plugin-prettier": "^5.2.1",
-    "prettier": "^3.2.5",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.9"
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   }
 }

@@ -22,14 +22,25 @@ export const ConfigGame = observer(({ config }: { config: ConfigService }) => {
       <ConfigSelect label="Timer setting" id="clock" choices={clocks} item={item} />
       <div>&nbsp;</div>
       <div className="[&>button]:mx-2">
-        <ConfigButton onClick={playService.startGameAction} label="Play" icon={<MdPlayCircle />} />
+        <ConfigButton
+          onClick={playService.startGameAction}
+          label="Play"
+          icon={<MdPlayCircle />}
+          type="filled"
+        />
         <ConfigButton
           onClick={playService.endGameAction}
           label="End game"
           icon={<MdExitToApp />}
           disabled={playService.isComplete}
+          type="tonal"
         />
-        <ConfigButton onClick={playService.resetGameAction} label="Reset" icon={<MdClear />} />
+        <ConfigButton
+          onClick={playService.resetGameAction}
+          label="Reset"
+          icon={<MdClear />}
+          type="tonal"
+        />
         <ConfigButton onClick={playService.editGameAction} label="Edit" icon={<MdEdit />} />
       </div>
     </div>

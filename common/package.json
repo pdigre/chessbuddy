@@ -4,11 +4,11 @@
   "homepage": ".",
   "type": "module",
   "dependencies": {
-    "@types/node": "^22.7.7",
+    "@types/node": "^22.10.10",
     "@types/w3c-web-serial": "^1.0.7",
     "@types/web-bluetooth": "^0.0.20",
-    "chess.js": "^1.0.0-beta.8",
-    "esbuild": "^0.24.0",
+    "chess.js": "^1.0.0",
+    "esbuild": "^0.24.2",
     "mobx": "^6.13.5"
   },
   "scripts": {
@@ -18,27 +18,27 @@
     "test": "bun test --inspect-wait"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.1",
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.13.0",
+    "@eslint/compat": "^1.2.5",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.19.0",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.2",
+    "@testing-library/jest-dom": "^6.6.3",
     "@types/chess.js": "^0.13.7",
-    "@types/jest": "^29.5.13",
+    "@types/jest": "^29.5.14",
     "@types/web": "^0.0.174",
-    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
     "bun-types": "1.1.31",
-    "eslint": "^9.13.0",
+    "eslint": "^9.19.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-mobx": "^0.0.12",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.37.1",
-    "globals": "^15.11.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
     "jest": "^29.7.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.2",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.9"
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   }
 }

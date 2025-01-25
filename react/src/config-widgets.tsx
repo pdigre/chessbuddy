@@ -21,7 +21,9 @@ export const ConfigButton: React.FC<{
   return (
     <Button
       className="flex-grow h-14 text-lg m-2"
-      sx={{ backgroundColor: renderingService.darkTheme ? 'green' : 'darkgreen' }}
+      sx={{
+        backgroundColor: renderingService.darkTheme ? 'green' : 'darkgreen',
+      }}
       onClick={onClick}
       variant="contained"
       disabled={disabled ?? false}
