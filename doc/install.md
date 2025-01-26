@@ -30,7 +30,8 @@ Chessbuddy:
 
 To run via Docker:
 1. docker build --no-cache --progress=plain .
-2. docker compose up
+2. docker compose up --build -d
+
 
 
 

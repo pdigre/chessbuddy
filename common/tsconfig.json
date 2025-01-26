@@ -10,12 +10,14 @@
     "isolatedModules": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
+    "verbatimModuleSyntax": true,
     "noEmit": true,
     "composite": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
@@ -24,5 +26,5 @@
     "allowJs": true,
     "types": ["bun-types", "web", "web-bluetooth", "w3c-web-serial", "jest"]
   },
-  "include": ["service", "model"]
+  "include": ["service", "model", "serve.ts"]
 }
