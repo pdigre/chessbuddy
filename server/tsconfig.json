@@ -24,7 +24,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "types": ["bun-types", "web", "web-bluetooth", "w3c-web-serial", "jest"]
+    "types": ["bun-types", "jest"]
   },
-  "include": ["service", "model"]
+  "include": ["src", "serve.ts"]
 }
