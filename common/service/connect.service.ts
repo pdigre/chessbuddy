@@ -5,10 +5,10 @@ export type RESP = { stored: number; games: string[] };
 
 export class ConnectService {
   readonly connectAction: (human: Human) => void = async human => {
-    const games1 = historyService.getFilteredGames(human.name);
-    const connect = { email: human.email, device: renderingService, games: games1.join('\n') };
-    const url = window.document.location.hostname == 'http://chess.digre.com';
-    await fetch(url + '/api.php', {
+    const games = historyService.getFilteredGames(human.name);
+    const connect = { email: human.email, device: renderingService, games: games.join('\n') };
+    const url = window.document.location.hostname;
+    await fetch(url + '/connect', {
       method: 'POST',
       body: JSON.stringify(connect),
       headers: {

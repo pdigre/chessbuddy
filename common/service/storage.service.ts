@@ -7,7 +7,7 @@ export class StorageService {
   };
   restoreLines = (name: string, init: string[]) => {
     try {
-      return localStorage.getItem(name)?.replace(/\r/, '').split('\n') ?? init;
+      return localStorage.getItem(name)?.replace(/\r/g, '').split('\n') ?? init;
     } catch (error) {
       messageService.error('Storage error ' + name, String(error));
       return init;

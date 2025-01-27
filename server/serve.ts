@@ -7,11 +7,12 @@ Bun.serve({
   async fetch(req: Request): Promise<Response> {
     const url = req.url;
 
-    if (req.method === "POST") {
+    if (req.method === "POST" && url.includes("/connect")) {
+      console.log("POST:", url);
       const data = await req.json();
       console.log("Received POST data:", data);
       // Save data to Google Cloud Datastore
-      await saveData("Task", "sampletask1", data);
+      await saveData("Tasks", "sampletask1", data);
 
       return new Response("POST request received", { status: 200 }) as Response;
     }

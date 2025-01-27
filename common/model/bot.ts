@@ -1,4 +1,4 @@
-import { ListItem } from './model.ts';
+import type { ListItem } from './model.ts';
 
 export class Engine {
   constructor(

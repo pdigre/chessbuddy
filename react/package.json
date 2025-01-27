@@ -11,7 +11,7 @@
     "react-icons": "^5.4.0"
   },
   "scripts": {
-    "dev": "bun watch:css && bunx --bun vite",
+    "dev": "bunx --bun vite",
     "build:npm": "npm run watch:css && vite build",
     "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
     "format": "prettier src --write",

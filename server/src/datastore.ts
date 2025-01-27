@@ -1,47 +1,10 @@
-import { Datastore } from "@google-cloud/datastore";
+import { DocumentData, Firestore, WithFieldValue } from '@google-cloud/firestore';
 
 // Creates a client
-const datastore = new Datastore();
+const firestore = new Firestore();
 
-// Define a kind and name for the new entity
-const kind = "Task";
-const name = "sampletask1";
-const taskKey = datastore.key([kind, name]);
-
-// Prepares the new entity
-const task = {
-  key: taskKey,
-  data: {
-    description: "Buy milk",
-  },
-};
-
-// Saves the entity
-async function saveTask() {
-  await datastore.save(task);
-  console.log(`Saved ${task.key.name}: ${task.data.description}`);
+export async function saveData(collection: string, docId: string, data: WithFieldValue<DocumentData>): Promise<void> {
+  const docRef = firestore.collection(collection).doc(docId);
+  await docRef.set(data);
+  console.log(`Saved document ${docId} in collection ${collection}: ${JSON.stringify(data)}`);
 }
-
-// saveTask().catch(console.error);
-
-export async function saveData(
-  kind: string,
-  name: string,
-  data: object,
-): Promise<void> {
-  const taskKey = datastore.key([kind, name]);
-  const entity = {
-    key: taskKey,
-    data,
-  };
-  await datastore.save(entity);
-  console.log(`Saved ${taskKey.name}: ${JSON.stringify(data)}`);
-}
-
-/*
-Set up authentication:
-  Ensure you have a Google Cloud project with Datastore enabled.
-  Create a service account and download the JSON key file.
-  Set the GOOGLE_APPLICATION_CREDENTIALS environment variable to the path of the JSON key file:
-export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your-service-account-file.json"
- */
