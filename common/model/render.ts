@@ -1,7 +1,7 @@
-import { Persist } from './model.ts';
+import * as model from './model';
 import { isBrowser } from '../service/index.service.ts';
 
-export class Render implements Persist {
+export class Render implements model.Persist {
   persist = () => ({
     name: 'render',
     init: new Render(),

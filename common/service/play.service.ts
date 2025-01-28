@@ -1,7 +1,7 @@
 import { Human } from '../model/human';
 import { San } from './openings.service';
 import { action, makeObservable, observable } from 'mobx';
-import { Chess, Square, WHITE } from 'chess.js';
+import * as chezz from 'chess.js';
 import { Clock } from '../model/clock';
 import { BotRunner } from './bot.service';
 import {
@@ -28,7 +28,7 @@ import { Play } from '../model/play.ts';
  */
 export class PlayService extends Play {
   // runtime does not need persisting
-  chess = new Chess(this.fen);
+  chess = new chezz.Chess(this.fen);
   isWhiteTurn = true;
   isComplete = false;
   bplayer?: BotRunner;
@@ -36,7 +36,7 @@ export class PlayService extends Play {
   clock?: Clock;
   allowed = 0;
   isPlaying = false;
-  pgns: Square[] = [];
+  pgns: chezz.Square[] = [];
 
   constructor() {
     super();
@@ -69,7 +69,7 @@ export class PlayService extends Play {
 
   private calculate() {
     const san = this.log[this.log.length - 1];
-    this.chess = new Chess(this.fen);
+    this.chess = new chezz.Chess(this.fen);
     this.isComplete = rulesService.isEndMove(san) || this.chess.isGameOver();
     if (this.isComplete) {
       if (this.isPlaying) {
@@ -80,11 +80,11 @@ export class PlayService extends Play {
     this.clock =
       configService.clocks.find(p => p.getName() == configService.game.clock) || new Clock('', []);
     this.allowed = this.clock.getAllowed(this.log.length / 2);
-    this.isWhiteTurn = this.chess.turn() === WHITE;
+    this.isWhiteTurn = this.chess.turn() === chezz.WHITE;
     this.pgns = this.calculatePgns();
   }
 
-  private calculatePgns(): Square[] {
+  private calculatePgns(): chezz.Square[] {
     if (this.log.length == 0) {
       return this.getPGNS(openingsService.tree);
     }
@@ -92,12 +92,12 @@ export class PlayService extends Play {
     return pgn ? this.getPGNS(pgn.children) : [];
   }
 
-  private getPGNS(sans: San[]): Square[] {
+  private getPGNS(sans: San[]): chezz.Square[] {
     try {
       const sqs = sans
         .filter(san => san.san)
         .map(san => {
-          return new Chess(this.fen).move(san.san);
+          return new chezz.Chess(this.fen).move(san.san);
         })
         .flatMap(move => (move ? [move.from, move.to] : []));
       return Array.from(new Set(sqs).values());
@@ -106,7 +106,7 @@ export class PlayService extends Play {
     }
   }
 
-  readonly isMoveable = (from: Square): boolean => this.chess.moves({ square: from }).length > 0;
+  readonly isMoveable = (from: chezz.Square): boolean => this.chess.moves({ square: from }).length > 0;
 
   readonly resetGameAction: VoidFunction = () => {
     this.wtime = 0;
@@ -278,7 +278,7 @@ export class PlayService extends Play {
 
   // Board actions
 
-  pieceStartAction = (from: Square): any => {
+  pieceStartAction = (from: chezz.Square): any => {
     const player = this.nextPlayer();
     if (player instanceof Human && !this.isComplete) {
       const movable = this.isMoveable(from);
@@ -290,7 +290,7 @@ export class PlayService extends Play {
     return false;
   };
 
-  pieceMoveAction = (from: Square, to: Square) => {
+  pieceMoveAction = (from: chezz.Square, to: chezz.Square) => {
     if (
       analyzerService.help.length > 1 &&
       analyzerService.help[0] == to &&
@@ -306,7 +306,7 @@ export class PlayService extends Play {
     return isOk;
   };
 
-  move(from: Square, to: Square, isHuman: boolean) {
+  move(from: chezz.Square, to: chezz.Square, isHuman: boolean) {
     const move = rulesService.move(this.fen, from, to);
     if (!move) {
       return;
@@ -329,17 +329,17 @@ export class PlayService extends Play {
   markEdit(func: VoidFunction) {
     if (editService.showEdit && editService.editSquare != '') func();
   }
-  markFacts(func: (x: Square) => void) {
+  markFacts(func: (x: chezz.Square) => void) {
     if (configService.display.showFacts) {
       this.pgns.forEach(x => func(x));
     }
   }
-  markHints(func: (x: Square, i: number) => void) {
+  markHints(func: (x: chezz.Square, i: number) => void) {
     if (configService.display.showFacts) {
       analyzerService.help.forEach((x, i) => func(x, i));
     }
   }
-  markCastling(func: (x: Square) => void) {
+  markCastling(func: (x: chezz.Square) => void) {
     rulesService.getCastlingSquares(this.fen).forEach(x => func(x));
   }
 

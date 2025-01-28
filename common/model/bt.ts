@@ -1,6 +1,7 @@
-import { ListItem } from './model.ts';
+import * as model from './model';
 
-export class BT implements ListItem {
+
+export class BT implements model.ListItem {
   constructor(
     public name = '',
     public description = ''

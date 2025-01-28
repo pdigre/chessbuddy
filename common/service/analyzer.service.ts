@@ -1,6 +1,6 @@
 import type { Fen } from './rules.service';
 import { action, makeObservable, observable, runInAction } from 'mobx';
-import { Square } from 'chess.js';
+import * as chess from 'chess.js';
 import {
   isBrowser,
   mediaService,
@@ -85,7 +85,7 @@ class AnalyzerBot {
  * Run Stockfish 1 sec to get best moves and CP
  */
 export class AnalyzerService {
-  help: Square[] = [];
+  help: chess.Square[] = [];
   cp = 0;
   prevcp = 0;
   helperBot = new AnalyzerBot();
@@ -102,8 +102,8 @@ export class AnalyzerService {
   run: (fen: string, isWhiteTurn: boolean) => void = (fen, isWhiteTurn) => {
     this.reset();
     this.helperBot.run(fen, ({ moves, cp }) => {
-      const squares: Set<Square> = new Set();
-      moves.forEach(x => squares.add(x as Square));
+      const squares: Set<chess.Square> = new Set();
+      moves.forEach(x => squares.add(x as chess.Square));
       runInAction(() => {
         this.help = [...squares];
         if (cp) {

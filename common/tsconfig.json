@@ -24,7 +24,11 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "types": ["bun-types", "web", "web-bluetooth", "w3c-web-serial", "jest"]
+    "types": ["bun-types", "web", "web-bluetooth", "w3c-web-serial", "jest"],
+    "paths": {
+      "model/*": ["../common/model/*"],
+      "service/*": ["../common/service/*"]
+    }
   },
   "include": ["service", "model"]
 }

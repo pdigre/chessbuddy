@@ -1,12 +1,12 @@
 import React from 'react';
 import { Chessboard } from 'react-chessboard';
-import { ConfigService } from '../../common/service/config.service';
+import { ConfigService } from 'service/config.service';
 import { observer } from 'mobx-react';
-import { editService, playService } from '../../common/service/index.service';
-import { FEN } from '../../common/model/fen';
-import { RenderingService } from '../../common/service/rendering.service';
-import { EditService } from '../../common/service/edit.service';
-import { Square } from '../../common/service/rules.service';
+import { editService, playService } from 'service/index.service';
+import { FEN } from 'model/fen';
+import { RenderingService } from 'service/rendering.service';
+import { EditService } from 'service/edit.service';
+import { Square } from 'chess.js';
 
 export const Board = observer(
   ({

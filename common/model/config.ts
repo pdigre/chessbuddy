@@ -5,9 +5,10 @@ import { BT } from './bt.ts';
 import { Display } from './display.ts';
 import { Game } from './game.ts';
 import { storageService } from '../service/index.service.ts';
-import { Persist } from './model.ts';
+import * as model from './model';
 
-export class Config implements Persist {
+
+export class Config implements model.Persist {
   persist = () => ({
     name: 'config',
     init: {

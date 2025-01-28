@@ -1,4 +1,4 @@
-import { ListItem } from './model.ts';
+import * as model from './model';
 
 export type TimeRule = {
   from: number;
@@ -6,7 +6,7 @@ export type TimeRule = {
   each: number;
 };
 
-export class Clock implements ListItem {
+export class Clock implements model.ListItem {
   constructor(
     public name = '',
     public time: TimeRule[] = []

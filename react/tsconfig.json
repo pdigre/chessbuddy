@@ -22,7 +22,12 @@
       {
         "name": "typescript-plugin-css-modules"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "model/*": ["../common/model/*"],
+      "service/*": ["../common/service/*"]
+    }
   },
   "include": ["src", "../common/service/", "../common/model/", "index.js"],
   "exclude": ["node_modules", "build"]

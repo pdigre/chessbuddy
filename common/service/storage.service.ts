@@ -1,5 +1,5 @@
 import { isBrowser, messageService } from './index.service';
-import { Persist } from '../model/model.ts';
+import * as model from '../model/model';
 
 export class StorageService {
   storeLines = (name: string, lines: string[]) => {
@@ -20,7 +20,7 @@ export class StorageService {
     }
   };
 
-  save = (persist: Persist) => {
+  save = (persist: model.Persist) => {
     const { name, init } = persist.persist();
     const props = new Map(Object.entries(init));
     Object.entries(persist).forEach(([key, value]) => {
@@ -32,7 +32,7 @@ export class StorageService {
       localStorage.setItem(name, JSON.stringify(Object.fromEntries(props)));
     }
   };
-  load = (persist: Persist) => {
+  load = (persist: model.Persist) => {
     if (!isBrowser) {
       return null;
     }

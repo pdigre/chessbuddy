@@ -1,6 +1,6 @@
-import { ListItem } from './model.ts';
+import * as model from './model';
 
-export class Human implements ListItem {
+export class Human implements model.ListItem {
   constructor(
     public name = '',
     public email = ''

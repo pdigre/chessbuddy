@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
     publicDir: "../public",
     plugins: [
       react(),
-
       tsconfigPaths(),
       envPlugin(),
       devServerPlugin(),
@@ -22,8 +21,6 @@ export default defineConfig(({ mode }) => {
       basePlugin(),
       importPrefixPlugin(),
       htmlPlugin(mode),
-
-
     ],
   };
 });

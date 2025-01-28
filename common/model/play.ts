@@ -1,7 +1,7 @@
-import { Persist } from './model.ts';
+import * as model from './model';
 import { FEN } from './fen.ts';
 
-export class Play implements Persist {
+export class Play implements model.Persist {
   persist = () => ({
     name: 'play',
     init: new Play(),

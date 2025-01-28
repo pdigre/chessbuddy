@@ -11,8 +11,8 @@ import {
   editService,
   renderingService,
 } from './index.service';
-import { ListItem } from '../model/model.ts';
-import { Square } from './rules.service.ts';
+import * as model from '../model/model';
+import * as rulez from './rules.service.ts';
 import { Config } from '../model/config.ts';
 
 export const enum ListMode {
@@ -31,10 +31,10 @@ export const enum ListType {
 export interface ListProps {
   tab: number;
   title: string;
-  getItems: () => ListItem[];
+  getItems: () => model.ListItem[];
   getCursor: () => number;
   setCursor: (i: number) => void;
-  createItem: () => ListItem;
+  createItem: () => model.ListItem;
 }
 
 export class ConfigService extends Config {
@@ -190,15 +190,15 @@ export class ConfigService extends Config {
   getBoardLogic() {
     const rotation = renderingService.rotation;
     const { r90, r180 } = rules.splitRotation(rotation);
-    const b2sq = (board: Square) => rules.board2Square(board, rotation);
+    const b2sq = (board: rulez.Square) => rules.board2Square(board, rotation);
     return {
       rotation,
       r90,
       r180,
       b2sq,
-      sq2b: (square: Square) => (r90 ? rules.rightSquare(square) : square),
+      sq2b: (square: rulez.Square) => (r90 ? rules.rightSquare(square) : square),
       fen2b: (fen: string) => (r90 ? rules.leftFen(fen) : fen),
-      onPieceDrop: (boardFrom: Square, boardTo: Square) => {
+      onPieceDrop: (boardFrom: rulez.Square, boardTo: rulez.Square) => {
         if (editService.showEdit) {
           editService.editMove(boardFrom, boardTo);
           return true;

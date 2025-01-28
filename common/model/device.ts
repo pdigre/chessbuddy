@@ -1,10 +1,10 @@
-import { Persist } from './model.ts';
+import * as model from './model';
 import { isBrowser } from '../service/index.service.ts';
 
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 640;
 
-export class Device implements Persist {
+export class Device implements model.Persist {
   // Config to store
   first = Date.now().toString(36);
   userAgent = isBrowser ? navigator.userAgent : '';
