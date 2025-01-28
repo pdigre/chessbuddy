@@ -1,4 +1,6 @@
-*, ::before, ::after {
+*,
+::before,
+::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
@@ -152,7 +154,8 @@ html,
   /* 3 */
   tab-size: 4;
   /* 3 */
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
@@ -195,7 +198,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
 }
 
 /*
@@ -241,7 +244,8 @@ code,
 kbd,
 samp,
 pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
   /* 1 */
   font-feature-settings: normal;
   /* 2 */
@@ -497,7 +501,7 @@ Set the default cursor for buttons.
 */
 
 button,
-[role="button"] {
+[role='button'] {
   cursor: pointer;
 }
 
@@ -541,7 +545,7 @@ video {
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 
-[hidden]:where(:not([hidden="until-found"])) {
+[hidden]:where(:not([hidden='until-found'])) {
   display: none;
 }
 
@@ -675,7 +679,9 @@ video {
 }
 
 .transform {
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+    scaleY(var(--tw-scale-y));
 }
 
 .flex-row {
@@ -797,7 +803,8 @@ video {
 }
 
 .filter {
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale)
+    var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 body {
@@ -835,30 +842,30 @@ body {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
-.\[\&\>button\]\:mx-1>button {
+.\[\&\>button\]\:mx-1 > button {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
 }
 
-.\[\&\>button\]\:mx-2>button {
+.\[\&\>button\]\:mx-2 > button {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
 }
 
-.\[\&\>div\]\:mx-2>div {
+.\[\&\>div\]\:mx-2 > div {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
 }
 
-.\[\&\>div\]\:text-left>div {
+.\[\&\>div\]\:text-left > div {
   text-align: left;
 }
 
-.\[\&\>div\]\:text-center>div {
+.\[\&\>div\]\:text-center > div {
   text-align: center;
 }
 
-.\[\&\>div\]\:\[writing-mode\:vertical-lr\]>div {
+.\[\&\>div\]\:\[writing-mode\:vertical-lr\] > div {
   writing-mode: vertical-lr;
 }
 
