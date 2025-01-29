@@ -7,4 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   publicDir: "../public",
   plugins: [react(), tailwindcss(), tsconfigPaths()],
+  build: {
+    watch: false
+  }
 })
