@@ -2,6 +2,7 @@
   "name": "chessbuddy_react",
   "type": "module",
   "dependencies": {
+    "@tailwindcss/vite": "^4.0.1",
     "esbuild": "^0.24.2",
     "mobx": "^6.13.5",
     "mobx-react": "^9.2.0",
@@ -12,11 +13,10 @@
   },
   "scripts": {
     "dev": "bunx --bun vite",
-    "build:npm": "npm run watch:css && vite build",
-    "watch:css": "tailwindcss -i src/tailwind.css -o src/main.css",
+    "build:npm": "npm vite build",
     "format": "prettier src --write",
     "serve": "bun serve.ts",
-    "build": "bun run watch:css && vite build",
+    "build": "bun vite build",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
   },
@@ -60,9 +60,8 @@
     "eslint-plugin-mobx": "^0.0.12",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^15.14.0",
-    "postcss": "^8.5.1",
     "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^4.0.1",
     "typescript": "^5.7.3",
     "vite": "6.0.11",
     "vite-tsconfig-paths": "5.1.4"
