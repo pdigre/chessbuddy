@@ -17,7 +17,7 @@ RUN bun install
 WORKDIR /usr/src/app/server
 RUN bun install
 
-RUN echo "Installing dependencies and building react..." \
+RUN echo "Installing dependencies and building react..."
 WORKDIR /usr/src/app/react
 RUN bun install
 RUN bun run build
