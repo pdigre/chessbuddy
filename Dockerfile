@@ -24,8 +24,8 @@ RUN bun run build
 
 RUN echo "Installing dependencies and building wc..."
 WORKDIR /usr/src/app/wc
-RUN bun install
-RUN bun run build
+#RUN bun install
+#RUN bun run build
 
 RUN echo "Starting the backend server..."
 # Run Backend / server
