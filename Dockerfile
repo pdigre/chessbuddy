@@ -29,5 +29,5 @@ RUN bun run build
 
 RUN echo "Starting the backend server..."
 # Run Backend / server
-WORKDIR /usr/src/app
-ENTRYPOINT ["bun", "server/serve.ts"]
+WORKDIR /usr/src/app/server
+ENTRYPOINT ["bun", "serve.ts"]
