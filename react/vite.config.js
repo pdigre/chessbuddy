@@ -14,6 +14,7 @@ export default defineConfig({
       preserveEntrySignatures: 'strict',
       output: {
         preserveModules: true,
+        dynamicImportInCjs: false,
       }
     }
   }
