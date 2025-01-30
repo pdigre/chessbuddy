@@ -106,7 +106,8 @@ export class PlayService extends Play {
     }
   }
 
-  readonly isMoveable = (from: chezz.Square): boolean => this.chess.moves({ square: from }).length > 0;
+  readonly isMoveable = (from: chezz.Square): boolean =>
+    this.chess.moves({ square: from }).length > 0;
 
   readonly resetGameAction: VoidFunction = () => {
     this.wtime = 0;

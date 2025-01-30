@@ -38,3 +38,4 @@ public/bundle.js
 /common/package-lock.json
 /react/package-lock.json
 /wc/package-lock.json
+/react/dist/

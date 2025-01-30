@@ -1,7 +1,7 @@
 import { saveData } from "./src/datastore";
 
 console.log("Chessbuddy - http://localhost:80/index.html");
-let assets = "./react/build/assets/";
+let assets = "../react/dist/assets/";
 Bun.serve({
   port: 80,
   async fetch(req: Request): Promise<Response> {
@@ -18,7 +18,7 @@ Bun.serve({
     }
 
     // static routing
-    let tgt = "./react/build/index.html";
+    let tgt = "../react/dist/index.html";
     const route = (match: string, replace: string, setAssets?: string) => {
       if (url.includes(match)) {
         tgt = replace + url.substring(url.indexOf(match) + match.length);
@@ -28,13 +28,13 @@ Bun.serve({
       }
     };
     route("/assets/", assets);
-    route("/index.html", "./react/build/index.html", "./react/build/assets/");
-    route("/wc.html", "./wc/dist/index.html", "./wc/dist/assets/");
-    route("/png/", "./public/png/");
-    route("/mp3/", "./public/mp3/");
-    route("/mp4/", "./public/mp4/");
-    route("/bots/", "./public/bots/");
-    route("/manifest.json", "./public/manifest.json");
+    route("/index.html", "../react/dist/index.html", "../react/dist/assets/");
+    route("/wc.html", "../wc/dist/index.html", "../wc/dist/assets/");
+    route("/png/", "../public/png/");
+    route("/mp3/", "../public/mp3/");
+    route("/mp4/", "../public/mp4/");
+    route("/bots/", "../public/bots/");
+    route("/manifest.json", "../public/manifest.json");
     console.log(url + " =>" + tgt);
     const file = Bun.file(tgt);
     return new Response(file) as Response;

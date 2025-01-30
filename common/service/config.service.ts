@@ -150,8 +150,9 @@ export class ConfigService extends Config {
     const items = listProps.getItems();
     const cursor = listProps.getCursor();
     const isEdit = this.listMode == ListMode.Edit;
-    const item = isEdit ? items[cursor] : listProps.createItem();
     const active = this.showTab == listProps.tab;
+    const show = this.listMode !== ListMode.None && active;
+    const item = isEdit || !show ? listProps.getItems()[cursor] : listProps.createItem();
     return {
       type,
       items,
@@ -159,7 +160,7 @@ export class ConfigService extends Config {
       cursor,
       isEdit,
       hasSelect: cursor >= 0,
-      show: this.listMode !== ListMode.None && active,
+      show,
       onSelect: action((i: string) => {
         const c = Number.parseInt(i);
         listProps.setCursor(c == cursor ? -1 : c);

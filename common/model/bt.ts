@@ -1,6 +1,5 @@
 import * as model from './model';
 
-
 export class BT implements model.ListItem {
   constructor(
     public name = '',

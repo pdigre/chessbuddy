@@ -13,7 +13,6 @@ export const ConfigHuman = observer(
     const { type, item, hasSelect, show, onSave, onSelect, cursor, items } = config.getListLogic(
       ListType.Human
     );
-
     const uploadRef = useRef<HTMLInputElement>(null);
     const hasEmail = hasSelect && (item as Human).email;
 
