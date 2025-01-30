@@ -8,6 +8,13 @@ export default defineConfig({
   publicDir: "../public",
   plugins: [react(), tailwindcss(), tsconfigPaths()],
   build: {
-    watch: false
+    watch: false,
+    rollupOptions: {
+      cache: false,
+      preserveEntrySignatures: 'strict',
+      output: {
+        preserveModules: true,
+      }
+    }
   }
 })
