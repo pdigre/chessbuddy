@@ -6,6 +6,14 @@ export default defineConfig({
     publicDir: "../public",
     plugins: [tsconfigPaths()],
     build: {
-        watch: false
+        watch: false,
+        rollupOptions: {
+            watch: false,
+            treeshake: false,
+            preserveEntrySignatures: true,
+            output: {
+                dynamicImportInCjs: false,
+            }
+        }
     }
 })
