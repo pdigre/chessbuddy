@@ -10,10 +10,12 @@ export default defineConfig({
   build: {
     watch: false,
     rollupOptions: {
-      cache: false,
-      preserveEntrySignatures: 'strict',
+//      cache: false,
+      watch: false,
+      treeshake: false,
+      preserveEntrySignatures: true,
       output: {
-        preserveModules: true,
+//        preserveModules: true,
         dynamicImportInCjs: false,
       }
     }
