@@ -1,7 +1,7 @@
 import { saveData } from "./src/datastore";
 
 console.log("Chessbuddy - http://localhost:80/index.html");
-let assets = "../react/dist/assets/";
+let module = "../react/dist/";
 Bun.serve({
   port: 80,
   async fetch(req: Request): Promise<Response> {
@@ -18,18 +18,18 @@ Bun.serve({
     }
 
     // static routing
-    let tgt = "../react/dist/index.html";
-    const route = (match: string, replace: string, setAssets?: string) => {
+    let tgt = module + url.split("/").pop();
+    const route = (match: string, replace: string, setModule?: string) => {
       if (url.includes(match)) {
         tgt = replace + url.substring(url.indexOf(match) + match.length);
-        if (setAssets) {
-          assets = setAssets;
+        if (setModule) {
+          module = setModule;
         }
       }
     };
-    route("/assets/", assets);
-    route("/index.html", "../react/dist/index.html", "../react/dist/assets/");
-    route("/wc.html", "../wc/dist/index.html", "../wc/dist/assets/");
+    route("/assets/", module + "assets/");
+    route("/index.html", "../react/dist/index.html", "../react/dist/");
+    route("/wc.html", "../wc/dist/index.html", "../wc/dist/");
     route("/png/", "../public/png/");
     route("/mp3/", "../public/mp3/");
     route("/mp4/", "../public/mp4/");
@@ -37,9 +37,11 @@ Bun.serve({
     route("/manifest.json", "../public/manifest.json");
     console.log(url + " =>" + tgt);
     const file = Bun.file(tgt);
-    if (!file.exists()) {
-      console.error("File not found: " + url);
-    }
+    await file.exists().then((exists) => {
+      if ( !exists) {
+        console.error("File not found: " + url + "=>" + tgt);
+      }
+    });
     return new Response(file) as Response;
   },
   error(): Response {
