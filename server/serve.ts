@@ -1,6 +1,6 @@
 import { saveData } from "./src/datastore";
 
-console.log("Chessbuddy - http://localhost:80/index.html");
+console.log("ChessBuddy version 0.0.35 http://localhost:80/index.html");
 let module = "../react/dist/";
 Bun.serve({
   port: 80,
