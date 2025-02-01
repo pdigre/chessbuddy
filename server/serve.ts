@@ -35,11 +35,12 @@ Bun.serve({
     route("/mp4/", "../public/mp4/");
     route("/bots/", "../public/bots/");
     route("/manifest.json", "../public/manifest.json");
-    console.log(url + " =>" + tgt);
     const file = Bun.file(tgt);
     await file.exists().then((exists) => {
-      if ( !exists) {
-        console.error("File not found: " + url + "=>" + tgt);
+      if (exists) {
+        console.log("<OK> " + url + " => " + tgt);
+      } else {
+        console.error("File not found: " + url + " => " + tgt);
       }
     });
     return new Response(file) as Response;
