@@ -37,6 +37,9 @@ Bun.serve({
     route("/manifest.json", "../public/manifest.json");
     console.log(url + " =>" + tgt);
     const file = Bun.file(tgt);
+    if (!file.exists()) {
+      console.error("File not found: " + url);
+    }
     return new Response(file) as Response;
   },
   error(): Response {

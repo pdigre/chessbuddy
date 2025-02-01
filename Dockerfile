@@ -14,9 +14,6 @@ COPY wc ./wc
 WORKDIR /usr/src/app/common
 RUN bun install
 
-WORKDIR /usr/src/app/server
-RUN bun install
-
 RUN echo "Installing dependencies and building react..."
 WORKDIR /usr/src/app/react
 RUN bun install
@@ -27,7 +24,9 @@ WORKDIR /usr/src/app/wc
 RUN bun install
 RUN bun run build
 
+RUN echo "Installing backend server ..."
+WORKDIR /usr/src/app/server
+RUN bun install
 RUN echo "Starting the backend server..."
 # Run Backend / server
-WORKDIR /usr/src/app/server
 ENTRYPOINT ["bun", "serve.ts"]
