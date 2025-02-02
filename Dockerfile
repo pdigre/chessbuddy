@@ -27,6 +27,6 @@ RUN bun run build
 RUN echo "Installing backend server ..."
 WORKDIR /usr/src/app/server
 RUN bun install
-RUN echo "Starting the backend server..."
+RUN echo "Starting version 0.0.39"
 # Run Backend / server
 ENTRYPOINT ["bun", "serve.ts"]
