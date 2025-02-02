@@ -1,6 +1,6 @@
 import { saveData } from "./src/datastore";
 
-console.log("ChessBuddy version 0.0.39 http://localhost:80/index.html");
+console.log("ChessBuddy version 0.0.40 http://localhost:80/index.html");
 let module = "../react/dist/";
 Bun.serve({
   port: 80,
@@ -18,7 +18,7 @@ Bun.serve({
     }
 
     // static routing
-    let tgt = module + url.split("/").pop();
+    let tgt = "";
     const route = (match: string, replace: string, setModule?: string) => {
       if (url.includes(match)) {
         tgt = replace + url.substring(url.indexOf(match) + match.length);
@@ -27,6 +27,8 @@ Bun.serve({
         }
       }
     };
+
+    // mapping routes
     route("/assets/", module + "assets/");
     route("/index.html", "../react/dist/index.html", "../react/dist/");
     route("/wc.html", "../wc/dist/index.html", "../wc/dist/");
@@ -35,6 +37,12 @@ Bun.serve({
     route("/mp4/", "../public/mp4/");
     route("/bots/", "../public/bots/");
     route("/manifest.json", "../public/manifest.json");
+
+    // Fallback to index.html if nothing resolves
+    if(!tgt){
+      module = "../react/dist/";
+      tgt = module + "index.html";
+    }
     const file = Bun.file(tgt);
     await file.exists().then((exists) => {
       if (exists) {
