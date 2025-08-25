@@ -53,8 +53,7 @@ export const MessageDialog = observer(({ message }: { message: MessageService })
       aria-labelledby="message"
       open={show}
       onClose={closeFunc}
-      className="text-center text-lg"
-    >
+      className="text-center text-lg">
       <DialogTitle id="message">{msgHolder.title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{getMsg(msgHolder.msg)}</DialogContentText>
@@ -129,8 +128,7 @@ function getMsg(name: string) {
               <a
                 href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
                 target="_blank"
-                rel="noopener"
-              >
+                rel="noopener">
                 User Guide / instructions
               </a>
             </li>
