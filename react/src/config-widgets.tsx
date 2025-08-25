@@ -26,8 +26,7 @@ export const ConfigButton: React.FC<{
       }}
       onClick={onClick}
       variant="contained"
-      disabled={disabled ?? false}
-    >
+      disabled={disabled ?? false}>
       <span className="text-3xl">{icon}</span>
       <span className="text-lg ml-2">{label}</span>
     </Button>
@@ -35,7 +34,7 @@ export const ConfigButton: React.FC<{
 };
 
 export const ConfigText: React.FC<{
-  item: Object;
+  item: object;
   label: string;
   id: string;
 }> = ({ item, label, id }) => {
@@ -47,7 +46,7 @@ export const ConfigText: React.FC<{
 };
 
 export const ConfigBoolean: React.FC<{
-  item: Object;
+  item: object;
   label: string;
   id: string;
 }> = ({ item, label, id }) => {
@@ -75,7 +74,7 @@ export const ConfigSelect: React.FC<{
   label: string;
   id: string;
   choices: string[];
-  item: Object;
+  item: object;
 }> = ({ label, id, choices, item }) => {
   const prop = getProp(item, id);
   if (prop == null) {
@@ -100,8 +99,7 @@ export const ConfigSelect: React.FC<{
         inputProps={{
           name: label,
           id: 'for',
-        }}
-      >
+        }}>
         <option aria-label="None" value="" />
         {choices.map(name => (
           <option key={name} value={name}>

@@ -56,7 +56,6 @@ export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) 
 });
 
 const transformContent = {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   start() {}, // required.
   async transform(chunk: any, controller: any) {
     const textencoder = new TextEncoder();

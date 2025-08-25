@@ -29,8 +29,7 @@ export const ConfigListTable: React.FC<{
           <tr
             key={iLine.toString()}
             id={iLine.toString()}
-            className={iLine == cursor ? 'bg-green-300 dark:bg-green-700' : ''}
-          >
+            className={iLine == cursor ? 'bg-green-300 dark:bg-green-700' : ''}>
             <td className="dark:text-white">{item.getName()}</td>
             <td className="dark:text-white">{item.getDescription()}</td>
           </tr>
