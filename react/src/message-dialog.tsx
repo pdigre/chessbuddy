@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactNode, useEffect, useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -32,7 +32,6 @@ const msgHolder: {
 };
 export const MessageDialog = observer(({ message }: { message: MessageService }) => {
   const [show, setShow] = useState(false);
-  const clicked = '';
   const func = (msgtype: messageType) => {
     msgHolder.title = msgtype.title;
     msgHolder.msg = msgtype.msg;
@@ -53,7 +52,8 @@ export const MessageDialog = observer(({ message }: { message: MessageService })
       aria-labelledby="message"
       open={show}
       onClose={closeFunc}
-      className="text-center text-lg">
+      className="text-center text-lg"
+    >
       <DialogTitle id="message">{msgHolder.title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{getMsg(msgHolder.msg)}</DialogContentText>
@@ -120,7 +120,7 @@ function getMsg(name: string) {
           This chess program is open source and available at github.
           <ul>
             <li>
-              <a href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noopener">
+              <a href="https://github.com/pdigre/chessbuddy" target="_blank" rel="noreferrer">
                 Github pdigre/chessbuddy
               </a>
             </li>
@@ -128,7 +128,8 @@ function getMsg(name: string) {
               <a
                 href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
                 target="_blank"
-                rel="noopener">
+                rel="noreferrer"
+              >
                 User Guide / instructions
               </a>
             </li>
@@ -139,7 +140,7 @@ function getMsg(name: string) {
       return (
         <div className="text-3xl">
           Who won?
-          <img src="/png/win.png" />
+          <img src="/png/win.png" alt="alt" />
         </div>
       );
     default:

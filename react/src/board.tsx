@@ -1,5 +1,11 @@
 import React from 'react';
-import { Chessboard } from 'react-chessboard';
+import {
+  Chessboard,
+  ChessboardOptions,
+  PieceDropHandlerArgs,
+  PieceHandlerArgs,
+  SquareHandlerArgs,
+} from 'react-chessboard';
 import { ConfigService } from 'service/config.service';
 import { observer } from 'mobx-react';
 import { editService, playService } from 'service/index.service';
@@ -75,24 +81,26 @@ export const Board = observer(
       : edit.showEdit
         ? edit.editFen
         : playService.fen;
-    const onStart = (piece: string, boardFrom: Square): any => {
+    const onStart = (_piece: string, boardFrom: Square): any => {
       return editService.showEdit || playService.pieceStartAction(b2sq(boardFrom));
     };
 
     const onClick = (square: Square) => editService.onSquareClick(square);
     const orientation = !r180 ? 'white' : 'black';
-    return (
-      <Chessboard
-        position={fen2b(fen)}
-        onPieceDragBegin={onStart}
-        onPieceDrop={onPieceDrop}
-        onSquareClick={onClick}
-        boardOrientation={orientation}
-        boardWidth={rendering.boardWidth}
-        customSquareStyles={showMarkers()}
-        customLightSquareStyle={r90 ? blackStyle : whiteSquareStyle}
-        customDarkSquareStyle={r90 ? whiteSquareStyle : blackStyle}
-      />
-    );
+    const size = rendering.boardWidth;
+    const chessboardOptions: ChessboardOptions = {
+      position: fen2b(fen),
+      boardOrientation: orientation,
+      boardStyle: { width: size, height: size },
+      onPieceDrop: ({ sourceSquare, targetSquare }: PieceDropHandlerArgs) =>
+        onPieceDrop(sourceSquare as Square, targetSquare as Square),
+      onPieceDrag: ({ piece, square }: PieceHandlerArgs) =>
+        onStart(piece.pieceType, square as Square),
+      onSquareClick: ({ square }: SquareHandlerArgs) => onClick(square as Square),
+      squareStyles: showMarkers(),
+      lightSquareStyle: r90 ? blackStyle : whiteSquareStyle,
+      darkSquareStyle: r90 ? whiteSquareStyle : blackStyle,
+    } satisfies ChessboardOptions;
+    return <Chessboard options={chessboardOptions} />;
   }
 );

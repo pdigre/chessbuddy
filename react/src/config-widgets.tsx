@@ -26,7 +26,8 @@ export const ConfigButton: React.FC<{
       }}
       onClick={onClick}
       variant="contained"
-      disabled={disabled ?? false}>
+      disabled={disabled ?? false}
+    >
       <span className="text-3xl">{icon}</span>
       <span className="text-lg ml-2">{label}</span>
     </Button>
@@ -77,6 +78,8 @@ export const ConfigSelect: React.FC<{
   item: object;
 }> = ({ label, id, choices, item }) => {
   const prop = getProp(item, id);
+  const [v, setV] = useState(prop);
+
   if (prop == null) {
     return <div></div>;
   }
@@ -85,8 +88,6 @@ export const ConfigSelect: React.FC<{
     setProp(item, id, value);
     setV(value);
   });
-  const value = getProp(item, id);
-  const [v, setV] = useState(value);
   return (
     <FormControl variant="filled">
       <InputLabel variant="standard" htmlFor={label}>
@@ -99,7 +100,8 @@ export const ConfigSelect: React.FC<{
         inputProps={{
           name: label,
           id: 'for',
-        }}>
+        }}
+      >
         <option aria-label="None" value="" />
         {choices.map(name => (
           <option key={name} value={name}>

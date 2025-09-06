@@ -10,17 +10,18 @@ export const PanelHist = observer(({ history }: { history: HistoryService }) => 
     const id = Number.parseInt(
       ((event.target as HTMLTableCellElement).parentNode as HTMLTableRowElement).id
     );
-    history.setMarkHist(id == history.markHist ? -1 : id);
+    history.setMarkHist(id === history.markHist ? -1 : id);
   });
 
   const tableRows = history.getGames().map((row, iRow) => {
     const { time, win, c1, c2 } = row;
-    const marker = iRow == history.markHist ? ' bg-green-300' : '';
+    const marker = iRow === history.markHist ? ' bg-green-300' : '';
     return (
       <tr
         key={iRow.toString()}
         id={iRow.toString()}
-        className={'[&td]:p-[3px] [&td]:text-center [&td]:text-lg dark:text-white' + marker}>
+        className={'[&td]:p-[3px] [&td]:text-center [&td]:text-lg dark:text-white' + marker}
+      >
         <td>{time}</td>
         <td>{c1}</td>
         <td>{c2}</td>
@@ -30,7 +31,7 @@ export const PanelHist = observer(({ history }: { history: HistoryService }) => 
   });
 
   return (
-    <GridWidget onClickAction={historyClick} scroll={history.markHist == -1}>
+    <GridWidget onClickAction={historyClick} scroll={history.markHist === -1}>
       {tableRows}
     </GridWidget>
   );

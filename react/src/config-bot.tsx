@@ -6,9 +6,7 @@ import { ConfigListButtons, ConfigListTable, ConfigPopup } from './config-lists'
 import { ConfigSelect, ConfigText } from './config-widgets';
 
 export const ConfigBot = observer(({ config }: { config: ConfigService }) => {
-  const { type, item, hasSelect, show, onSave, onSelect, cursor, items } = config.getListLogic(
-    ListType.Bot
-  );
+  const { type, item, show, onSave, onSelect, cursor, items } = config.getListLogic(ListType.Bot);
   const engines = Array.from(Engines.map(x => x.name));
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">
