@@ -13,7 +13,7 @@ export const PanelLog = observer(
     const logClickAction = action((event: MouseEvent<HTMLTableElement>) => {
       event.preventDefault();
       const id = Number.parseInt((event.target as HTMLTableCellElement).id);
-      play.undoTo(id == dashboardService.markLog ? -1 : id);
+      play.undoTo(id === dashboardService.markLog ? -1 : id);
     });
 
     const viewLog = history.getLogRows().map((row, iRow) => (
@@ -23,7 +23,7 @@ export const PanelLog = observer(
         </td>
         {row.map((col, iCol) => {
           const id = iRow * 2 + iCol;
-          const marker = id == dashboardService.markLog ? ' bg-green-300' : '';
+          const marker = id === dashboardService.markLog ? ' bg-green-300' : '';
           return (
             <td
               id={id.toString()}
@@ -38,7 +38,7 @@ export const PanelLog = observer(
     ));
 
     return (
-      <GridWidget onClickAction={logClickAction} scroll={dashboardService.markLog == -1}>
+      <GridWidget onClickAction={logClickAction} scroll={dashboardService.markLog === -1}>
         {viewLog}
       </GridWidget>
     );

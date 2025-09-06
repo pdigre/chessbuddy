@@ -2,11 +2,7 @@ import { observer } from 'mobx-react';
 import { AnalyzerService } from '../../common/service/analyzer.service';
 import { ClockService } from '../../common/service/clock.service';
 import { PlayService } from '../../common/service/play.service';
-import {
-  clockService,
-  openingsService,
-  renderingService,
-} from '../../common/service/index.service';
+import { clockService, openingsService } from '../../common/service/index.service';
 import React from 'react';
 import { RenderingService } from '../../common/service/rendering.service';
 

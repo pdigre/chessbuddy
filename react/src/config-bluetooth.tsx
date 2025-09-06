@@ -1,17 +1,19 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { ConfigService, ListType } from '../../common/service/config.service';
 import { observer } from 'mobx-react';
 import { MdBluetoothConnected } from 'react-icons/md';
 import { action } from 'mobx';
-import { ConfigButton, ConfigSelect, ConfigText } from './config-widgets';
-import { ConfigListButtons, ConfigListTable, ConfigPopup } from './config-lists';
+import { ConfigButton } from './config-widgets';
+import { ConfigListButtons, ConfigListTable } from './config-lists';
 
 async function getPort() {
   const FILTERS = [{ usbVendorId: 0x0403, usbProductId: 0x6001 }];
 
+  /*
   const bt = await navigator.bluetooth.requestDevice({
     acceptAllDevices: true,
   });
+   */
   //  alert(bt);
   const ports: SerialPort[] = await navigator.serial.getPorts();
   for (const port of ports) {
@@ -41,9 +43,7 @@ async function doBT() {
 }
 
 export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) => {
-  const { type, item, hasSelect, show, onSave, onSelect, cursor, items } = config.getListLogic(
-    ListType.BT
-  );
+  const { type, onSelect, cursor, items } = config.getListLogic(ListType.BT);
 
   const doBtAction = () => doBT();
   return (

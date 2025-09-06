@@ -28,7 +28,6 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
     );
   };
 
-  // eslint-disable-next-line
   const handleChange = (event: ChangeEvent<{}>, newValue: number) =>
     config.switchTabAction(newValue as number);
 

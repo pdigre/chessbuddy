@@ -5,9 +5,7 @@ import { ConfigListButtons, ConfigListTable, ConfigPopup } from './config-lists'
 import { ConfigText } from './config-widgets';
 
 export const ConfigClock = observer(({ config }: { config: ConfigService }) => {
-  const { type, item, hasSelect, show, onSave, onSelect, cursor, items } = config.getListLogic(
-    ListType.Clock
-  );
+  const { type, item, show, onSave, onSelect, cursor, items } = config.getListLogic(ListType.Clock);
   return (
     <div className="w-[800px] h-[400px] flex flex-col text-center [&>div]:text-left">
       <ConfigListTable onSelect={onSelect} cursor={cursor} items={items} />

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { MediaService } from '../../common/service/media.service';
 
 export const Mp4dialog = observer(({ mp4 }: { mp4: MediaService }) => {
-  const { width, src, title, onClose, open } = mp4.getDialogControls();
+  const { width, src, title, onClose } = mp4.getDialogControls();
   return mp4.show ? (
     <Dialog
       aria-labelledby="mp4"

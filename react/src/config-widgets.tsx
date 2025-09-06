@@ -78,6 +78,8 @@ export const ConfigSelect: React.FC<{
   item: object;
 }> = ({ label, id, choices, item }) => {
   const prop = getProp(item, id);
+  const [v, setV] = useState(prop);
+
   if (prop == null) {
     return <div></div>;
   }
@@ -86,8 +88,6 @@ export const ConfigSelect: React.FC<{
     setProp(item, id, value);
     setV(value);
   });
-  const value = getProp(item, id);
-  const [v, setV] = useState(value);
   return (
     <FormControl variant="filled">
       <InputLabel variant="standard" htmlFor={label}>
