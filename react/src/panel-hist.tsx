@@ -20,7 +20,8 @@ export const PanelHist = observer(({ history }: { history: HistoryService }) => 
       <tr
         key={iRow.toString()}
         id={iRow.toString()}
-        className={'[&td]:p-[3px] [&td]:text-center [&td]:text-lg dark:text-white' + marker}>
+        className={'[&td]:p-[3px] [&td]:text-center [&td]:text-lg dark:text-white' + marker}
+      >
         <td>{time}</td>
         <td>{c1}</td>
         <td>{c2}</td>

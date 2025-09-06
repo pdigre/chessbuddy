@@ -11,7 +11,8 @@ export const Mp4dialog = observer(({ mp4 }: { mp4: MediaService }) => {
       open
       onClose={onClose}
       onClick={onClose}
-      className="text-center text-lg">
+      className="text-center text-lg"
+    >
       <DialogTitle id="mp4">
         {title} - {src}
       </DialogTitle>
