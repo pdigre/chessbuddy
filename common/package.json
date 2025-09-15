@@ -1,6 +1,6 @@
 {
   "name": "chessbuddy_common",
-  "version": "0.43.0",
+  "version": "0.44.0",
   "homepage": ".",
   "type": "module",
   "dependencies": {
@@ -24,6 +24,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/chess.js": "^0.13.7",
+    "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.14",
     "@types/web": "^0.0.174",
     "@typescript-eslint/eslint-plugin": "^8.21.0",

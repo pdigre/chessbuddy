@@ -6,7 +6,7 @@ import {
   FormControl,
   FormControlLabel,
   Checkbox,
-  NativeSelect,
+  NativeSelect, ButtonPropsVariantOverrides,
 } from '@mui/material';
 import { renderingService } from '../../common/service/index.service';
 import { action } from 'mobx';
@@ -17,7 +17,8 @@ export const ConfigButton: React.FC<{
   label: string;
   icon?: ReactNode;
   disabled?: boolean;
-}> = ({ onClick, label, icon, disabled }) => {
+  outline?: boolean;
+}> = ({ onClick, label, icon, disabled, outline }) => {
   return (
     <Button
       className="flex-grow h-14 text-lg m-2"
@@ -25,7 +26,7 @@ export const ConfigButton: React.FC<{
         backgroundColor: renderingService.darkTheme ? 'green' : 'darkgreen',
       }}
       onClick={onClick}
-      variant="contained"
+      variant={outline ?? false ? "outlined" : "contained"}
       disabled={disabled ?? false}
     >
       <span className="text-3xl">{icon}</span>

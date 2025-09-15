@@ -284,7 +284,7 @@ export class PlayService extends Play {
     if (player instanceof Human && !this.isComplete) {
       const movable = this.isMoveable(from);
       if (movable) {
-        mediaService.sound_click.play().then();
+        mediaService.soundClick();
       }
       return movable;
     }
