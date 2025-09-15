@@ -1,0 +1,39 @@
+= ChessBuddy Architecture
+:toc:
+:source-highlighter: highlightjs
+
+This directory contains the C4 model for the ChessBuddy application, defined using the Structurizr DSL (`workspace.dsl`). This model helps document and visualize the software architecture.
+
+== Viewing the Diagrams
+
+The diagrams below are rendered live from the model. To update them, run the export script and refresh the AsciiDoc preview in your IDE.
+
+[source,sh]
+----
+cd common
+bun run docs:export
+----
+
+For a fully interactive experience, you can also run Structurizr Lite:
+
+[source,sh]
+----
+docker run -it --rm -p 8080:8080 -v "$(pwd)/docs":/usr/local/structurizr structurizr/lite
+----
+
+== C4 Model Diagrams
+
+=== System Context
+Shows how the ChessBuddy system fits into its environment and interacts with users.
+
+plantuml::puml/structurizr-SystemContext.puml[]
+
+=== Containers
+Shows the high-level technical building blocks that make up the ChessBuddy system.
+
+plantuml::puml/structurizr-Containers.puml[]
+
+=== Backend API Components
+Shows the key components within the Backend API, including shared services from the `common` library.
+
+plantuml::puml/structurizr-BackendComponents.puml[]
