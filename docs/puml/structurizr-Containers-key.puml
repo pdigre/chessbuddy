@@ -1,0 +1,51 @@
+@startuml
+set separator none
+
+skinparam {
+  shadowing false
+  arrowFontSize 15
+  defaultTextAlignment center
+  wrapWidth 100
+  maxMessageSize 100
+}
+hide stereotype
+
+skinparam rectangle<<_transparent>> {
+  BorderColor transparent
+  BackgroundColor transparent
+  FontColor transparent
+}
+
+skinparam hexagon<<1>> {
+  BackgroundColor #438dd5
+  FontColor #ffffff
+  BorderColor #2e6295
+}
+hexagon "==Container, Backend" <<1>>
+
+skinparam database<<2>> {
+  BackgroundColor #438dd5
+  FontColor #ffffff
+  BorderColor #2e6295
+}
+database "==Container, Database" <<2>>
+
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #ffffff
+  BorderColor #2e6295
+}
+rectangle "==Container, Frontend" <<3>>
+
+skinparam person<<4>> {
+  BackgroundColor #dddddd
+  FontColor #000000
+  BorderColor #9a9a9a
+}
+person "==Person" <<4>>
+
+rectangle "." <<_transparent>> as 5
+5 .[#707070,thickness=2].> 5 : "<color:#707070>Relationship"
+
+
+@enduml

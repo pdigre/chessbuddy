@@ -1,0 +1,35 @@
+@startuml
+set separator none
+title ChessBuddy - System Context
+
+top to bottom direction
+skinparam ranksep 60
+skinparam nodesep 30
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<ChessBuddy>> {
+  BackgroundColor #1168bd
+  FontColor #ffffff
+  BorderColor #0b4884
+  shadowing false
+}
+skinparam person<<Player>> {
+  BackgroundColor #dddddd
+  FontColor #000000
+  BorderColor #9a9a9a
+  shadowing false
+}
+
+person "==Player\n<size:10>[Person]</size>\n\nA user of the ChessBuddy application." <<Player>> as Player
+rectangle "==ChessBuddy\n<size:10>[Software System]</size>\n\nAllows users to play chess, analyze games, and connect with other players." <<ChessBuddy>> as ChessBuddy
+
+Player .[#707070,thickness=2].> ChessBuddy : "<color:#707070>Uses"
+@enduml
