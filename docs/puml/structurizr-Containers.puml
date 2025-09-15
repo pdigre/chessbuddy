@@ -1,0 +1,59 @@
+@startuml
+set separator none
+title ChessBuddy - Containers
+
+top to bottom direction
+skinparam ranksep 60
+skinparam nodesep 30
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam hexagon<<ChessBuddy.BackendAPI>> {
+  BackgroundColor #438dd5
+  FontColor #ffffff
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam database<<ChessBuddy.Database>> {
+  BackgroundColor #438dd5
+  FontColor #ffffff
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam person<<Player>> {
+  BackgroundColor #dddddd
+  FontColor #000000
+  BorderColor #9a9a9a
+  shadowing false
+}
+skinparam rectangle<<ChessBuddy.WebFrontend>> {
+  BackgroundColor #438dd5
+  FontColor #ffffff
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<ChessBuddy>> {
+  BorderColor #0b4884
+  FontColor #0b4884
+  shadowing false
+}
+
+person "==Player\n<size:10>[Person]</size>\n\nA user of the ChessBuddy application." <<Player>> as Player
+
+rectangle "ChessBuddy\n<size:10>[Software System]</size>" <<ChessBuddy>> {
+  rectangle "==Web Frontend\n<size:10>[Container: React + Web Components]</size>\n\nThe user-facing web application that runs in the browser." <<ChessBuddy.WebFrontend>> as ChessBuddy.WebFrontend
+  hexagon "==Backend API\n<size:10>[Container: Bun.js / TypeScript]</size>\n\nHandles business logic, game state, and persistence." <<ChessBuddy.BackendAPI>> as ChessBuddy.BackendAPI
+  database "==Database\n<size:10>[Container: Google Cloud Firestore]</size>\n\nStores game data, user profiles, and tasks." <<ChessBuddy.Database>> as ChessBuddy.Database
+}
+
+ChessBuddy.WebFrontend .[#707070,thickness=2].> ChessBuddy.BackendAPI : "<color:#707070>Makes API calls to\n<color:#707070><size:8>[JSON/HTTP]</size>"
+ChessBuddy.BackendAPI .[#707070,thickness=2].> ChessBuddy.Database : "<color:#707070>Reads from and writes to"
+Player .[#707070,thickness=2].> ChessBuddy.WebFrontend : "<color:#707070>Uses"
+@enduml

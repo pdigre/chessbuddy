@@ -1,0 +1,50 @@
+@startuml
+set separator none
+title ChessBuddy - Backend API - Components
+
+top to bottom direction
+skinparam ranksep 60
+skinparam nodesep 30
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<ChessBuddy.BackendAPI.DataModel>> {
+  BackgroundColor #85bbf0
+  FontColor #000000
+  BorderColor #5d82a8
+  shadowing false
+}
+skinparam rectangle<<ChessBuddy.BackendAPI.Datastore>> {
+  BackgroundColor #85bbf0
+  FontColor #000000
+  BorderColor #5d82a8
+  shadowing false
+}
+skinparam rectangle<<ChessBuddy.BackendAPI.RulesService>> {
+  BackgroundColor #85bbf0
+  FontColor #000000
+  BorderColor #5d82a8
+  shadowing false
+}
+skinparam rectangle<<ChessBuddy.BackendAPI>> {
+  BorderColor #2e6295
+  FontColor #2e6295
+  shadowing false
+}
+
+rectangle "Backend API\n<size:10>[Container: Bun.js / TypeScript]</size>" <<ChessBuddy.BackendAPI>> {
+  rectangle "==Data Model\n<size:10>[Component: TypeScript]</size>\n\nDefines core data structures (ListItem, Persist) and utility functions for property access." <<ChessBuddy.BackendAPI.DataModel>> as ChessBuddy.BackendAPI.DataModel
+  rectangle "==Rules Service\n<size:10>[Component: TypeScript]</size>\n\nEncapsulates chess rules and game state validation." <<ChessBuddy.BackendAPI.RulesService>> as ChessBuddy.BackendAPI.RulesService
+  rectangle "==Datastore\n<size:10>[Component: TypeScript]</size>\n\nHandles interaction with Google Cloud Firestore." <<ChessBuddy.BackendAPI.Datastore>> as ChessBuddy.BackendAPI.Datastore
+}
+
+ChessBuddy.BackendAPI.RulesService .[#707070,thickness=2].> ChessBuddy.BackendAPI.DataModel : "<color:#707070>Uses"
+ChessBuddy.BackendAPI.Datastore .[#707070,thickness=2].> ChessBuddy.BackendAPI.DataModel : "<color:#707070>Uses"
+@enduml

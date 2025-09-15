@@ -6,7 +6,7 @@ dist
 build
 
 # Generated documentation
-/docs/puml/
+# /docs/puml/
 
 # IDE
 .idea
