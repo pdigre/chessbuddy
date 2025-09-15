@@ -86,6 +86,7 @@ Some of this is not yet production ready and I lack experience.
 
 - [Install](doc/install.md)
 - [Overview](doc/overview.md)
+- [Architecture](docs/README.md)
 
 </details>
 <details>
