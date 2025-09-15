@@ -2,7 +2,7 @@ import { action, makeObservable, observable } from 'mobx';
 import { Bot } from '../model/bot';
 import { Human } from '../model/human';
 import { Clock } from '../model/clock';
-import { BT } from '../model/bt.ts';
+import { BT } from '../model/bt';
 import {
   playService,
   storageService,
@@ -12,8 +12,8 @@ import {
   renderingService,
 } from './index.service';
 import * as model from '../model/model';
-import * as rulez from './rules.service.ts';
-import { Config } from '../model/config.ts';
+import * as rulez from './rules.service';
+import { Config } from '../model/config';
 
 export const enum ListMode {
   None = 1,

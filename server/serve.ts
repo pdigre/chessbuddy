@@ -1,6 +1,7 @@
 import { saveData } from "./src/datastore";
+import commonPackage from "../common/package.json" with { type: "json" };
 
-console.log("ChessBuddy version 0.43.0 http://localhost:80/index.html");
+console.log(`ChessBuddy version ${commonPackage.version} http://localhost:80/index.html`);
 
 Bun.serve({
   port: 80,
@@ -34,7 +35,7 @@ Bun.serve({
 
     // Define routes for asset directories
     const staticAssetDirs: Record<string, string> = {
-      "/assets/": "../react/dist/assets/",
+      "/assets/": "../assets/",
       "/png/": "../public/png/",
       "/mp3/": "../public/mp3/",
       "/mp4/": "../public/mp4/",

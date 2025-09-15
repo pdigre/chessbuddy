@@ -44,8 +44,7 @@ export class EditService {
       (this.wccq ? 'Q' : '') +
       (this.bcck ? 'k' : '') +
       (this.bccq ? 'q' : '');
-    const fen = fenArr.join(' ');
-    this.editFen = fen;
+    this.editFen = fenArr.join(' ');
     this.showEdit = false;
     //    playService.fen = fen;
     configService.showConfig = true;
@@ -57,8 +56,7 @@ export class EditService {
     const p = chess.SQUARES.indexOf(this.editSquare as chess.Square);
     brd[p] = piece;
     fenArr[0] = FEN.brd2fen(brd.join(''));
-    const fen = fenArr.join(' ');
-    this.editFen = fen;
+    this.editFen = fenArr.join(' ');
   };
 
   editMove(from: chess.Square, to: chess.Square) {
@@ -70,8 +68,7 @@ export class EditService {
     brd[p1] = brd[p2];
     brd[p2] = swap;
     fenArr[0] = FEN.brd2fen(brd.join(''));
-    const fen = fenArr.join(' ');
-    this.editFen = fen;
+    this.editFen = fenArr.join(' ');
   }
 
   onSquareClick(square: chess.Square) {

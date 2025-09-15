@@ -20,7 +20,6 @@ export const ConfigDisplay = observer(({ config }: { config: ConfigService }) =>
         onClick={renderingService.rotateAction}
         label="Rotate chessboard"
         icon={<MdRotateRight />}
-        type="tonal"
       />
     </div>
   );

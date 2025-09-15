@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { JSX, MouseEvent, useState } from 'react';
 import {
   Dialog,
   DialogActions,

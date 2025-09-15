@@ -47,20 +47,18 @@ export const ConfigListButtons: React.FC<{
   const { hasSelect, onDelete, onAdd, onEdit } = configService.getListLogic(type);
   return (
     <div className="[&>button]:mx-1">
-      <ConfigButton onClick={onAdd} label="Add" icon={<MdAdd />} type="filled" />
+      <ConfigButton onClick={onAdd} label="Add" icon={<MdAdd />} outline={true} />
       <ConfigButton
         onClick={onEdit}
         label="Edit"
         icon={<MdEdit />}
         disabled={!hasSelect}
-        type="tonal"
       />
       <ConfigButton
         onClick={onDelete}
         label="Delete"
         icon={<MdDelete />}
         disabled={!hasSelect}
-        type="tonal"
       />
       {children}
     </div>
