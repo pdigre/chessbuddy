@@ -24,4 +24,4 @@ steps:
 options:
   logging: CLOUD_LOGGING_ONLY
   # Ensure you include the service account that has permission to deploy
-serviceAccount: '210193644238-compute@developer.gserviceaccount.com'
+  # serviceAccount: '210193644238-compute@developer.gserviceaccount.com'
