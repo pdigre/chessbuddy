@@ -27,7 +27,7 @@ export class PanelHist extends MobxLitElement {
 
   clickAction = action((e: MouseEvent) => {
     e.preventDefault();
-    let target = e.target as HTMLElement;
+    const target = e.target as HTMLElement;
     if (target.nodeName == 'TD') {
       const id = +(target.parentNode as HTMLElement).id;
       this.history.setMarkHist(id == this.history.markHist ? -1 : id);
@@ -66,8 +66,7 @@ export class PanelHist extends MobxLitElement {
           class="table m-0 table-fixed w-full"
           @touch-start=${this.onTouchStartAction}
           @touch-move=${this.onTouchMoveAction}
-          @click=${this.clickAction}
-        >
+          @click=${this.clickAction}>
           <tbody>
             ${this.renderRows(rows, mark)}
           </tbody>

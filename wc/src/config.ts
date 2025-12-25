@@ -38,8 +38,7 @@ export class Config extends MobxLitElement {
         <md-primary-tab
           class="text-3xl"
           @click=${choose(num)}
-          .active=${num === this.config.showTab}
-        >
+          .active=${num === this.config.showTab}>
           <span class="text-lg material-symbols-outlined">${icon}</span>${title}</md-primary-tab
         >`;
     };
@@ -54,8 +53,7 @@ export class Config extends MobxLitElement {
         aria-labelledby="simple-dialog-title"
         open
         @close=${this.config.closeConfigAction}
-        maxWidth="xl"
-      >
+        maxWidth="xl">
         <form slot="content" id="form-id" method="dialog">
           <md-tabs class="text-lg text-center w-full">
             ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')} ${tab(2, 'people', 'Humans')}

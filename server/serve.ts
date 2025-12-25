@@ -1,5 +1,5 @@
-import { saveData } from "./src/datastore";
-import commonPackage from "../common/package.json" with { type: "json" };
+import { saveData } from './src/datastore';
+import commonPackage from '../common/package.json' with { type: 'json' };
 
 console.log(`ChessBuddy version ${commonPackage.version} http://localhost:80/index.html`);
 
@@ -9,25 +9,25 @@ Bun.serve({
     const { pathname } = new URL(req.url);
 
     // API endpoint for POST requests
-    if (req.method === "POST" && pathname === "/connect") {
-      console.log("POST:", pathname);
+    if (req.method === 'POST' && pathname === '/connect') {
+      console.log('POST:', pathname);
       try {
         const data = await req.json();
-        console.log("Received POST data:", data);
+        console.log('Received POST data:', data);
         // Save data to Google Cloud Datastore
-        await saveData("Tasks", "sampletask1", data);
-        return new Response("POST request received", { status: 200 });
+        await saveData('Tasks', 'sampletask1', data);
+        return new Response('POST request received', { status: 200 });
       } catch (error) {
-        console.error("Error processing POST request:", error);
-        return new Response("Invalid JSON", { status: 400 });
+        console.error('Error processing POST request:', error);
+        return new Response('Invalid JSON', { status: 400 });
       }
     }
 
     // --- Static File Routing ---
 
     // Explicitly map the root path to the React app's entry point
-    if (pathname === "/" || pathname === "/index.html") {
-      const filePath = "../react/dist/index.html";
+    if (pathname === '/' || pathname === '/index.html') {
+      const filePath = '../react/dist/index.html';
       const file = Bun.file(filePath);
       console.log(`<OK> ${pathname} => ${filePath}`);
       return new Response(file);
@@ -35,11 +35,11 @@ Bun.serve({
 
     // Define routes for asset directories
     const staticAssetDirs: Record<string, string> = {
-      "/assets/": "../assets/",
-      "/png/": "../public/png/",
-      "/mp3/": "../public/mp3/",
-      "/mp4/": "../public/mp4/",
-      "/bots/": "../public/bots/",
+      '/assets/': '../assets/',
+      '/png/': '../public/png/',
+      '/mp3/': '../public/mp3/',
+      '/mp4/': '../public/mp4/',
+      '/bots/': '../public/bots/',
     };
 
     for (const prefix in staticAssetDirs) {
@@ -52,14 +52,14 @@ Bun.serve({
         }
         // For assets, it's better to return a 404 if not found
         console.error(`Asset not found: ${pathname} => ${filePath}`);
-        return new Response("Not Found", { status: 404 });
+        return new Response('Not Found', { status: 404 });
       }
     }
 
     // Define routes for specific files
     const staticFileRoutes: Record<string, string> = {
-      "/manifest.json": "../public/manifest.json",
-      "/wc.html": "../wc/dist/index.html",
+      '/manifest.json': '../public/manifest.json',
+      '/wc.html': '../wc/dist/index.html',
     };
 
     if (staticFileRoutes[pathname]) {
@@ -74,7 +74,7 @@ Bun.serve({
     // --- SPA Fallback ---
     // Default to serving the React app for any other path (e.g., /game/123).
     // This is standard for SPAs to handle client-side routing.
-    const reactAppEntry = "../react/dist/index.html";
+    const reactAppEntry = '../react/dist/index.html';
     console.log(`<SPA Fallback> ${pathname} => ${reactAppEntry}`);
     const file = Bun.file(reactAppEntry);
 
@@ -85,10 +85,10 @@ Bun.serve({
 
     // If we get here, even the main React app entry point is missing.
     console.error(`Critical: React entry point not found at ${reactAppEntry}`);
-    return new Response("Application not found", { status: 404 });
+    return new Response('Application not found', { status: 404 });
   },
   error(error: Error): Response {
-    console.error("Server error:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    console.error('Server error:', error);
+    return new Response('Internal Server Error', { status: 500 });
   },
 });

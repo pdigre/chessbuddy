@@ -1,6 +1,6 @@
 {
   "name": "chessbuddy_common",
-  "version": "0.45.0",
+  "version": "0.46.0",
   "homepage": ".",
   "type": "module",
   "dependencies": {
@@ -9,8 +9,8 @@
   },
   "scripts": {
     "format": "prettier . --write",
-    "lint": "eslint ./model/*.ts;./service/*.ts",
-    "lint:fix": "eslint ./model/*.{ts},./service/*.{ts} --fix",
+    "lint": "eslint \"model/*.ts\" \"service/*.ts\"",
+    "lint:fix": "eslint \"model/*.ts\" \"service/*.ts\" --fix",
     "test": "bun test --inspect-wait",
     "docs:export": "docker run --rm -v \"$(pwd)/../docs\":/usr/local/structurizr structurizr/cli export -w workspace.dsl -f plantuml -o puml"
   },

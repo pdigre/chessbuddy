@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 const lines = readFileSync('./gaviota-starters.pgn', 'utf8')
   .toString()
   .replace(/(\r\n)/gm, '\n')
-  .replace(/(`)/gm, '\'')
+  .replace(/(`)/gm, "'")
   .split('\n');
 console.log('lines:' + lines.length);
 

@@ -1,5 +1,5 @@
 {
-  "name": "chessbuddy_common",
+  "name": "chessbuddy_server",
   "version": "0.35.0",
   "homepage": ".",
   "type": "module",
@@ -11,8 +11,8 @@
   "scripts": {
     "dev": "bun --inspect serve.ts",
     "format": "prettier . --write",
-    "lint": "eslint ./model/*.ts;./service/*.ts",
-    "lint:fix": "eslint ./model/*.{ts},./service/*.{ts} --fix",
+    "lint": "eslint src/*.ts",
+    "lint:fix": "eslint src/*.ts --fix",
     "test": "bun test --inspect-wait"
   },
   "devDependencies": {

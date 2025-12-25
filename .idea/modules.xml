@@ -3,6 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/chessbuddy.iml" filepath="$PROJECT_DIR$/chessbuddy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/public/public.iml" filepath="$PROJECT_DIR$/public/public.iml" />
+      <module fileurl="file://$PROJECT_DIR$/react/react.iml" filepath="$PROJECT_DIR$/react/react.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/tools.iml" filepath="$PROJECT_DIR$/tools/tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wc/wc.iml" filepath="$PROJECT_DIR$/wc/wc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zig/zig.iml" filepath="$PROJECT_DIR$/zig/zig.iml" />
     </modules>
   </component>
 </project>

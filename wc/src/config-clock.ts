@@ -33,8 +33,7 @@ export class ConfigClock extends MobxLitElement {
             <cb-config-list
               .onSelect=${onSelect}
               .cursor=${cursor}
-              .items=${items}
-            ></cb-config-list>
+              .items=${items}></cb-config-list>
           </td>
         </tr>
         <tr>
@@ -43,22 +42,19 @@ export class ConfigClock extends MobxLitElement {
               .onClick=${onAdd}
               label="Add"
               icon="add"
-              type="filled"
-            ></cb-config-button>
+              type="filled"></cb-config-button>
             <cb-config-button
               .onClick=${onEdit}
               label="Edit"
               icon="edit"
               .disabled=${!hasSelect}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
             <cb-config-button
               .onClick=${onDelete}
               label="Delete"
               icon="delete"
               .disabled=${!hasSelect}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
           </td>
         </tr>
       </table>

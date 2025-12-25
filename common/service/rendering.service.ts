@@ -51,6 +51,6 @@ export class RenderingService extends Render {
       return RenderingService.DEFAULT; // Use when on laptop
     }
     // On iPad either as PWA with Safari or Chrome which has more controls that takes space
-    return !!navigator.userAgent.match(/(Chrome)/) ? RenderingService.CHROME : RenderingService.PWA;
+    return navigator.userAgent.match(/(Chrome)/) ? RenderingService.CHROME : RenderingService.PWA;
   }
 }

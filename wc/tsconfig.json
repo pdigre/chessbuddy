@@ -22,14 +22,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "types": [
-      "bun-types", "web"
-    ]
+    "types": ["bun-types", "web"]
   },
-  "include": [
-    "src",
-    "../common/model",
-    "../common/services"
-  ],
+  "include": ["src", "../common/model", "../common/services"],
   "exclude": ["node_modules", "dist"]
 }

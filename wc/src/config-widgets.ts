@@ -53,8 +53,7 @@ export class ConfigButton extends LitElement {
         <md-filled-button
           class="button flex-grow text-lg"
           @click=${this.onClick}
-          .disabled=${this.disabled ?? false}
-        >
+          .disabled=${this.disabled ?? false}>
           <span class="icon material-symbols-outlined">${this.icon}</span>
           <span class="label">${this.label}</span>
         </md-filled-button>
@@ -66,8 +65,7 @@ export class ConfigButton extends LitElement {
         <md-filled-tonal-button
           class="button flex-grow text-lg"
           @click=${this.onClick}
-          .disabled=${this.disabled ?? false}
-        >
+          .disabled=${this.disabled ?? false}>
           <span class="icon material-symbols-outlined">${this.icon}</span>
           <span class="label">${this.label}</span>
         </md-filled-tonal-button>
@@ -78,8 +76,7 @@ export class ConfigButton extends LitElement {
       <md-outlined-button
         class="button flex-grow text-lg"
         @click=${this.onClick}
-        .disabled=${this.disabled ?? false}
-      >
+        .disabled=${this.disabled ?? false}>
         <span class="icon material-symbols-outlined">${this.icon}</span>
         <span class="label">${this.label}</span>
       </md-outlined-button>
@@ -90,11 +87,11 @@ export class ConfigButton extends LitElement {
 @customElement('cb-config-text')
 export class ConfigText extends LitElement {
   @property({
-    hasChanged(newVal: Object, oldVal: Object) {
+    hasChanged(newVal: object, oldVal: object) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  item!: Object;
+  item!: object;
   @property({ attribute: true })
   label!: string;
   @property({ attribute: true })
@@ -109,8 +106,7 @@ export class ConfigText extends LitElement {
         label=${this.label}
         name=${this.id}
         @change=${onChange}
-        value=${value}
-      ></md-outlined-text-field>
+        value=${value}></md-outlined-text-field>
     `;
   }
 }
@@ -118,11 +114,11 @@ export class ConfigText extends LitElement {
 @customElement('cb-config-boolean')
 export class ConfigBoolean extends LitElement {
   @property({
-    hasChanged(newVal: Object, oldVal: Object) {
+    hasChanged(newVal: object, oldVal: object) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  item!: Object;
+  item!: object;
   @property({ attribute: true })
   label!: string;
   @property({ attribute: true })
@@ -156,11 +152,11 @@ export class ConfigBoolean extends LitElement {
 @customElement('cb-config-select')
 export class ConfigSelect extends LitElement {
   @property({
-    hasChanged(newVal: Object, oldVal: Object) {
+    hasChanged(newVal: object, oldVal: object) {
       return JSON.stringify(newVal) !== JSON.stringify(oldVal);
     },
   })
-  item!: Object;
+  item!: object;
   @property({ attribute: true })
   label!: string;
   id!: string;
@@ -190,8 +186,7 @@ export class ConfigSelect extends LitElement {
             html` <md-select-option
               .selected=${name === value}
               value=${name}
-              @request-selection=${onSelect}
-            >
+              @request-selection=${onSelect}>
               <div slot="headline">${name}</div>
             </md-select-option>`
         )}

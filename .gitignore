@@ -9,5 +9,5 @@ build
 # /docs/puml/
 
 # IDE
-.idea
+# .idea
 .vscode

@@ -32,8 +32,7 @@ export const GridWidget = (props: {
         className="m-0 table-fixed w-full"
         onTouchStart={onTouchStartAction}
         onTouchMove={onTouchMoveAction}
-        onClick={onClickAction}
-      >
+        onClick={onClickAction}>
         <tbody>
           {children}
           <tr ref={endRef} />

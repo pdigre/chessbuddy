@@ -28,8 +28,7 @@ export const PanelLog = observer(
             <td
               id={id.toString()}
               key={id.toString()}
-              className={'w-30 p-[2px] text-center text-lg dark:text-white' + marker}
-            >
+              className={'w-30 p-[2px] text-center text-lg dark:text-white' + marker}>
               {col}
             </td>
           );

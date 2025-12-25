@@ -1,0 +1,22 @@
+{
+  "name": "chessbuddy-monorepo",
+  "private": true,
+  "workspaces": [
+    "common",
+    "public",
+    "react",
+    "server",
+    "tools",
+    "wc",
+    "zig"
+  ],
+  "scripts": {
+    "format": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,html,css,scss}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,html,css,scss}\"",
+    "lint": "bun run --filter '*' lint",
+    "lint:fix": "bun run --filter '*' lint:fix"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}

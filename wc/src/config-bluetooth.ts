@@ -22,8 +22,7 @@ export class ConfigBluetooth extends MobxLitElement {
             <cb-config-list
               .onSelect=${onSelect}
               .cursor=${cursor}
-              .items=${items}
-            ></cb-config-list>
+              .items=${items}></cb-config-list>
           </td>
         </tr>
         <tr>
@@ -32,21 +31,18 @@ export class ConfigBluetooth extends MobxLitElement {
               label="Add"
               icon="add"
               .onClick=${bluetoothService.addBT}
-              type="filled"
-            ></cb-config-button>
+              type="filled"></cb-config-button>
             <cb-config-button
               label="Delete"
               icon="delete"
               .onClick=${onDelete}
               .disabled=${!hasSelect}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
             <cb-config-button
               .onClick=${bluetoothService.connect}
               label="Connect"
               icon="bluetooth"
-              .disabled=${!hasSelect}
-            ></cb-config-button>
+              .disabled=${!hasSelect}></cb-config-button>
           </td>
         </tr>
       </table>
