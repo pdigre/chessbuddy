@@ -1,11 +1,11 @@
 steps:
   # 1. Build the container image using the commit SHA as the tag
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-app:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/chessbuddy:$COMMIT_SHA', '.']
 
   # 2. Push the image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/my-app:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/chessbuddy:$COMMIT_SHA']
 
   # 3. Deploy the specific image we just built to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -13,11 +13,11 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'SERVICE-NAME' # Replace with your Cloud Run service name
+      - 'chessbuddy' # Replace with your Cloud Run service name
       - '--image'
-      - 'gcr.io/$PROJECT_ID/my-app:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/chessbuddy:$COMMIT_SHA'
       - '--region'
-      - 'us-central1' # Replace with your region
+      - 'europe-west1' # Replace with your region
       - '--platform'
       - 'managed'
 
