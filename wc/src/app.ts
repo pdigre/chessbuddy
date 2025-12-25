@@ -80,8 +80,7 @@ export class App extends LitElement {
             class="m-0 p-0"
             .edit=${editService}
             .rendering=${renderingService}
-            .config=${configService}
-          ></cb-board>
+            .config=${configService}></cb-board>
           <cb-playerinfobar class="m-0 p-0" .isTop=${false} .play=${playService}></cb-playerinfobar>
         </div>
         <div class="flex flex-col w-full text-center">

@@ -63,8 +63,7 @@ export class ConfigHuman extends MobxLitElement {
             <cb-config-list
               .onSelect=${onSelect}
               .cursor=${cursor}
-              .items=${items}
-            ></cb-config-list>
+              .items=${items}></cb-config-list>
           </td>
         </tr>
         <tr>
@@ -76,8 +75,7 @@ export class ConfigHuman extends MobxLitElement {
               multiple=${false}
               accept=".txt,text/plain"
               .onChange=${onUpload}
-              ref="{uploadRef}"
-            />
+              ref="{uploadRef}" />
           </td>
         </tr>
         <tr>
@@ -86,22 +84,19 @@ export class ConfigHuman extends MobxLitElement {
               .onClick=${onAdd}
               label="Add"
               icon="add"
-              type="filled"
-            ></cb-config-button>
+              type="filled"></cb-config-button>
             <cb-config-button
               .onClick=${onEdit}
               label="Edit"
               icon="edit"
               .disabled=${!hasSelect}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
             <cb-config-button
               .onClick=${onDelete}
               label="Delete"
               icon="delete"
               .disabled=${!hasSelect}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
           </td>
         </tr>
         <tr>
@@ -110,20 +105,17 @@ export class ConfigHuman extends MobxLitElement {
               .onClick=${downloadPlayerAction}
               label="Download"
               icon="download"
-              .disabled=${!hasSelect}
-            ></cb-config-button>
+              .disabled=${!hasSelect}></cb-config-button>
             <cb-config-button
               .onClick=${uploadPlayerAction}
               label="Upload"
               icon="upload"
-              .disabled=${!hasSelect}
-            ></cb-config-button>
+              .disabled=${!hasSelect}></cb-config-button>
             <cb-config-button
               .onClick=${connectPlayerAction}
               label="Update"
               icon="online_prediction"
-              .disabled=${!hasEmail}
-            ></cb-config-button>
+              .disabled=${!hasEmail}></cb-config-button>
           </td>
         </tr>
       </table>

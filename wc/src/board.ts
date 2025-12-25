@@ -113,8 +113,7 @@ export class Board extends MobxLitElement {
         @click=${onClick}
         orientation=${orientation}
         style=${STYLE}
-        draggable-pieces
-      ></chess-board>
+        draggable-pieces></chess-board>
     `;
   }
 }

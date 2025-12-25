@@ -34,11 +34,7 @@ export const ConfigGame = observer(({ config }: { config: ConfigService }) => {
           icon={<MdExitToApp />}
           disabled={playService.isComplete}
         />
-        <ConfigButton
-          onClick={playService.resetGameAction}
-          label="Reset"
-          icon={<MdClear />}
-        />
+        <ConfigButton onClick={playService.resetGameAction} label="Reset" icon={<MdClear />} />
         <ConfigButton onClick={playService.editGameAction} label="Edit" icon={<MdEdit />} />
       </div>
     </div>

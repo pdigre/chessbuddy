@@ -37,7 +37,7 @@ export class Config implements model.Persist {
     this.game = this.initialize(new Game(), this.game);
   }
 
-  private initialize<T extends Object>(obj: T, props: Object) {
+  private initialize<T extends object>(obj: T, props: object) {
     Object.assign(obj, props);
     return obj;
   }

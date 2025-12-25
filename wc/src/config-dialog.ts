@@ -79,14 +79,13 @@ export class ConfigDialog extends MobxLitElement {
         >`;
     };
 
-    let onClose = action(this.config.closeConfigAction);
+    const onClose = action(this.config.closeConfigAction);
     return html`
       <md-dialog
         class="main"
         aria-labelledby="simple-dialog-title"
         .open=${showConfig}
-        @close=${onClose}
-      >
+        @close=${onClose}>
         <div slot="content">
           <md-tabs class="text-lg text-center" aria-label="Content to view">
             ${tab(0, 'chess', 'Game')} ${tab(1, 'monitor', 'Display')} ${tab(2, 'people', 'Humans')}

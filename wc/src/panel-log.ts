@@ -29,7 +29,7 @@ export class PanelLog extends MobxLitElement {
   };
 
   clickAction = action((e: MouseEvent) => {
-    let target = e.target as HTMLElement;
+    const target = e.target as HTMLElement;
     if (target.nodeName == 'TD') {
       const i = +target.id;
       dashboardService.setMarkLogAction(i);
@@ -75,8 +75,7 @@ export class PanelLog extends MobxLitElement {
           class="m-0 table-fixed w-full"
           @touch-start=${this.onTouchStartAction}
           @touch-move=${this.onTouchMoveAction}
-          @click=${this.clickAction}
-        >
+          @click=${this.clickAction}>
           <tbody>
             ${this.renderRows(rows, mark)}
           </tbody>

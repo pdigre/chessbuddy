@@ -6,10 +6,10 @@ export interface ListItem {
 }
 
 export interface Persist {
-  persist: () => { name: string; init: Object };
+  persist: () => { name: string; init: object };
 }
 
-export const getProp = (obj: Object, name: string) => {
+export const getProp = (obj: object, name: string) => {
   if (!obj) {
     console.log('Get object undefined:' + name);
     return '';
@@ -21,7 +21,7 @@ export const getProp = (obj: Object, name: string) => {
   }
   return prop![1];
 };
-export const setProp = (obj: Object, name: string, value: any) => {
+export const setProp = (obj: object, name: string, value: any) => {
   if (!obj) {
     console.log('Set object undefined:' + name);
     return '';

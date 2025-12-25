@@ -29,8 +29,7 @@ export class MessageDialog extends MobxLitElement {
         type="alert"
         aria-labelledby="message"
         .open=${this.message.show}
-        class="text-center text-lg"
-      >
+        class="text-center text-lg">
         <div slot="headline">${this.title}</div>
         <form slot="content" id="form-id" method="dialog">${getMsg(this.msg)}</form>
         <div slot="actions">${this.buttons?.map(x => this.renderButton(x, onClick))}</div>
@@ -158,8 +157,7 @@ function getMsg(name: string) {
             <a
               href="https://github.com/pdigre/chessbuddy/wiki/User-guide"
               target="_blank"
-              rel="noopener"
-            >
+              rel="noopener">
               User Guide / instructions
             </a>
           </li>

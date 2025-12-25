@@ -37,8 +37,7 @@ export class ConfigBot extends MobxLitElement {
             <cb-config-list
               .onSelect=${onSelect}
               .cursor=${cursor}
-              .items=${items}
-            ></cb-config-list>
+              .items=${items}></cb-config-list>
           </td>
         </tr>
         <tr>
@@ -47,22 +46,19 @@ export class ConfigBot extends MobxLitElement {
               label="Add"
               icon="add"
               .onClick=${onAdd}
-              type="filled"
-            ></cb-config-button>
+              type="filled"></cb-config-button>
             <cb-config-button
               label="Edit"
               icon="edit"
               .onClick=${onEdit}
               .disabled=${!hasSelect}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
             <cb-config-button
               label="Delete"
               icon="delete"
               .onClick=${onDelete}
               .disabled=${!hasSelect}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
           </td>
         </tr>
       </table>
@@ -73,8 +69,7 @@ export class ConfigBot extends MobxLitElement {
             .item=${item}
             id="engine"
             label="Chess Engine"
-            .choices=${engines}
-          ></cb-config-select>
+            .choices=${engines}></cb-config-select>
           <br />
           <cb-config-text .item=${item} id="skill" label="Skill level"></cb-config-text>
           <br />

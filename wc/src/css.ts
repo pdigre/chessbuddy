@@ -75,8 +75,7 @@ export const TW_CSS: CSSResultArray = [
 export const MD_ICONS = html`
   <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-    rel="stylesheet"
-  />
+    rel="stylesheet" />
   <style>
     @font-face {
       font-family: 'Material Design Icons';

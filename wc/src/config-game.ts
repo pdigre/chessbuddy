@@ -35,16 +35,14 @@ export class ConfigGame extends MobxLitElement {
               label="White"
               id="white"
               .choices=${playerNames}
-              .item=${item}
-            ></cb-config-select>
+              .item=${item}></cb-config-select>
           </td>
           <td>
             <cb-config-select
               label="Black"
               id="black"
               .choices=${playerNames}
-              .item=${item}
-            ></cb-config-select>
+              .item=${item}></cb-config-select>
           </td>
         </tr>
         <tr>
@@ -54,8 +52,7 @@ export class ConfigGame extends MobxLitElement {
               label="Timer setting"
               id="clock"
               .choices=${this.config.clocks.map(x => x.name)}
-              .item=${item}
-            ></cb-config-select>
+              .item=${item}></cb-config-select>
           </td>
         </tr>
         <tr>
@@ -64,26 +61,22 @@ export class ConfigGame extends MobxLitElement {
               .onClick=${playService.startGameAction}
               label="Play"
               icon="play_circle"
-              type="filled"
-            ></cb-config-button>
+              type="filled"></cb-config-button>
             <cb-config-button
               .onClick=${playService.endGameAction}
               label="End game"
               icon="exit_to_app"
               .disabled=${playService.isComplete}
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
             <cb-config-button
               .onClick=${playService.resetGameAction}
               label="Reset"
               icon="clear"
-              type="tonal"
-            ></cb-config-button>
+              type="tonal"></cb-config-button>
             <cb-config-button
               .onClick=${playService.editGameAction}
               label="Edit"
-              icon="edit"
-            ></cb-config-button>
+              icon="edit"></cb-config-button>
           </td>
         </tr>
       </table>

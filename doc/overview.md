@@ -1,25 +1,25 @@
 # Code Chessbuddy
 
 ## MOBX Observables
-* Config - orientation, settings
-* Rendering - screensize
-* Players - list of bots and players
-* GameState - playing or paused
-* Game - the game updates when move is done
-* GameHistory - previous games updates when game completes
-* Server - online game history storage
-* Helper - gets CP and Stockfish suggestions
-* TimeKeeper - updates timer every second of play
-* RefreshTimer - 100ms refresh, due to ChessBoard bug
-* Messages- Message box, prompts
 
+- Config - orientation, settings
+- Rendering - screensize
+- Players - list of bots and players
+- GameState - playing or paused
+- Game - the game updates when move is done
+- GameHistory - previous games updates when game completes
+- Server - online game history storage
+- Helper - gets CP and Stockfish suggestions
+- TimeKeeper - updates timer every second of play
+- RefreshTimer - 100ms refresh, due to ChessBoard bug
+- Messages- Message box, prompts
 
-```mermaid 
+```mermaid
 ---
 title: Chessbuddy observed state
 ---
 classDiagram
-    App <|-- render : darkMode 
+    App <|-- render : darkMode
     Board <|-- render : rotation
     Board <|-- config : fen
     CP <|-- analyzer : cp
@@ -72,7 +72,7 @@ classDiagram
     }
 ```
 
-```mermaid 
+```mermaid
 ---
 title: Chessbuddy Storage data model
 ---
@@ -133,6 +133,3 @@ erDiagram
     string fen
     }
 ```
-
-
-

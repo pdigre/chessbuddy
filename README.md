@@ -1,8 +1,8 @@
 # ChessBuddy project
+
 <i>Per Digre - personal project to explore new tech.</i>
 
 Play at: [https://chessbuddy.net/](https://chessbuddy.net/)
-
 
 <details>
   <summary>Introduction</summary>
@@ -16,7 +16,7 @@ An iPad app that follows along when playing chess with my friends.
 - chess clock
 - logs games
 - StockFish and Lozza chessbots opponents
-- Names of openings 
+- Names of openings
 - Suggest moves
 - Evaluates CP score throughout the game
 </details>
@@ -43,7 +43,9 @@ This has been used as an assistant like chess clock during friendly two player g
 ## Tech exploration
 
 ### 1. React version
+
 My first learning experience
+
 - React
 - Typescript
 - Chessboard.jsx
@@ -60,17 +62,21 @@ My first learning experience
 - Docker distro-less deployment
 
 ### 2. Web-Components version
+
 My second learning trip
+
 - Web Components
 - Bun
 - Zig
-- Chessboard - Web Component 
+- Chessboard - Web Component
 - Material Design 3 - Web
 - MobX for Lit Element
 - Structure project for both React and WC
 
 ### 3. Next to do
+
 Some of this is not yet production ready and I lack experience.
+
 - Use media queries to fix size issues
 - Connect Bluetooth chessboard
 - Connect other iPad to use as slave display
@@ -95,9 +101,11 @@ Some of this is not yet production ready and I lack experience.
 ## Credits and resources
 
 Credits:
+
 - [https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/](https://eddmann.com/posts/creating-a-react-based-chess-game-with-wasm-bots-in-typescript/)
 
 Resources
+
 - Learn Web components with MobX - https://www.npmjs.com/package/@adobe/lit-mobx
 - Using Material Design MD-3 for web components - https://m3.material.io/develop/web
 - Material Design on Github - https://github.com/material-components/material-web/tree/main/docs/components
@@ -111,6 +119,5 @@ Resources
 * Chess Board - https://github.com/Clariity/react-chessboard
 * WASM - Use with Stockfish
 * Lozza JS chess engine
-
 
 </details>

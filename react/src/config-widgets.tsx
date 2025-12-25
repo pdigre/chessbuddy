@@ -6,7 +6,8 @@ import {
   FormControl,
   FormControlLabel,
   Checkbox,
-  NativeSelect, ButtonPropsVariantOverrides,
+  NativeSelect,
+  ButtonPropsVariantOverrides,
 } from '@mui/material';
 import { renderingService } from '../../common/service/index.service';
 import { action } from 'mobx';
@@ -26,9 +27,8 @@ export const ConfigButton: React.FC<{
         backgroundColor: renderingService.darkTheme ? 'green' : 'darkgreen',
       }}
       onClick={onClick}
-      variant={outline ?? false ? "outlined" : "contained"}
-      disabled={disabled ?? false}
-    >
+      variant={(outline ?? false) ? 'outlined' : 'contained'}
+      disabled={disabled ?? false}>
       <span className="text-3xl">{icon}</span>
       <span className="text-lg ml-2">{label}</span>
     </Button>
@@ -101,8 +101,7 @@ export const ConfigSelect: React.FC<{
         inputProps={{
           name: label,
           id: 'for',
-        }}
-      >
+        }}>
         <option aria-label="None" value="" />
         {choices.map(name => (
           <option key={name} value={name}>

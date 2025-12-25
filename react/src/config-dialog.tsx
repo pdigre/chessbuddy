@@ -21,8 +21,7 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
         hidden={config.showTab !== index}
         id={`nav-tabpanel-${index}`}
         aria-labelledby={`nav-tab-${index}`}
-        className="dark:bg-green-900 dark:text-white"
-      >
+        className="dark:bg-green-900 dark:text-white">
         <Box>{children}</Box>
       </div>
     );
@@ -39,14 +38,12 @@ export const ConfigDialog = observer(({ config }: { config: ConfigService }) => 
       open={config.showConfig}
       onClose={config.closeConfigAction}
       maxWidth="xl"
-      className={'text-center text-xl'}
-    >
+      className={'text-center text-xl'}>
       <Tabs
         value={config.showTab}
         onChange={handleChange}
         aria-label="Settings"
-        variant="fullWidth"
-      >
+        variant="fullWidth">
         <Tab
           component="a"
           onClick={prevent}

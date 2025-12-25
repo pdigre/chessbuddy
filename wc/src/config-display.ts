@@ -26,44 +26,36 @@ export class ConfigDisplay extends LitElement {
         <cb-config-boolean
           .item=${rendering}
           id="darkTheme"
-          label="Use dark theme"
-        ></cb-config-boolean>
+          label="Use dark theme"></cb-config-boolean>
         <cb-config-boolean
           .item=${display}
           id="showFacts"
-          label="Show openings information"
-        ></cb-config-boolean>
+          label="Show openings information"></cb-config-boolean>
         <cb-config-boolean
           .item=${display}
           id="showHints"
-          label="Training mode / Stockfish suggestions"
-        ></cb-config-boolean>
+          label="Training mode / Stockfish suggestions"></cb-config-boolean>
         <cb-config-boolean
           .item=${rendering}
           id="showCP"
-          label="Show CP - CentiPawns estimate"
-        ></cb-config-boolean>
+          label="Show CP - CentiPawns estimate"></cb-config-boolean>
         <cb-config-boolean
           .item=${display}
           id="playCorrect"
-          label="Play giphy for correct moves"
-        ></cb-config-boolean>
+          label="Play giphy for correct moves"></cb-config-boolean>
         <cb-config-boolean
           .item=${display}
           id="playMistake"
-          label="Play giphy for big mistake"
-        ></cb-config-boolean>
+          label="Play giphy for big mistake"></cb-config-boolean>
         <cb-config-boolean
           .item=${display}
           id="playWinner"
-          label="Play giphy when game ends"
-        ></cb-config-boolean>
+          label="Play giphy when game ends"></cb-config-boolean>
         <cb-config-button
           .onClick=${rendering.rotateAction}
           label="Rotate chessboard"
           icon="rotate_right"
-          type="tonal"
-        ></cb-config-button>
+          type="tonal"></cb-config-button>
       </form>
     `;
   }
