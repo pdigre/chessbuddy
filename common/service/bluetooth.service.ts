@@ -1,5 +1,5 @@
 import { BT } from '../model/bt.ts';
-import { configService } from './index.service.ts';
+import { configService, playService } from './index.service.ts';
 import { SQUARES } from 'chess.js';
 
 import { FEN } from '../model/fen';
@@ -14,6 +14,9 @@ const CN4 = '9e5d1e47-5c13-44a0-b635-82ad38a1386f';
 const CH_WRITE = '1b7e8272-2877-41c3-b46e-cf057c562023';
 const CH_CONFIRM = '1b7e8273-2877-41c3-b46e-cf057c562023';
 const CH_BOARD_DATA = '1b7e8262-2877-41c3-b46e-cf057c562023';
+
+// Nordic UART Service (NUS) UUIDs
+const NUS_SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
 
 function bytesToHex(bytes: Uint8Array) {
   return Array.from(bytes)
@@ -34,6 +37,10 @@ function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
   const timeout = new Promise<never>((_, reject) => {
     t = setTimeout(() => reject(new Error(label + ' timed out after ' + ms + 'ms')), ms);
   });
+
+  // Suppress unhandled rejection in p if it loses the race
+  p.catch(() => {});
+
   return Promise.race([p, timeout]).finally(() => {
     if (t) clearTimeout(t);
   }) as Promise<T>;
@@ -48,6 +55,7 @@ export class BluetoothService {
 
   private activeDevice: BluetoothDevice | null = null;
   private disconnectHandler?: () => void;
+  private writeChar: BluetoothRemoteGATTCharacteristic | null = null;
 
   // Track last full board string (a8..h1) for move detection.
   private lastBrd: string | null = null;
@@ -135,7 +143,7 @@ export class BluetoothService {
 
         // Prefer minimal probing: we only need CN1 + CN2 for Chessnut Air.
         const requiredServiceUuids = [CN1, CN2];
-        const optionalServiceUuids = [CN3, CN4];
+        const optionalServiceUuids = [CN3, CN4, NUS_SERVICE_UUID];
 
         services = [];
 
@@ -245,7 +253,7 @@ export class BluetoothService {
         7000,
         'getCharacteristic confirm'
       );
-      const writeChar = await withTimeout(
+      this.writeChar = await withTimeout(
         ss2.getCharacteristic(CH_WRITE),
         7000,
         'getCharacteristic write'
@@ -253,7 +261,7 @@ export class BluetoothService {
 
       console.log('Bluetooth: boardDataChar=' + boardDataChar.uuid);
       console.log('Bluetooth: confirmChar=' + confirmChar.uuid);
-      console.log('Bluetooth: writeChar=' + writeChar.uuid);
+      console.log('Bluetooth: writeChar=' + this.writeChar.uuid);
 
       this.subscribed = [];
 
@@ -302,7 +310,8 @@ export class BluetoothService {
                   this.lastMove = brd;
                   console.log('Bluetooth: Move: ' + SQUARES[move[0]] + ' ' + SQUARES[move[1]]);
                   // signal move to Chessnut
-                  writeLeds(writeChar, move).then(() => {});
+                  this.writeLeds(move);
+                  playService.pieceMoveAction(SQUARES[move[0]], SQUARES[move[1]]);
                 }
               } else {
                 this.lastMove = brd;
@@ -318,14 +327,35 @@ export class BluetoothService {
       });
 
       console.log('Bluetooth: starting notifications...');
-      await withTimeout(confirmChar.startNotifications(), 5000, 'confirmChar.startNotifications');
-      this.subscribed.push(confirmChar);
-      await withTimeout(
-        boardDataChar.startNotifications(),
-        5000,
-        'boardDataChar.startNotifications'
-      );
-      this.subscribed.push(boardDataChar);
+      if (confirmChar.properties.notify) {
+        try {
+          await withTimeout(
+            confirmChar.startNotifications(),
+            5000,
+            'confirmChar.startNotifications'
+          );
+          this.subscribed.push(confirmChar);
+        } catch (e) {
+          console.warn('Bluetooth: Failed to start notifications on confirmChar', e);
+        }
+      } else {
+        console.warn('Bluetooth: confirmChar does not support notifications');
+      }
+
+      if (boardDataChar.properties.notify) {
+        try {
+          await withTimeout(
+            boardDataChar.startNotifications(),
+            5000,
+            'boardDataChar.startNotifications'
+          );
+          this.subscribed.push(boardDataChar);
+        } catch (e) {
+          console.warn('Bluetooth: Failed to start notifications on boardDataChar', e);
+        }
+      } else {
+        console.warn('Bluetooth: boardDataChar does not support notifications');
+      }
 
       console.log('Bluetooth: Notifications started for confirm + board data');
 
@@ -333,14 +363,14 @@ export class BluetoothService {
       const initCmd = new Uint8Array([0x21, 0x01, 0x00]);
       console.log('Bluetooth: sending init: ' + bytesToHex(initCmd));
       try {
-        if (writeChar.properties.writeWithoutResponse) {
+        if (this.writeChar.properties.writeWithoutResponse) {
           await withTimeout(
-            writeChar.writeValueWithoutResponse(initCmd),
+            this.writeChar.writeValueWithoutResponse(initCmd),
             5000,
             'writeValueWithoutResponse init'
           );
         } else {
-          await withTimeout(writeChar.writeValue(initCmd), 5000, 'writeValue init');
+          await withTimeout(this.writeChar.writeValue(initCmd), 5000, 'writeValue init');
         }
       } catch (e) {
         console.error('Bluetooth: init write failed', e);
@@ -368,24 +398,37 @@ export class BluetoothService {
       console.error('Bluetooth Error:', error);
     }
   };
+
+  writeLeds = async (move: number[]) => {
+    let grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+    writeBit(move[0], grid);
+    writeBit(move[1], grid);
+    const initCmd = new Uint8Array([0x0a, 0x08, ...grid]);
+    const writer = this.writeChar;
+    if (writer) {
+      try {
+        await withTimeout(writer.writeValue(initCmd), 5000, 'set Leds' + move[0].toString());
+      } catch (e) {
+        console.warn('Write LEDs failed', e);
+      }
+    }
+  };
 }
 
 function writeBit(p: number, grid: number[]) {
-  grid[(p - (p % 8)) / 8] |= 1 << (7 - (p % 8));
-}
-
-async function writeLeds(write: BluetoothRemoteGATTCharacteristic, move: number[]) {
-  let grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
-  writeBit(move[0], grid);
-  writeBit(move[1], grid);
-  const initCmd = new Uint8Array([0x0a, 0x08, ...grid]);
-  return withTimeout(write.writeValue(initCmd), 5000, 'set Leds' + move[0].toString());
+  // Set the bit corresponding to square p. Use |= to set, ^= to toggle.
+  // XOR is used here to toggle the bit.
+  grid[(p - (p % 8)) / 8] ^= 1 << (7 - (p % 8));
 }
 
 async function addBtDevice() {
-  chooseBtDevice().then(bt => {
-    configService.bts.push(new BT(bt.name, bt.id));
-  });
+  chooseBtDevice()
+    .then(bt => {
+      configService.bts.push(new BT(bt.name, bt.id));
+    })
+    .catch(e => {
+      console.warn('Bluetooth: addBtDevice failed', e);
+    });
 }
 
 async function chooseBtDevice() {
@@ -402,6 +445,6 @@ async function chooseBtDevice() {
 
   return await navigator.bluetooth.requestDevice({
     filters: [{ namePrefix: 'Chessnut' }],
-    optionalServices: [CN1, CN2, CN3, CN4],
+    optionalServices: [CN1, CN2, CN3, CN4, NUS_SERVICE_UUID],
   });
 }
