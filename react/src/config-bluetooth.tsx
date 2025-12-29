@@ -1,12 +1,11 @@
 import React from 'react';
 import { ConfigService, ListType } from '../../common/service/config.service';
 import { observer } from 'mobx-react';
-import { MdBluetoothConnected } from 'react-icons/md';
+import { MdBluetoothConnected, MdDelete } from 'react-icons/md';
 import { action } from 'mobx';
 import { ConfigButton } from './config-widgets';
 import { ConfigListTable } from './config-lists';
 import { bluetoothService } from 'service/index.service';
-import { MdDelete } from 'react-icons/md';
 
 export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) => {
   const { items, cursor, unselect, hasSelect, onSelect, onDelete } = config.getListLogic(
@@ -43,6 +42,12 @@ export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) 
         <ConfigButton
           onClick={action(hardReset)}
           label="Hard Reset"
+          icon={<MdBluetoothConnected />}
+          outline={true}
+        />
+        <ConfigButton
+          onClick={action(action(bluetoothService.copyBoard))}
+          label="Copy Board"
           icon={<MdBluetoothConnected />}
           outline={true}
         />
