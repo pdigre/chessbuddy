@@ -38,7 +38,7 @@ export class FEN {
   }
 
   static fen2brd = (fen: string) => {
-    const n = fen.indexOf(' ');
+    const n = (fen + ' ').indexOf(' ');
     let brd = '';
     for (let i = 0; i < n; i++) {
       const c = fen.charAt(i);
@@ -75,4 +75,60 @@ export class FEN {
     }
     return fen;
   };
+
+  static detectMove(brd1: string, brd2: string) {
+    let from = -1;
+    for (let i = 0; i < 64; i++) {
+      const c1 = brd1.charAt(i);
+      const c2 = brd2.charAt(i);
+      if (c2 == ' ' && c1 != ' ') {
+        if (from == -1 || c1.toUpperCase() == 'K') {
+          // Castling - keep king move
+          from = i;
+        }
+      }
+    }
+    if (from == -1) {
+      return null;
+    }
+    let to = -1;
+    for (let i = 0; i < 64; i++) {
+      const c1 = brd1.charAt(i);
+      const c2 = brd2.charAt(i);
+      if (c1 != c2) {
+        // Piece different
+        // Promotion white - check incomplete
+        let src = brd1.charAt(from);
+        if (c1 != c2 && src == 'P' && i < 8 && (c2 == 'Q' || c2 == 'R' || c2 == 'B' || c2 == 'N')) {
+          to = i;
+        } else if (
+          c1 != c2 &&
+          src == 'p' &&
+          i > 55 &&
+          (c2 == 'q' || c2 == 'r' || c2 == 'b' || c2 == 'n')
+        ) {
+          // Promotion black - check incomplete
+          to = i;
+        } else if (
+          c2 == 'K' &&
+          from == 60 &&
+          ((i == 58 && brd2.charAt(59) == 'R') || (i == 62 && brd2.charAt(61) == 'R'))
+        ) {
+          // Castling white - check for rook finished move
+          to = i;
+        } else if (
+          c2 == 'k' &&
+          from == 4 &&
+          ((i == 6 && brd2.charAt(5) == 'r') || (i == 2 && brd2.charAt(3) == 'r'))
+        ) {
+          // Castling black - check for rook finished move
+          to = i;
+        } else if (c1 != c2 && c2 == src) {
+          // Simple move to
+          to = i;
+        }
+      }
+    }
+    return to == -1 ? null : [from, to];
+  }
 }

@@ -4,106 +4,49 @@ import { observer } from 'mobx-react';
 import { MdBluetoothConnected } from 'react-icons/md';
 import { action } from 'mobx';
 import { ConfigButton } from './config-widgets';
-import { ConfigListButtons, ConfigListTable } from './config-lists';
-
-async function getPort() {
-  const FILTERS = [{ usbVendorId: 0x0403, usbProductId: 0x6001 }];
-
-  /*
-  const bt = await navigator.bluetooth.requestDevice({
-    acceptAllDevices: true,
-  });
-   */
-  //  alert(bt);
-  const ports: SerialPort[] = await navigator.serial.getPorts();
-  for (const port of ports) {
-    for (const filter of FILTERS) {
-      //      if (port.productId === filter.productId && port.vendorId === filter.vendorId) {
-      return port;
-      //      }
-    }
-  }
-
-  // do not use `Board.FILTERS` as of now since we do not
-  //   know all valid identifiers, also when using a VM etc.
-  const filters: SerialPortFilter[] = [];
-  return await navigator.serial.requestPort({
-    filters: filters,
-  });
-}
-
-async function doBT() {
-  const port = await getPort();
-  if (!port) {
-    throw new Error('No port available.');
-  }
-  await port.open({ baudRate: 9600 });
-  const board = new Board(port);
-  console.log(board);
-}
+import { ConfigListTable } from './config-lists';
+import { bluetoothService } from 'service/index.service';
+import { MdDelete } from 'react-icons/md';
 
 export const ConfigBluetooth = observer(({ config }: { config: ConfigService }) => {
-  const { type, onSelect, cursor, items } = config.getListLogic(ListType.BT);
+  const { items, cursor, unselect, hasSelect, onSelect, onDelete } = config.getListLogic(
+    ListType.BT
+  );
 
-  const doBtAction = () => doBT();
+  const addBlueTooth = () => {
+    bluetoothService.addBT();
+    unselect();
+  };
+
+  const hardReset = async () => {
+    // Force disconnect + small pause + reconnect. Helps recover from macOS/CoreBluetooth getting stuck.
+    await bluetoothService.disconnect();
+    await new Promise<void>(r => setTimeout(r, 1200));
+    await bluetoothService.connect();
+  };
+
   return (
     <div className="w-[800px] h-[400px] [&>div]:text-left">
       <ConfigListTable onSelect={onSelect} cursor={cursor} items={items} />
-      <ConfigListButtons type={type} />
-      <ConfigButton onClick={action(doBtAction)} label="Delete" icon={<MdBluetoothConnected />} />
+      <div className="[&>button]:mx-1">
+        <ConfigButton
+          onClick={action(addBlueTooth)}
+          label="Add BT"
+          icon={<MdBluetoothConnected />}
+        />
+        <ConfigButton onClick={onDelete} label="Delete" icon={<MdDelete />} disabled={!hasSelect} />
+        <ConfigButton
+          onClick={action(bluetoothService.connect)}
+          label="Connect"
+          icon={<MdBluetoothConnected />}
+        />
+        <ConfigButton
+          onClick={action(hardReset)}
+          label="Hard Reset"
+          icon={<MdBluetoothConnected />}
+          outline={true}
+        />
+      </div>
     </div>
   );
 });
-
-const transformContent = {
-  start() {}, // required.
-  async transform(chunk: any, controller: any) {
-    const textencoder = new TextEncoder();
-    chunk = await chunk;
-    switch (typeof chunk) {
-      case 'object':
-        // just say the stream is done I guess
-        if (chunk === null) {
-          controller.terminate();
-        } else if (ArrayBuffer.isView(chunk)) {
-          controller.enqueue(new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength));
-        } else if (Array.isArray(chunk) && chunk.every(value => typeof value === 'number')) {
-          controller.enqueue(new Uint8Array(chunk));
-        } else if (typeof chunk.valueOf === 'function' && chunk.valueOf() !== chunk) {
-          this.transform(chunk.valueOf(), controller); // hack
-        } else if ('toJSON' in chunk) {
-          this.transform(JSON.stringify(chunk), controller);
-        }
-        break;
-      case 'symbol':
-        controller.error('Cannot send a symbol as a chunk part');
-        break;
-      case 'undefined':
-        controller.error('Cannot send undefined as a chunk part');
-        break;
-      default:
-        controller.enqueue(textencoder.encode(String(chunk)));
-        break;
-    }
-  },
-  flush() {
-    /* do any destructor work here */
-  },
-};
-
-class AnyToU8Stream extends TransformStream {
-  constructor() {
-    super({ ...transformContent });
-  }
-}
-export default class Board {
-  #port;
-  #writer;
-  #msgFieldUpdateTransformer;
-
-  constructor(port: SerialPort) {
-    this.#port = port;
-    this.#writer = this.#port.writable?.getWriter();
-    this.#msgFieldUpdateTransformer = new AnyToU8Stream();
-  }
-}
