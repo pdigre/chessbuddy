@@ -45,7 +45,6 @@ export class ConfigService extends Config {
   cursorBot = -1;
   cursorHuman = -1;
   cursorBT = -1;
-  listType = ListType.None;
   listMode = ListMode.None;
 
   constructor() {
@@ -56,7 +55,7 @@ export class ConfigService extends Config {
       cursorClock: observable,
       cursorBot: observable,
       cursorHuman: observable,
-      listType: observable,
+      cursorBT: observable,
       listMode: observable,
       humans: observable,
       bots: observable,
@@ -153,12 +152,17 @@ export class ConfigService extends Config {
     const active = this.showTab == listProps.tab;
     const show = this.listMode !== ListMode.None && active;
     const item = isEdit || !show ? listProps.getItems()[cursor] : listProps.createItem();
+    const unselect: () => void = () => {
+      listProps.setCursor(-1);
+      this.listMode = ListMode.None;
+    };
     return {
       type,
       items,
       item,
       cursor,
       isEdit,
+      unselect,
       hasSelect: cursor >= 0,
       show,
       onSelect: action((i: string) => {
@@ -176,14 +180,13 @@ export class ConfigService extends Config {
         } else {
           isEdit ? (items[cursor] = item) : items.push(item);
         }
-        listProps.setCursor(-1);
-        this.listMode = ListMode.None;
+        unselect();
       }),
       onAdd: () => this.setListModeAction(ListMode.Add),
       onEdit: () => this.setListModeAction(ListMode.Edit),
       onDelete: action(() => {
         items.splice(cursor, 1);
-        listProps.setCursor(-1);
+        unselect();
       }),
     };
   }

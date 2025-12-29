@@ -107,4 +107,11 @@ export class RulesService {
     const r90 = rotation % 2 == 1;
     return r90 ? this.leftSquare(sq) : sq;
   }
+
+  diffFen(fen1: string, fen2: string) {
+    const brd1 = FEN.fen2brd(fen1);
+    const brd2 = FEN.fen2brd(fen2);
+    const move = FEN.diffBrd(brd1, brd2);
+    return move ? SQUARES[move[0]] + ' ' + SQUARES[move[1]] : null;
+  }
 }

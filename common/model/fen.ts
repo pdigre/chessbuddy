@@ -38,7 +38,7 @@ export class FEN {
   }
 
   static fen2brd = (fen: string) => {
-    const n = fen.indexOf(' ');
+    const n = (fen + ' ').indexOf(' ');
     let brd = '';
     for (let i = 0; i < n; i++) {
       const c = fen.charAt(i);
@@ -75,4 +75,39 @@ export class FEN {
     }
     return fen;
   };
+
+  static diffBrd(brd1: string, brd2: string) {
+    let from = -1;
+    for (let i = 0; i < 64; i++) {
+      const c1 = brd1.charAt(i);
+      const c2 = brd2.charAt(i);
+      if (c2 == ' ' && c1 != ' ') {
+        if (from == -1 || c1.toUpperCase() == 'K') {
+          // Castling - keep king move
+          from = i;
+        }
+      }
+    }
+    if (from == -1) {
+      return null;
+    }
+    let to = -1;
+    for (let i = 0; i < 64; i++) {
+      const c1 = brd1.charAt(i);
+      const c2 = brd2.charAt(i);
+      // Simple move
+      if (c1 != c2 && c2 == brd1.charAt(from)) {
+        to = i;
+      }
+      // Promotion white
+      if (c1 != c2 && brd1.charAt(from) == 'P' && i > 57) {
+        to = i;
+      }
+      // Promotion black
+      if (c1 != c2 && brd1.charAt(from) == 'p' && i < 8) {
+        to = i;
+      }
+    }
+    return [from, to];
+  }
 }
