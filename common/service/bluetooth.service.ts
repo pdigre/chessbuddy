@@ -1,5 +1,5 @@
 import { BT } from '../model/bt.ts';
-import { configService, playService } from './index.service.ts';
+import { configService, mediaService, playService } from './index.service.ts';
 import { SQUARES } from 'chess.js';
 
 import { FEN } from '../model/fen';
@@ -60,6 +60,7 @@ export class BluetoothService {
   // Track last full board string (a8..h1) for move detection.
   private lastBrd: string | null = null;
   private lastMove: string | null = null;
+  private botBrd: string | null = null;
 
   addBT = () => {
     addBtDevice();
@@ -304,13 +305,18 @@ export class BluetoothService {
           if (brd) {
             if (brd !== this.lastBrd) {
               console.log('Bluetooth: Board: ' + FEN.brd2fen(brd) + ' "' + brd + '"');
-              if (this.lastMove) {
+              if (brd == this.botBrd) {
+                this.lastMove = brd;
+                this.clearLeds();
+                this.botBrd = null;
+                mediaService.soundClick();
+              } else if (this.lastMove) {
                 const move = FEN.detectMove(this.lastMove, brd);
                 if (move) {
                   this.lastMove = brd;
                   console.log('Bluetooth: Move: ' + SQUARES[move[0]] + ' ' + SQUARES[move[1]]);
                   // signal move to Chessnut
-                  this.writeLeds(move);
+                  this.moveLeds(move);
                   playService.pieceMoveAction(SQUARES[move[0]], SQUARES[move[1]]);
                 }
               } else {
@@ -399,19 +405,44 @@ export class BluetoothService {
     }
   };
 
-  writeLeds = async (move: number[]) => {
+  moveLeds = async (move: number[]) => {
     let grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
     writeBit(move[0], grid);
     writeBit(move[1], grid);
+    await this.setLeds(grid, 'set Leds' + move[0].toString());
+  };
+
+  clearLeds = async () => {
+    let grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+    await this.setLeds(grid, 'clear Leds');
+  };
+
+  copyBoard = () => {
+    if (this.lastBrd) {
+      const fen = playService.fen;
+      let i = fen.indexOf(' ');
+      playService.fen = FEN.brd2fen(this.lastBrd) + fen.substring(i);
+      this.clearLeds();
+      this.lastMove = null;
+      this.lastBrd = null;
+    }
+  };
+
+  private async setLeds(grid: number[], label: string) {
     const initCmd = new Uint8Array([0x0a, 0x08, ...grid]);
     const writer = this.writeChar;
     if (writer) {
       try {
-        await withTimeout(writer.writeValue(initCmd), 5000, 'set Leds' + move[0].toString());
+        await withTimeout(writer.writeValue(initCmd), 5000, label);
       } catch (e) {
         console.warn('Write LEDs failed', e);
       }
     }
+  }
+
+  botMove = async (fen: string, from: number, to: number) => {
+    this.botBrd = FEN.fen2brd(fen);
+    await this.moveLeds([from, to]);
   };
 }
 

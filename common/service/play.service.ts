@@ -170,7 +170,7 @@ export class PlayService extends Play {
           if (move) {
             this.playMove(move[1].san);
             bluetoothService
-              .writeLeds([chezz.SQUARES.indexOf(from), chezz.SQUARES.indexOf(to)])
+              .botMove(this.fen, chezz.SQUARES.indexOf(from), chezz.SQUARES.indexOf(to))
               .then(() => {});
           }
         })
