@@ -2,12 +2,11 @@ import { describe, expect, test } from '@jest/globals';
 import { FEN } from '../model/fen.ts';
 
 describe('Chessnut decode (pure)', () => {
-
   test('Start pos Quarter', async () => {
     const mod = await import('./chessnut.util.ts');
     const data =
       '01 24 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 77 77 00 00 9b 6a 09 00 00 00';
-    const fen = "8/8/8/8/8/8/PPPP4/RNBQ4";
+    const fen = '8/8/8/8/8/8/PPPP4/RNBQ4';
     expect(mod.decodeHex(data)).toBe(FEN.fen2brd(fen));
   });
 

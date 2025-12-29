@@ -2,8 +2,8 @@ import { describe, expect, test } from '@jest/globals';
 import { FEN } from './fen.ts';
 import { SQUARES } from 'chess.js';
 
-function move2string(move:number[]|null){
-  return move?SQUARES[move[0]] + " " + SQUARES[move[1]]:null;
+function move2string(move: number[] | null) {
+  return move ? SQUARES[move[0]] + ' ' + SQUARES[move[1]] : null;
 }
 
 describe('Move diff', () => {
@@ -70,5 +70,4 @@ describe('Move diff', () => {
     const move = FEN.detectMove(FEN.fen2brd(fen1), FEN.fen2brd(fen2));
     expect(move2string(move)).toBe('e8 g8');
   });
-
 });
