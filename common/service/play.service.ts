@@ -18,6 +18,7 @@ import {
   renderingService,
   rulesService,
   storageService,
+  bluetoothService,
 } from './index.service';
 import { FEN } from '../model/fen';
 import { toMMSS } from './clock.service.ts';
@@ -168,6 +169,9 @@ export class PlayService extends Play {
           const move = rulesService.move(this.fen, from, to);
           if (move) {
             this.playMove(move[1].san);
+            bluetoothService
+              .writeLeds([chezz.SQUARES.indexOf(from), chezz.SQUARES.indexOf(to)])
+              .then(() => {});
           }
         })
       );
