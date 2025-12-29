@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from '@jest/globals';
-import { RulesService } from 'service/rules.service.ts';
+import { RulesService } from './rules.service.ts';
 
 describe('Test RulesService', () => {
   let service: RulesService;

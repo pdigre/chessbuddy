@@ -1,8 +1,9 @@
 import { BT } from '../model/bt.ts';
 import { configService } from './index.service.ts';
-import { rulesService } from './index.service.ts';
+import { SQUARES } from 'chess.js';
+
 import { FEN } from '../model/fen';
-import { tryDecodeFenFromChessnutFrame } from 'service/chessnut.util.ts';
+import { decodeHex } from './chessnut.util.ts';
 
 const CN1 = '1b7e8261-2877-41c3-b46e-cf057c562023';
 const CN2 = '1b7e8271-2877-41c3-b46e-cf057c562023';
@@ -48,11 +49,9 @@ export class BluetoothService {
   private activeDevice: BluetoothDevice | null = null;
   private disconnectHandler?: () => void;
 
-  // Track last decoded board-only FEN to avoid spamming console.
-  private lastBoardOnlyFen: string | null = null;
-
   // Track last full board string (a8..h1) for move detection.
   private lastBrd: string | null = null;
+  private lastMove: string | null = null;
 
   addBT = () => {
     addBtDevice();
@@ -82,7 +81,6 @@ export class BluetoothService {
       }
       this.activeDevice = null;
       this.disconnectHandler = undefined;
-      this.lastBoardOnlyFen = null;
       this.lastBrd = null;
 
       console.log('Bluetooth: disconnected');
@@ -292,28 +290,24 @@ export class BluetoothService {
 
         // Documented: 38 bytes, prefix 0x01 0x24 indicates position signal
         if (bytes.length === 38 && isPrefix(bytes, [0x01, 0x24])) {
-          console.log('Bluetooth: board data: ' + bytesToHex(bytes));
-
-          const decoded = tryDecodeFenFromChessnutFrame(bytes);
-          if (decoded) {
-            if (decoded.boardOnly !== this.lastBoardOnlyFen) {
-              // Decode board-only FEN into our 64-char board string (a8..h1) for diffing.
-              const nextBrd = FEN.fen2brd(decoded.boardOnly);
-
-              // Detect simple move (e.g. e2-e4) between consecutive board positions.
-              // Note: if mapping is still unstable, piece letters may be wrong, but squares still help.
-              if (this.lastBrd) {
-                const move = rulesService.diffFen(this.lastBrd, nextBrd);
-
+          let hex = bytesToHex(bytes);
+//          console.log('Bluetooth: board data: ' + hex);
+          const brd = decodeHex(hex);
+          if (brd) {
+            if (brd !== this.lastBrd) {
+              console.log('Bluetooth: Board: ' + FEN.brd2fen(brd) + ' "' +brd+ '"');
+              if (this.lastMove) {
+                const move = FEN.detectMove(this.lastMove, brd);
                 if (move) {
-                  console.log('Bluetooth: detected move: ' + move);
+                  this.lastMove = brd;
+                  console.log('Bluetooth: Move: ' + SQUARES[move[0]] + ' ' + SQUARES[move[1]]);
+                  // signal move to Chessnut
+                  writeLeds(writeChar, move).then(()=>{});
                 }
+              } else {
+                this.lastMove = brd;
               }
-
-              this.lastBoardOnlyFen = decoded.boardOnly;
-              this.lastBrd = nextBrd;
-
-              console.log('Bluetooth: decoded FEN: ' + decoded.fen);
+              this.lastBrd = brd;
             }
           } else {
             console.log('Bluetooth: could not decode frame ');
@@ -374,6 +368,18 @@ export class BluetoothService {
       console.error('Bluetooth Error:', error);
     }
   };
+}
+
+function writeBit(p: number, grid: number[]) {
+  grid[(p - p % 8) / 8] |= 1 << (7 - p % 8);
+}
+
+async function writeLeds(write: BluetoothRemoteGATTCharacteristic, move: number[]) {
+  let grid = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00];
+  writeBit(move[0], grid);
+  writeBit(move[1], grid);
+  const initCmd = new Uint8Array([0x0a, 0x08, ...grid]);
+   return withTimeout( write.writeValue(initCmd), 5000, 'set Leds' + move[0].toString());
 }
 
 async function addBtDevice() {
