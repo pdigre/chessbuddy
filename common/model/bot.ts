@@ -8,8 +8,8 @@ export class Engine {
 }
 
 export const Engines: Engine[] = [
-  new Engine('Stockfish-16-single', 'bots/stockfish.js-16/stockfish-nnue-16-single.js'),
   new Engine('Stockfish-10', 'bots/stockfish.js-10.0.2/stockfish.js'),
+  new Engine('Stockfish-16-single', 'bots/stockfish.js-16/stockfish-nnue-16-single.js'),
   new Engine('Lozza', 'bots/lozza-1.18/lozza.js'),
 ];
 

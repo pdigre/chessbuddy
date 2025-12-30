@@ -61,7 +61,7 @@ const SidePanel = observer(() => {
 });
 
 export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService }) => {
-  const { width, height } = renderingService.getSize();
+  const { width, height } = rendering.getSize();
   const style: React.CSSProperties = {
     width: `${width}px`,
     height: `${height}px`,
@@ -74,7 +74,7 @@ export const ChessBuddy = observer(({ rendering }: { rendering: RenderingService
         <div
           className="bg-green-100 dark:bg-green-900 border-0 flex m-0 p-0 flex-row"
           style={style}>
-          <CP analyzer={analyzerService} rendering={renderingService} />
+          <CP analyzer={analyzerService} rendering={rendering} />
           <div className="flex flex-col flex-grow">
             <PlayerInfoBar isTop={true} play={playService} />
             <Board edit={editService} rendering={rendering} config={configService} />
