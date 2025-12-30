@@ -340,7 +340,7 @@ export class PlayService extends Play {
     }
   }
   markHints(func: (x: chezz.Square, i: number) => void) {
-    if (configService.display.showFacts) {
+    if (configService.display.showHints) {
       analyzerService.help.forEach((x, i) => func(x, i));
     }
   }
