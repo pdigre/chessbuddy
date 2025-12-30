@@ -98,7 +98,7 @@ export class FEN {
       if (c1 != c2) {
         // Piece different
         // Promotion white - check incomplete
-        let src = brd1.charAt(from);
+        const src = brd1.charAt(from);
         if (c1 != c2 && src == 'P' && i < 8 && (c2 == 'Q' || c2 == 'R' || c2 == 'B' || c2 == 'N')) {
           to = i;
         } else if (
