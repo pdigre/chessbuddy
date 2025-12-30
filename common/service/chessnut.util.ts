@@ -1,5 +1,5 @@
 export function decodeHex(data: string) {
-  let raw = data.replaceAll(' ', '').substring(4, 68);
+  const raw = data.replaceAll(' ', '').substring(4, 68);
   let brd = '';
   for (let i = 0; i < 64; i++) {
     const r = i - (i % 8);

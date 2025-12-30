@@ -50,7 +50,7 @@ export class BluetoothService {
   constructor() {}
 
   // keep subscribed characteristics to retain references while connected (prevents GC/lifecycle quirks)
-  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
+
   private subscribed: BluetoothRemoteGATTCharacteristic[] = [];
 
   private activeDevice: BluetoothDevice | null = null;
@@ -299,7 +299,7 @@ export class BluetoothService {
 
         // Documented: 38 bytes, prefix 0x01 0x24 indicates position signal
         if (bytes.length === 38 && isPrefix(bytes, [0x01, 0x24])) {
-          let hex = bytesToHex(bytes);
+          const hex = bytesToHex(bytes);
           //          console.log('Bluetooth: board data: ' + hex);
           const brd = decodeHex(hex);
           if (brd) {
@@ -406,21 +406,21 @@ export class BluetoothService {
   };
 
   moveLeds = async (move: number[]) => {
-    let grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+    const grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
     writeBit(move[0], grid);
     writeBit(move[1], grid);
     await this.setLeds(grid, 'set Leds' + move[0].toString());
   };
 
   clearLeds = async () => {
-    let grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+    const grid = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
     await this.setLeds(grid, 'clear Leds');
   };
 
   copyBoard = () => {
     if (this.lastBrd) {
       const fen = playService.fen;
-      let i = fen.indexOf(' ');
+      const i = fen.indexOf(' ');
       playService.fen = FEN.brd2fen(this.lastBrd) + fen.substring(i);
       this.clearLeds();
       this.lastMove = null;
