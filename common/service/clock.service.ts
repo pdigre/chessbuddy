@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { bluetoothService, mediaService, playService } from './index.service';
-import { OutOfTime, TimeClick } from 'service/bluetooth.service.ts';
+import { OutOfTime, TimeClick } from './bluetooth.service.ts';
 
 export class ClockService {
   elapsed = 0;
