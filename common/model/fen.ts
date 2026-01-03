@@ -97,33 +97,28 @@ export class FEN {
       const c2 = brd2.charAt(i);
       if (c1 != c2) {
         // Piece different
-        // Promotion white - check incomplete
         const src = brd1.charAt(from);
-        if (c1 != c2 && src == 'P' && i < 8 && (c2 == 'Q' || c2 == 'R' || c2 == 'B' || c2 == 'N')) {
-          to = i;
-        } else if (
-          c1 != c2 &&
-          src == 'p' &&
-          i > 55 &&
-          (c2 == 'q' || c2 == 'r' || c2 == 'b' || c2 == 'n')
-        ) {
+        if (src == 'P' && i < 8) {
+          // Promotion white - check incomplete
+          if (c2 == 'Q' || c2 == 'R' || c2 == 'B' || c2 == 'N') {
+            to = i;
+          }
+        } else if (src == 'p' && i > 55) {
           // Promotion black - check incomplete
-          to = i;
-        } else if (
-          c2 == 'K' &&
-          from == 60 &&
-          ((i == 58 && brd2.charAt(59) == 'R') || (i == 62 && brd2.charAt(61) == 'R'))
-        ) {
+          if (c2 == 'q' || c2 == 'r' || c2 == 'b' || c2 == 'n') {
+            to = i;
+          }
+        } else if (c2 == 'K' && from == 60) {
           // Castling white - check for rook finished move
-          to = i;
-        } else if (
-          c2 == 'k' &&
-          from == 4 &&
-          ((i == 6 && brd2.charAt(5) == 'r') || (i == 2 && brd2.charAt(3) == 'r'))
-        ) {
+          if ((i == 58 && brd2.charAt(59) == 'R') || (i == 62 && brd2.charAt(61) == 'R')) {
+            to = i;
+          }
+        } else if (c2 == 'k' && from == 4) {
           // Castling black - check for rook finished move
-          to = i;
-        } else if (c1 != c2 && c2 == src) {
+          if ((i == 6 && brd2.charAt(5) == 'r') || (i == 2 && brd2.charAt(3) == 'r')) {
+            to = i;
+          }
+        } else if (c2 == src) {
           // Simple move to
           to = i;
         }

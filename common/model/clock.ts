@@ -59,5 +59,6 @@ export class Clock implements model.ListItem {
     new Clock('Rapid - 10/10', [{ from: 0, plus: 10, each: 10 }]),
     new Clock('FIDE Blitz - 3/2', [{ from: 0, plus: 3, each: 2 }]),
     new Clock('Blitz - 5/0', [{ from: 0, plus: 5, each: 0 }]),
+    new Clock('Bullet - 1/0', [{ from: 0, plus: 1, each: 0 }]),
   ];
 }

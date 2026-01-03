@@ -46,6 +46,17 @@ function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
   }) as Promise<T>;
 }
 
+type BeepType = {
+  duration: number;
+  frequency: number;
+  label: string;
+};
+
+export const MoveClick = { duration: 200, frequency: 1000, label: 'Move click' } as BeepType;
+export const BotClick = { duration: 200, frequency: 800, label: 'Bot click' } as BeepType;
+export const TimeClick = { duration: 200, frequency: 2000, label: 'Move click' } as BeepType;
+export const OutOfTime = { duration: 3000, frequency: 2000, label: 'Bot click' } as BeepType;
+
 export class BluetoothService {
   constructor() {}
 
@@ -312,12 +323,15 @@ export class BluetoothService {
                 mediaService.soundClick();
               } else if (this.lastMove) {
                 const move = FEN.detectMove(this.lastMove, brd);
-                if (move) {
+                if (move && this.botBrd === null) {
                   this.lastMove = brd;
                   console.log('Bluetooth: Move: ' + SQUARES[move[0]] + ' ' + SQUARES[move[1]]);
                   // signal move to Chessnut
-                  this.moveLeds(move);
-                  playService.pieceMoveAction(SQUARES[move[0]], SQUARES[move[1]]);
+                  if (playService.pieceMoveAction(SQUARES[move[0]], SQUARES[move[1]])) {
+                    this.moveLeds(move).then(() => {
+                      this.beep(MoveClick);
+                    });
+                  }
                 }
               } else {
                 this.lastMove = brd;
@@ -433,16 +447,45 @@ export class BluetoothService {
     const writer = this.writeChar;
     if (writer) {
       try {
-        await withTimeout(writer.writeValue(initCmd), 5000, label);
+        await withTimeout(writer.writeValue(initCmd), 1000, label);
       } catch (e) {
         console.warn('Write LEDs failed', e);
       }
     }
   }
 
+  beep = async (beep: BeepType) => {
+    const beepCommand = new Uint8Array([
+      0x0b, // Command header
+      0x04, // Length of data following the header
+      beep.frequency >> 8, // Frequency High Byte
+      beep.frequency & 0xff, // Frequency Low Byte
+      beep.duration >> 8, // Duration High Byte
+      beep.duration & 0xff, // Duration Low Byte
+    ]);
+    const writer = this.writeChar;
+    if (writer) {
+      try {
+        console.log('BLE Sound:' + beep.label);
+        withTimeout(writer.writeValue(beepCommand), 1000, beep.label);
+      } catch (e) {
+        console.warn('BLE Sound failed', e);
+      }
+    }
+  };
+
   botMove = async (fen: string, from: number, to: number) => {
     this.botBrd = FEN.fen2brd(fen);
-    await this.moveLeds([from, to]);
+    await this.moveLeds([from, to]).then(() => {
+      this.beep(BotClick);
+    });
+  };
+
+  humanMove = async (fen: string, from: number, to: number) => {
+    this.botBrd = FEN.fen2brd(fen);
+    await this.moveLeds([from, to]).then(() => {
+      this.beep(BotClick);
+    });
   };
 }
 
