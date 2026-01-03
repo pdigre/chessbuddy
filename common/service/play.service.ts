@@ -205,8 +205,9 @@ export class PlayService extends Play {
   }
 
   outOfTime() {
-    this.playMove(this.isWhiteTurn ? '1-0' : '0-1');
     this.isPlaying = false;
+    this.isComplete = true;
+    this.log.push(this.isWhiteTurn ? '1-0' : '0-1');
   }
 
   playContinue() {

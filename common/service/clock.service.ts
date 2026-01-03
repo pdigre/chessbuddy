@@ -1,5 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
-import { mediaService, playService } from './index.service';
+import { bluetoothService, mediaService, playService } from './index.service';
+import { OutOfTime, TimeClick } from 'service/bluetooth.service.ts';
 
 export class ClockService {
   elapsed = 0;
@@ -28,12 +29,15 @@ export class ClockService {
       return toMMSS(current);
     }
     const remains = allowed - current;
-    if (remains < 11) {
-      mediaService.soundClick();
-    }
     if (remains < 0) {
+      // Finished - out of time
       mediaService.soundError();
+      bluetoothService.beep(OutOfTime);
       playService.outOfTime();
+    } else if (remains < 11) {
+      // Warning running out of time
+      mediaService.soundClick();
+      bluetoothService.beep(TimeClick);
     }
     return toMMSS(allowed - current);
   }
