@@ -316,12 +316,21 @@ export class BluetoothService {
           if (brd) {
             if (brd !== this.lastBrd) {
               console.log('Bluetooth: Board: ' + FEN.brd2fen(brd) + ' "' + brd + '"');
-              if (brd == this.botBrd) {
+              if (brd === FEN.fen2brd(FEN.NEW_GAME)) {
+                // Reset if starting position
+                console.log('BLE: Board starting pos ');
+                playService.resetGameAction();
+                this.clearLeds();
+              }
+              if (brd === this.botBrd) {
+                // Check if updated according to Bot
+                console.log('BLE: Updated BOT position ');
                 this.lastMove = brd;
                 this.clearLeds();
                 this.botBrd = null;
                 mediaService.soundClick();
               } else if (this.lastMove) {
+                // New human move
                 const move = FEN.detectMove(this.lastMove, brd);
                 if (move && this.botBrd === null) {
                   this.lastMove = brd;
