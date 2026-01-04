@@ -41,19 +41,6 @@ export class Bot implements ListItem {
     return '';
   };
 
-  toInt: (num: string) => number = (num: string) => {
-    const parsed = Number.parseInt(num);
-    return isNaN(parsed) ? 0 : parsed;
-  };
-
-  toTxt: (num: number) => string = (num: number) => {
-    return isNaN(num) ? '0' : num.toString();
-  };
-
-  setEngine(value: string) {
-    this.engine = value;
-  }
-
   get getUciEngineDef() {
     return Engines.find(engine => engine.name == this.engine) ?? Engines[0];
   }

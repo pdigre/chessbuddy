@@ -1,4 +1,4 @@
-import { saveData } from './src/datastore';
+import { type Handler, handlers } from './src/endpoints';
 import commonPackage from '../common/package.json' with { type: 'json' };
 
 console.log(`ChessBuddy version ${commonPackage.version} http://localhost:80/index.html`);
@@ -8,22 +8,10 @@ Bun.serve({
   async fetch(req: Request): Promise<Response> {
     const { pathname } = new URL(req.url);
 
-    // API endpoint for POST requests
-    if (req.method === 'POST' && pathname === '/connect') {
-      console.log('POST:', pathname);
-      try {
-        const data = await req.json();
-        console.log('Received POST data:', data);
-        // Save data to Google Cloud Datastore
-        await saveData('Tasks', 'sampletask1', data);
-        return new Response('POST request received', { status: 200 });
-      } catch (error) {
-        console.error('Error processing POST request:', error);
-        return new Response('Invalid JSON', { status: 400 });
-      }
+    // Server endpoints
+    if (pathname.startsWith('/srv/')) {
+      return await endpoints(req, pathname);
     }
-
-    // --- Static File Routing ---
 
     // Explicitly map the root path to the React app's entry point
     if (pathname === '/' || pathname === '/index.html') {
@@ -59,6 +47,8 @@ Bun.serve({
     // Define routes for specific files
     const staticFileRoutes: Record<string, string> = {
       '/manifest.json': '../public/manifest.json',
+      '/openings.js': '../public/openings.js',
+      '/service-worker.js': '../public/service-worker.js',
       '/wc.html': '../wc/dist/index.html',
     };
 
@@ -92,3 +82,15 @@ Bun.serve({
     return new Response('Internal Server Error', { status: 500 });
   },
 });
+
+async function endpoints(req: Request, pathname: string): Promise<Response> {
+  const pathHandlers = handlers[pathname];
+  if (pathHandlers) {
+    const handler = pathHandlers[req.method];
+    if (handler) {
+      return handler(req);
+    }
+    return new Response('Method Not Allowed', { status: 405 });
+  }
+  return new Response('Not Found', { status: 404 });
+}

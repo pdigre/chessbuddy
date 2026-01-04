@@ -17,7 +17,7 @@ export const PanelEdit = observer(({ edit }: { edit: EditService }) => {
   const TD = (name: string, img: ReactNode) => (
     <td onClick={action(() => edit.editPiece(name))}>{img}</td>
   );
-  const props = edit.boolprops;
+  const props = edit;
   return (
     <div>
       <table className="m-0 table-fixed w-full border-spacing-2">
