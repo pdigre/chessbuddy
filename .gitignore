@@ -11,3 +11,4 @@ build
 # IDE
 # .idea
 .vscode
+/assets/

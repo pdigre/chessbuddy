@@ -6,7 +6,8 @@
   "dependencies": {
     "@google-cloud/firestore": "^7.11.3",
     "@types/node": "^24.3.0",
-    "esbuild": "^0.25.9"
+    "esbuild": "^0.25.9",
+    "google-auth-library": "^10.5.0"
   },
   "scripts": {
     "dev": "bun --inspect serve.ts",
