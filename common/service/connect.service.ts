@@ -27,7 +27,7 @@ export class ConnectService {
       }
 
       const games = historyService.getFilteredGames(human.name);
-      const connect = { email: human.email, device: renderingService, games: games.join('\n') };
+      const connect = { email: human.email, device: renderingService, games: games };
       const url = window.document.location.protocol + '//' + window.document.location.host;
 
       const response = await fetch(url + '/srv/connect', {
