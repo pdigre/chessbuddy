@@ -33,7 +33,8 @@ export class ConnectService {
         device: renderingService,
         humans: configService.humans,
         bots: configService.bots,
-        games: games.map(x=> History.create(x)) };
+        games: games.map(x => History.create(x)),
+      };
       const url = window.document.location.protocol + '//' + window.document.location.host;
 
       const response = await fetch(url + '/srv/connect', {
@@ -109,13 +110,11 @@ export class ConnectService {
     const i1 = historyService.history.length;
     historyService.importFromServer(resp.games);
     const i2 = historyService.history.length;
-    messageService.display(
-      {
-        name: 'ok',
-        title: 'Connect Success',
-        msg: `Stored ${(resp as RESP).stored} games and fetched ${i2 - i1} games` + ''
-      }
-    );
+    messageService.display({
+      name: 'ok',
+      title: 'Connect Success',
+      msg: `Stored ${(resp as RESP).stored} games and fetched ${i2 - i1} games` + '',
+    });
   };
 }
 
