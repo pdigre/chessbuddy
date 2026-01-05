@@ -25,10 +25,7 @@ async function handleConnect(req: Request): Promise<Response> {
     }
     const data = await req.json();
     console.log('Received POST data:', data);
-    await saveData('Tasks', 'sampletask1', {
-      ...data,
-      googleEmail: profile.email,
-    });
+    await saveData(profile.email, data);
     return new Response('POST request received', { status: 200 });
   } catch (error: unknown) {
     console.error('Error processing POST request:', error);
