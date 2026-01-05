@@ -1,6 +1,10 @@
 import { OAuth2Client } from 'google-auth-library';
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+// Hardcoded for now to match the client-side ID
+const GOOGLE_CLIENT_ID =
+  process.env.GOOGLE_CLIENT_ID ||
+  '210193644238-4kfjtd85p04vu3f8n3vsrmfp2191fia8.apps.googleusercontent.com';
+
 if (!GOOGLE_CLIENT_ID) {
   throw new Error('GOOGLE_CLIENT_ID must be set before verifying Google ID tokens.');
 }
