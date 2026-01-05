@@ -1,7 +1,9 @@
 import { type DocumentData, Firestore, type WithFieldValue } from '@google-cloud/firestore';
 
 // Creates a client
-const firestore = new Firestore();
+const firestore = new Firestore({
+  databaseId: 'chessbuddy',
+});
 const collection = 'chessbuddy';
 
 export async function saveData(email: string, data: WithFieldValue<DocumentData>): Promise<void> {
