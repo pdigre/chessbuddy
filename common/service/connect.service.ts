@@ -1,5 +1,6 @@
 import { Human } from '../model/human';
-import { historyService, messageService, renderingService } from './index.service';
+import { History } from '../model/history';
+import { configService, historyService, messageService, renderingService } from './index.service';
 
 export type RESP = { stored: number; games: string[] };
 
@@ -27,7 +28,13 @@ export class ConnectService {
       }
 
       const games = historyService.getFilteredGames(human.name);
-      const connect = { email: human.email, device: renderingService, games: games };
+      const connect = {
+        email: human.email,
+        device: renderingService,
+        humans: configService.humans,
+        bots: configService.bots,
+        games: games.map(x => History.create(x)),
+      };
       const url = window.document.location.protocol + '//' + window.document.location.host;
 
       const response = await fetch(url + '/srv/connect', {
@@ -103,10 +110,11 @@ export class ConnectService {
     const i1 = historyService.history.length;
     historyService.importFromServer(resp.games);
     const i2 = historyService.history.length;
-    messageService.error(
-      'Connect Success',
-      `Stored ${(resp as RESP).stored} games and fetched ${i2 - i1} games` + ''
-    );
+    messageService.display({
+      name: 'ok',
+      title: 'Connect Success',
+      msg: `Stored ${(resp as RESP).stored} games and fetched ${i2 - i1} games` + '',
+    });
   };
 }
 
