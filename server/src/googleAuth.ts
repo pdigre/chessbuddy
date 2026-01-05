@@ -1,8 +1,8 @@
 import { OAuth2Client } from 'google-auth-library';
 
 // Hardcoded for now to match the client-side ID
-const GOOGLE_CLIENT_ID =
-  process.env.GOOGLE_CLIENT_ID ||
+export const GOOGLE_CLIENT_ID =
+  process.env['GOOGLE_CLIENT_ID'] ||
   '210193644238-4kfjtd85p04vu3f8n3vsrmfp2191fia8.apps.googleusercontent.com';
 
 if (!GOOGLE_CLIENT_ID) {
