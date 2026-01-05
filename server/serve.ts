@@ -1,12 +1,18 @@
 import { type Handler, handlers } from './src/endpoints';
 import commonPackage from '../common/package.json' with { type: 'json' };
 
-console.log(`ChessBuddy version ${commonPackage.version} http://localhost:80/index.html`);
+const port = parseInt(process.env.PORT || '8080');
+console.log(`ChessBuddy version ${commonPackage.version} http://localhost:${port}/index.html`);
 
 Bun.serve({
-  port: 80,
+  port: port,
   async fetch(req: Request): Promise<Response> {
     const { pathname } = new URL(req.url);
+
+    // Health check endpoint for Cloud Run
+    if (pathname === '/health') {
+      return new Response('OK', { status: 200 });
+    }
 
     // Server endpoints
     if (pathname.startsWith('/srv/')) {
