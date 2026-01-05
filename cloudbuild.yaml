@@ -20,6 +20,8 @@ steps:
       - 'europe-west1' # Replace with your region
       - '--platform'
       - 'managed'
+      - '--timeout'
+      - '300s'
 
 options:
   logging: CLOUD_LOGGING_ONLY
