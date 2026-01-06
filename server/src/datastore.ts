@@ -11,13 +11,34 @@ export async function saveData(email: string, data: WithFieldValue<DocumentData>
   const req = data as REQU;
   const db = firestore.collection(collection);
   const games = req.games;
-  const games_rec = email + '/games';
 
   // Store general info
   await db.doc(email).set({ device: req.device, humans: req.humans, bots: req.bots });
 
   // Read any currently stored games
-  const doc = await db.doc(games_rec).get();
+  // We need to access the subcollection 'games' and then a document inside it.
+  // However, the previous logic seemed to treat 'games' as a document ID suffix.
+  // If we want to store games in a separate document under the user's document,
+  // we should structure it as collection(collection).doc(email).collection('data').doc('games')
+  // OR just store it as a field in the user document if it's not too large.
+  // OR use a predictable document ID in the same collection, like "email_games".
+
+  // Based on the error "path does not contain an even number of components",
+  // db.doc(games_rec) where games_rec is "email/games" is trying to access
+  // collection("chessbuddy").doc("email/games").
+  // "chessbuddy" is a collection. "email/games" is 2 segments.
+  // So the full path is "chessbuddy/email/games".
+  // That is 3 segments: Collection / Document / Collection (or field path?).
+  // Firestore paths must alternate Collection/Document/Collection/Document.
+
+  // If we want "games" to be a document inside a subcollection of the user:
+  // path: chessbuddy/{email}/user_data/games
+  // db.doc(email).collection('user_data').doc('games')
+
+  // Let's try to fix it by using a subcollection.
+  const gamesRef = db.doc(email).collection('data').doc('games');
+
+  const doc = await gamesRef.get();
   let existingGames: any[] = [];
   if (doc.exists) {
     const docData = doc.data();
@@ -33,8 +54,7 @@ export async function saveData(email: string, data: WithFieldValue<DocumentData>
   const mergedGames = [...existingGames, ...newGames];
 
   // Store games
-  // We store the array of games inside an object, e.g. { games: [...] }
-  await db.doc(games_rec).set({ games: mergedGames });
+  await gamesRef.set({ games: mergedGames });
 
   console.log(
     `Saved document ${email} in collection ${collection}. Merged ${newGames.length} new games. Total: ${mergedGames.length}`
@@ -44,7 +64,6 @@ export async function saveData(email: string, data: WithFieldValue<DocumentData>
 
 export async function readData(email: string): Promise<REQU> {
   const db = firestore.collection(collection);
-  const games_rec = email + '/games';
 
   // Read general info
   const docInfo = await db.doc(email).get();
@@ -54,7 +73,8 @@ export async function readData(email: string): Promise<REQU> {
   }
 
   // Read any currently stored games
-  const docGames = await db.doc(games_rec).get();
+  const gamesRef = db.doc(email).collection('data').doc('games');
+  const docGames = await gamesRef.get();
   let games: any[] = [];
   if (docGames.exists) {
     const docData = docGames.data();
