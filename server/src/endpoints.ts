@@ -1,5 +1,5 @@
 import { verifyGoogleIdToken } from './googleAuth';
-import { saveData } from './datastore';
+import { type RESP, saveData } from './datastore';
 
 export type Handler = (req: Request) => Promise<Response>;
 
@@ -7,7 +7,29 @@ export const handlers: Record<string, Record<string, Handler>> = {
   '/srv/connect': {
     POST: handleConnect,
   },
+  '/srv/login': {
+    POST: handleLogin,
+  },
 };
+
+async function handleLogin(req: Request): Promise<Response> {
+  try {
+    const { token } = await req.json();
+    const profile = await verifyGoogleIdToken(token);
+    // Set a cookie with the token
+    // In a real app, you'd want to create a session or sign your own JWT
+    // For simplicity, we'll just store the Google ID token in a cookie
+    return new Response('Logged in', {
+      status: 200,
+      headers: {
+        'Set-Cookie': `auth_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600`,
+      },
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    return new Response('Login failed', { status: 401 });
+  }
+}
 
 async function handleConnect(req: Request): Promise<Response> {
   const url = new URL(req.url);
@@ -25,8 +47,10 @@ async function handleConnect(req: Request): Promise<Response> {
     }
     const data = await req.json();
     console.log('Received POST data:', data);
-    await saveData(profile.email, data);
-    return new Response('POST request received', { status: 200 });
+    const resp: RESP = await saveData(profile.email, data);
+    return new Response(JSON.stringify(resp), {
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error: unknown) {
     console.error('Error processing POST request:', error);
     if (error instanceof Error && error.message.includes('Blocked by CORS policy')) {

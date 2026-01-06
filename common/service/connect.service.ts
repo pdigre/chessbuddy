@@ -1,8 +1,17 @@
 import { Human } from '../model/human';
 import { History } from '../model/history';
 import { configService, historyService, messageService, renderingService } from './index.service';
+import type { Bot } from 'model/bot.ts';
+import type { RenderingService } from 'service/rendering.service.ts';
 
-export type RESP = { stored: number; games: string[] };
+export type RESP = { stored: number; games: History[] };
+export type REQU = {
+  games: History[];
+  email: string;
+  device: RenderingService;
+  humans: Human[];
+  bots: Bot[];
+};
 
 // This is the client ID for the web application
 // It must match the one in the Google Cloud Console
@@ -34,7 +43,7 @@ export class ConnectService {
         humans: configService.humans,
         bots: configService.bots,
         games: games.map(x => History.create(x)),
-      };
+      } as REQU;
       const url = window.document.location.protocol + '//' + window.document.location.host;
 
       const response = await fetch(url + '/srv/connect', {
@@ -108,7 +117,7 @@ export class ConnectService {
 
   readonly importFromServerAction: (resp: RESP) => void = resp => {
     const i1 = historyService.history.length;
-    historyService.importFromServer(resp.games);
+    historyService.importFromServer(resp.games.map(x => x.toString()));
     const i2 = historyService.history.length;
     messageService.display({
       name: 'ok',
