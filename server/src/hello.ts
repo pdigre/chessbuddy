@@ -25,13 +25,13 @@ export async function handleHello(req: Request): Promise<Response> {
   let body = `
         <h1>Hello from Bun!</h1>
         <p>This is a server-side rendered page.</p>
-        <div id="buttonDiv"></div>
       `;
 
   if (userData) {
     body += `<h2>Welcome ${email}</h2>`;
     body += `<pre>${JSON.stringify(userData, null, 2)}</pre>`;
   } else {
+    body += `<div id="buttonDiv"></div>`;
     body += `<p>Please sign in to see your data.</p>`;
   }
 
