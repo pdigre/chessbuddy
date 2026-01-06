@@ -32,3 +32,19 @@ export async function verifyGoogleIdToken(idToken: string): Promise<GoogleUserIn
     subject: payload.sub,
   };
 }
+
+export async function getAuthenticatedUser(req: Request): Promise<GoogleUserInfo | null> {
+  const cookieHeader = req.headers.get('Cookie');
+  if (!cookieHeader) return null;
+
+  const cookies = Object.fromEntries(cookieHeader.split('; ').map(c => c.split('=')));
+  const token = cookies['auth_token'];
+  if (!token) return null;
+
+  try {
+    return await verifyGoogleIdToken(token);
+  } catch (e) {
+    console.error('Invalid token', e);
+    return null;
+  }
+}
