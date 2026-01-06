@@ -29,7 +29,7 @@ export function renderTemplate(title: string, body: string, clientId?: string): 
                document.getElementById("buttonDiv"),
                { theme: "outline", size: "large" }  // customization attributes
              );
-             google.accounts.id.prompt(); // also display the One Tap dialog
+             // google.accounts.id.prompt(); // also display the One Tap dialog
            }
          }
        </script>`
