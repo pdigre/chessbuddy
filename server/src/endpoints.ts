@@ -22,7 +22,7 @@ async function handleLogin(req: Request): Promise<Response> {
     return new Response('Logged in', {
       status: 200,
       headers: {
-        'Set-Cookie': `auth_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600`,
+        'Set-Cookie': `auth_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600`,
       },
     });
   } catch (error) {
