@@ -1,12 +1,12 @@
 import { handlers } from './src/endpoints';
 import commonPackage from '../common/package.json' with { type: 'json' };
-import { renderTemplate } from './src/template.ts';
-import { GOOGLE_CLIENT_ID, type GoogleUserInfo } from './src/googleAuth.ts';
-import { withAuth } from './src/login.ts';
-import { webPage } from './src/ssr/hello';
+import { initSSR, handleSSR } from './src/ssr_router.ts';
 
 const port = parseInt(process.env.PORT || '8080');
 console.log(`ChessBuddy version ${commonPackage.version} http://localhost:${port}/index.html`);
+
+// Initialize SSR routes
+await initSSR();
 
 Bun.serve({
   port: port,
@@ -18,9 +18,13 @@ Bun.serve({
       return new Response('OK', { status: 200 });
     }
 
-    // Example of a template-based page
-    if (pathname.startsWith('/ssr/hello')) {
-      return await withAuth(webPageHandler)(req);
+    // Template-based server side rendered page
+    if (pathname.startsWith('/ssr/')) {
+      const response = handleSSR(req);
+      if (response) {
+        return await response;
+      }
+      return new Response('Page Not Found', { status: 404 });
     }
 
     // Server endpoints
@@ -108,12 +112,4 @@ async function endpoints(req: Request, pathname: string): Promise<Response> {
     return new Response('Method Not Allowed', { status: 405 });
   }
   return new Response('Not Found', { status: 404 });
-}
-
-async function webPageHandler(req: Request, user: GoogleUserInfo): Promise<Response> {
-  const { title, body } = await webPage(req, user);
-  const html = renderTemplate(title, body, GOOGLE_CLIENT_ID);
-  return new Response(html, {
-    headers: { 'Content-Type': 'text/html' },
-  });
 }

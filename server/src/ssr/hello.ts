@@ -1,10 +1,7 @@
 import { type GoogleUserInfo } from '../googleAuth.ts';
 import { readData } from '../datastore.ts';
 
-export async function webPage(
-  req: Request,
-  user: GoogleUserInfo
-): Promise<{ title: string; body: string }> {
+export default async function helloPage(req: Request, user: GoogleUserInfo) {
   const userData = await readData(user.email);
   return {
     title: 'Hello World',
