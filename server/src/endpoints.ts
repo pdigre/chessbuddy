@@ -1,5 +1,6 @@
 import { verifyGoogleIdToken } from './googleAuth';
-import { type RESP, saveData } from './datastore';
+import { saveData } from './datastore';
+import type { RESP } from '../../common/service/connect.service';
 
 export type Handler = (req: Request) => Promise<Response>;
 
