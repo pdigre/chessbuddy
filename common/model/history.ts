@@ -32,6 +32,14 @@ export class History {
       : undefined;
   }
 
+  public toString(): string {
+    const d = this.date.getTime().toString(36);
+    const w = this.wtime.toString(36);
+    const b = this.btime.toString(36);
+    const l = this.log.join(' ');
+    return `${d};${this.white};${this.black};${w};${b};${l}`;
+  }
+
   public static readHistory: (x: string) => string | undefined = x => {
     const s = x.split(';');
     const date = History.readDate(s[0]);
@@ -69,7 +77,7 @@ export class History {
     'knanqmb1;Per;Ronny;4sq;3ck;c4 e5 Nc3 f5 Nf3 d6 d4 e4 Ng5 h6 Nh3 g5 e3 Nf6 f3 exf3 gxf3 Bg7 Bd2 O-O Rg1 c5 d5 a6 f4 g4 Nf2 Re8 h3 h5 Qc2 Qe7 Bd3 h4 hxg4 fxg4 O-O-O g3 Nfe4 Bg4 Ng5 Bxd1 Qxd1 Qd7 Rh1 Qg4 Be2 Qf5 Rxh4 b5 e4 Rxe4 Ncxe4 Nxe4 Bg4 Nf2 Bxf5 Nxd1 Kxd1 Bxb2 Rg4 Ra7 Rxg3 b4 Ne4+ Rg7 Be6+ Kf8 Rxg7 Kxg7 f5 a5 Bg5 Be5 f6+ Kg6 f7 Kg7 Bh6+ Kxh6 f8=Q+ 1-0',
     'knaqui2r;Per;Ronny;7qp;4de;d4 d5 c4 e6 Nf3 dxc4 Nc3 a6 a4 Bb4 e3 c5 Bxc4 cxd4 exd4 Nc6 O-O Nf6 Qe2 Nxd4 Nxd4 Qxd4 Bg5 Qg4 Bxf6 Qxe2 Bxe2 gxf6 Rac1 Bd7 Bf3 Bc6 Bxc6+ bxc6 Rfd1 f5 h4 Rb8 g3 Ke7 b3 Ba3 Rb1 e5 Kf1 Rhc8 Rd3 Bb4 Rc1 Bc5 Ne2 Ba3 Rc2 Bd6 f4 e4 Rdc3 c5 Nd4 cxd4 Rxc8 Rxb3 Kf2 e3+ Ke1 d3 R2c3 Bb4 Rc7+ Kf6 Rc6+ Kg7 0-1',
     'knaychuz;Per;Ronny;8rp;553;d4 d5 Nf3 f5 Bf4 e6 a4 Bd6 Ne5 Nf6 e3 O-O c4 Bb4+ Nc3 Ne4 Qb3 Bxc3+ bxc3 dxc4 Bxc4 Qe7 f3 Nd6 O-O Nxc4 Qxc4 a5 Nd3 b6 Qxc7 Qxc7 Bxc7 Ba6 Rfd1 Rc8 Bxb6 Nd7 Bxa5 Bxd3 Bb4 Bc2 Rdc1 Rxa4 Rxa4 Bxa4 c4 Bb5 c5 Kf7 Ra1 Rc7 h3 e5 d5 Nxc5 Ra5 Nd3 Rxb5 Rc1+ Kh2 h5 Rb7+ Kg6 Bf8 f4 e4 Nf2 Rxg7+ Kf6 Re7 Rh1#',
-    'knbja009;Per;Ronny;og;16k;c4 e5 g3 c6 Nf3 e4 Nd4 d5 cxd5 Qxd5 e3 c5 Nc3 Qe5 Nb3 b6 Bg2 Bb7 O-O f5 Nb5 Nc6 d4 cxd4 exd4 Qxb5 d5 Nb4 d6 Rd8 Bf4 Nd3 Qe2 Bxd6 Bg5 Be7 Be3 Bc5 Bg5 Be7 Be3 Bd5 Nd4 Qxb2 Qxb2 Nxb2 Nxf5 Bf6 Bd4 Bxd4 Nxd4 Bc4 Nc6 Bxf1 Kxf1 Rd1+ Rxd1 Nxd1 Nxa7 Nf6 Nb5 Kf7 Ke2 Rd8 0-1',
+    'knbja009;Per;Ronny;og;16k;c4 e5 g3 c6 Nf3 e4 Nd4 d5 cxd5 Qxd5 e3 c5 Nc3 Qe5 Nb3 b6 Bg2 Bb7 O-O f5 Nb5 Nc6 d4 cxd4 exd4 Qxb5 d5 Nb4 d6 Rd8 Bf4 Nd3 Qe2 Bxd6 Bg5 Be7 Be3 Bc5 Bg5 Be7 Be3 Bd5 Nd4 Qxb2 axb2 Nxb2 Nxf5 Bf6 Bd4 Bxd4 Nxd4 Bc4 Nc6 Bxf1 Kxf1 Rd1+ Rxd1 Nxd1 Nxa7 Nf6 Nb5 Kf7 Ke2 Rd8 0-1',
     'knbl3sat;Per;Ronny;1xc;28q;d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 c6 Qc2 Na6 a3 Qe8 b4 e5 b5 cxb5 cxb5 Nc7 Bg5 e4 Bxf6 Bxf6 Nd2 Nxb5 Nxb5 Qxb5 Qc4+ Qxc4 Nxc4 d5 Nd6 Bxd4 Rad1 Bc5 Rxd5 Bxa3 f3 Be6 Rd2 Rad8 Rfd1 Bxd6 Rxd6 Rxd6 Rxd6 Bc4 fxe4 Bxe2 exf5 Rxf5 Rd7 Rf7 Bd5 1-0',
     'kn62vy6k;Per;Ronny;16;2s;e4 e5 d4 exd4 Qxd4 Nc6 1-0',
     'kngha7xw;Per;Ronny;18;11;d4 Nf6 Nf3 d5 c4 e6 g3 Bb4+ Bd2 1-0',

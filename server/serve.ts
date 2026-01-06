@@ -1,7 +1,6 @@
 import { type Handler, handlers } from './src/endpoints';
 import commonPackage from '../common/package.json' with { type: 'json' };
-import { renderTemplate } from './src/template';
-import { GOOGLE_CLIENT_ID } from './src/googleAuth';
+import { handleHello } from './src/hello';
 
 const port = parseInt(process.env.PORT || '8080');
 console.log(`ChessBuddy version ${commonPackage.version} http://localhost:${port}/index.html`);
@@ -18,15 +17,7 @@ Bun.serve({
 
     // Example of a template-based page
     if (pathname === '/hello') {
-      const body = `
-        <h1>Hello from Bun!</h1>
-        <p>This is a server-side rendered page.</p>
-        <div id="buttonDiv"></div>
-      `;
-      const html = renderTemplate('Hello World', body, GOOGLE_CLIENT_ID);
-      return new Response(html, {
-        headers: { 'Content-Type': 'text/html' },
-      });
+      return await handleHello(req);
     }
 
     // Server endpoints
