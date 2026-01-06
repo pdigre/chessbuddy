@@ -20,15 +20,17 @@ export function renderTemplate(title: string, body: string, clientId?: string): 
            });
          }
          window.onload = function () {
-           google.accounts.id.initialize({
-             client_id: "${clientId}",
-             callback: handleCredentialResponse
-           });
-           google.accounts.id.renderButton(
-             document.getElementById("buttonDiv"),
-             { theme: "outline", size: "large" }  // customization attributes
-           );
-           google.accounts.id.prompt(); // also display the One Tap dialog
+           if (document.getElementById("buttonDiv")) {
+             google.accounts.id.initialize({
+               client_id: "${clientId}",
+               callback: handleCredentialResponse
+             });
+             google.accounts.id.renderButton(
+               document.getElementById("buttonDiv"),
+               { theme: "outline", size: "large" }  // customization attributes
+             );
+             google.accounts.id.prompt(); // also display the One Tap dialog
+           }
          }
        </script>`
     : '';
