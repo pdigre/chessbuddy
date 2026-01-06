@@ -1,6 +1,9 @@
-import { type Handler, handlers } from './src/endpoints';
+import { handlers } from './src/endpoints';
 import commonPackage from '../common/package.json' with { type: 'json' };
-import { handleHello } from './src/hello';
+import { renderTemplate } from '../template.ts';
+import { GOOGLE_CLIENT_ID, type GoogleUserInfo } from '../googleAuth.ts';
+import { withAuth } from '../login.ts';
+import { webPage } from './src/ssr/hello';
 
 const port = parseInt(process.env.PORT || '8080');
 console.log(`ChessBuddy version ${commonPackage.version} http://localhost:${port}/index.html`);
@@ -16,8 +19,8 @@ Bun.serve({
     }
 
     // Example of a template-based page
-    if (pathname === '/hello') {
-      return await handleHello(req);
+    if (pathname.startsWith('/ssr/hello')) {
+      return await withAuth(webPageHandler)(req);
     }
 
     // Server endpoints
@@ -105,4 +108,12 @@ async function endpoints(req: Request, pathname: string): Promise<Response> {
     return new Response('Method Not Allowed', { status: 405 });
   }
   return new Response('Not Found', { status: 404 });
+}
+
+async function webPageHandler(req: Request, user: GoogleUserInfo): Promise<Response> {
+  const { title, body } = await webPage(req, user);
+  const html = renderTemplate(title, body, GOOGLE_CLIENT_ID);
+  return new Response(html, {
+    headers: { 'Content-Type': 'text/html' },
+  });
 }
