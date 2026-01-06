@@ -1,8 +1,8 @@
 import { handlers } from './src/endpoints';
 import commonPackage from '../common/package.json' with { type: 'json' };
-import { renderTemplate } from '../template.ts';
-import { GOOGLE_CLIENT_ID, type GoogleUserInfo } from '../googleAuth.ts';
-import { withAuth } from '../login.ts';
+import { renderTemplate } from './src/template.ts';
+import { GOOGLE_CLIENT_ID, type GoogleUserInfo } from './src/googleAuth.ts';
+import { withAuth } from './src/login.ts';
 import { webPage } from './src/ssr/hello';
 
 const port = parseInt(process.env.PORT || '8080');
