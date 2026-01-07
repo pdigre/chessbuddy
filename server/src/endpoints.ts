@@ -16,7 +16,7 @@ export const handlers: Record<string, Record<string, Handler>> = {
 async function handleLogin(req: Request): Promise<Response> {
   try {
     const { token } = await req.json();
-    const profile = await verifyGoogleIdToken(token);
+    await verifyGoogleIdToken(token);
     // Set a cookie with the token
     // In a real app, you'd want to create a session or sign your own JWT
     // For simplicity, we'll just store the Google ID token in a cookie
