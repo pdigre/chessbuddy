@@ -1,0 +1,49 @@
+.renderjson a {
+  text-decoration: none;
+}
+.renderjson .disclosure {
+  color: crimson;
+  font-size: 150%;
+}
+.chessboard {
+  display: block;
+  margin: 0;
+  border: 2px solid #555;
+  width: fit-content;
+}
+.board-row {
+  display: flex;
+}
+.board-square {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  cursor: default;
+}
+.white-square {
+  background-color: #f0d9b5;
+}
+.black-square {
+  background-color: #b58863;
+}
+
+.move {
+  cursor: pointer;
+  padding: 0 2px;
+}
+.move:hover {
+  background-color: #eee;
+  text-decoration: underline;
+}
+.active-move {
+  background-color: yellow;
+  font-weight: bold;
+  color: black;
+}
+.start-move {
+  color: blue;
+  font-weight: bold;
+}
