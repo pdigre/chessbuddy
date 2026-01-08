@@ -25,8 +25,8 @@ Bun.serve({
         const filePath = './src' + pathname;
         const file = Bun.file(filePath);
         if (await file.exists()) {
-          console.log(`<OK> ${pathname} => ${filePath}`);
-          return new Response(file);
+           console.log(`<OK> ${pathname} => ${filePath}`);
+           return new Response(file);
         }
       }
 
