@@ -44,9 +44,8 @@ export async function initSSR() {
 export function handleSSR(req: Request): Promise<Response> | undefined {
   const url = new URL(req.url);
   const parts = url.pathname.split('/');
-  // /ssr/hello -> ["", "ssr", "hello"]
   if (parts[1] === 'ssr' && parts[2]) {
-    const handler = handlers.get(parts[2]);
+    const handler = handlers.get(parts[2].replace(".htm",".ts"));
     if (handler) {
       return handler(req);
     }
