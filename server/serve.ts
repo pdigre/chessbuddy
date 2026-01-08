@@ -21,12 +21,12 @@ Bun.serve({
     // Template-based server side rendered page
     if (pathname.startsWith('/ssr/')) {
       // Try to serve static files from src/ssr, excluding .ts files
-      if (!pathname.endsWith('.ts')) {
+      if (!pathname.endsWith('.htm')) {
         const filePath = './src' + pathname;
         const file = Bun.file(filePath);
         if (await file.exists()) {
-          console.log(`<OK> ${pathname} => ${filePath}`);
-          return new Response(file);
+           console.log(`<OK> ${pathname} => ${filePath}`);
+           return new Response(file);
         }
       }
 
