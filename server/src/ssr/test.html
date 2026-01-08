@@ -1,0 +1,12 @@
+<html>
+  <body>
+    <h2>Data Test</h2>
+    <div id="data-tree"></div>
+    <script src="https://cdn.jsdelivr.net/npm/renderjson@1.4.0/renderjson.min.js"></script>
+    <script type="module">
+      import { loadData } from './data.js';
+      loadData('./test.json');
+    </script>
+    <link rel="stylesheet" href="./display.css" />
+  </body>
+</html>
