@@ -1,6 +1,7 @@
 import { handlers } from './src/endpoints';
 import commonPackage from '../common/package.json' with { type: 'json' };
 import { initSSR, handleSSR } from './src/ssr_router.ts';
+import { join } from 'node:path';
 
 const port = parseInt(process.env.PORT || '8080');
 console.log(`ChessBuddy version ${commonPackage.version} http://localhost:${port}/index.html`);
@@ -22,11 +23,11 @@ Bun.serve({
     if (pathname.startsWith('/ssr/')) {
       // Try to serve static files from src/ssr, excluding .ts files
       if (!pathname.endsWith('.htm')) {
-        const filePath = './src' + pathname;
+        const filePath = join(import.meta.dir, 'src', pathname);
         const file = Bun.file(filePath);
         if (await file.exists()) {
-           console.log(`<OK> ${pathname} => ${filePath}`);
-           return new Response(file);
+          console.log(`<OK> ${pathname} => ${filePath}`);
+          return new Response(file);
         }
       }
 
