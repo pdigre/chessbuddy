@@ -107,4 +107,66 @@ export class RulesService {
     const r90 = rotation % 2 == 1;
     return r90 ? this.leftSquare(sq) : sq;
   }
+
+  /**
+   * Detect if a move is legal and finished.
+   * Castling and promotion are typical moves that require more than one piece to be moved
+   * same thing with killing pieces.
+   * We may need to distinguish sliding moves and allow a timer for completing them.
+   */
+  static detectMove(brd1: string, brd2: string) {
+    let from = -1;
+    for (let i = 0; i < 64; i++) {
+      const c1 = brd1.charAt(i);
+      const c2 = brd2.charAt(i);
+      if (c2 == ' ' && c1 != ' ') {
+        if (from == -1 || c1.toUpperCase() == 'K') {
+          // Castling - keep king move
+          from = i;
+        }
+      }
+    }
+    if (from == -1) {
+      return null;
+    }
+    let to = -1;
+    for (let i = 0; i < 64; i++) {
+      const c1 = brd1.charAt(i);
+      const c2 = brd2.charAt(i);
+      if (c1 != c2) {
+        // Piece different
+        const src = brd1.charAt(from);
+        // Check incomplete
+        if (src == 'P' && i < 8) {
+          // Promotion white
+          if (c2 == 'Q' || c2 == 'R' || c2 == 'B' || c2 == 'N') {
+            to = i;
+          }
+        } else if (src == 'p' && i > 55) {
+          // Promotion black
+          if (c2 == 'q' || c2 == 'r' || c2 == 'b' || c2 == 'n') {
+            to = i;
+          }
+        } else if (
+          c2 == 'K' &&
+          from == 60 &&
+          ((i == 58 && brd2.charAt(59) == 'R') || (i == 62 && brd2.charAt(61) == 'R'))
+        ) {
+          // Castling white
+          to = i;
+        } else if (
+          c2 == 'k' &&
+          from == 4 &&
+          ((i == 6 && brd2.charAt(5) == 'r') || (i == 2 && brd2.charAt(3) == 'r'))
+        ) {
+          // Castling black
+          to = i;
+        } else if (c2 == src) {
+          // Simple move to
+          to = i;
+        }
+      }
+    }
+    return to == -1 ? null : [from, to];
+  }
 }
