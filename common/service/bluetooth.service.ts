@@ -4,6 +4,7 @@ import { SQUARES } from 'chess.js';
 
 import { FEN } from '../model/fen';
 import { decodeHex } from './chessnut.util.ts';
+import { RulesService } from 'service/rules.service.ts';
 
 const CN1 = '1b7e8261-2877-41c3-b46e-cf057c562023';
 const CN2 = '1b7e8271-2877-41c3-b46e-cf057c562023';
@@ -331,7 +332,7 @@ export class BluetoothService {
                 mediaService.soundClick();
               } else if (this.lastMove) {
                 // New human move
-                const move = FEN.detectMove(this.lastMove, brd);
+                const move = RulesService.detectMove(this.lastMove, brd);
                 if (move && this.botBrd === null) {
                   this.lastMove = brd;
                   console.log('Bluetooth: Move: ' + SQUARES[move[0]] + ' ' + SQUARES[move[1]]);

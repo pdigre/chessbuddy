@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "target": "ES2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "moduleResolution": "node",
     "checkJs": true,
     "esModuleInterop": true,
     "outDir": "out",
     "sourceMap": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "experimentalDecorators": true,
     "noEmit": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
     "jsx": "react-jsx",
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
     "plugins": [
       {
         "name": "typescript-plugin-css-modules"
