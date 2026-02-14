@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { RulesService } from './rules.service.ts';
-import { FEN } from 'model/fen.ts';
+import { FEN } from '../model/fen.ts';
 import { SQUARES } from 'chess.js';
 
 describe('Test RulesService', () => {
