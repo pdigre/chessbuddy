@@ -1,8 +1,8 @@
 import { Human } from '../model/human';
 import { History } from '../model/history';
 import { configService, historyService, messageService, renderingService } from './index.service';
-import type { Bot } from 'model/bot.ts';
-import type { RenderingService } from 'service/rendering.service.ts';
+import type { Bot } from '../model/bot.ts';
+import type { RenderingService } from './rendering.service.ts';
 
 export type RESP = { stored: number; games: History[] };
 export type REQU = {

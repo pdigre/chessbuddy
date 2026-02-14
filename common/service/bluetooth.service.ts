@@ -2,9 +2,9 @@ import { BT } from '../model/bt.ts';
 import { configService, mediaService, playService } from './index.service.ts';
 import { SQUARES } from 'chess.js';
 
-import { FEN } from '../model/fen';
+import { FEN } from '../model/fen.ts';
 import { decodeHex } from './chessnut.util.ts';
-import { RulesService } from 'service/rules.service.ts';
+import { RulesService } from './rules.service.ts';
 
 const CN1 = '1b7e8261-2877-41c3-b46e-cf057c562023';
 const CN2 = '1b7e8271-2877-41c3-b46e-cf057c562023';
