@@ -13,7 +13,8 @@
     "format": "prettier src --write",
     "build": "vite build",
     "lint": "eslint src/*.ts",
-    "lint:fix": "eslint src/*.ts --fix"
+    "lint:fix": "eslint src/*.ts --fix",
+    "test": "bun test"
   },
   "devDependencies": {
     "esbuild": "0.25.9",
