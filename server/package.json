@@ -14,7 +14,7 @@
     "format": "prettier . --write",
     "lint": "eslint src/*.ts",
     "lint:fix": "eslint src/*.ts --fix",
-    "test": "bun test --inspect-wait"
+    "test": "bun test"
   },
   "devDependencies": {
     "eslint": "9.39.0",

@@ -1,34 +1,20 @@
 {
   "compilerOptions": {
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
     "module": "ESNext",
-    "target": "ES2022",
-    "moduleResolution": "bundler",
-    "moduleDetection": "force",
-    "allowImportingTsExtensions": true,
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Node",
+    "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "experimentalDecorators": true,
-    "useDefineForClassFields": false,
-    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
     "noEmit": true,
-    "composite": true,
-    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "downlevelIteration": true,
+    "noImplicitReturns": true,
     "skipLibCheck": true,
-    "jsx": "react-jsx",
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "types": ["bun-types", "web", "web-bluetooth", "w3c-web-serial", "jest"],
-    "paths": {
-      "model/*": ["../common/model/*"],
-      "service/*": ["../common/service/*"]
-    }
+    "types": ["bun-types", "jest"]
   },
-  "include": ["service", "model"]
+  "include": ["model", "service"]
 }

@@ -12,3 +12,7 @@ build
 # .idea
 .vscode
 /assets/
+/common/tmp_decode_debug.ts
+/common/bun.lock
+/react/package-lock.json
+/react/bun.lock
