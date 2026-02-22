@@ -1,10 +1,10 @@
-import { BT } from '../model/bt.ts';
-import { configService, mediaService, playService } from './index.service.ts';
+import { BT } from '../model/bt';
+import { configService, mediaService, playService } from './index.service';
 import { SQUARES } from 'chess.js';
 
-import { FEN } from '../model/fen.ts';
-import { decodeHex } from './chessnut.util.ts';
-import { RulesService } from './rules.service.ts';
+import { FEN } from '../model/fen';
+import { decodeHex } from './chessnut.util';
+import { RulesService } from './rules.service';
 
 const CN1 = '1b7e8261-2877-41c3-b46e-cf057c562023';
 const CN2 = '1b7e8271-2877-41c3-b46e-cf057c562023';
@@ -53,6 +53,7 @@ type BeepType = {
   label: string;
 };
 
+export const TinyClick = { duration: 50, frequency: 3000, label: 'Tiny click' } as BeepType;
 export const MoveClick = { duration: 200, frequency: 1000, label: 'Move click' } as BeepType;
 export const BotClick = { duration: 200, frequency: 800, label: 'Bot click' } as BeepType;
 export const TimeClick = { duration: 200, frequency: 2000, label: 'Move click' } as BeepType;
@@ -337,10 +338,14 @@ export class BluetoothService {
                   this.lastMove = brd;
                   console.log('Bluetooth: Move: ' + SQUARES[move[0]] + ' ' + SQUARES[move[1]]);
                   // signal move to Chessnut
-                  if (playService.pieceMoveAction(SQUARES[move[0]], SQUARES[move[1]])) {
+
+                  let isLegalMove = playService.pieceMoveAction(SQUARES[move[0]], SQUARES[move[1]]);
+                  if (isLegalMove) {
                     this.moveLeds(move).then(() => {
                       this.beep(MoveClick);
                     });
+                  } else {
+                    this.beep(TinyClick);
                   }
                 }
               } else {
