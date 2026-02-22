@@ -14,7 +14,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "types": ["bun-types", "jest"]
+    "types": ["bun-types", "jest", "@types/web-bluetooth"]
   },
   "include": ["model", "service"]
 }
